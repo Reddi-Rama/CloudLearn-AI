@@ -1,0 +1,21 @@
+// Prisma Database schema outlining PostgreSQL models.
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+generator client {
+  provider = "prisma-client-js"
+}
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  password  String
+  role      Role     @default(STUDENT)
+  createdAt DateTime @default(now())
+}
+enum Role {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+}

@@ -1,0 +1,314 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   GOOGLE FONT
+============================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+
+/* ============================================
+   ROOT COLORS
+============================================ */
+
+:root {
+  --background: #f7fbff;
+  --foreground: #0f172a;
+
+  --primary: #2563eb;
+  --primary-light: #dbeafe;
+
+  --secondary: #7c3aed;
+  --secondary-light: #ede9fe;
+
+  --border: #dbeafe;
+
+  --card: rgba(255,255,255,.75);
+
+  --muted: #64748b;
+
+  --shadow:
+    0 8px 30px rgba(37,99,235,.08);
+
+  --radius: 22px;
+}
+
+/* ============================================
+   DARK MODE
+============================================ */
+
+.dark{
+
+  --background:#020617;
+
+  --foreground:#f8fafc;
+
+  --card:rgba(15,23,42,.75);
+
+  --border:#334155;
+
+  --muted:#cbd5e1;
+}
+
+/* ============================================
+   RESET
+============================================ */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+
+  scroll-behavior:smooth;
+
+}
+
+body{
+
+  font-family:"Inter",sans-serif;
+
+  background:var(--background);
+
+  color:var(--foreground);
+
+  overflow-x:hidden;
+
+}
+
+/* ============================================
+   SCROLLBAR
+============================================ */
+
+::-webkit-scrollbar{
+
+  width:8px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+  background:#93c5fd;
+
+  border-radius:999px;
+
+}
+
+::-webkit-scrollbar-track{
+
+  background:#eff6ff;
+
+}
+
+/* ============================================
+   SECTIONS
+============================================ */
+
+.section{
+
+  padding:100px 0;
+
+}
+
+.container-custom{
+
+  width:100%;
+
+  max-width:1280px;
+
+  margin:auto;
+
+  padding-inline:24px;
+
+}
+
+/* ============================================
+   GLASS CARD
+============================================ */
+
+.glass-card{
+
+  background:rgba(255,255,255,.72);
+
+  backdrop-filter:blur(18px);
+
+  border:1px solid rgba(255,255,255,.5);
+
+  box-shadow:var(--shadow);
+
+}
+
+/* ============================================
+   BUTTONS
+============================================ */
+
+.btn-primary{
+
+  display:inline-flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:10px;
+
+  padding:14px 28px;
+
+  background:var(--primary);
+
+  color:white;
+
+  border-radius:999px;
+
+  transition:.3s;
+
+  font-weight:600;
+
+}
+
+.btn-primary:hover{
+
+  transform:translateY(-2px);
+
+  background:#1d4ed8;
+
+}
+
+.btn-secondary{
+
+  display:inline-flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:10px;
+
+  padding:14px 28px;
+
+  border-radius:999px;
+
+  border:1px solid var(--border);
+
+  background:white;
+
+  transition:.3s;
+
+}
+
+.btn-secondary:hover{
+
+  background:#eff6ff;
+
+}
+
+/* ============================================
+   TITLES
+============================================ */
+
+.heading{
+
+  font-size:clamp(2.2rem,5vw,4rem);
+
+  line-height:1.1;
+
+  font-weight:800;
+
+}
+
+.sub-heading{
+
+  font-size:clamp(1.2rem,2vw,1.5rem);
+
+  color:var(--muted);
+
+  line-height:1.8;
+
+}
+
+/* ============================================
+   CLOUD BACKGROUND
+============================================ */
+
+.cloud-bg{
+
+  position:fixed;
+
+  inset:0;
+
+  z-index:-10;
+
+  overflow:hidden;
+
+  background:
+
+  radial-gradient(circle at top,#dbeafe 0%,#eff6ff 45%,#f8fbff 100%);
+
+}
+
+/* ============================================
+   FLOATING
+============================================ */
+
+@keyframes float{
+
+  0%{
+
+    transform:translateY(0px);
+
+  }
+
+  50%{
+
+    transform:translateY(-18px);
+
+  }
+
+  100%{
+
+    transform:translateY(0px);
+
+  }
+
+}
+
+.float{
+
+  animation:float 6s ease-in-out infinite;
+
+}
+
+.float-slow{
+
+  animation:float 10s ease-in-out infinite;
+
+}
+
+.float-fast{
+
+  animation:float 4s ease-in-out infinite;
+
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+
+@media(max-width:768px){
+
+  .section{
+
+    padding:70px 0;
+
+  }
+
+  .container-custom{
+
+    padding-inline:18px;
+
+  }
+
+}
