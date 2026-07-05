@@ -6,6 +6,7 @@ export { default as ExampleCard } from "./ExampleCard";
 export { default as ExerciseCard } from "./ExerciseCard";
 export { default as InfoBox } from "./InfoBox";
 export { default as KeyPoints } from "./KeyPoints";
+export { default as LessonActions } from "./LessonActions";   // <-- ADD THIS
 export { default as LessonCompletion } from "./LessonCompletion";
 export { default as LessonContent } from "./LessonContent";
 export { default as LessonFAQ } from "./LessonFAQ";
