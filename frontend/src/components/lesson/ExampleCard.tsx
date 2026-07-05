@@ -4,20 +4,20 @@ import { Lightbulb } from "lucide-react";
 
 interface ExampleCardProps {
   title: string;
-  children: React.ReactNode;
+  example: string;
 }
 
 export default function ExampleCard({
   title,
-  children,
+  example,
 }: ExampleCardProps) {
   return (
-    <section className="rounded-3xl border border-yellow-200 bg-yellow-50 p-8 shadow-sm">
+    <section className="rounded-[30px] border-l-4 border-yellow-500 bg-yellow-50 p-8 shadow">
 
-      <div className="mb-6 flex items-center gap-3">
+      <div className="flex items-center gap-3">
 
         <Lightbulb
-          size={26}
+          size={24}
           className="text-yellow-600"
         />
 
@@ -27,9 +27,9 @@ export default function ExampleCard({
 
       </div>
 
-      <div className="leading-8 text-slate-700">
-        {children}
-      </div>
+      <p className="mt-5 leading-8 text-slate-700">
+        {example}
+      </p>
 
     </section>
   );

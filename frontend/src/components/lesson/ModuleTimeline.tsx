@@ -1,57 +1,62 @@
 "use client";
 
-import { CheckCircle2, Circle } from "lucide-react";
+import {
+  CheckCircle2,
+  Circle,
+} from "lucide-react";
 
-interface TimelineItem {
-  title: string;
-  completed: boolean;
-}
+const lessons = [
+  {
+    title: "Introduction",
+    completed: true,
+  },
+  {
+    title: "Core Concepts",
+    completed: true,
+  },
+  {
+    title: "Working Example",
+    completed: false,
+  },
+  {
+    title: "Mini Assessment",
+    completed: false,
+  },
+];
 
-interface ModuleTimelineProps {
-  lessons: TimelineItem[];
-}
-
-export default function ModuleTimeline({
-  lessons,
-}: ModuleTimelineProps) {
+export default function ModuleTimeline() {
   return (
-    <section className="rounded-3xl border border-sky-200 bg-white p-8 shadow-sm">
+    <section className="rounded-[28px] bg-white p-6 shadow-lg">
 
-      <h2 className="mb-8 text-3xl font-bold">
-
-        Module Progress
-
+      <h2 className="text-xl font-bold">
+        Module Timeline
       </h2>
 
-      <div className="space-y-6">
+      <div className="mt-6 space-y-5">
 
-        {lessons.map((lesson, index) => (
+        {lessons.map((lesson) => (
 
           <div
-            key={index}
-            className="flex items-center gap-5"
+            key={lesson.title}
+            className="flex items-center gap-4"
           >
 
             {lesson.completed ? (
-
               <CheckCircle2
-                className="text-green-600"
-                size={24}
+                className="text-green-500"
+                size={22}
               />
-
             ) : (
-
               <Circle
                 className="text-slate-400"
-                size={24}
+                size={22}
               />
-
             )}
 
             <span
               className={
                 lesson.completed
-                  ? "font-semibold text-slate-800"
+                  ? "font-medium text-slate-900"
                   : "text-slate-500"
               }
             >

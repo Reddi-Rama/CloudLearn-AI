@@ -2,48 +2,54 @@
 
 import { BookMarked, ExternalLink } from "lucide-react";
 
-interface Resource {
-  title: string;
-  url: string;
-}
+const resources = [
+  {
+    title: "Official Documentation",
+    url: "#",
+  },
+  {
+    title: "CloudLearn AI Notes",
+    url: "#",
+  },
+  {
+    title: "Practice Questions",
+    url: "#",
+  },
+];
 
-interface LessonResourcesProps {
-  resources: Resource[];
-}
-
-export default function LessonResources({
-  resources,
-}: LessonResourcesProps) {
+export default function LessonResources() {
   return (
-    <section className="rounded-3xl border border-sky-200 bg-white p-8 shadow-sm">
+    <section className="rounded-[30px] bg-white p-8 shadow-lg">
 
-      <h2 className="mb-8 flex items-center gap-3 text-3xl font-bold">
+      <div className="flex items-center gap-3">
 
-        <BookMarked className="text-sky-600" />
+        <BookMarked
+          className="text-blue-600"
+          size={24}
+        />
 
-        Resources
+        <h2 className="text-2xl font-bold">
+          Learning Resources
+        </h2>
 
-      </h2>
+      </div>
 
-      <div className="space-y-5">
+      <div className="mt-8 space-y-4">
 
         {resources.map((resource) => (
 
           <a
             key={resource.title}
             href={resource.url}
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center justify-between rounded-2xl border border-slate-200 p-5 transition hover:border-sky-400 hover:bg-sky-50"
+            className="flex items-center justify-between rounded-2xl bg-slate-50 p-5 transition hover:bg-blue-50"
           >
 
-            <span className="font-medium">
+            <span>{resource.title}</span>
 
-              {resource.title}
-
-            </span>
-
-            <ExternalLink size={18} />
+            <ExternalLink
+              size={18}
+              className="text-blue-600"
+            />
 
           </a>
 

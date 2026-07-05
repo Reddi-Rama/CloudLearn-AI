@@ -2,73 +2,56 @@
 
 import Link from "next/link";
 import {
-  BookOpen,
-  PencilLine,
+  Bookmark,
+  CheckCircle2,
   ClipboardCheck,
 } from "lucide-react";
 
 export default function LessonActions() {
   return (
-    <section className="rounded-3xl border border-sky-200 bg-white p-8 shadow-sm">
+    <section className="mt-10 rounded-[32px] bg-white p-8 shadow-lg">
 
-      <h2 className="mb-8 text-3xl font-bold text-slate-800">
-        Continue Your Learning
+      <h2 className="text-2xl font-bold text-slate-900">
+        Lesson Actions
       </h2>
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <p className="mt-3 text-slate-600">
+        Save your progress, complete the lesson, or move to the assessment.
+      </p>
 
-        <Link
-          href="/practice"
-          className="rounded-2xl border border-sky-200 p-6 transition hover:border-sky-500 hover:shadow-lg"
-        >
-          <PencilLine
-            className="mb-4 text-sky-600"
-            size={32}
-          />
+      <div className="mt-8 grid gap-5 md:grid-cols-3">
 
-          <h3 className="text-xl font-semibold">
-            Practice
-          </h3>
+        {/* Save Notes */}
 
-          <p className="mt-3 text-slate-600">
-            Strengthen your understanding through exercises.
-          </p>
-        </Link>
+        <button className="flex items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-6 py-4 font-semibold text-slate-700 transition hover:bg-slate-100">
 
-        <Link
-          href="/quiz"
-          className="rounded-2xl border border-sky-200 p-6 transition hover:border-sky-500 hover:shadow-lg"
-        >
-          <BookOpen
-            className="mb-4 text-sky-600"
-            size={32}
-          />
+          <Bookmark size={20} />
 
-          <h3 className="text-xl font-semibold">
-            Quiz
-          </h3>
+          Save Notes
 
-          <p className="mt-3 text-slate-600">
-            Test your knowledge with a short quiz.
-          </p>
-        </Link>
+        </button>
+
+        {/* Mark Completed */}
+
+        <button className="flex items-center justify-center gap-3 rounded-2xl bg-green-600 px-6 py-4 font-semibold text-white transition hover:bg-green-700">
+
+          <CheckCircle2 size={20} />
+
+          Mark as Completed
+
+        </button>
+
+        {/* Assessment */}
 
         <Link
           href="/assessment"
-          className="rounded-2xl border border-sky-200 p-6 transition hover:border-sky-500 hover:shadow-lg"
+          className="flex items-center justify-center gap-3 rounded-2xl bg-blue-600 px-6 py-4 font-semibold text-white transition hover:bg-blue-700"
         >
-          <ClipboardCheck
-            className="mb-4 text-sky-600"
-            size={32}
-          />
 
-          <h3 className="text-xl font-semibold">
-            Assessment
-          </h3>
+          <ClipboardCheck size={20} />
 
-          <p className="mt-3 text-slate-600">
-            Complete the module assessment.
-          </p>
+          Take Assessment
+
         </Link>
 
       </div>

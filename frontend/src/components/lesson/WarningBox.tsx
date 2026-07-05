@@ -3,35 +3,33 @@
 import { TriangleAlert } from "lucide-react";
 
 interface WarningBoxProps {
-  title?: string;
-  children: React.ReactNode;
+  warning: string;
 }
 
 export default function WarningBox({
-  title = "Common Mistake",
-  children,
+  warning,
 }: WarningBoxProps) {
   return (
-    <div className="my-8 rounded-3xl border-l-4 border-amber-500 bg-amber-50 p-6">
+    <div className="rounded-3xl border-l-4 border-red-500 bg-red-50 p-6">
 
-      <div className="mb-4 flex items-center gap-3">
+      <div className="flex items-start gap-4">
 
         <TriangleAlert
+          className="mt-1 text-red-600"
           size={22}
-          className="text-amber-600"
         />
 
-        <h3 className="text-lg font-semibold">
+        <div>
 
-          {title}
+          <h3 className="font-bold text-red-700">
+            Common Mistake
+          </h3>
 
-        </h3>
+          <p className="mt-2 leading-7 text-slate-700">
+            {warning}
+          </p>
 
-      </div>
-
-      <div className="leading-8 text-slate-700">
-
-        {children}
+        </div>
 
       </div>
 

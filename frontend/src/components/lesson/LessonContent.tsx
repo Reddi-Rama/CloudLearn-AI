@@ -1,40 +1,46 @@
 "use client";
 
-import { ReactNode } from "react";
+import { Target } from "lucide-react";
 
-interface LessonContentProps {
-  title?: string;
-  children: ReactNode;
-}
+const objectives = [
+  "Understand the core concept",
+  "Identify important terminology",
+  "Apply concepts to real examples",
+  "Prepare for the lesson assessment",
+];
 
-export default function LessonContent({
-  title,
-  children,
-}: LessonContentProps) {
+export default function LessonObjectives() {
   return (
-    <section className="rounded-3xl border border-slate-200 bg-white p-10 shadow-sm">
+    <section className="rounded-[30px] bg-white p-8 shadow-lg">
 
-      {title && (
-        <h2 className="mb-8 text-4xl font-bold text-slate-800">
-          {title}
+      <div className="flex items-center gap-3">
+
+        <Target className="text-blue-600" />
+
+        <h2 className="text-2xl font-bold">
+          Learning Objectives
         </h2>
-      )}
 
-      <div
-        className="
-          prose
-          prose-slate
-          max-w-none
-          prose-headings:font-bold
-          prose-headings:text-slate-800
-          prose-p:leading-8
-          prose-p:text-slate-700
-          prose-li:leading-8
-          prose-strong:text-slate-900
-        "
-      >
-        {children}
       </div>
+
+      <ul className="mt-6 space-y-4">
+
+        {objectives.map((item) => (
+
+          <li
+            key={item}
+            className="flex items-center gap-3"
+          >
+
+            <span className="h-2 w-2 rounded-full bg-blue-600" />
+
+            {item}
+
+          </li>
+
+        ))}
+
+      </ul>
 
     </section>
   );

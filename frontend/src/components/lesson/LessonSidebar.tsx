@@ -1,57 +1,41 @@
 "use client";
 
-import Link from "next/link";
-import { CheckCircle2, Circle } from "lucide-react";
+import { CheckCircle2, PlayCircle } from "lucide-react";
 
-interface Lesson {
-  id: string;
-  title: string;
-  completed: boolean;
-}
+const lessons = [
+  { title: "Introduction", completed: true },
+  { title: "Cloud Fundamentals", completed: true },
+  { title: "Cloud Architecture", completed: false },
+  { title: "Deployment Models", completed: false },
+  { title: "Mini Assessment", completed: false },
+];
 
-interface LessonSidebarProps {
-  courseTitle: string;
-  lessons: Lesson[];
-}
-
-export default function LessonSidebar({
-  courseTitle,
-  lessons,
-}: LessonSidebarProps) {
+export default function LessonSidebar() {
   return (
-    <aside className="sticky top-24 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <aside className="rounded-[30px] bg-white p-6 shadow-lg">
 
-      <h2 className="mb-6 text-2xl font-bold">
-        {courseTitle}
+      <h2 className="text-xl font-bold">
+        Lessons
       </h2>
 
-      <div className="space-y-4">
+      <div className="mt-6 space-y-5">
 
         {lessons.map((lesson) => (
 
-          <Link
-            key={lesson.id}
-            href={lesson.id}
-            className="flex items-center gap-3 rounded-xl p-3 transition hover:bg-sky-50"
+          <div
+            key={lesson.title}
+            className="flex items-center gap-3 rounded-2xl p-3 transition hover:bg-slate-100"
           >
 
             {lesson.completed ? (
-              <CheckCircle2
-                className="text-green-600"
-                size={20}
-              />
+              <CheckCircle2 className="text-green-500" size={22} />
             ) : (
-              <Circle
-                className="text-slate-400"
-                size={20}
-              />
+              <PlayCircle className="text-blue-500" size={22} />
             )}
 
-            <span className="text-slate-700">
-              {lesson.title}
-            </span>
+            <span>{lesson.title}</span>
 
-          </Link>
+          </div>
 
         ))}
 

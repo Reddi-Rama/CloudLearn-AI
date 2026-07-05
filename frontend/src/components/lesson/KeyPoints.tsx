@@ -10,28 +10,32 @@ export default function KeyPoints({
   points,
 }: KeyPointsProps) {
   return (
-    <section className="rounded-3xl border border-sky-200 bg-sky-50 p-8 shadow-sm">
+    <section className="rounded-[30px] bg-white p-8 shadow-lg">
 
-      <h2 className="mb-8 text-3xl font-bold text-slate-800">
-        Key Points
+      <h2 className="text-2xl font-bold">
+        Key Takeaways
       </h2>
 
-      <div className="space-y-5">
+      <div className="mt-6 space-y-5">
 
         {points.map((point, index) => (
+
           <div
             key={index}
             className="flex items-start gap-4"
           >
+
             <CheckCircle2
               size={22}
               className="mt-1 text-green-600"
             />
 
-            <p className="leading-8 text-slate-700">
+            <p className="leading-7 text-slate-700">
               {point}
             </p>
+
           </div>
+
         ))}
 
       </div>

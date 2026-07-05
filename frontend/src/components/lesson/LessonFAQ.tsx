@@ -1,66 +1,47 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
-import { useState } from "react";
+const faqs = [
+  {
+    question: "Why is this concept important?",
+    answer:
+      "It builds the foundation for the upcoming lessons.",
+  },
+  {
+    question: "Should I memorize everything?",
+    answer:
+      "Focus on understanding the concepts instead of memorizing.",
+  },
+  {
+    question: "Can I skip this lesson?",
+    answer:
+      "No. Complete each lesson before moving forward.",
+  },
+];
 
-interface FAQ {
-  question: string;
-  answer: string;
-}
-
-interface LessonFAQProps {
-  faqs: FAQ[];
-}
-
-export default function LessonFAQ({
-  faqs,
-}: LessonFAQProps) {
-  const [open, setOpen] = useState<number | null>(0);
-
+export default function LessonFAQ() {
   return (
-    <section className="rounded-3xl border border-sky-200 bg-white p-8 shadow-sm">
+    <section className="rounded-[30px] bg-white p-8 shadow-lg">
 
-      <h2 className="mb-8 text-3xl font-bold">
-
+      <h2 className="text-2xl font-bold">
         Frequently Asked Questions
-
       </h2>
 
-      <div className="space-y-4">
+      <div className="mt-8 space-y-6">
 
-        {faqs.map((faq, index) => (
+        {faqs.map((faq) => (
 
           <div
-            key={index}
-            className="rounded-2xl border border-slate-200"
+            key={faq.question}
+            className="rounded-2xl bg-slate-50 p-5"
           >
 
-            <button
-              onClick={() =>
-                setOpen(open === index ? null : index)
-              }
-              className="flex w-full items-center justify-between p-5"
-            >
+            <h3 className="font-bold">
+              {faq.question}
+            </h3>
 
-              <span className="font-semibold">
-
-                {faq.question}
-
-              </span>
-
-              <ChevronDown />
-
-            </button>
-
-            {open === index && (
-
-              <div className="border-t border-slate-200 p-5 text-slate-600">
-
-                {faq.answer}
-
-              </div>
-
-            )}
+            <p className="mt-3 text-slate-600 leading-7">
+              {faq.answer}
+            </p>
 
           </div>
 

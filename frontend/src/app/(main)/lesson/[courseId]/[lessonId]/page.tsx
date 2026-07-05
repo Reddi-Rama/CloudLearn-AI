@@ -1,163 +1,131 @@
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+
 import {
   LessonHeader,
+  LessonProgress,
+  ModuleTimeline,
   LessonSidebar,
   LessonObjectives,
   LessonContent,
-  LessonProgress,
-  LessonNavigation,
-  LessonSummary,
-  LessonResources,
-  LessonFAQ,
-  LessonCompletion,
-  LessonActions,
-  LessonNotes,
-  ModuleTimeline,
-  QuizSection,
-  ExerciseCard,
   InfoBox,
+  DiagramCard,
+  ExampleCard,
+  ExerciseCard,
   WarningBox,
   KeyPoints,
+  LessonNotes,
+  LessonResources,
+  LessonFAQ,
+  LessonSummary,
+  QuizSection,
+  LessonActions,
+  LessonCompletion,
+  LessonNavigation,
 } from "@/components/lesson";
 
-import {
-  CloudBackground,
-  PageContainer,
-} from "@/components/common";
-
-interface LessonPageProps {
-  params: Promise<{
-    courseId: string;
-    lessonId: string;
-  }>;
-}
-
-export default async function LessonPage({
-  params,
-}: LessonPageProps) {
-  const { courseId, lessonId } = await params;
-
+export default function LessonPage() {
   return (
-    <CloudBackground>
+    <>
+      <Header />
 
-      <PageContainer>
+      <main className="min-h-screen bg-slate-50 pt-36 pb-20">
 
-        <div className="grid gap-10 lg:grid-cols-4">
+        <div className="mx-auto max-w-7xl px-6">
 
-          {/* Sidebar */}
+          {/* Lesson Header */}
 
-          <LessonSidebar />
+          <LessonHeader
+            title="Introduction to Cloud Computing"
+            module="Module 1"
+            duration="20 Minutes"
+            difficulty="Beginner"
+          />
 
-          {/* Lesson */}
+          <div className="mt-10 grid gap-8 lg:grid-cols-4">
 
-          <div className="space-y-10 lg:col-span-3">
+            {/* Sidebar */}
 
-            <LessonHeader
-              module={courseId.replaceAll("-", " ")}
-              title={lessonId.replaceAll("-", " ")}
-            />
+            <div className="space-y-8 lg:col-span-1">
 
-            <LessonProgress progress={35} />
+              <LessonSidebar />
 
-            <LessonObjectives
-              objectives={[
-                "Understand Variables",
-                "Store Data",
-                "Learn Data Types",
-              ]}
-            />
+              <LessonProgress
+                completed={1}
+                total={10}
+              />
 
-            <LessonContent
-              content="Lesson content will be loaded here. Later this will come from your backend based on courseId and lessonId."
-            />
+              <ModuleTimeline />
 
-            <InfoBox title="Remember">
+            </div>
 
-              Python automatically determines the data type based on the assigned value.
+            {/* Main Content */}
 
-            </InfoBox>
+            <div className="space-y-8 lg:col-span-3">
 
-            <WarningBox>
+              <LessonObjectives />
 
-              Variable names are case-sensitive.
+              <LessonContent />
 
-            </WarningBox>
+              <InfoBox
+                title="Did You Know?"
+                description="Cloud computing allows organizations to scale applications quickly without investing in expensive hardware."
+              />
 
-            <KeyPoints
-              points={[
-                "Variables store values",
-                "Python is dynamically typed",
-                "Naming matters",
-              ]}
-            />
+              <DiagramCard
+                title="Cloud Infrastructure"
+                description="Understand how users connect to cloud providers through the internet."
+              />
 
-            <ExerciseCard
-              title="Exercise"
-              description="Create three variables and print them."
-            />
+              <ExampleCard
+                title="Real World Example"
+                example="When you use Google Drive or Microsoft OneDrive to store files online, you are using cloud computing."
+              />
 
-            <LessonSummary
-              points={[
-                "Variables are containers.",
-                "Different data types exist.",
-                "Python handles typing automatically.",
-              ]}
-            />
+              <ExerciseCard
+                title="Practice Exercise"
+                instruction="Identify five cloud services that you use in your daily life and classify them as SaaS, PaaS, or IaaS."
+              />
 
-            <LessonResources
-              resources={[
-                {
-                  title: "Python Docs",
-                  url: "https://docs.python.org/3/",
-                },
-              ]}
-            />
+              <WarningBox
+                warning="Cloud computing is not the same as simply using the internet. It provides computing resources on demand."
+              />
 
-            <LessonFAQ
-              faqs={[
-                {
-                  question: "What is a variable?",
-                  answer:
-                    "A variable stores information in memory.",
-                },
-              ]}
-            />
+              <KeyPoints
+                points={[
+                  "Cloud services are available on demand.",
+                  "Cloud computing reduces infrastructure cost.",
+                  "Scalability is one of its biggest advantages.",
+                  "Security remains a shared responsibility.",
+                ]}
+              />
 
-            <LessonNotes />
+              <LessonNotes />
 
-            <ModuleTimeline
-              lessons={[
-                {
-                  title: "Introduction",
-                  completed: true,
-                },
-                {
-                  title: "Variables",
-                  completed: true,
-                },
-                {
-                  title: "Data Types",
-                  completed: false,
-                },
-              ]}
-            />
+              <LessonResources />
 
-            <QuizSection
-              questionCount={10}
-              passingScore={70}
-            />
+              <LessonFAQ />
 
-            <LessonActions />
+              <LessonSummary />
 
-            <LessonNavigation />
+              <QuizSection />
 
-            <LessonCompletion />
+              <LessonActions />
+
+              <LessonCompletion />
+
+              <LessonNavigation />
+
+            </div>
 
           </div>
 
         </div>
 
-      </PageContainer>
+      </main>
 
-    </CloudBackground>
+      <Footer />
+
+    </>
   );
 }

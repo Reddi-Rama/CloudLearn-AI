@@ -3,26 +3,32 @@
 import Link from "next/link";
 import { ClipboardCheck } from "lucide-react";
 
-interface AssessmentsButtonProps {
-  href?: string;
-}
-
-export default function AssessmentsButton({
-  href = "/assessment",
-}: AssessmentsButtonProps) {
+export default function AssessmentsButton() {
   return (
-    <div className="flex justify-center">
+    <section className="mt-10 rounded-[30px] bg-gradient-to-r from-blue-600 to-indigo-600 p-8 text-white shadow-xl">
 
-      <Link
-        href={href}
-        className="flex items-center gap-3 rounded-full bg-sky-600 px-8 py-4 font-semibold text-white transition hover:bg-sky-700"
-      >
-        <ClipboardCheck size={20} />
+      <div className="flex flex-col items-center text-center">
 
-        Go to Assessment
+        <ClipboardCheck size={60} />
 
-      </Link>
+        <h2 className="mt-6 text-3xl font-bold">
+          Ready for Assessment?
+        </h2>
 
-    </div>
+        <p className="mt-5 max-w-xl leading-8 text-blue-100">
+          Test your understanding by answering four questions.
+          Pass the assessment to unlock the next lesson.
+        </p>
+
+        <Link
+          href="/assessment"
+          className="mt-8 rounded-2xl bg-white px-8 py-4 font-semibold text-blue-700 transition hover:scale-105"
+        >
+          Start Assessment
+        </Link>
+
+      </div>
+
+    </section>
   );
 }

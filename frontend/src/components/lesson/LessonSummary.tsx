@@ -1,46 +1,31 @@
 "use client";
 
-import { CheckCircle2 } from "lucide-react";
+import { ClipboardCheck } from "lucide-react";
 
-interface LessonSummaryProps {
-  points: string[];
-}
-
-export default function LessonSummary({
-  points,
-}: LessonSummaryProps) {
+export default function LessonSummary() {
   return (
-    <section className="rounded-3xl border border-sky-200 bg-white p-8 shadow-sm">
+    <section className="rounded-[30px] bg-gradient-to-br from-blue-50 to-indigo-100 p-8 shadow-lg">
 
-      <h2 className="mb-8 text-3xl font-bold text-slate-800">
-        Lesson Summary
-      </h2>
+      <div className="flex items-center gap-3">
 
-      <div className="space-y-5">
+        <ClipboardCheck
+          className="text-blue-600"
+          size={26}
+        />
 
-        {points.map((point, index) => (
-
-          <div
-            key={index}
-            className="flex items-start gap-4"
-          >
-
-            <CheckCircle2
-              size={22}
-              className="mt-1 text-green-600"
-            />
-
-            <p className="leading-7 text-slate-700">
-
-              {point}
-
-            </p>
-
-          </div>
-
-        ))}
+        <h2 className="text-2xl font-bold">
+          Lesson Summary
+        </h2>
 
       </div>
+
+      <p className="mt-6 leading-8 text-slate-700">
+
+        In this lesson, you learned the fundamental concepts,
+        explored practical examples, understood key terminology,
+        and prepared yourself for the lesson assessment.
+
+      </p>
 
     </section>
   );

@@ -1,46 +1,44 @@
 "use client";
 
-import { BookOpen } from "lucide-react";
+import { BookOpen, Clock3, BarChart3 } from "lucide-react";
 
 interface LessonHeaderProps {
-  course: string;
+  title: string;
   module: string;
-  lesson: string;
-  description?: string;
+  duration: string;
+  difficulty: string;
 }
 
 export default function LessonHeader({
-  course,
+  title,
   module,
-  lesson,
-  description,
+  duration,
+  difficulty,
 }: LessonHeaderProps) {
   return (
-    <section className="rounded-3xl border border-sky-200 bg-gradient-to-r from-sky-50 to-white p-10 shadow-sm">
+    <section className="rounded-[32px] bg-white p-8 shadow-lg">
 
-      <span className="rounded-full bg-sky-100 px-4 py-2 text-sm font-semibold text-sky-700">
-        {course}
-      </span>
-
-      <p className="mt-5 text-lg font-medium text-sky-600">
+      <div className="inline-flex items-center gap-2 rounded-full bg-blue-100 px-4 py-2 text-sm font-semibold text-blue-700">
+        <BookOpen size={16} />
         {module}
-      </p>
+      </div>
 
-      <h1 className="mt-3 text-5xl font-bold text-slate-800">
-        {lesson}
+      <h1 className="mt-6 text-4xl font-black text-slate-900">
+        {title}
       </h1>
 
-      {description && (
-        <p className="mt-5 max-w-3xl leading-8 text-slate-600">
-          {description}
-        </p>
-      )}
+      <div className="mt-8 flex flex-wrap gap-6">
 
-      <div className="mt-8 flex items-center gap-3 text-sky-600">
-        <BookOpen size={22} />
-        <span className="font-medium">
-          Self-paced Learning
-        </span>
+        <div className="flex items-center gap-2 text-slate-600">
+          <Clock3 size={18} />
+          <span>{duration}</span>
+        </div>
+
+        <div className="flex items-center gap-2 text-slate-600">
+          <BarChart3 size={18} />
+          <span>{difficulty}</span>
+        </div>
+
       </div>
 
     </section>

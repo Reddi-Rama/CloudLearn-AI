@@ -1,41 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
-interface LessonNavigationProps {
-  previousLesson?: string;
-  nextLesson?: string;
-}
-
-export default function LessonNavigation({
-  previousLesson,
-  nextLesson,
-}: LessonNavigationProps) {
+export default function LessonNavigation() {
   return (
-    <section className="flex flex-col gap-4 sm:flex-row sm:justify-between">
+    <section className="mt-10 flex flex-col gap-5 md:flex-row md:justify-between">
 
-      {previousLesson ? (
-        <Link
-          href={previousLesson}
-          className="flex items-center gap-3 rounded-full border border-sky-200 px-6 py-4 transition hover:bg-sky-50"
-        >
-          <ChevronLeft size={20} />
-          Previous Lesson
-        </Link>
-      ) : (
-        <div />
-      )}
+      <Link
+        href="#"
+        className="flex items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-8 py-4 font-semibold shadow hover:bg-slate-100"
+      >
+        <ArrowLeft size={20} />
+        Previous Lesson
+      </Link>
 
-      {nextLesson && (
-        <Link
-          href={nextLesson}
-          className="flex items-center gap-3 rounded-full bg-sky-600 px-6 py-4 text-white transition hover:bg-sky-700"
-        >
-          Next Lesson
-          <ChevronRight size={20} />
-        </Link>
-      )}
+      <Link
+        href="#"
+        className="flex items-center justify-center gap-3 rounded-2xl bg-blue-600 px-8 py-4 font-semibold text-white shadow hover:bg-blue-700"
+      >
+        Next Lesson
+        <ArrowRight size={20} />
+      </Link>
 
     </section>
   );

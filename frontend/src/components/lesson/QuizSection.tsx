@@ -1,81 +1,55 @@
 "use client";
 
-import Link from "next/link";
-import { Brain, ArrowRight, CircleHelp } from "lucide-react";
+import { CircleHelp } from "lucide-react";
 
-interface QuizSectionProps {
-  title?: string;
-  description?: string;
-  questions: number;
-  passingScore: number;
-  href: string;
-}
+const questions = [
+  "What is Cloud Computing?",
+  "Which deployment model is most secure?",
+  "Which cloud service provides virtual machines?",
+  "Which model offers maximum scalability?",
+];
 
-export default function QuizSection({
-  title = "Ready for the Quiz?",
-  description = "Test your understanding before moving to the next lesson.",
-  questions,
-  passingScore,
-  href,
-}: QuizSectionProps) {
+export default function QuizSection() {
   return (
-    <section className="rounded-3xl border border-sky-200 bg-gradient-to-r from-sky-50 via-white to-blue-50 p-8 shadow-sm">
+    <section className="rounded-[30px] bg-white p-8 shadow-lg">
 
-      <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex items-center gap-3">
 
-        <div>
+        <CircleHelp
+          className="text-blue-600"
+          size={24}
+        />
 
-          <div className="mb-5 flex items-center gap-3">
+        <h2 className="text-2xl font-bold">
+          Lesson Quiz
+        </h2>
 
-            <Brain
-              size={32}
-              className="text-sky-600"
-            />
+      </div>
 
-            <h2 className="text-3xl font-bold">
-              {title}
-            </h2>
+      <p className="mt-4 text-slate-600">
+        Answer these 4 questions to complete the lesson.
+      </p>
 
-          </div>
+      <div className="mt-8 space-y-4">
 
-          <p className="max-w-2xl leading-8 text-slate-600">
-            {description}
-          </p>
+        {questions.map((question, index) => (
 
-          <div className="mt-8 flex flex-wrap gap-4">
+          <div
+            key={question}
+            className="rounded-2xl border border-slate-200 p-5"
+          >
 
-            <div className="flex items-center gap-2 rounded-full bg-sky-100 px-5 py-2">
+            <p className="font-semibold">
+              Q{index + 1}. {question}
+            </p>
 
-              <CircleHelp
-                size={18}
-                className="text-sky-600"
-              />
-
-              <span className="font-medium">
-                {questions} Questions
-              </span>
-
-            </div>
-
-            <div className="rounded-full bg-green-100 px-5 py-2 font-medium text-green-700">
-
-              Pass Score: {passingScore}%
-
-            </div>
+            <button className="mt-4 rounded-xl bg-blue-600 px-5 py-2 text-white hover:bg-blue-700">
+              Answer Question
+            </button>
 
           </div>
 
-        </div>
-
-        <Link
-          href={href}
-          className="flex items-center justify-center gap-3 rounded-full bg-sky-600 px-8 py-4 font-semibold text-white transition hover:bg-sky-700"
-        >
-          Start Quiz
-
-          <ArrowRight size={20} />
-
-        </Link>
+        ))}
 
       </div>
 

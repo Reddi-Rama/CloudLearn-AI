@@ -1,54 +1,33 @@
 "use client";
 
-import { Award, ArrowRight } from "lucide-react";
+import { CheckCircle2, Award } from "lucide-react";
 
-interface LessonCompletionProps {
-  onNextLesson?: () => void;
-  onTakeQuiz?: () => void;
-}
-
-export default function LessonCompletion({
-  onNextLesson,
-  onTakeQuiz,
-}: LessonCompletionProps) {
+export default function LessonCompletion() {
   return (
-    <section className="rounded-3xl bg-gradient-to-r from-sky-500 to-blue-600 p-10 text-center text-white shadow-xl">
+    <section className="rounded-[32px] bg-gradient-to-r from-green-500 to-emerald-600 p-10 text-white shadow-xl">
 
-      <Award
-        size={70}
-        className="mx-auto"
-      />
+      <div className="flex flex-col items-center text-center">
 
-      <h2 className="mt-6 text-4xl font-bold">
+        <CheckCircle2 size={70} />
 
-        Lesson Completed 🎉
+        <h2 className="mt-6 text-4xl font-black">
+          Lesson Completed!
+        </h2>
 
-      </h2>
+        <p className="mt-5 max-w-2xl text-lg leading-8 text-green-100">
+          Congratulations! You have successfully completed this lesson.
+          Continue learning to unlock your course certificate.
+        </p>
 
-      <p className="mt-4 text-lg text-sky-100">
+        <div className="mt-8 flex items-center gap-3 rounded-full bg-white/20 px-6 py-3">
 
-        Great job! Continue your learning journey.
+          <Award size={24} />
 
-      </p>
+          <span className="font-semibold">
+            Progress Updated
+          </span>
 
-      <div className="mt-10 flex flex-wrap justify-center gap-4">
-
-        <button
-          onClick={onTakeQuiz}
-          className="rounded-full bg-white px-8 py-3 font-semibold text-sky-700"
-        >
-          Take Quiz
-        </button>
-
-        <button
-          onClick={onNextLesson}
-          className="flex items-center gap-2 rounded-full border border-white px-8 py-3 font-semibold"
-        >
-          Next Lesson
-
-          <ArrowRight size={18} />
-
-        </button>
+        </div>
 
       </div>
 
