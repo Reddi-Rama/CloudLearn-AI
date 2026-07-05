@@ -1,49 +1,39 @@
 "use client";
 
-export default function LessonContent() {
+import { ReactNode } from "react";
+
+interface LessonContentProps {
+  title?: string;
+  children: ReactNode;
+}
+
+export default function LessonContent({
+  title,
+  children,
+}: LessonContentProps) {
   return (
-    <section className="rounded-3xl bg-white p-10 shadow-lg">
+    <section className="rounded-3xl border border-slate-200 bg-white p-10 shadow-sm">
 
-      <span className="rounded-full bg-sky-100 px-4 py-2 text-sky-600">
+      {title && (
+        <h2 className="mb-8 text-4xl font-bold text-slate-800">
+          {title}
+        </h2>
+      )}
 
-        Module 2
-
-      </span>
-
-      <h1 className="mt-6 text-5xl font-black">
-
-        Python Data Types
-
-      </h1>
-
-      <p className="mt-8 text-lg leading-9 text-slate-600">
-
-        Python provides several built-in data types.
-
-        The most common are integers, floats,
-        strings, booleans, lists, tuples,
-        dictionaries and sets.
-
-      </p>
-
-      <div className="mt-10 rounded-3xl bg-slate-100 p-8">
-
-        <pre>
-
-{`age = 20
-
-name = "Rama"
-
-price = 99.5
-
-print(type(age))
-
-print(type(name))
-
-print(type(price))`}
-
-        </pre>
-
+      <div
+        className="
+          prose
+          prose-slate
+          max-w-none
+          prose-headings:font-bold
+          prose-headings:text-slate-800
+          prose-p:leading-8
+          prose-p:text-slate-700
+          prose-li:leading-8
+          prose-strong:text-slate-900
+        "
+      >
+        {children}
       </div>
 
     </section>

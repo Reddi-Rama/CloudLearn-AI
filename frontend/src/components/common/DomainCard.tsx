@@ -1,47 +1,47 @@
 "use client";
 
-interface Props{
-title:string;
-courses:number;
-icon:string;
+import Link from "next/link";
+import { ReactNode } from "react";
+import CloudShape from "./CloudShape";
+
+interface DomainCardProps {
+  title: string;
+  description: string;
+  icon: ReactNode;
+  href: string;
 }
 
 export default function DomainCard({
-title,
-courses,
-icon,
-}:Props){
+  title,
+  description,
+  icon,
+  href,
+}: DomainCardProps) {
+  return (
+    <Link href={href}>
 
-return(
+      <CloudShape className="h-full p-8 transition hover:scale-105">
 
-<div className="rounded-[32px] bg-white p-8 shadow-xl transition hover:-translate-y-2 hover:shadow-2xl">
+        <div className="mb-6 flex justify-center text-sky-600">
 
-<div className="text-5xl">
+          {icon}
 
-{icon}
+        </div>
 
-</div>
+        <h3 className="text-center text-2xl font-bold">
 
-<h2 className="mt-6 text-3xl font-bold">
+          {title}
 
-{title}
+        </h3>
 
-</h2>
+        <p className="mt-4 text-center text-slate-600">
 
-<p className="mt-3 text-slate-500">
+          {description}
 
-{courses} Courses
+        </p>
 
-</p>
+      </CloudShape>
 
-<button className="mt-8 rounded-xl bg-sky-500 px-6 py-3 text-white">
-
-Explore
-
-</button>
-
-</div>
-
-);
-
+    </Link>
+  );
 }

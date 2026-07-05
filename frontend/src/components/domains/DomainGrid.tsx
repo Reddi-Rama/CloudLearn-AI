@@ -1,122 +1,101 @@
 "use client";
 
-import DomainCard from "./DomainCard";
 import {
-  Code2,
   Brain,
+  Bot,
   Database,
+  BarChart3,
+  Globe,
   Cloud,
   Shield,
-  Globe,
-  Server,
+  Smartphone,
+  Settings,
   Sparkles,
-  GraduationCap,
-  Cpu,
-  Workflow,
-  BarChart3,
 } from "lucide-react";
+
+import DomainCard from "./DomainCard";
 
 const domains = [
   {
-    title: "Programming",
-    courses: 8,
-    icon: Code2,
-    color: "from-sky-500 to-blue-600",
-    href: "/domains/programming",
-  },
-  {
     title: "Artificial Intelligence",
-    courses: 6,
-    icon: Brain,
-    color: "from-violet-500 to-purple-600",
-    href: "/domains/artificial-intelligence",
+    description: "Build intelligent AI applications.",
+    icon: <Brain size={28} />,
+    href: "/courses/artificial-intelligence",
   },
   {
     title: "Machine Learning",
-    courses: 5,
-    icon: Cpu,
-    color: "from-indigo-500 to-blue-600",
-    href: "/domains/machine-learning",
+    description: "Master ML algorithms and models.",
+    icon: <Bot size={28} />,
+    href: "/courses/machine-learning",
   },
   {
     title: "Data Science",
-    courses: 6,
-    icon: Database,
-    color: "from-cyan-500 to-blue-600",
-    href: "/domains/data-science",
-  },
-  {
-    title: "Cloud Computing",
-    courses: 5,
-    icon: Cloud,
-    color: "from-sky-500 to-cyan-600",
-    href: "/domains/cloud-computing",
-  },
-  {
-    title: "Cyber Security",
-    courses: 5,
-    icon: Shield,
-    color: "from-red-500 to-orange-500",
-    href: "/domains/cyber-security",
-  },
-  {
-    title: "Full Stack Development",
-    courses: 8,
-    icon: Globe,
-    color: "from-green-500 to-emerald-600",
-    href: "/domains/full-stack",
-  },
-  {
-    title: "DevOps",
-    courses: 5,
-    icon: Server,
-    color: "from-emerald-500 to-green-600",
-    href: "/domains/devops",
+    description: "Learn statistics and predictive analytics.",
+    icon: <Database size={28} />,
+    href: "/courses/data-science",
   },
   {
     title: "Data Analytics",
-    courses: 5,
-    icon: BarChart3,
-    color: "from-pink-500 to-rose-600",
-    href: "/domains/data-analytics",
+    description: "Transform raw data into insights.",
+    icon: <BarChart3 size={28} />,
+    href: "/courses/data-analytics",
   },
   {
-    title: "AI Tools",
-    courses: 6,
-    icon: Sparkles,
-    color: "from-yellow-500 to-orange-500",
-    href: "/domains/ai-tools",
+    title: "Generative AI",
+    description: "Build LLMs and AI Agents.",
+    icon: <Sparkles size={28} />,
+    href: "/courses/generative-ai",
+  },
+  {
+    title: "Full Stack",
+    description: "Frontend + Backend Development.",
+    icon: <Globe size={28} />,
+    href: "/courses/full-stack",
+  },
+  {
+    title: "Cloud Computing",
+    description: "AWS, Azure & Google Cloud.",
+    icon: <Cloud size={28} />,
+    href: "/courses/cloud",
+  },
+  {
+    title: "DevOps",
+    description: "CI/CD and Docker pipelines.",
+    icon: <Settings size={28} />,
+    href: "/courses/devops",
+  },
+  {
+    title: "Cyber Security",
+    description: "Ethical Hacking & Security.",
+    icon: <Shield size={28} />,
+    href: "/courses/cyber-security",
   },
   {
     title: "Vibe Coding",
-    courses: 1,
-    icon: Workflow,
-    color: "from-fuchsia-500 to-violet-600",
-    href: "/domains/vibe-coding",
-  },
-  {
-    title: "B.Tech Subjects",
-    courses: 12,
-    icon: GraduationCap,
-    color: "from-slate-500 to-slate-700",
-    href: "/domains/btech",
+    description: "Create apps with AI assistance.",
+    icon: <Smartphone size={28} />,
+    href: "/courses/vibe-coding",
   },
 ];
 
 export default function DomainGrid() {
   return (
-    <section className="pb-24">
-      <div className="mx-auto max-w-7xl px-6">
+    <section className="mx-auto max-w-7xl px-6 py-16">
 
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid gap-y-14 gap-x-8 justify-items-center sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
 
-          {domains.map((domain) => (
-            <DomainCard key={domain.title} {...domain} />
-          ))}
-
-        </div>
+        {domains.map((domain) => (
+          <DomainCard
+            key={domain.title}
+            title={domain.title}
+            description={domain.description}
+            icon={domain.icon}
+            href={domain.href}
+          />
+        ))}
 
       </div>
+
     </section>
   );
 }

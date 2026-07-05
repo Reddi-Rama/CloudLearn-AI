@@ -1,51 +1,51 @@
 "use client";
 
-import { Copy } from "lucide-react";
+import { Copy, Check } from "lucide-react";
+import { useState } from "react";
 
-interface Props{
-code:string;
-language:string;
+interface CodeBlockProps {
+  language?: string;
+  code: string;
 }
 
 export default function CodeBlock({
-code,
-language,
-}:Props){
+  language = "text",
+  code,
+}: CodeBlockProps) {
+  const [copied, setCopied] = useState(false);
 
-return(
+  const copyCode = async () => {
+    await navigator.clipboard.writeText(code);
+    setCopied(true);
 
-<div className="overflow-hidden rounded-3xl bg-[#0F172A] shadow-xl">
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
 
-<div className="flex items-center justify-between border-b border-slate-700 px-6 py-4">
+  return (
+    <div className="overflow-hidden rounded-3xl border border-slate-700 bg-slate-900 shadow-lg">
 
-<span className="text-sm text-slate-300">
+      <div className="flex items-center justify-between border-b border-slate-700 px-6 py-4">
 
-{language}
+        <span className="text-sm font-medium uppercase tracking-wide text-slate-300">
+          {language}
+        </span>
 
-</span>
+        <button
+          onClick={copyCode}
+          className="flex items-center gap-2 rounded-lg bg-slate-800 px-3 py-2 text-sm text-white transition hover:bg-slate-700"
+        >
+          {copied ? <Check size={16} /> : <Copy size={16} />}
+          {copied ? "Copied" : "Copy"}
+        </button>
 
-<button className="flex items-center gap-2 rounded-xl bg-slate-700 px-4 py-2 text-white">
+      </div>
 
-<Copy size={16}/>
+      <pre className="overflow-x-auto p-6 text-sm leading-7 text-green-400">
+        <code>{code}</code>
+      </pre>
 
-Copy
-
-</button>
-
-</div>
-
-<pre className="overflow-auto p-8 text-green-400">
-
-<code>
-
-{code}
-
-</code>
-
-</pre>
-
-</div>
-
-);
-
+    </div>
+  );
 }

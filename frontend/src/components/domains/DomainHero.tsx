@@ -1,26 +1,69 @@
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+"use client";
 
-import DomainHero from "@/components/domains/DomainHero";
-import DomainSearch from "@/components/domains/DomainSearch";
-import DomainGrid from "@/components/domains/DomainGrid";
+import { motion } from "framer-motion";
+import { BookOpen, Sparkles } from "lucide-react";
 
-export default function DomainsPage() {
+export default function DomainHero() {
   return (
-    <>
-      <Navbar />
+    <section className="relative overflow-hidden pt-36 pb-24">
 
-      <main className="bg-[#F8FBFF] pt-28">
+      <div className="container-custom">
 
-        <DomainHero />
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="mx-auto max-w-4xl text-center"
+        >
 
-        <DomainSearch />
+          <div className="inline-flex items-center gap-2 rounded-full bg-blue-100 px-5 py-2 text-blue-600">
 
-        <DomainGrid />
+            <Sparkles size={18} />
 
-      </main>
+            <span className="font-medium">
+              Explore Technology Domains
+            </span>
 
-      <Footer />
-    </>
+          </div>
+
+          <h1 className="heading mt-8">
+
+            Choose Your
+
+            <span className="text-blue-600">
+              {" "}Dream Career
+            </span>
+
+          </h1>
+
+          <p className="sub-heading mt-6">
+
+            Browse all learning domains available on CloudLearn AI.
+            Every domain includes structured learning paths,
+            practical projects, quizzes, mock tests and certificates.
+
+          </p>
+
+          <div className="mt-12 flex justify-center">
+
+            <div className="glass-card flex items-center gap-3 rounded-full px-8 py-4">
+
+              <BookOpen className="text-blue-600" />
+
+              <span className="font-medium">
+
+                40+ Learning Domains
+
+              </span>
+
+            </div>
+
+          </div>
+
+        </motion.div>
+
+      </div>
+
+    </section>
   );
 }

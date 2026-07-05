@@ -1,122 +1,143 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
+import {
+  Award,
+  ShieldCheck,
+  Download,
+  ArrowRight,
+} from "lucide-react";
 
-export default function CTA() {
+export default function CertificatePreview() {
   return (
-    <section className="relative overflow-hidden py-24">
+    <section className="section">
 
-      {/* Background */}
+      <div className="container-custom">
 
-      <div className="absolute inset-0 bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-700" />
+        <div className="grid items-center gap-16 lg:grid-cols-2">
 
-      {/* Glow */}
+          {/* Left */}
 
-      <div className="absolute -left-32 top-10 h-80 w-80 rounded-full bg-white/10 blur-[120px]" />
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
 
-      <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-cyan-300/20 blur-[150px]" />
+            <span className="rounded-full bg-emerald-100 px-5 py-2 text-sm font-semibold text-emerald-700">
+              Earn Certificates
+            </span>
 
-      <div className="relative mx-auto max-w-7xl px-6">
+            <h2 className="heading mt-6">
+              Showcase Your
+              <span className="text-blue-600"> Achievements</span>
+            </h2>
 
-        <div className="rounded-[40px] border border-white/20 bg-white/10 p-14 text-center backdrop-blur-xl">
+            <p className="sub-heading mt-6">
+              Complete courses, pass assessments, and earn
+              industry-style certificates that can be verified
+              online and shared with employers.
+            </p>
 
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white/20">
+            <div className="mt-10 space-y-5">
 
-            <Sparkles
-              className="text-white"
-              size={38}
-            />
+              <div className="flex items-center gap-3">
+                <ShieldCheck className="text-green-600" />
+                <span>Secure Verification</span>
+              </div>
 
-          </div>
+              <div className="flex items-center gap-3">
+                <Award className="text-blue-600" />
+                <span>Professional Certificate Design</span>
+              </div>
 
-          <h2 className="mt-8 text-5xl font-black text-white">
+              <div className="flex items-center gap-3">
+                <Download className="text-violet-600" />
+                <span>Download & Share Anytime</span>
+              </div>
 
-            Start Your Learning Journey Today
-
-          </h2>
-
-          <p className="mx-auto mt-8 max-w-3xl text-xl leading-9 text-blue-100">
-
-            Join thousands of learners mastering Programming,
-            Artificial Intelligence, Machine Learning,
-            Data Science, Cloud Computing,
-            Cyber Security and much more.
-
-          </p>
-
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-6">
+            </div>
 
             <Link
-              href="/domains"
-              className="group flex items-center gap-3 rounded-2xl bg-white px-8 py-5 text-lg font-bold text-sky-700 shadow-2xl transition-all duration-300 hover:scale-105"
+              href="/certificates"
+              className="btn-primary mt-10 inline-flex"
             >
-              Explore Domains
-
-              <ArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
-
+              Explore Certificates
+              <ArrowRight size={18} />
             </Link>
 
-            <Link
-              href="/register"
-              className="rounded-2xl border border-white/40 bg-white/10 px-8 py-5 text-lg font-semibold text-white backdrop-blur-xl transition hover:bg-white/20"
-            >
-              Create Free Account
-            </Link>
+          </motion.div>
 
-          </div>
+          {/* Right */}
 
-          <div className="mt-14 grid gap-8 md:grid-cols-3">
+          <motion.div
+            initial={{ opacity: 0, x: 60 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
 
-            <div>
+            <div className="glass-card rounded-[36px] p-8 shadow-2xl">
 
-              <h3 className="text-4xl font-black text-white">
+              <div className="rounded-3xl border-2 border-blue-100 bg-gradient-to-br from-white to-blue-50 p-10">
 
-                100+
+                <div className="flex justify-center">
 
-              </h3>
+                  <Award
+                    size={70}
+                    className="text-blue-600"
+                  />
 
-              <p className="mt-2 text-blue-100">
+                </div>
 
-                Learning Paths
+                <h3 className="mt-8 text-center text-3xl font-bold">
+                  Certificate of Completion
+                </h3>
 
-              </p>
+                <p className="mt-4 text-center text-slate-600">
+                  This certifies that
+                </p>
+
+                <h4 className="mt-4 text-center text-2xl font-bold text-blue-700">
+                  Student Name
+                </h4>
+
+                <p className="mt-5 text-center text-slate-600">
+                  has successfully completed
+                </p>
+
+                <h5 className="mt-4 text-center text-xl font-semibold">
+                  Artificial Intelligence Learning Path
+                </h5>
+
+                <div className="mt-10 flex items-center justify-between">
+
+                  <div>
+
+                    <p className="text-xs text-slate-500">
+                      Certificate ID
+                    </p>
+
+                    <p className="font-semibold">
+                      CLAI-2026-0001
+                    </p>
+
+                  </div>
+
+                  <ShieldCheck
+                    size={36}
+                    className="text-green-600"
+                  />
+
+                </div>
+
+              </div>
 
             </div>
 
-            <div>
-
-              <h3 className="text-4xl font-black text-white">
-
-                500+
-
-              </h3>
-
-              <p className="mt-2 text-blue-100">
-
-                Interactive Lessons
-
-              </p>
-
-            </div>
-
-            <div>
-
-              <h3 className="text-4xl font-black text-white">
-
-                50K+
-
-              </h3>
-
-              <p className="mt-2 text-blue-100">
-
-                Future Learners
-
-              </p>
-
-            </div>
-
-          </div>
+          </motion.div>
 
         </div>
 

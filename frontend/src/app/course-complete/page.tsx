@@ -1,8 +1,8 @@
 import CourseCompleted from "@/components/course/CourseCompleted";
 
-export default function Page() {
+export default function CourseCompletePage() {
   return (
-    <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-10">
+    <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
       <CourseCompleted />
     </main>
   );

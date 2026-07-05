@@ -1,70 +1,56 @@
 "use client";
 
-import {
-Download,
-FileDown,
-Video,
-Link2
-} from "lucide-react";
+import { BookMarked, ExternalLink } from "lucide-react";
 
-const resources=[
-{
-icon:Video,
-title:"Lesson Video"
-},
-{
-icon:FileDown,
-title:"PDF Notes"
-},
-{
-icon:Download,
-title:"Source Code"
-},
-{
-icon:Link2,
-title:"Useful Links"
+interface Resource {
+  title: string;
+  url: string;
 }
-];
 
-export default function LessonResources(){
+interface LessonResourcesProps {
+  resources: Resource[];
+}
 
-return(
+export default function LessonResources({
+  resources,
+}: LessonResourcesProps) {
+  return (
+    <section className="rounded-3xl border border-sky-200 bg-white p-8 shadow-sm">
 
-<section className="rounded-3xl bg-white p-8 shadow-lg">
+      <h2 className="mb-8 flex items-center gap-3 text-3xl font-bold">
 
-<h2 className="mb-8 text-2xl font-bold">
+        <BookMarked className="text-sky-600" />
 
-Resources
+        Resources
 
-</h2>
+      </h2>
 
-<div className="grid gap-5 md:grid-cols-2">
+      <div className="space-y-5">
 
-{resources.map((item)=>{
+        {resources.map((resource) => (
 
-const Icon=item.icon;
+          <a
+            key={resource.title}
+            href={resource.url}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center justify-between rounded-2xl border border-slate-200 p-5 transition hover:border-sky-400 hover:bg-sky-50"
+          >
 
-return(
+            <span className="font-medium">
 
-<button
-key={item.title}
-className="flex items-center gap-4 rounded-2xl border p-6 hover:bg-sky-50"
->
+              {resource.title}
 
-<Icon className="text-sky-600"/>
+            </span>
 
-{item.title}
+            <ExternalLink size={18} />
 
-</button>
+          </a>
 
-);
+        ))}
 
-})}
+      </div>
 
-</div>
-
-</section>
-
-);
-
+    </section>
+  );
 }

@@ -1,6 +1,5 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import CTA from "@/components/home/CTA";
 import FAQ from "@/components/home/FAQ";
 
 import {
@@ -216,7 +215,6 @@ export default function ContactPage() {
 
         <FAQ />
 
-        <CTA />
 
       </main>
 

@@ -1,89 +1,61 @@
 "use client";
 
-import {
-  CheckCircle2,
-  Circle,
-  Lock,
-} from "lucide-react";
+import Link from "next/link";
+import { CheckCircle2, Circle } from "lucide-react";
 
-const modules = [
-  {
-    title: "Module 1",
-    lessons: [
-      { title: "Introduction", status: "completed" },
-      { title: "Variables", status: "completed" },
-      { title: "Assessment", status: "completed" },
-    ],
-  },
-  {
-    title: "Module 2",
-    lessons: [
-      { title: "Data Types", status: "current" },
-      { title: "Operators", status: "locked" },
-      { title: "Assessment", status: "locked" },
-    ],
-  },
-];
+interface Lesson {
+  id: string;
+  title: string;
+  completed: boolean;
+}
 
-export default function LessonSidebar() {
+interface LessonSidebarProps {
+  courseTitle: string;
+  lessons: Lesson[];
+}
+
+export default function LessonSidebar({
+  courseTitle,
+  lessons,
+}: LessonSidebarProps) {
   return (
-    <aside className="h-screen overflow-y-auto rounded-3xl bg-white p-6 shadow-lg">
+    <aside className="sticky top-24 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
 
-      <h2 className="mb-8 text-2xl font-bold">
-
-        Course Content
-
+      <h2 className="mb-6 text-2xl font-bold">
+        {courseTitle}
       </h2>
 
-      {modules.map((module) => (
+      <div className="space-y-4">
 
-        <div
-          key={module.title}
-          className="mb-8"
-        >
+        {lessons.map((lesson) => (
 
-          <h3 className="mb-4 font-bold text-sky-600">
+          <Link
+            key={lesson.id}
+            href={lesson.id}
+            className="flex items-center gap-3 rounded-xl p-3 transition hover:bg-sky-50"
+          >
 
-            {module.title}
+            {lesson.completed ? (
+              <CheckCircle2
+                className="text-green-600"
+                size={20}
+              />
+            ) : (
+              <Circle
+                className="text-slate-400"
+                size={20}
+              />
+            )}
 
-          </h3>
+            <span className="text-slate-700">
+              {lesson.title}
+            </span>
 
-          <div className="space-y-4">
+          </Link>
 
-            {module.lessons.map((lesson) => (
+        ))}
 
-              <div
-                key={lesson.title}
-                className="flex items-center gap-3 rounded-xl p-3 hover:bg-slate-50"
-              >
-
-                {lesson.status === "completed" && (
-                  <CheckCircle2 className="text-green-500" size={20}/>
-                )}
-
-                {lesson.status === "current" && (
-                  <Circle className="text-sky-500" size={20}/>
-                )}
-
-                {lesson.status === "locked" && (
-                  <Lock className="text-slate-400" size={18}/>
-                )}
-
-                <span>
-
-                  {lesson.title}
-
-                </span>
-
-              </div>
-
-            ))}
-
-          </div>
-
-        </div>
-
-      ))}
+      </div>
 
     </aside>
   );

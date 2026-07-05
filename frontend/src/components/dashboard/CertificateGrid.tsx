@@ -1,67 +1,52 @@
 "use client";
 
-import {
-Award,
-Download,
-BadgeCheck
-} from "lucide-react";
+import { Award } from "lucide-react";
 
-const certificates=[
-"Python Programming",
-"C Programming",
+const certificates = [
+  "Artificial Intelligence",
+  "Python Programming",
+  "Cloud Computing",
+  "Machine Learning",
+  "Data Science",
+  "Cyber Security",
 ];
 
-export default function CertificateGrid(){
+export default function CertificateGrid() {
+  return (
+    <section className="mt-14">
 
-return(
+      <h2 className="mb-8 text-3xl font-bold">
+        Certificate Gallery
+      </h2>
 
-<section className="mx-auto max-w-7xl">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 
-<h1 className="mb-10 text-4xl font-black">
+        {certificates.map((item) => (
 
-Certificates
+          <div
+            key={item}
+            className="rounded-[28px] bg-white p-8 shadow-lg hover:shadow-2xl transition"
+          >
 
-</h1>
+            <Award
+              size={46}
+              className="text-yellow-500"
+            />
 
-<div className="grid gap-8 lg:grid-cols-2">
+            <h3 className="mt-5 text-xl font-bold">
+              {item}
+            </h3>
 
-{certificates.map((certificate)=>(
+            <p className="mt-2 text-slate-500">
+              Successfully Completed
+            </p>
 
-<div
-key={certificate}
-className="rounded-3xl bg-white p-8 shadow-xl"
->
+          </div>
 
-<div className="flex items-center justify-between">
+        ))}
 
-<Award className="text-yellow-500" size={40}/>
+      </div>
 
-<BadgeCheck className="text-green-500"/>
-
-</div>
-
-<h2 className="mt-8 text-3xl font-bold">
-
-{certificate}
-
-</h2>
-
-<button className="mt-8 flex items-center gap-2 rounded-xl bg-sky-500 px-6 py-4 text-white">
-
-<Download size={18}/>
-
-Download
-
-</button>
-
-</div>
-
-))}
-
-</div>
-
-</section>
-
-);
-
+    </section>
+  );
 }

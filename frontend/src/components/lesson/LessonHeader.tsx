@@ -1,64 +1,46 @@
 "use client";
 
-import { Clock, BookOpen, GraduationCap } from "lucide-react";
+import { BookOpen } from "lucide-react";
 
-export default function LessonHeader() {
+interface LessonHeaderProps {
+  course: string;
+  module: string;
+  lesson: string;
+  description?: string;
+}
+
+export default function LessonHeader({
+  course,
+  module,
+  lesson,
+  description,
+}: LessonHeaderProps) {
   return (
-    <section className="overflow-hidden rounded-[32px] bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-700 p-10 text-white shadow-2xl">
+    <section className="rounded-3xl border border-sky-200 bg-gradient-to-r from-sky-50 to-white p-10 shadow-sm">
 
-      <div className="flex flex-col justify-between gap-8 lg:flex-row">
+      <span className="rounded-full bg-sky-100 px-4 py-2 text-sm font-semibold text-sky-700">
+        {course}
+      </span>
 
-        <div>
+      <p className="mt-5 text-lg font-medium text-sky-600">
+        {module}
+      </p>
 
-          <span className="rounded-full bg-white/20 px-4 py-2 text-sm">
+      <h1 className="mt-3 text-5xl font-bold text-slate-800">
+        {lesson}
+      </h1>
 
-            Module 2 • Lesson 1
+      {description && (
+        <p className="mt-5 max-w-3xl leading-8 text-slate-600">
+          {description}
+        </p>
+      )}
 
-          </span>
-
-          <h1 className="mt-6 text-5xl font-black">
-
-            Python Data Types
-
-          </h1>
-
-          <p className="mt-6 max-w-3xl text-lg leading-8 text-white/90">
-
-            Learn Python Data Types with examples,
-            visual diagrams and practical coding.
-
-          </p>
-
-        </div>
-
-        <div className="grid gap-4">
-
-          <div className="flex items-center gap-3 rounded-2xl bg-white/15 p-4">
-
-            <Clock />
-
-            <span>45 Minutes</span>
-
-          </div>
-
-          <div className="flex items-center gap-3 rounded-2xl bg-white/15 p-4">
-
-            <BookOpen />
-
-            <span>Lesson 5 / 12</span>
-
-          </div>
-
-          <div className="flex items-center gap-3 rounded-2xl bg-white/15 p-4">
-
-            <GraduationCap />
-
-            <span>Intermediate</span>
-
-          </div>
-
-        </div>
-
+      <div className="mt-8 flex items-center gap-3 text-sky-600">
+        <BookOpen size={22} />
+        <span className="font-medium">
+          Self-paced Learning
+        </span>
       </div>
 
     </section>

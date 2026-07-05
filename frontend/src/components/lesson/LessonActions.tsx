@@ -1,43 +1,78 @@
 "use client";
 
+import Link from "next/link";
 import {
-Bookmark,
-Share2,
-Download
+  BookOpen,
+  PencilLine,
+  ClipboardCheck,
 } from "lucide-react";
 
-export default function LessonActions(){
+export default function LessonActions() {
+  return (
+    <section className="rounded-3xl border border-sky-200 bg-white p-8 shadow-sm">
 
-return(
+      <h2 className="mb-8 text-3xl font-bold text-slate-800">
+        Continue Your Learning
+      </h2>
 
-<div className="flex flex-wrap gap-4">
+      <div className="grid gap-6 md:grid-cols-3">
 
-<button className="flex items-center gap-3 rounded-xl bg-slate-100 px-6 py-4">
+        <Link
+          href="/practice"
+          className="rounded-2xl border border-sky-200 p-6 transition hover:border-sky-500 hover:shadow-lg"
+        >
+          <PencilLine
+            className="mb-4 text-sky-600"
+            size={32}
+          />
 
-<Bookmark/>
+          <h3 className="text-xl font-semibold">
+            Practice
+          </h3>
 
-Bookmark
+          <p className="mt-3 text-slate-600">
+            Strengthen your understanding through exercises.
+          </p>
+        </Link>
 
-</button>
+        <Link
+          href="/quiz"
+          className="rounded-2xl border border-sky-200 p-6 transition hover:border-sky-500 hover:shadow-lg"
+        >
+          <BookOpen
+            className="mb-4 text-sky-600"
+            size={32}
+          />
 
-<button className="flex items-center gap-3 rounded-xl bg-slate-100 px-6 py-4">
+          <h3 className="text-xl font-semibold">
+            Quiz
+          </h3>
 
-<Share2/>
+          <p className="mt-3 text-slate-600">
+            Test your knowledge with a short quiz.
+          </p>
+        </Link>
 
-Share
+        <Link
+          href="/assessment"
+          className="rounded-2xl border border-sky-200 p-6 transition hover:border-sky-500 hover:shadow-lg"
+        >
+          <ClipboardCheck
+            className="mb-4 text-sky-600"
+            size={32}
+          />
 
-</button>
+          <h3 className="text-xl font-semibold">
+            Assessment
+          </h3>
 
-<button className="flex items-center gap-3 rounded-xl bg-slate-100 px-6 py-4">
+          <p className="mt-3 text-slate-600">
+            Complete the module assessment.
+          </p>
+        </Link>
 
-<Download/>
+      </div>
 
-Download Notes
-
-</button>
-
-</div>
-
-);
-
+    </section>
+  );
 }

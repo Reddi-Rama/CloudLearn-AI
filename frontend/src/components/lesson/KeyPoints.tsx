@@ -1,44 +1,41 @@
 "use client";
 
-const points=[
-"Easy to understand explanations",
-"Real-world examples",
-"Visual diagrams",
-"Practice questions",
-"Mini assessment"
-];
+import { CheckCircle2 } from "lucide-react";
 
-export default function KeyPoints(){
+interface KeyPointsProps {
+  points: string[];
+}
 
-return(
+export default function KeyPoints({
+  points,
+}: KeyPointsProps) {
+  return (
+    <section className="rounded-3xl border border-sky-200 bg-sky-50 p-8 shadow-sm">
 
-<section className="rounded-3xl bg-white p-8 shadow-lg">
+      <h2 className="mb-8 text-3xl font-bold text-slate-800">
+        Key Points
+      </h2>
 
-<h2 className="mb-8 text-2xl font-bold">
+      <div className="space-y-5">
 
-Key Points
+        {points.map((point, index) => (
+          <div
+            key={index}
+            className="flex items-start gap-4"
+          >
+            <CheckCircle2
+              size={22}
+              className="mt-1 text-green-600"
+            />
 
-</h2>
+            <p className="leading-8 text-slate-700">
+              {point}
+            </p>
+          </div>
+        ))}
 
-<div className="space-y-4">
+      </div>
 
-{points.map(point=>(
-
-<div
-key={point}
-className="rounded-xl bg-slate-100 p-4"
->
-
-✅ {point}
-
-</div>
-
-))}
-
-</div>
-
-</section>
-
-);
-
+    </section>
+  );
 }

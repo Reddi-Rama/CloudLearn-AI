@@ -1,40 +1,73 @@
 "use client";
 
-import Accordion from "@/components/ui/Accordion";
+import { ChevronDown } from "lucide-react";
+import { useState } from "react";
 
-export default function LessonFAQ(){
+interface FAQ {
+  question: string;
+  answer: string;
+}
 
-return(
+interface LessonFAQProps {
+  faqs: FAQ[];
+}
 
-<section className="rounded-3xl bg-white p-8 shadow-lg">
+export default function LessonFAQ({
+  faqs,
+}: LessonFAQProps) {
+  const [open, setOpen] = useState<number | null>(0);
 
-<h2 className="mb-8 text-2xl font-bold">
+  return (
+    <section className="rounded-3xl border border-sky-200 bg-white p-8 shadow-sm">
 
-Frequently Asked Questions
+      <h2 className="mb-8 text-3xl font-bold">
 
-</h2>
+        Frequently Asked Questions
 
-<div className="space-y-4">
+      </h2>
 
-<Accordion
-title="What is a List?"
-content="A list is an ordered and mutable collection in Python."
-/>
+      <div className="space-y-4">
 
-<Accordion
-title="What is a Tuple?"
-content="A tuple is ordered but immutable."
-/>
+        {faqs.map((faq, index) => (
 
-<Accordion
-title="What is Dictionary?"
-content="Dictionary stores data as key-value pairs."
-/>
+          <div
+            key={index}
+            className="rounded-2xl border border-slate-200"
+          >
 
-</div>
+            <button
+              onClick={() =>
+                setOpen(open === index ? null : index)
+              }
+              className="flex w-full items-center justify-between p-5"
+            >
 
-</section>
+              <span className="font-semibold">
 
-);
+                {faq.question}
 
+              </span>
+
+              <ChevronDown />
+
+            </button>
+
+            {open === index && (
+
+              <div className="border-t border-slate-200 p-5 text-slate-600">
+
+                {faq.answer}
+
+              </div>
+
+            )}
+
+          </div>
+
+        ))}
+
+      </div>
+
+    </section>
+  );
 }

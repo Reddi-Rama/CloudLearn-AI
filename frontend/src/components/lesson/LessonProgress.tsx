@@ -1,30 +1,44 @@
 "use client";
 
-export default function LessonProgress() {
+interface LessonProgressProps {
+  completed: number;
+  total: number;
+}
+
+export default function LessonProgress({
+  completed,
+  total,
+}: LessonProgressProps) {
+
+  const percentage = Math.round((completed / total) * 100);
+
   return (
-    <section className="rounded-3xl bg-white p-8 shadow-lg">
+    <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
 
-      <div className="flex justify-between">
+      <div className="mb-4 flex items-center justify-between">
 
-        <h2 className="text-2xl font-bold">
-
-          Lesson Progress
-
-        </h2>
+        <h3 className="font-semibold text-slate-800">
+          Course Progress
+        </h3>
 
         <span className="font-bold text-sky-600">
-
-          58%
-
+          {percentage}%
         </span>
 
       </div>
 
-      <div className="mt-6 h-4 rounded-full bg-slate-200">
+      <div className="h-3 rounded-full bg-slate-200">
 
-        <div className="h-full w-[58%] rounded-full bg-gradient-to-r from-sky-500 to-indigo-600"/>
+        <div
+          style={{ width: `${percentage}%` }}
+          className="h-3 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 transition-all"
+        />
 
       </div>
+
+      <p className="mt-4 text-sm text-slate-500">
+        {completed} of {total} lessons completed
+      </p>
 
     </section>
   );

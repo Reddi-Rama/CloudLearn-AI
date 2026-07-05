@@ -1,33 +1,25 @@
 "use client";
 
-interface Props{
-title:string;
-image:string;
+interface DiagramCardProps {
+  title: string;
+  children: React.ReactNode;
 }
 
 export default function DiagramCard({
-title,
-image,
-}:Props){
+  title,
+  children,
+}: DiagramCardProps) {
+  return (
+    <div className="rounded-3xl border border-sky-200 bg-sky-50 p-8">
 
-return(
+      <h3 className="mb-6 text-2xl font-bold text-slate-800">
+        {title}
+      </h3>
 
-<div className="rounded-3xl bg-white p-8 shadow-lg">
+      <div>
+        {children}
+      </div>
 
-<h2 className="mb-6 text-2xl font-bold">
-
-{title}
-
-</h2>
-
-<img
-src={image}
-alt={title}
-className="w-full rounded-2xl"
-/>
-
-</div>
-
-);
-
+    </div>
+  );
 }

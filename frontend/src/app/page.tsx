@@ -1,5 +1,5 @@
 import Header from "@/components/layout/Header";
-import Hero from "@/components/hero/Hero";
+import Hero from "@/components/home/Hero";
 import WhyCloudLearn from "@/components/home/WhyCloudLearn";
 import CloudDomains from "@/components/home/CloudDomains";
 import LearningPaths from "@/components/home/LearningPaths";
@@ -15,7 +15,7 @@ export default function HomePage() {
     <>
       <Header />
 
-      <main className="overflow-x-hidden bg-[#F8FAFC] pt-44">
+      <main className="overflow-x-hidden bg-[#F8FAFC] pt-40">
 
         <Hero />
 

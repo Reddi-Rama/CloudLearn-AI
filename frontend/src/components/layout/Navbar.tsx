@@ -22,8 +22,8 @@ const navItems = [
     href: "/courses",
   },
   {
-    title: "Practice",
-    href: "/practice",
+    title: "Certificates",
+    href: "/certificates",
   },
   {
     title: "Dashboard",

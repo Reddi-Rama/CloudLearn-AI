@@ -1,65 +1,113 @@
 "use client";
 
+import Link from "next/link";
 import {
   CalendarDays,
-  Clock3,
+  Clock,
   ArrowRight,
 } from "lucide-react";
 
+const exams = [
+  {
+    title: "Artificial Intelligence Quiz",
+    date: "08 July 2026",
+    time: "10:00 AM",
+    type: "Quiz",
+    color: "bg-blue-500",
+  },
+  {
+    title: "Python Programming Assessment",
+    date: "10 July 2026",
+    time: "02:00 PM",
+    type: "Assessment",
+    color: "bg-green-500",
+  },
+  {
+    title: "Cloud Computing Final Exam",
+    date: "15 July 2026",
+    time: "11:00 AM",
+    type: "Final Exam",
+    color: "bg-purple-500",
+  },
+];
+
 export default function UpcomingExam() {
   return (
-    <section className="rounded-3xl bg-gradient-to-r from-indigo-600 to-sky-500 p-8 text-white shadow-xl">
+    <section className="mt-14">
 
-      <h2 className="text-3xl font-bold">
+      <div className="mb-8 flex items-center justify-between">
 
-        Upcoming Assessment
+        <h2 className="text-3xl font-bold text-slate-900">
+          Upcoming Exams
+        </h2>
 
-      </h2>
+        <Link
+          href="/exam"
+          className="font-semibold text-blue-600 hover:underline"
+        >
+          View All
+        </Link>
 
-      <div className="mt-8 space-y-6">
+      </div>
 
-        <div className="flex items-center gap-4">
+      <div className="grid gap-6 lg:grid-cols-3">
 
-          <CalendarDays />
+        {exams.map((exam) => (
 
-          <span>
+          <div
+            key={exam.title}
+            className="rounded-[32px] bg-white p-8 shadow-lg transition hover:-translate-y-2 hover:shadow-2xl"
+          >
 
-            Python Final Assessment
+            <div className="flex items-center justify-between">
 
-          </span>
+              <div
+                className={`rounded-full px-4 py-2 text-sm font-semibold text-white ${exam.color}`}
+              >
+                {exam.type}
+              </div>
 
-        </div>
+              <CalendarDays
+                size={28}
+                className="text-blue-600"
+              />
 
-        <div className="flex items-center gap-4">
+            </div>
 
-          <Clock3 />
+            <h3 className="mt-6 text-2xl font-bold text-slate-900">
+              {exam.title}
+            </h3>
 
-          <span>
+            <div className="mt-6 flex items-center gap-3 text-slate-600">
 
-            30 Questions
+              <CalendarDays size={18} />
 
-          </span>
+              <span>{exam.date}</span>
 
-        </div>
+            </div>
 
-        <div className="rounded-2xl bg-white/15 p-5">
+            <div className="mt-3 flex items-center gap-3 text-slate-600">
 
-          <p className="text-white/90">
+              <Clock size={18} />
 
-            Complete all modules before attempting
-            the final assessment.
+              <span>{exam.time}</span>
 
-          </p>
+            </div>
 
-        </div>
+            <Link
+              href="/exam"
+              className="mt-8 flex items-center justify-center gap-2 rounded-2xl bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700"
+            >
 
-        <button className="mt-4 flex items-center gap-3 rounded-2xl bg-white px-8 py-4 font-semibold text-indigo-600">
+              Start Exam
 
-          View Details
+              <ArrowRight size={18} />
 
-          <ArrowRight size={18} />
+            </Link>
 
-        </button>
+          </div>
+
+        ))}
 
       </div>
 

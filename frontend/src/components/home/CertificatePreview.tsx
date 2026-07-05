@@ -1,258 +1,120 @@
 "use client";
 
+import { motion } from "framer-motion";
 import {
-  Award,
-  BadgeCheck,
-  Download,
-  ShieldCheck,
-  QrCode,
+  Brain,
+  Globe,
+  Database,
+  Cloud,
+  Shield,
+  Smartphone,
 } from "lucide-react";
 
-export default function CertificatePreview() {
+import CloudCard from "./CloudCard";
+
+const domains = [
+  {
+    title: "Artificial Intelligence",
+    description:
+      "Machine Learning, Deep Learning, NLP, Computer Vision and Generative AI.",
+    icon: Brain,
+    courses: 18,
+    level: "Beginner → Advanced",
+    href: "/domains/artificial-intelligence",
+    color: "bg-violet-500",
+  },
+  {
+    title: "Full Stack Development",
+    description:
+      "HTML, CSS, JavaScript, React, Next.js, Node.js and databases.",
+    icon: Globe,
+    courses: 22,
+    level: "Beginner → Advanced",
+    href: "/domains/full-stack",
+    color: "bg-blue-500",
+  },
+  {
+    title: "Data Science",
+    description:
+      "Python, Statistics, Data Analysis, Visualization and Machine Learning.",
+    icon: Database,
+    courses: 16,
+    level: "Intermediate",
+    href: "/domains/data-science",
+    color: "bg-cyan-500",
+  },
+  {
+    title: "Cloud Computing",
+    description:
+      "AWS, Azure, Docker, Kubernetes, DevOps and cloud architecture.",
+    icon: Cloud,
+    courses: 14,
+    level: "Intermediate",
+    href: "/domains/cloud-computing",
+    color: "bg-sky-500",
+  },
+  {
+    title: "Cyber Security",
+    description:
+      "Networking, Ethical Hacking, Penetration Testing and Security.",
+    icon: Shield,
+    courses: 15,
+    level: "Intermediate",
+    href: "/domains/cyber-security",
+    color: "bg-red-500",
+  },
+  {
+    title: "Mobile Development",
+    description:
+      "Flutter, Android, iOS and cross-platform application development.",
+    icon: Smartphone,
+    courses: 12,
+    level: "Beginner",
+    href: "/domains/mobile-development",
+    color: "bg-emerald-500",
+  },
+];
+
+export default function CloudDomains() {
   return (
-    <section className="bg-white py-28">
+    <section className="section">
 
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="container-custom">
 
-        {/* Heading */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mx-auto max-w-3xl text-center"
+        >
 
-        <div className="text-center">
-
-          <span className="rounded-full bg-blue-100 px-5 py-2 text-sm font-semibold text-blue-700">
-            PROFESSIONAL CERTIFICATE
+          <span className="rounded-full bg-blue-100 px-5 py-2 text-sm font-semibold text-blue-600">
+            Explore Domains
           </span>
 
-          <h2 className="mt-6 text-5xl font-black">
-
-            Earn an Industry Ready Certificate
-
+          <h2 className="mt-6 heading">
+            Discover Your Dream Career
           </h2>
 
-          <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-slate-600">
-
-            Successfully complete your course, pass the
-            final assessment and unlock your verified
-            CloudLearn Certificate.
-
+          <p className="sub-heading mt-6">
+            Explore structured learning domains designed to help you
+            master modern technologies with guided roadmaps,
+            practical projects and certifications.
           </p>
 
-        </div>
+        </motion.div>
 
-        <div className="mt-20 grid gap-16 lg:grid-cols-2">
+        <div className="mt-16 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
 
-          {/* Certificate */}
+          {domains.map((domain) => (
 
-          <div className="rounded-[40px] border-[10px] border-blue-100 bg-gradient-to-br from-white via-sky-50 to-blue-50 p-10 shadow-2xl">
+            <CloudCard
+              key={domain.title}
+              {...domain}
+            />
 
-            <div className="text-center">
-
-              <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-r from-sky-500 to-blue-700 text-white shadow-xl">
-
-                <Award size={48} />
-
-              </div>
-
-              <h3 className="mt-8 text-5xl font-black text-slate-900">
-
-                CloudLearn
-
-              </h3>
-
-              <p className="mt-2 text-blue-600 font-semibold">
-
-                Certificate of Completion
-
-              </p>
-
-              <div className="my-10 h-px bg-blue-200" />
-
-              <p className="text-slate-500">
-
-                This Certificate is proudly presented to
-
-              </p>
-
-              <h2 className="mt-4 text-4xl font-black text-blue-700">
-
-                Your Name
-
-              </h2>
-
-              <p className="mt-8 text-slate-600">
-
-                for successfully completing
-
-              </p>
-
-              <h3 className="mt-3 text-3xl font-bold">
-
-                Python Programming
-
-              </h3>
-
-              <div className="mt-12 grid grid-cols-2 gap-8 text-left">
-
-                <div>
-
-                  <p className="text-sm text-slate-500">
-
-                    Certificate ID
-
-                  </p>
-
-                  <p className="font-bold">
-
-                    CLD-2026-000245
-
-                  </p>
-
-                </div>
-
-                <div>
-
-                  <p className="text-sm text-slate-500">
-
-                    Date
-
-                  </p>
-
-                  <p className="font-bold">
-
-                    July 2026
-
-                  </p>
-
-                </div>
-
-              </div>
-
-              <div className="mt-10 flex items-center justify-between">
-
-                <div>
-
-                  <p className="font-bold">
-
-                    CloudLearn Team
-
-                  </p>
-
-                  <p className="text-sm text-slate-500">
-
-                    Authorized Signature
-
-                  </p>
-
-                </div>
-
-                <QrCode
-                  size={70}
-                  className="text-slate-700"
-                />
-
-              </div>
-
-            </div>
-
-          </div>
-
-          {/* Right Side */}
-
-          <div>
-
-            <h3 className="text-4xl font-black">
-
-              Why Get Certified?
-
-            </h3>
-
-            <div className="mt-10 space-y-8">
-
-              <div className="flex gap-5">
-
-                <BadgeCheck
-                  className="text-blue-600"
-                  size={30}
-                />
-
-                <div>
-
-                  <h4 className="text-2xl font-bold">
-
-                    Verified Certificate
-
-                  </h4>
-
-                  <p className="mt-2 text-slate-600">
-
-                    Every certificate contains a unique ID
-                    for verification.
-
-                  </p>
-
-                </div>
-
-              </div>
-
-              <div className="flex gap-5">
-
-                <Download
-                  className="text-green-600"
-                  size={30}
-                />
-
-                <div>
-
-                  <h4 className="text-2xl font-bold">
-
-                    Download PDF
-
-                  </h4>
-
-                  <p className="mt-2 text-slate-600">
-
-                    Download your certificate anytime.
-
-                  </p>
-
-                </div>
-
-              </div>
-
-              <div className="flex gap-5">
-
-                <ShieldCheck
-                  className="text-violet-600"
-                  size={30}
-                />
-
-                <div>
-
-                  <h4 className="text-2xl font-bold">
-
-                    Only ₹29
-
-                  </h4>
-
-                  <p className="mt-2 text-slate-600">
-
-                    Unlock your professional certificate
-                    after passing the final assessment.
-
-                  </p>
-
-                </div>
-
-              </div>
-
-            </div>
-
-            <button className="mt-12 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-700 px-8 py-4 text-lg font-bold text-white transition hover:scale-105">
-
-              View Sample Certificate
-
-            </button>
-
-          </div>
+          ))}
 
         </div>
 

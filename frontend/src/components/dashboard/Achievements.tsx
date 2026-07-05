@@ -2,73 +2,64 @@
 
 import {
   Trophy,
+  Flame,
   Star,
   Medal,
-  Target,
 } from "lucide-react";
 
 const achievements = [
   {
-    title: "First Course Completed",
+    title: "15 Day Streak",
+    icon: Flame,
+    color: "text-orange-500",
+  },
+  {
+    title: "Top Performer",
     icon: Trophy,
-    color: "bg-yellow-100 text-yellow-600",
+    color: "text-yellow-500",
   },
   {
-    title: "Perfect Quiz",
+    title: "100 XP Earned",
     icon: Star,
-    color: "bg-purple-100 text-purple-600",
+    color: "text-blue-500",
   },
   {
-    title: "Assessment Master",
+    title: "Course Champion",
     icon: Medal,
-    color: "bg-blue-100 text-blue-600",
-  },
-  {
-    title: "Learning Goal",
-    icon: Target,
-    color: "bg-green-100 text-green-600",
+    color: "text-green-500",
   },
 ];
 
 export default function Achievements() {
   return (
-    <section className="rounded-3xl border bg-white p-8 shadow-lg">
+    <section className="mt-14">
 
-      <h2 className="mb-8 text-2xl font-bold">
-
+      <h2 className="mb-8 text-3xl font-bold">
         Achievements
-
       </h2>
 
-      <div className="grid gap-6 sm:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
 
         {achievements.map((item) => {
-
           const Icon = item.icon;
 
           return (
-
             <div
               key={item.title}
-              className="rounded-2xl border p-6 hover:shadow-lg transition"
+              className="rounded-[28px] bg-white p-8 shadow-lg hover:shadow-2xl transition"
             >
 
-              <div className={`inline-flex rounded-2xl p-4 ${item.color}`}>
+              <Icon
+                size={40}
+                className={item.color}
+              />
 
-                <Icon size={28} />
-
-              </div>
-
-              <h3 className="mt-5 font-bold">
-
+              <h3 className="mt-5 text-xl font-bold">
                 {item.title}
-
               </h3>
 
             </div>
-
           );
-
         })}
 
       </div>

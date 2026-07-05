@@ -1,8 +1,8 @@
 import Link from "next/link";
 import {
   GraduationCap,
-  Github,
-  Linkedin,
+  Globe,
+  Users,
   Mail,
 } from "lucide-react";
 
@@ -23,22 +23,18 @@ const supportLinks = [
 export default function Footer() {
   return (
     <footer className="mt-24 border-t border-blue-100 bg-white/70 backdrop-blur-xl">
-
       <div className="container-custom py-16">
-
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
 
+          {/* Logo */}
           <div>
-
             <div className="flex items-center gap-3">
-
               <GraduationCap
                 className="text-blue-600"
                 size={34}
               />
 
               <div>
-
                 <h2 className="text-2xl font-bold">
                   CloudLearn AI
                 </h2>
@@ -46,70 +42,56 @@ export default function Footer() {
                 <p className="text-sm text-slate-500">
                   Learn Beyond Limits
                 </p>
-
               </div>
-
             </div>
 
-            <p className="mt-5 text-slate-600 leading-7">
-              A modern cloud-inspired learning platform
-              designed to help students build skills,
-              practice consistently and achieve their goals.
+            <p className="mt-5 leading-7 text-slate-600">
+              A modern cloud-inspired learning platform designed to help
+              students learn, practice and achieve their career goals.
             </p>
-
           </div>
 
+          {/* Quick Links */}
           <div>
-
-            <h3 className="font-semibold text-lg">
+            <h3 className="text-lg font-semibold">
               Quick Links
             </h3>
 
             <div className="mt-5 flex flex-col gap-3">
-
               {quickLinks.map((item) => (
-
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="text-slate-600 hover:text-blue-600 transition"
+                  className="transition hover:text-blue-600"
                 >
                   {item.name}
                 </Link>
-
               ))}
-
             </div>
-
           </div>
 
+          {/* Support */}
           <div>
-
-            <h3 className="font-semibold text-lg">
+            <h3 className="text-lg font-semibold">
               Support
             </h3>
 
             <div className="mt-5 flex flex-col gap-3">
-
               {supportLinks.map((item) => (
-
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="text-slate-600 hover:text-blue-600 transition"
+                  className="transition hover:text-blue-600"
                 >
                   {item.name}
                 </Link>
-
               ))}
-
             </div>
-
           </div>
 
+          {/* Connect */}
           <div>
-
-            <h3 className="font-semibold text-lg">
+            <h3 className="text-lg font-semibold">
               Connect
             </h3>
 
@@ -117,40 +99,34 @@ export default function Footer() {
 
               <Link
                 href="#"
-                className="rounded-full bg-blue-100 p-3 text-blue-600 hover:bg-blue-600 hover:text-white transition"
+                className="rounded-full bg-blue-100 p-3 text-blue-600 transition hover:bg-blue-600 hover:text-white"
               >
-                <Github size={20} />
+                <Globe size={20} />
               </Link>
 
               <Link
                 href="#"
-                className="rounded-full bg-blue-100 p-3 text-blue-600 hover:bg-blue-600 hover:text-white transition"
+                className="rounded-full bg-blue-100 p-3 text-blue-600 transition hover:bg-blue-600 hover:text-white"
               >
-                <Linkedin size={20} />
+                <Users size={20} />
               </Link>
 
               <Link
-                href="#"
-                className="rounded-full bg-blue-100 p-3 text-blue-600 hover:bg-blue-600 hover:text-white transition"
+                href="mailto:info@cloudlearn.ai"
+                className="rounded-full bg-blue-100 p-3 text-blue-600 transition hover:bg-blue-600 hover:text-white"
               >
                 <Mail size={20} />
               </Link>
 
             </div>
-
           </div>
 
         </div>
 
-        <div className="mt-14 border-t border-blue-100 pt-6 text-center text-sm text-slate-500">
-
-          © {new Date().getFullYear()} CloudLearn AI.
-          All rights reserved.
-
+        <div className="mt-12 border-t border-blue-100 pt-6 text-center text-sm text-slate-500">
+          © {new Date().getFullYear()} CloudLearn AI. All Rights Reserved.
         </div>
-
       </div>
-
     </footer>
   );
 }

@@ -1,33 +1,36 @@
 "use client";
 
-interface Props{
-title:string;
-description:string;
+import { Lightbulb } from "lucide-react";
+
+interface ExampleCardProps {
+  title: string;
+  children: React.ReactNode;
 }
 
 export default function ExampleCard({
-title,
-description,
-}:Props){
+  title,
+  children,
+}: ExampleCardProps) {
+  return (
+    <section className="rounded-3xl border border-yellow-200 bg-yellow-50 p-8 shadow-sm">
 
-return(
+      <div className="mb-6 flex items-center gap-3">
 
-<div className="rounded-3xl border border-sky-100 bg-sky-50 p-8">
+        <Lightbulb
+          size={26}
+          className="text-yellow-600"
+        />
 
-<h2 className="text-2xl font-bold">
+        <h2 className="text-2xl font-bold">
+          {title}
+        </h2>
 
-{title}
+      </div>
 
-</h2>
+      <div className="leading-8 text-slate-700">
+        {children}
+      </div>
 
-<p className="mt-4 leading-8 text-slate-700">
-
-{description}
-
-</p>
-
-</div>
-
-);
-
+    </section>
+  );
 }

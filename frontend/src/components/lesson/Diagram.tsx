@@ -1,54 +1,40 @@
 "use client";
 
-import { Database, ArrowDown } from "lucide-react";
+import Image from "next/image";
 
-export default function Diagram() {
+interface DiagramProps {
+  src: string;
+  title: string;
+  description?: string;
+}
+
+export default function Diagram({
+  src,
+  title,
+  description,
+}: DiagramProps) {
   return (
-    <section className="rounded-3xl bg-white p-10 shadow-lg border">
+    <section className="rounded-3xl border border-sky-200 bg-white p-8 shadow-sm">
 
-      <h2 className="text-3xl font-bold mb-8">
-        Variable Flow
+      <h2 className="text-2xl font-bold">
+        {title}
       </h2>
 
-      <div className="flex flex-col items-center gap-5">
+      {description && (
+        <p className="mt-3 text-slate-600">
+          {description}
+        </p>
+      )}
 
-        <div className="rounded-full bg-sky-500 p-6 text-white">
+      <div className="mt-8 overflow-hidden rounded-2xl border border-slate-200">
 
-          <Database size={40} />
-
-        </div>
-
-        <ArrowDown className="text-sky-500" />
-
-        <div className="rounded-3xl bg-sky-100 px-10 py-6">
-
-          name = "Rama"
-
-        </div>
-
-        <ArrowDown className="text-sky-500" />
-
-        <div className="rounded-3xl bg-green-100 px-10 py-6">
-
-          Stored in Memory
-
-        </div>
-
-        <ArrowDown className="text-sky-500" />
-
-        <div className="rounded-3xl bg-indigo-100 px-10 py-6">
-
-          print(name)
-
-        </div>
-
-        <ArrowDown className="text-sky-500" />
-
-        <div className="rounded-3xl bg-yellow-100 px-10 py-6">
-
-          Output → Rama
-
-        </div>
+        <Image
+          src={src}
+          alt={title}
+          width={1000}
+          height={600}
+          className="h-auto w-full object-contain"
+        />
 
       </div>
 

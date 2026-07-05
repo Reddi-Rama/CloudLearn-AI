@@ -1,28 +1,35 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import CloudDomains from "@/components/home/CloudDomains";
 
-export default function DomainsPage() {
+import {
+  CertificateHeader,
+  CertificatePreview,
+  CertificateActions,
+  CertificateFooter,
+} from "@/components/certificate";
+
+export default function CertificatesPage() {
   return (
     <>
       <Header />
 
-      <main className="pt-36">
+      <main className="min-h-screen bg-[#F8FAFC] pt-36 pb-24">
 
-        <section className="py-24 text-center">
+        <div className="mx-auto max-w-6xl px-6">
 
-          <h1 className="text-6xl font-black text-slate-900">
-            Explore Learning Domains
-          </h1>
+          <CertificateHeader
+            title="CloudLearn AI Certificates"
+          />
 
-          <p className="mx-auto mt-6 max-w-3xl text-xl text-slate-600">
-            Choose a technology domain and begin your complete learning journey
-            with structured roadmaps, projects, quizzes and certifications.
-          </p>
+          <div className="mt-14">
+            <CertificatePreview />
+          </div>
 
-        </section>
+          <div className="mt-10">
+            <CertificateActions />
+          </div>
 
-        <CloudDomains />
+        </div>
 
       </main>
 

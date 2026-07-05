@@ -1,36 +1,46 @@
 "use client";
 
-import { FileText } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 
-export default function LessonSummary() {
+interface LessonSummaryProps {
+  points: string[];
+}
+
+export default function LessonSummary({
+  points,
+}: LessonSummaryProps) {
   return (
-    <section className="rounded-3xl bg-white p-8 shadow-lg">
+    <section className="rounded-3xl border border-sky-200 bg-white p-8 shadow-sm">
 
-      <div className="mb-6 flex items-center gap-3">
+      <h2 className="mb-8 text-3xl font-bold text-slate-800">
+        Lesson Summary
+      </h2>
 
-        <FileText className="text-sky-600" />
+      <div className="space-y-5">
 
-        <h2 className="text-2xl font-bold">
+        {points.map((point, index) => (
 
-          Lesson Summary
+          <div
+            key={index}
+            className="flex items-start gap-4"
+          >
 
-        </h2>
+            <CheckCircle2
+              size={22}
+              className="mt-1 text-green-600"
+            />
+
+            <p className="leading-7 text-slate-700">
+
+              {point}
+
+            </p>
+
+          </div>
+
+        ))}
 
       </div>
-
-      <ul className="space-y-4 text-slate-600">
-
-        <li>• Python supports multiple built-in data types.</li>
-
-        <li>• Strings are immutable.</li>
-
-        <li>• Lists are mutable.</li>
-
-        <li>• Dictionaries store key-value pairs.</li>
-
-        <li>• Sets contain unique values.</li>
-
-      </ul>
 
     </section>
   );

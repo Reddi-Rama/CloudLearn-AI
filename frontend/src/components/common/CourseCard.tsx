@@ -1,60 +1,64 @@
 "use client";
 
-import { BookOpen } from "lucide-react";
+import Link from "next/link";
+import { BookOpen, Clock, ArrowRight } from "lucide-react";
+import GlassCard from "./GlassCard";
+import Badge from "./Badge";
 
-interface Props{
-title:string;
-progress:number;
+interface CourseCardProps {
+  title: string;
+  description: string;
+  lessons: number;
+  duration: string;
+  level: "Beginner" | "Intermediate" | "Advanced";
+  href: string;
 }
 
 export default function CourseCard({
-title,
-progress,
-}:Props){
+  title,
+  description,
+  lessons,
+  duration,
+  level,
+  href,
+}: CourseCardProps) {
+  return (
+    <GlassCard className="flex h-full flex-col p-6">
 
-return(
+      <Badge color="blue">
+        {level}
+      </Badge>
 
-<div className="overflow-hidden rounded-3xl bg-white shadow-xl">
+      <h3 className="mt-5 text-2xl font-bold">
+        {title}
+      </h3>
 
-<div className="bg-gradient-to-r from-sky-500 to-indigo-600 p-8 text-white">
+      <p className="mt-3 flex-1 text-slate-600">
+        {description}
+      </p>
 
-<BookOpen size={40}/>
+      <div className="mt-6 flex items-center justify-between text-sm text-slate-500">
 
-<h2 className="mt-5 text-3xl font-bold">
+        <div className="flex items-center gap-2">
+          <BookOpen size={16} />
+          {lessons} Lessons
+        </div>
 
-{title}
+        <div className="flex items-center gap-2">
+          <Clock size={16} />
+          {duration}
+        </div>
 
-</h2>
+      </div>
 
-</div>
+      <Link
+        href={href}
+        className="mt-8 flex items-center gap-2 font-semibold text-sky-600 hover:text-sky-700"
+      >
+        Start Learning
+        <ArrowRight size={18} />
+      </Link>
 
-<div className="p-8">
-
-<div className="h-3 overflow-hidden rounded-full bg-slate-200">
-
-<div
-style={{width:`${progress}%`}}
-className="h-full rounded-full bg-gradient-to-r from-sky-500 to-indigo-600"
-/>
-
-</div>
-
-<p className="mt-4">
-
-{progress}% Completed
-
-</p>
-
-<button className="mt-8 rounded-xl bg-sky-500 px-6 py-3 text-white">
-
-Continue
-
-</button>
-
-</div>
-
-</div>
-
-);
-
+    </GlassCard>
+  );
 }
