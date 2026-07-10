@@ -1,6 +1,6 @@
 "use client";
 
-const filters = [
+const categories = [
   "All",
   "Popular",
   "Beginner",
@@ -8,34 +8,17 @@ const filters = [
   "Advanced",
 ];
 
-interface Props {
-  selected: string;
-  onSelect: (value: string) => void;
-}
-
-export default function CourseFilter({
-  selected,
-  onSelect,
-}: Props) {
+export default function CourseFilter() {
   return (
-    <div className="mt-10 flex flex-wrap justify-center gap-4">
-
-      {filters.map((filter) => (
-
+    <div className="flex flex-wrap justify-center gap-4 py-8">
+      {categories.map((category) => (
         <button
-          key={filter}
-          onClick={() => onSelect(filter)}
-          className={`rounded-full px-6 py-3 transition-all ${
-            selected === filter
-              ? "bg-blue-600 text-white shadow-lg"
-              : "glass-card text-slate-700 hover:bg-blue-50"
-          }`}
+          key={category}
+          className="rounded-full bg-white px-6 py-3 shadow-sm hover:bg-sky-600 hover:text-white"
         >
-          {filter}
+          {category}
         </button>
-
       ))}
-
     </div>
   );
 }
