@@ -1,119 +1,85 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
-  Brain,
-  Globe,
-  Database,
   Cloud,
-  Shield,
-  Smartphone,
+  Brain,
+  ShieldCheck,
+  Database,
+  Code2,
+  Cpu,
 } from "lucide-react";
 
 import CloudCard from "./CloudCard";
 
 const domains = [
   {
-    title: "Artificial Intelligence",
-    description:
-      "Machine Learning, Deep Learning, NLP, Computer Vision and Generative AI.",
-    icon: Brain,
-    courses: 18,
-    level: "Beginner → Advanced",
-    href: "/domains/artificial-intelligence",
-    color: "bg-violet-500",
-  },
-  {
-    title: "Full Stack Development",
-    description:
-      "HTML, CSS, JavaScript, React, Next.js, Node.js and databases.",
-    icon: Globe,
-    courses: 22,
-    level: "Beginner → Advanced",
-    href: "/domains/full-stack",
-    color: "bg-blue-500",
-  },
-  {
-    title: "Data Science",
-    description:
-      "Python, Statistics, Data Analysis, Visualization and Machine Learning.",
-    icon: Database,
-    courses: 16,
-    level: "Intermediate",
-    href: "/domains/data-science",
-    color: "bg-cyan-500",
-  },
-  {
     title: "Cloud Computing",
-    description:
-      "AWS, Azure, Docker, Kubernetes, DevOps and cloud architecture.",
+    description: "Master AWS, Azure, Docker, Kubernetes and DevOps.",
     icon: Cloud,
-    courses: 14,
-    level: "Intermediate",
-    href: "/domains/cloud-computing",
-    color: "bg-sky-500",
+    lessons: 120,
+  },
+  {
+    title: "Artificial Intelligence",
+    description: "Build intelligent systems using modern AI.",
+    icon: Brain,
+    lessons: 90,
   },
   {
     title: "Cyber Security",
-    description:
-      "Networking, Ethical Hacking, Penetration Testing and Security.",
-    icon: Shield,
-    courses: 15,
-    level: "Intermediate",
-    href: "/domains/cyber-security",
-    color: "bg-red-500",
+    description: "Protect networks, applications and cloud infrastructure.",
+    icon: ShieldCheck,
+    lessons: 85,
   },
   {
-    title: "Mobile Development",
-    description:
-      "Flutter, Android, iOS and cross-platform application development.",
-    icon: Smartphone,
-    courses: 12,
-    level: "Beginner",
-    href: "/domains/mobile-development",
-    color: "bg-emerald-500",
+    title: "Data Science",
+    description: "Learn Python, Pandas, ML and analytics.",
+    icon: Database,
+    lessons: 110,
+  },
+  {
+    title: "Programming",
+    description: "Master C, C++, Python, JavaScript and more.",
+    icon: Code2,
+    lessons: 150,
+  },
+  {
+    title: "Machine Learning",
+    description: "Learn regression, classification and deep learning.",
+    icon: Cpu,
+    lessons: 95,
   },
 ];
 
 export default function CloudDomains() {
   return (
-    <section className="section">
+    <section className="py-24 bg-slate-50">
 
-      <div className="container-custom">
+      <div className="mx-auto max-w-7xl px-6">
 
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mx-auto max-w-3xl text-center"
-        >
+        <div className="text-center">
 
-          <span className="rounded-full bg-blue-100 px-5 py-2 text-sm font-semibold text-blue-600">
-            Explore Domains
+          <span className="rounded-full bg-sky-100 px-5 py-2 text-sm font-semibold text-sky-700">
+            Popular Domains
           </span>
 
-          <h2 className="mt-6 heading">
-            Discover Your Dream Career
+          <h2 className="mt-6 text-5xl font-black">
+            Explore Learning Domains
           </h2>
 
-          <p className="sub-heading mt-6">
-            Explore structured learning domains designed to help you
-            master modern technologies with guided roadmaps,
-            practical projects and certifications.
+          <p className="mx-auto mt-6 max-w-3xl text-lg text-slate-600">
+            Choose from industry-ready learning domains designed for
+            engineering students and future professionals.
           </p>
 
-        </motion.div>
+        </div>
 
         <div className="mt-16 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
 
           {domains.map((domain) => (
-
             <CloudCard
               key={domain.title}
               {...domain}
             />
-
           ))}
 
         </div>

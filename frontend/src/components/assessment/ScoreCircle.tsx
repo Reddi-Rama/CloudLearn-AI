@@ -1,43 +1,27 @@
 "use client";
 
-interface Props{
-score:number;
-total:number;
+interface ScoreCircleProps {
+  score: number;
 }
 
 export default function ScoreCircle({
-score,
-total
-}:Props){
+  score,
+}: ScoreCircleProps) {
+  return (
+    <div className="flex flex-col items-center justify-center">
 
-const percentage=Math.round((score/total)*100);
+      <div className="flex h-44 w-44 items-center justify-center rounded-full border-[12px] border-blue-600 bg-blue-50 shadow-lg">
 
-return(
+        <span className="text-5xl font-black text-blue-600">
+          {score}%
+        </span>
 
-<div className="flex justify-center">
+      </div>
 
-<div className="flex h-52 w-52 items-center justify-center rounded-full border-[12px] border-blue-600">
+      <p className="mt-5 text-lg font-semibold text-slate-700">
+        Final Score
+      </p>
 
-<div className="text-center">
-
-<h2 className="text-5xl font-bold">
-
-{percentage}%
-
-</h2>
-
-<p className="mt-2 text-slate-500">
-
-Score
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-)
-
+    </div>
+  );
 }

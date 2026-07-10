@@ -1,30 +1,15 @@
 "use client";
 
-import Link from "next/link";
-
-interface AuthFooterProps {
-  text: string;
-  linkText: string;
-  href: string;
-}
-
-export default function AuthFooter({
-  text,
-  linkText,
-  href,
-}: AuthFooterProps) {
+export default function AuthFooter() {
   return (
-    <p className="mt-8 text-center text-slate-600">
+    <footer className="pt-8 text-center text-sm text-slate-500">
 
-      {text}{" "}
+      © 2026 CloudLearn AI
 
-      <Link
-        href={href}
-        className="font-semibold text-blue-600"
-      >
-        {linkText}
-      </Link>
+      <br />
 
-    </p>
+      Learn • Build • Grow
+
+    </footer>
   );
 }

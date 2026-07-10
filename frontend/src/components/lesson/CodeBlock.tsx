@@ -1,33 +1,34 @@
 "use client";
 
-interface CodeBlockProps {
-  language: string;
-  code: string;
+import { TriangleAlert } from "lucide-react";
+
+interface WarningBoxProps {
+  children?: React.ReactNode;
 }
 
-export default function CodeBlock({
-  language,
-  code,
-}: CodeBlockProps) {
+export default function WarningBox({
+  children,
+}: WarningBoxProps) {
   return (
-    <section className="overflow-hidden rounded-[30px] bg-slate-900 shadow-lg">
+    <div className="rounded-3xl border-l-4 border-red-500 bg-red-50 p-6">
 
-      <div className="flex items-center justify-between border-b border-slate-700 px-6 py-4">
+      <div className="flex items-center gap-3">
 
-        <span className="font-semibold text-white">
-          {language}
-        </span>
+        <TriangleAlert className="text-red-600" />
+
+        <h3 className="text-xl font-bold text-red-700">
+          Important
+        </h3>
 
       </div>
 
-      <pre className="overflow-x-auto p-6 text-sm text-green-400">
+      <p className="mt-4 leading-8 text-slate-700">
 
-        <code>
-          {code}
-        </code>
+        {children ||
+          "Always close HTML tags correctly. Invalid HTML can cause layout issues."}
 
-      </pre>
+      </p>
 
-    </section>
+    </div>
   );
 }

@@ -1,36 +1,24 @@
 "use client";
 
 import { BookmarkX } from "lucide-react";
-import Link from "next/link";
 
 export default function EmptyBookmarks() {
   return (
-    <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-sky-200 bg-white/80 p-16 text-center">
+    <section className="rounded-[32px] bg-white p-16 text-center shadow-lg">
 
       <BookmarkX
         size={70}
-        className="text-sky-400"
+        className="mx-auto text-slate-400"
       />
 
-      <h2 className="mt-6 text-3xl font-bold">
-
+      <h2 className="mt-6 text-3xl font-bold text-slate-900">
         No Bookmarks Yet
-
       </h2>
 
-      <p className="mt-4 max-w-lg text-slate-600">
-
-        Save your favorite courses and lessons to access them quickly anytime.
-
+      <p className="mt-4 text-slate-500">
+        Save your favorite courses and lessons to access them quickly later.
       </p>
 
-      <Link
-        href="/courses"
-        className="mt-8 rounded-full bg-sky-600 px-8 py-3 font-semibold text-white transition hover:bg-sky-700"
-      >
-        Explore Courses
-      </Link>
-
-    </div>
+    </section>
   );
 }

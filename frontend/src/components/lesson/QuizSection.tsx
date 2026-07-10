@@ -1,57 +1,38 @@
 "use client";
 
+import Link from "next/link";
 import { CircleHelp } from "lucide-react";
-
-const questions = [
-  "What is Cloud Computing?",
-  "Which deployment model is most secure?",
-  "Which cloud service provides virtual machines?",
-  "Which model offers maximum scalability?",
-];
 
 export default function QuizSection() {
   return (
-    <section className="rounded-[30px] bg-white p-8 shadow-lg">
+    <section className="rounded-3xl bg-gradient-to-r from-indigo-600 to-sky-600 p-8 text-white shadow-xl">
 
       <div className="flex items-center gap-3">
 
-        <CircleHelp
-          className="text-blue-600"
-          size={24}
-        />
+        <CircleHelp size={30}/>
 
-        <h2 className="text-2xl font-bold">
+        <h2 className="text-3xl font-black">
+
           Lesson Quiz
+
         </h2>
 
       </div>
 
-      <p className="mt-4 text-slate-600">
-        Answer these 4 questions to complete the lesson.
+      <p className="mt-5 text-sky-100">
+
+        Test your understanding before moving to the next lesson.
+
       </p>
 
-      <div className="mt-8 space-y-4">
+      <Link
+      href="/assessments"
+      className="mt-8 inline-flex rounded-2xl bg-white px-6 py-4 font-semibold text-sky-700"
+      >
 
-        {questions.map((question, index) => (
+        Start Quiz
 
-          <div
-            key={question}
-            className="rounded-2xl border border-slate-200 p-5"
-          >
-
-            <p className="font-semibold">
-              Q{index + 1}. {question}
-            </p>
-
-            <button className="mt-4 rounded-xl bg-blue-600 px-5 py-2 text-white hover:bg-blue-700">
-              Answer Question
-            </button>
-
-          </div>
-
-        ))}
-
-      </div>
+      </Link>
 
     </section>
   );

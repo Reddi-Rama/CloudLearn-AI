@@ -1,43 +1,27 @@
 "use client";
 
-import { Monitor, Moon, Sun } from "lucide-react";
-
 export default function AppearanceSettings() {
   return (
-    <div className="glass-card rounded-3xl p-8">
-
+    <div className="rounded-3xl bg-white p-8 shadow-sm">
       <h2 className="text-2xl font-bold">
         Appearance
       </h2>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-3">
+      <div className="mt-6 flex gap-4">
 
-        <button className="rounded-2xl border border-blue-200 p-6 hover:border-blue-600">
-
-          <Sun className="mx-auto mb-3 text-yellow-500" />
-
+        <button className="rounded-xl border px-6 py-3">
           Light
-
         </button>
 
-        <button className="rounded-2xl border border-blue-200 p-6 hover:border-blue-600">
-
-          <Moon className="mx-auto mb-3 text-slate-700" />
-
+        <button className="rounded-xl border px-6 py-3">
           Dark
-
         </button>
 
-        <button className="rounded-2xl border border-blue-200 p-6 hover:border-blue-600">
-
-          <Monitor className="mx-auto mb-3 text-blue-600" />
-
+        <button className="rounded-xl border px-6 py-3">
           System
-
         </button>
 
       </div>
-
     </div>
   );
 }

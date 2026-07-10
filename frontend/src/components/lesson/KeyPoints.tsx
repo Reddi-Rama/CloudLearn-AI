@@ -1,38 +1,32 @@
 "use client";
 
-import { CheckCircle2 } from "lucide-react";
+const points = [
+  "HTML provides webpage structure.",
+  "Every HTML document begins with <!DOCTYPE html>.",
+  "Elements are represented using tags.",
+  "HTML works with CSS and JavaScript.",
+];
 
-interface KeyPointsProps {
-  points: string[];
-}
-
-export default function KeyPoints({
-  points,
-}: KeyPointsProps) {
+export default function KeyPoints() {
   return (
-    <section className="rounded-[30px] bg-white p-8 shadow-lg">
+    <section className="rounded-3xl bg-white p-8 shadow-lg">
 
       <h2 className="text-2xl font-bold">
         Key Takeaways
       </h2>
 
-      <div className="mt-6 space-y-5">
+      <div className="mt-6 space-y-4">
 
-        {points.map((point, index) => (
+        {points.map((point) => (
 
           <div
-            key={index}
-            className="flex items-start gap-4"
+            key={point}
+            className="flex gap-3"
           >
 
-            <CheckCircle2
-              size={22}
-              className="mt-1 text-green-600"
-            />
+            <div className="mt-2 h-3 w-3 rounded-full bg-sky-600" />
 
-            <p className="leading-7 text-slate-700">
-              {point}
-            </p>
+            <span>{point}</span>
 
           </div>
 

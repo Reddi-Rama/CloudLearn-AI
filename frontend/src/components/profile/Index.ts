@@ -1,15 +1,4 @@
-export { default as ProfileHeader } from "./ProfileHeader";
-export { default as ProfileBanner } from "./ProfileBanner";
-export { default as ProfileAvatar } from "./ProfileAvatar";
-export { default as UserCard } from "./UserCard";
-export { default as PersonalInfo } from "./PersonalInfo";
 export { default as AcademicInfo } from "./AcademicInfo";
-export { default as SkillsCard } from "./SkillsCard";
-export { default as AchievementsCard } from "./AchievementsCard";
-export { default as CertificatesCard } from "./CertificatesCard";
-export { default as ProgressSummary } from "./ProgressSummary";
-export { default as LearningHistory } from "./LearningHistory";
-export { default as EditProfileButton } from "./EditprofileButton";
-export { default as SaveProfileButton } from "./SaveProfileButton";
+export { default as ProfileHeader } from "./ProfileHeader";
+export { default as ProfileCard } from "./ProfileCard";
 export { default as ProfileStats } from "./ProfileStats";
-export { default as SocialLinks } from "./SocialLinks";

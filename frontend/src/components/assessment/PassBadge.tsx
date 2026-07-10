@@ -1,37 +1,58 @@
 "use client";
 
-import { CheckCircle2, XCircle } from "lucide-react";
+import {
+  Award,
+  CheckCircle2,
+} from "lucide-react";
 
-interface Props{
-passed:boolean;
+interface PassBadgeProps {
+  passed: boolean;
 }
 
 export default function PassBadge({
-passed
-}:Props){
+  passed,
+}: PassBadgeProps) {
+  return (
+    <div
+      className={`rounded-[30px] p-8 text-center shadow-lg ${
+        passed
+          ? "bg-green-50"
+          : "bg-red-50"
+      }`}
+    >
 
-return(
+      {passed ? (
 
-<div className="flex justify-center">
+        <CheckCircle2
+          size={70}
+          className="mx-auto text-green-600"
+        />
 
-<div className={`flex items-center gap-3 rounded-full px-6 py-3 font-semibold ${
-passed
-?"bg-green-100 text-green-700"
-:"bg-red-100 text-red-700"
-}`}>
+      ) : (
 
-{passed
-?<CheckCircle2/>
-:<XCircle/>}
+        <Award
+          size={70}
+          className="mx-auto text-red-500"
+        />
 
-{passed
-?"PASSED"
-:"FAILED"}
+      )}
 
-</div>
+      <h2 className="mt-6 text-3xl font-black">
 
-</div>
+        {passed
+          ? "Assessment Passed"
+          : "Assessment Not Passed"}
 
-)
+      </h2>
 
+      <p className="mt-4 text-slate-600">
+
+        {passed
+          ? "Congratulations! You can continue to the next lesson."
+          : "Review the lesson and try again."}
+
+      </p>
+
+    </div>
+  );
 }

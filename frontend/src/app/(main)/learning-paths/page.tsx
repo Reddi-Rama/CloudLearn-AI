@@ -1,31 +1,28 @@
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-
 import {
-  LearningPathsHero,
-  LearningPathsGrid,
-} from "@/components/learningPaths";
+  Hero,
+  Search,
+  Filter,
+  PathGrid,
+  CareerSection,
+  CTA,
+} from "@/components/learning-Paths";
 
 export default function LearningPathsPage() {
   return (
-    <>
-      <Header />
+    <main>
 
-      <main className="min-h-screen bg-[#F8FAFC] pt-36 pb-24">
+      <Hero />
 
-        <div className="mx-auto max-w-7xl px-6">
+      <Search />
 
-          <LearningPathsHero />
+      <Filter />
 
-          <div className="mt-16">
-            <LearningPathsGrid />
-          </div>
+      <PathGrid />
 
-        </div>
+      <CareerSection />
 
-      </main>
+      <CTA />
 
-      <Footer />
-    </>
+    </main>
   );
 }

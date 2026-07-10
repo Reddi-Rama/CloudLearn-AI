@@ -1,61 +1,34 @@
 "use client";
 
-interface Props{
-question:string;
-correctAnswer:string;
-explanation:string;
+import { Lightbulb } from "lucide-react";
+
+interface ExplanationCardProps {
+  explanation: string;
 }
 
 export default function ExplanationCard({
-question,
-correctAnswer,
-explanation
-}:Props){
+  explanation,
+}: ExplanationCardProps) {
+  return (
+    <section className="rounded-[30px] border border-yellow-300 bg-yellow-50 p-6 shadow">
 
-return(
+      <div className="mb-4 flex items-center gap-3">
 
-<div className="glass-card rounded-3xl p-8">
+        <Lightbulb
+          size={24}
+          className="text-yellow-600"
+        />
 
-<h3 className="text-2xl font-bold">
+        <h2 className="text-xl font-bold text-yellow-800">
+          Explanation
+        </h2>
 
-{question}
+      </div>
 
-</h3>
+      <p className="leading-8 text-slate-700">
+        {explanation}
+      </p>
 
-<div className="mt-6 rounded-2xl bg-green-100 p-5">
-
-<p className="font-semibold">
-
-Correct Answer
-
-</p>
-
-<p className="mt-2">
-
-{correctAnswer}
-
-</p>
-
-</div>
-
-<div className="mt-6">
-
-<p className="font-semibold">
-
-Explanation
-
-</p>
-
-<p className="mt-3 leading-8 text-slate-600">
-
-{explanation}
-
-</p>
-
-</div>
-
-</div>
-
-)
-
+    </section>
+  );
 }

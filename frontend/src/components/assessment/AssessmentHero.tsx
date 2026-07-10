@@ -1,86 +1,37 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowLeft, BookOpen } from "lucide-react";
-import Link from "next/link";
-import Timer from "./Timer";
-import ProgressBar from "./ProgressBar";
+import { ClipboardCheck, Trophy } from "lucide-react";
 
-interface AssessmentHeaderProps {
-  title: string;
-  currentQuestion: number;
-  totalQuestions: number;
-  timeRemaining: string;
-}
-
-export default function AssessmentHeader({
-  title,
-  currentQuestion,
-  totalQuestions,
-  timeRemaining,
-}: AssessmentHeaderProps) {
-  const progress = Math.round(
-    (currentQuestion / totalQuestions) * 100
-  );
-
+export default function AssessmentHero() {
   return (
-    <motion.header
-      initial={{ opacity: 0, y: -25 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="glass-card sticky top-4 z-50 rounded-3xl p-6"
-    >
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+    <section className="rounded-[36px] bg-gradient-to-r from-sky-600 to-indigo-700 p-10 text-white shadow-xl">
 
-        {/* Left */}
+      <div className="flex items-center gap-3">
 
-        <div className="flex items-center gap-4">
+        <ClipboardCheck size={40} />
 
-          <Link
-            href="/courses"
-            className="rounded-xl p-3 transition hover:bg-blue-50"
-          >
-            <ArrowLeft className="text-blue-600" />
-          </Link>
+        <div>
 
-          <div>
+          <h1 className="text-4xl font-black">
+            Course Assessment
+          </h1>
 
-            <div className="flex items-center gap-2">
-
-              <BookOpen
-                size={18}
-                className="text-blue-600"
-              />
-
-              <span className="text-sm font-medium text-blue-600">
-                Assessment
-              </span>
-
-            </div>
-
-            <h1 className="mt-2 text-2xl font-bold text-slate-800">
-              {title}
-            </h1>
-
-            <p className="mt-1 text-slate-500">
-              Question {currentQuestion} of {totalQuestions}
-            </p>
-
-          </div>
-
-        </div>
-
-        {/* Right */}
-
-        <div className="flex flex-col gap-5 lg:w-[340px]">
-
-          <Timer time={timeRemaining} />
-
-          <ProgressBar progress={progress} />
+          <p className="mt-2 text-blue-100">
+            Test your understanding and unlock your certificate.
+          </p>
 
         </div>
 
       </div>
-    </motion.header>
+
+      <div className="mt-8 inline-flex items-center gap-2 rounded-full bg-white/20 px-5 py-2">
+
+        <Trophy size={18} />
+
+        <span>Pass Score : 70%</span>
+
+      </div>
+
+    </section>
   );
 }

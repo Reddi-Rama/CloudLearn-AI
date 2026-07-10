@@ -5,22 +5,28 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export default function LessonNavigation() {
   return (
-    <section className="mt-10 flex flex-col gap-5 md:flex-row md:justify-between">
+    <section className="flex items-center justify-between">
 
       <Link
-        href="#"
-        className="flex items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-8 py-4 font-semibold shadow hover:bg-slate-100"
+        href="/lesson/1"
+        className="flex items-center gap-3 rounded-2xl border px-6 py-4 hover:bg-slate-100"
       >
-        <ArrowLeft size={20} />
+
+        <ArrowLeft />
+
         Previous Lesson
+
       </Link>
 
       <Link
-        href="#"
-        className="flex items-center justify-center gap-3 rounded-2xl bg-blue-600 px-8 py-4 font-semibold text-white shadow hover:bg-blue-700"
+        href="/lesson/3"
+        className="flex items-center gap-3 rounded-2xl bg-sky-600 px-6 py-4 font-semibold text-white hover:bg-sky-700"
       >
+
         Next Lesson
-        <ArrowRight size={20} />
+
+        <ArrowRight />
+
       </Link>
 
     </section>

@@ -2,28 +2,28 @@
 
 export default function AccountSettings() {
   return (
-    <div className="glass-card rounded-3xl p-8">
-
+    <div className="rounded-3xl bg-white p-8 shadow-sm">
       <h2 className="text-2xl font-bold">
-
         Account Settings
-
       </h2>
 
-      <div className="mt-8 space-y-6">
+      <div className="mt-6 grid gap-6 md:grid-cols-2">
 
         <input
           placeholder="Full Name"
-          className="w-full rounded-2xl border border-slate-200 p-4 outline-none"
+          className="rounded-xl border p-4"
         />
 
         <input
-          placeholder="Email"
-          className="w-full rounded-2xl border border-slate-200 p-4 outline-none"
+          placeholder="Email Address"
+          className="rounded-xl border p-4"
         />
 
       </div>
 
+      <button className="mt-6 rounded-xl bg-sky-600 px-6 py-3 text-white">
+        Save Changes
+      </button>
     </div>
   );
 }

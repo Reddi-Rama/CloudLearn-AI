@@ -1,150 +1,94 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
-  Compass,
-  Route,
-  BookOpen,
+  Brain,
+  Cloud,
   Code2,
-  ClipboardCheck,
   Award,
-  Briefcase,
 } from "lucide-react";
 
-const journey = [
+const features = [
   {
-    icon: Compass,
-    title: "Choose a Domain",
+    icon: Brain,
+    title: "AI Powered Learning",
     description:
-      "Select your dream career path like AI, Full Stack, Cloud or Cyber Security.",
-    color: "bg-blue-500",
+      "Personalized learning paths that adapt to your progress.",
   },
   {
-    icon: Route,
-    title: "Follow Learning Path",
+    icon: Cloud,
+    title: "Cloud Based Platform",
     description:
-      "Progress through a carefully designed roadmap from beginner to advanced.",
-    color: "bg-indigo-500",
-  },
-  {
-    icon: BookOpen,
-    title: "Complete Courses",
-    description:
-      "Learn every topic through structured lessons, examples and projects.",
-    color: "bg-violet-500",
+      "Access your courses anytime from any device.",
   },
   {
     icon: Code2,
-    title: "Practice Daily",
+    title: "Hands-on Coding",
     description:
-      "Strengthen your understanding using coding exercises and debugging questions.",
-    color: "bg-cyan-500",
-  },
-  {
-    icon: ClipboardCheck,
-    title: "Mock Tests",
-    description:
-      "Evaluate your knowledge using timed assessments and quizzes.",
-    color: "bg-orange-500",
+      "Practice programming with interactive coding exercises.",
   },
   {
     icon: Award,
-    title: "Earn Certificates",
+    title: "Industry Certificates",
     description:
-      "Receive completion certificates for every successfully finished course.",
-    color: "bg-emerald-500",
-  },
-  {
-    icon: Briefcase,
-    title: "Become Career Ready",
-    description:
-      "Build confidence with real-world skills and placement-focused preparation.",
-    color: "bg-sky-500",
+      "Earn certificates after completing assessments.",
   },
 ];
 
 export default function WhyCloudLearn() {
   return (
-    <section className="section">
+    <section className="py-24">
 
-      <div className="container-custom">
+      <div className="mx-auto max-w-7xl px-6">
 
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="text-center">
 
-          <span className="rounded-full bg-blue-100 px-5 py-2 text-sm font-semibold text-blue-600">
+          <span className="rounded-full bg-sky-100 px-5 py-2 text-sm font-semibold text-sky-700">
             Why CloudLearn AI?
           </span>
 
-          <h2 className="mt-6 heading">
-            Your Complete Learning Journey
+          <h2 className="mt-6 text-5xl font-black text-slate-900">
+            Learn Smarter,
+            <span className="text-sky-600"> Not Harder</span>
           </h2>
 
-          <p className="sub-heading mt-6">
-            CloudLearn AI guides you from your first lesson to becoming
-            placement-ready through a structured, practical learning experience.
+          <p className="mx-auto mt-6 max-w-3xl text-lg text-slate-600">
+            Experience a next-generation learning platform designed
+            specifically for engineering students with interactive
+            learning paths, coding practice, assessments, and certificates.
           </p>
 
         </div>
 
-        <div className="relative mt-20">
+        <div className="mt-16 grid gap-8 md:grid-cols-2 xl:grid-cols-4">
 
-          <div className="absolute left-1/2 hidden h-full w-1 -translate-x-1/2 rounded-full bg-blue-100 lg:block" />
+          {features.map((feature) => {
+            const Icon = feature.icon;
 
-          <div className="space-y-12">
+            return (
+              <div
+                key={feature.title}
+                className="group rounded-3xl border border-slate-200 bg-white p-8 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:border-sky-300 hover:shadow-2xl"
+              >
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-sky-100 transition group-hover:bg-sky-600">
 
-            {journey.map((step, index) => {
-              const Icon = step.icon;
+                  <Icon
+                    size={30}
+                    className="text-sky-600 group-hover:text-white"
+                  />
 
-              return (
-                <motion.div
-                  key={step.title}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    duration: 0.5,
-                    delay: index * 0.08,
-                  }}
-                  className={`flex flex-col items-center gap-8 lg:flex-row ${
-                    index % 2 === 1
-                      ? "lg:flex-row-reverse"
-                      : ""
-                  }`}
-                >
-                  <div className="w-full lg:w-1/2">
+                </div>
 
-                    <div className="glass-card rounded-3xl p-8">
+                <h3 className="mt-6 text-2xl font-bold text-slate-900">
+                  {feature.title}
+                </h3>
 
-                      <div
-                        className={`flex h-16 w-16 items-center justify-center rounded-2xl ${step.color}`}
-                      >
-                        <Icon
-                          className="text-white"
-                          size={28}
-                        />
-                      </div>
+                <p className="mt-4 leading-7 text-slate-600">
+                  {feature.description}
+                </p>
 
-                      <h3 className="mt-6 text-2xl font-bold text-slate-800">
-                        {step.title}
-                      </h3>
-
-                      <p className="mt-4 leading-7 text-slate-600">
-                        {step.description}
-                      </p>
-
-                    </div>
-
-                  </div>
-
-                  <div className="hidden lg:flex h-6 w-6 rounded-full border-4 border-white bg-blue-600 shadow-xl" />
-
-                  <div className="hidden lg:block lg:w-1/2" />
-
-                </motion.div>
-              );
-            })}
-
-          </div>
+              </div>
+            );
+          })}
 
         </div>
 

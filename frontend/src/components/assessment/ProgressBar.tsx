@@ -1,38 +1,42 @@
 "use client";
 
 interface ProgressBarProps {
-  progress: number;
+  current: number;
+  total: number;
 }
 
 export default function ProgressBar({
-  progress,
+  current,
+  total,
 }: ProgressBarProps) {
+  const percentage = (current / total) * 100;
+
   return (
-    <div>
+    <section className="rounded-[30px] bg-white p-6 shadow-lg">
 
-      <div className="mb-3 flex justify-between">
+      <div className="mb-3 flex items-center justify-between">
 
-        <span className="font-medium">
+        <h2 className="font-bold">
           Progress
-        </span>
+        </h2>
 
-        <span>
-          {progress}%
+        <span className="font-semibold">
+          {current}/{total}
         </span>
 
       </div>
 
-      <div className="h-3 rounded-full bg-blue-100">
+      <div className="h-3 rounded-full bg-slate-200">
 
         <div
-          className="h-full rounded-full bg-blue-600 transition-all"
+          className="h-3 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600"
           style={{
-            width: `${progress}%`,
+            width: `${percentage}%`,
           }}
         />
 
       </div>
 
-    </div>
+    </section>
   );
 }

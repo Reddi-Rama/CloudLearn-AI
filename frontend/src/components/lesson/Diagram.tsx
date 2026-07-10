@@ -1,31 +1,27 @@
 "use client";
 
-interface DiagramProps {
-  image: string;
-  title: string;
-}
-
-export default function Diagram({
-  image,
-  title,
-}: DiagramProps) {
+export default function Diagram() {
   return (
-    <section className="rounded-[30px] bg-white p-8 shadow-lg">
+    <div className="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-sky-300 bg-sky-50 p-10">
 
-      <h2 className="text-2xl font-bold">
-        {title}
-      </h2>
+      <div className="rounded-xl bg-sky-600 px-6 py-3 text-white font-bold">
+        HTML
+      </div>
 
-      <div className="mt-6 overflow-hidden rounded-3xl border border-slate-200">
+      <div className="my-4 h-10 w-1 bg-sky-300" />
 
-        <img
-          src={image}
-          alt={title}
-          className="w-full object-cover"
-        />
+      <div className="flex gap-6">
+
+        <div className="rounded-xl bg-white px-5 py-3 shadow">
+          Head
+        </div>
+
+        <div className="rounded-xl bg-white px-5 py-3 shadow">
+          Body
+        </div>
 
       </div>
 
-    </section>
+    </div>
   );
 }

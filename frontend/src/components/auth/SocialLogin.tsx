@@ -1,16 +1,28 @@
 "use client";
 
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
+
 export default function SocialLogin() {
   return (
-    <button className="mt-6 flex w-full items-center justify-center gap-3 rounded-2xl border border-slate-200 py-3 transition hover:bg-slate-50">
-      <img
-        src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-        alt="Google"
-        className="h-5 w-5"
-      />
-      <span className="font-medium">
-        Continue with Google
-      </span>
-    </button>
+    <div className="grid grid-cols-2 gap-4">
+
+      <button
+  type="button"
+  className="flex items-center justify-center gap-3 rounded-2xl border border-slate-300 py-3 transition hover:bg-slate-100"
+>
+  <FcGoogle size={22} />
+  Google
+</button>
+
+<button
+  type="button"
+  className="flex items-center justify-center gap-3 rounded-2xl border border-slate-300 py-3 transition hover:bg-slate-100"
+>
+  <FaGithub size={22} />
+  GitHub
+</button>
+
+    </div>
   );
 }

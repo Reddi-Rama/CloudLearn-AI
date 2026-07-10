@@ -1,49 +1,25 @@
 "use client";
 
-interface Props{
-current:number;
-total:number;
-onSelect:(n:number)=>void;
+interface MCQOptionProps {
+  option: string;
+  selected?: boolean;
 }
 
-export default function QuestionNavigator({
-current,
-total,
-onSelect
-}:Props){
-
-return(
-
-<div className="grid grid-cols-5 gap-3">
-
-{Array.from({length:total}).map((_,i)=>(
-
-<button
-
-key={i}
-
-onClick={()=>onSelect(i+1)}
-
-className={`h-12 rounded-xl transition
-
-${current===i+1
-
-?"bg-blue-600 text-white"
-
-:"glass-card"
-
-}`}
-
->
-
-{i+1}
-
-</button>
-
-))}
-
-</div>
-
-)
-
+export default function MCQOption({
+  option,
+  selected = false,
+}: MCQOptionProps) {
+  return (
+    <button
+      className={`w-full rounded-2xl border p-5 text-left transition-all ${
+        selected
+          ? "border-blue-600 bg-blue-50"
+          : "border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50"
+      }`}
+    >
+      <span className="font-medium text-slate-800">
+        {option}
+      </span>
+    </button>
+  );
 }

@@ -1,46 +1,48 @@
 "use client";
 
-import { BookOpen, Clock3, BarChart3 } from "lucide-react";
-
-interface LessonHeaderProps {
-  title: string;
-  module: string;
-  duration: string;
-  difficulty: string;
+interface Props{
+    progress?:number;
 }
 
-export default function LessonHeader({
-  title,
-  module,
-  duration,
-  difficulty,
-}: LessonHeaderProps) {
-  return (
-    <section className="rounded-[32px] bg-white p-8 shadow-lg">
+export default function LessonProgress({
+    progress=35
+}:Props){
 
-      <div className="inline-flex items-center gap-2 rounded-full bg-blue-100 px-4 py-2 text-sm font-semibold text-blue-700">
-        <BookOpen size={16} />
-        {module}
-      </div>
+return(
 
-      <h1 className="mt-6 text-4xl font-black text-slate-900">
-        {title}
-      </h1>
+<section className="rounded-3xl bg-white p-8 shadow-lg">
 
-      <div className="mt-8 flex flex-wrap gap-6">
+<div className="flex justify-between">
 
-        <div className="flex items-center gap-2 text-slate-600">
-          <Clock3 size={18} />
-          <span>{duration}</span>
-        </div>
+<h2 className="text-2xl font-bold">
+Lesson Progress
+</h2>
 
-        <div className="flex items-center gap-2 text-slate-600">
-          <BarChart3 size={18} />
-          <span>{difficulty}</span>
-        </div>
+<span className="font-bold text-sky-600">
+{progress}%
+</span>
 
-      </div>
+</div>
 
-    </section>
-  );
+<div className="mt-6 h-4 rounded-full bg-slate-200">
+
+<div
+className="h-4 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600"
+style={{
+width:`${progress}%`
+}}
+/>
+
+</div>
+
+<p className="mt-5 text-slate-500">
+
+Complete this lesson to unlock the next lesson.
+
+</p>
+
+</section>
+
+);
+
 }

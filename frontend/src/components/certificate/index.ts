@@ -16,3 +16,6 @@ export { default as VerificationForm } from "./VerificationForm";
 export { default as VerificationQR } from "./VerificationQR";
 export { default as VerificationResult } from "./VerificationResult";
 export { default as VerifiedBadge } from "./VerifiedBadge";
+export { default as CertificatePage } from "./CertificatePage";
+export { default as CertificatesGrid } from "./CertificatesGrid";
+export * from "./certificateData";

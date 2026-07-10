@@ -3,35 +3,31 @@
 import { Info } from "lucide-react";
 
 interface InfoBoxProps {
-  title: string;
-  description: string;
+  title?: string;
+  children?: React.ReactNode;
 }
 
 export default function InfoBox({
-  title,
-  description,
+  title = "Did You Know?",
+  children,
 }: InfoBoxProps) {
   return (
-    <div className="rounded-3xl border-l-4 border-blue-600 bg-blue-50 p-6">
+    <div className="rounded-3xl border-l-4 border-sky-500 bg-sky-50 p-6">
 
-      <div className="flex items-start gap-4">
+      <div className="flex items-center gap-3">
 
-        <Info
-          className="mt-1 text-blue-600"
-          size={22}
-        />
+        <Info className="text-sky-600" />
 
-        <div>
+        <h3 className="text-xl font-bold text-sky-700">
+          {title}
+        </h3>
 
-          <h3 className="font-bold text-blue-700">
-            {title}
-          </h3>
+      </div>
 
-          <p className="mt-2 leading-7 text-slate-700">
-            {description}
-          </p>
+      <div className="mt-4 text-slate-700 leading-8">
 
-        </div>
+        {children ||
+          "HTML is not a programming language. It is a markup language used to structure webpages."}
 
       </div>
 

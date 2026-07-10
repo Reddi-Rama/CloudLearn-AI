@@ -1,85 +1,16 @@
 "use client";
 
-import { motion } from "framer-motion";
-
-const clouds = [
-  {
-    size: "w-72 h-36",
-    top: "10%",
-    left: "-15%",
-    duration: 45,
-    delay: 0,
-    opacity: "opacity-30",
-  },
-  {
-    size: "w-96 h-44",
-    top: "28%",
-    left: "-20%",
-    duration: 60,
-    delay: 8,
-    opacity: "opacity-25",
-  },
-  {
-    size: "w-80 h-40",
-    top: "60%",
-    left: "-18%",
-    duration: 55,
-    delay: 3,
-    opacity: "opacity-20",
-  },
-  {
-    size: "w-64 h-32",
-    top: "82%",
-    left: "-12%",
-    duration: 40,
-    delay: 10,
-    opacity: "opacity-20",
-  },
-];
-
 export default function CloudBackground() {
   return (
-    <div className="cloud-bg pointer-events-none fixed inset-0 -z-50 overflow-hidden">
+    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
 
-      {clouds.map((cloud, index) => (
+      <div className="absolute left-10 top-20 h-40 w-40 rounded-full bg-sky-200/30 blur-3xl animate-pulse" />
 
-        <motion.div
-          key={index}
-          initial={{
-            x: "-30vw",
-          }}
-          animate={{
-            x: "130vw",
-          }}
-          transition={{
-            repeat: Infinity,
-            repeatType: "loop",
-            ease: "linear",
-            duration: cloud.duration,
-            delay: cloud.delay,
-          }}
-          className={`absolute ${cloud.size} ${cloud.opacity}`}
-          style={{
-            top: cloud.top,
-            left: cloud.left,
-          }}
-        >
+      <div className="absolute right-20 top-40 h-56 w-56 rounded-full bg-cyan-200/30 blur-3xl animate-pulse delay-700" />
 
-          <div className="relative h-full w-full">
+      <div className="absolute bottom-10 left-1/3 h-64 w-64 rounded-full bg-indigo-200/20 blur-3xl animate-pulse delay-1000" />
 
-            <div className="absolute left-0 top-6 h-20 w-20 rounded-full bg-white blur-sm" />
-
-            <div className="absolute left-12 top-0 h-28 w-28 rounded-full bg-white blur-sm" />
-
-            <div className="absolute left-28 top-8 h-20 w-20 rounded-full bg-white blur-sm" />
-
-            <div className="absolute bottom-0 h-16 w-full rounded-full bg-white blur-sm" />
-
-          </div>
-
-        </motion.div>
-
-      ))}
+      <div className="absolute bottom-20 right-10 h-44 w-44 rounded-full bg-sky-300/20 blur-3xl animate-pulse delay-500" />
 
     </div>
   );

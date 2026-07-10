@@ -10,14 +10,26 @@ export default function Timer({
   time,
 }: TimerProps) {
   return (
-    <div className="glass-card flex items-center gap-3 rounded-full px-6 py-3">
+    <section className="rounded-[30px] bg-gradient-to-r from-red-500 to-orange-500 p-6 text-white shadow-lg">
 
-      <Clock3 className="text-blue-600" />
+      <div className="flex items-center gap-4">
 
-      <span className="font-semibold">
-        {time}
-      </span>
+        <Clock3 size={30} />
 
-    </div>
+        <div>
+
+          <p className="text-sm">
+            Remaining Time
+          </p>
+
+          <h2 className="text-3xl font-black">
+            {time}
+          </h2>
+
+        </div>
+
+      </div>
+
+    </section>
   );
 }

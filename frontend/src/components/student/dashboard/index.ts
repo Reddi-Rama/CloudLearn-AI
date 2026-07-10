@@ -1,0 +1,14 @@
+export { default as DashboardHeader } from "./DashboardHeader";
+export { default as WelcomeBanner } from "./WelcomeBanner";
+export { default as QuickStats } from "./QuickStats";
+export { default as StatCard } from "./StatCard";
+export { default as ContinueLearning } from "./ContinueLearning";
+export { default as CourseProgressCard } from "./CourseProgressCard";
+export { default as RecentActivity } from "./RecentActivity";
+export { default as ActivityCard } from "./ActivityCard";
+export { default as UpcomingAssessments } from "./UpcomingAssessment";
+export { default as AssessmentCard } from "./AssessmentCard";
+export { default as RecommendedCourses } from "./RecommendedCourses";
+export { default as QuickActions } from "./QuickActions";
+export { default as LearningCalendar } from "./LearningCalendar";
+export { default as NotificationsPanel } from "./NotificationsPanel";

@@ -1,59 +1,42 @@
 "use client";
 
-import { BookMarked, ExternalLink } from "lucide-react";
-
-const resources = [
-  {
-    title: "Official Documentation",
-    url: "#",
-  },
-  {
-    title: "CloudLearn AI Notes",
-    url: "#",
-  },
-  {
-    title: "Practice Questions",
-    url: "#",
-  },
-];
+import { Download, FileText, Link2 } from "lucide-react";
 
 export default function LessonResources() {
   return (
-    <section className="rounded-[30px] bg-white p-8 shadow-lg">
+    <section className="rounded-3xl bg-white p-8 shadow-lg">
 
-      <div className="flex items-center gap-3">
+      <h2 className="text-2xl font-bold">
+        Lesson Resources
+      </h2>
 
-        <BookMarked
-          className="text-blue-600"
-          size={24}
-        />
+      <div className="mt-8 space-y-5">
 
-        <h2 className="text-2xl font-bold">
-          Learning Resources
-        </h2>
+        <button className="flex w-full items-center justify-between rounded-2xl border p-5 hover:bg-slate-50">
 
-      </div>
+          <div className="flex items-center gap-3">
 
-      <div className="mt-8 space-y-4">
+            <FileText className="text-sky-600" />
 
-        {resources.map((resource) => (
+            HTML Notes PDF
 
-          <a
-            key={resource.title}
-            href={resource.url}
-            className="flex items-center justify-between rounded-2xl bg-slate-50 p-5 transition hover:bg-blue-50"
-          >
+          </div>
 
-            <span>{resource.title}</span>
+          <Download />
 
-            <ExternalLink
-              size={18}
-              className="text-blue-600"
-            />
+        </button>
 
-          </a>
+        <button className="flex w-full items-center justify-between rounded-2xl border p-5 hover:bg-slate-50">
 
-        ))}
+          <div className="flex items-center gap-3">
+
+            <Link2 className="text-sky-600" />
+
+            W3Schools Reference
+
+          </div>
+
+        </button>
 
       </div>
 

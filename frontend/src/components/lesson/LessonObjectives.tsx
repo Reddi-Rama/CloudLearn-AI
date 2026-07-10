@@ -1,39 +1,32 @@
 "use client";
 
-import { CheckCircle2, PlayCircle } from "lucide-react";
-
-const lessons = [
-  { title: "Introduction", completed: true },
-  { title: "Cloud Fundamentals", completed: true },
-  { title: "Cloud Architecture", completed: false },
-  { title: "Deployment Models", completed: false },
-  { title: "Mini Assessment", completed: false },
+const objectives = [
+  "Understand HTML structure",
+  "Create basic webpages",
+  "Use headings and paragraphs",
+  "Understand HTML tags",
 ];
 
-export default function LessonSidebar() {
+export default function LessonObjectives() {
   return (
-    <aside className="rounded-[30px] bg-white p-6 shadow-lg">
+    <section className="rounded-3xl bg-white p-8 shadow-lg">
 
-      <h2 className="text-xl font-bold">
-        Lessons
+      <h2 className="text-2xl font-bold">
+        Learning Objectives
       </h2>
 
-      <div className="mt-6 space-y-5">
+      <div className="mt-6 space-y-4">
 
-        {lessons.map((lesson) => (
+        {objectives.map((item) => (
 
           <div
-            key={lesson.title}
-            className="flex items-center gap-3 rounded-2xl p-3 transition hover:bg-slate-100"
+            key={item}
+            className="flex items-center gap-3"
           >
 
-            {lesson.completed ? (
-              <CheckCircle2 className="text-green-500" size={22} />
-            ) : (
-              <PlayCircle className="text-blue-500" size={22} />
-            )}
+            <div className="h-3 w-3 rounded-full bg-sky-600"/>
 
-            <span>{lesson.title}</span>
+            {item}
 
           </div>
 
@@ -41,6 +34,6 @@ export default function LessonSidebar() {
 
       </div>
 
-    </aside>
+    </section>
   );
 }

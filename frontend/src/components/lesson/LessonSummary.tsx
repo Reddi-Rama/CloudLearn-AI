@@ -1,31 +1,26 @@
 "use client";
 
-import { ClipboardCheck } from "lucide-react";
-
 export default function LessonSummary() {
   return (
-    <section className="rounded-[30px] bg-gradient-to-br from-blue-50 to-indigo-100 p-8 shadow-lg">
+    <section className="rounded-3xl bg-white p-8 shadow-lg">
 
-      <div className="flex items-center gap-3">
+      <h2 className="text-3xl font-black">
 
-        <ClipboardCheck
-          className="text-blue-600"
-          size={26}
-        />
+        Lesson Summary
 
-        <h2 className="text-2xl font-bold">
-          Lesson Summary
-        </h2>
+      </h2>
 
-      </div>
+      <ul className="mt-6 list-disc space-y-3 pl-6 text-slate-700">
 
-      <p className="mt-6 leading-8 text-slate-700">
+        <li>HTML is the foundation of webpages.</li>
 
-        In this lesson, you learned the fundamental concepts,
-        explored practical examples, understood key terminology,
-        and prepared yourself for the lesson assessment.
+        <li>HTML uses tags to organize content.</li>
 
-      </p>
+        <li>HTML works together with CSS and JavaScript.</li>
+
+        <li>Every webpage starts with an HTML document.</li>
+
+      </ul>
 
     </section>
   );

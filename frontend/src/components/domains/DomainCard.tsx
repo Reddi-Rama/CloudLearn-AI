@@ -1,70 +1,85 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { Clock3, BookOpen, ArrowRight } from "lucide-react";
 
-interface DomainCardProps {
+interface Props {
   title: string;
   description: string;
-  icon: React.ReactNode;
-  href: string;
+  lessons: number;
+  duration: string;
+  level: string;
+  icon: any;
 }
 
 export default function DomainCard({
   title,
   description,
-  icon,
-  href,
-}: DomainCardProps) {
+ lessons,
+  duration,
+  level,
+  icon: Icon,
+}: Props) {
   return (
-   <div className="relative mx-auto h-[245px] w-[285px] transition-all duration-300 hover:-translate-y-2 hover:scale-105">
+    <div className="group rounded-[32px] border border-slate-200 bg-white p-8 shadow-lg transition duration-300 hover:-translate-y-2 hover:border-sky-300 hover:shadow-2xl">
 
-  {/* Cloud */}
-  <svg
-    viewBox="0 0 340 270"
-    className="absolute inset-0 h-full w-full drop-shadow-[0_15px_40px_rgba(59,130,246,0.18)]"
-  >
-    <path
-      d="
-      M85 225
-      C38 225 18 190 26 155
-      C33 125 58 108 90 106
-      C92 62 122 35 168 35
-      C198 35 225 48 238 74
-      C250 66 267 62 285 62
-      C324 62 340 92 340 128
-      C340 152 330 171 312 184
-      C320 205 309 225 280 225
-      L85 225
-      Z
-      "
-      fill="white"
-      stroke="#DBEAFE"
-      strokeWidth="2"
-    />
-  </svg>
+      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-sky-100">
 
-  {/* Content */}
-  <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-8 text-center">
+        <Icon
+          size={32}
+          className="text-sky-600"
+        />
 
-    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-cyan-400 text-white shadow-lg">
-      {icon}
+      </div>
+
+      <h3 className="mt-6 text-2xl font-bold">
+        {title}
+      </h3>
+
+      <p className="mt-4 text-slate-600">
+        {description}
+      </p>
+
+      <div className="mt-8 space-y-3">
+
+        <div className="flex items-center gap-3">
+
+          <BookOpen size={18} />
+
+          {lessons} Lessons
+
+        </div>
+
+        <div className="flex items-center gap-3">
+
+          <Clock3 size={18} />
+
+          {duration}
+
+        </div>
+
+      </div>
+
+      <div className="mt-8 flex items-center justify-between">
+
+        <span className="rounded-full bg-sky-100 px-4 py-2 text-sm font-semibold text-sky-700">
+
+          {level}
+
+        </span>
+
+        <Link
+          href="/courses"
+          className="flex items-center gap-2 font-semibold text-sky-600"
+        >
+          Explore
+
+          <ArrowRight size={18} />
+
+        </Link>
+
+      </div>
+
     </div>
-
-    <h3 className="text-xl font-bold text-slate-900 leading-tight">
-      {title}
-    </h3>
-
-    <p className="mt-3 text-sm leading-6 text-slate-600">
-      {description}
-    </p>
-
-    <span className="mt-5 inline-flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">
-      Explore →
-    </span>
-
-  </div>
-
-</div>
   );
 }

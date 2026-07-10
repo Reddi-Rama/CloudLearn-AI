@@ -1,47 +1,32 @@
 "use client";
 
-import { Target } from "lucide-react";
+export default function LessonContent(){
 
-const objectives = [
-  "Understand the core concept",
-  "Identify important terminology",
-  "Apply concepts to real examples",
-  "Prepare for the lesson assessment",
-];
+return(
 
-export default function LessonObjectives() {
-  return (
-    <section className="rounded-[30px] bg-white p-8 shadow-lg">
+<section className="rounded-3xl bg-white p-10 shadow-lg">
 
-      <div className="flex items-center gap-3">
+<h2 className="text-4xl font-black">
 
-        <Target className="text-blue-600" />
+What is HTML?
 
-        <h2 className="text-2xl font-bold">
-          Learning Objectives
-        </h2>
+</h2>
 
-      </div>
+<p className="mt-8 leading-9 text-slate-600">
 
-      <ul className="mt-6 space-y-4">
+HTML (HyperText Markup Language) is the standard
+markup language used to build webpages.
 
-        {objectives.map((item) => (
+It provides structure to every webpage using
+elements called tags.
 
-          <li
-            key={item}
-            className="flex items-center gap-3"
-          >
+HTML works together with CSS and JavaScript to
+create modern web applications.
 
-            <span className="h-2 w-2 rounded-full bg-blue-600" />
+</p>
 
-            {item}
+</section>
 
-          </li>
+);
 
-        ))}
-
-      </ul>
-
-    </section>
-  );
 }

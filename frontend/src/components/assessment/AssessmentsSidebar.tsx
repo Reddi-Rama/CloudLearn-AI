@@ -1,28 +1,33 @@
 "use client";
 
-import Timer from "./Timer";
-import ProgressBar from "./ProgressBar";
+const questions = Array.from(
+  { length: 10 },
+  (_, i) => i + 1
+);
 
-interface Props{
-time:string;
-progress:number;
-}
+export default function AssessmentsSidebar() {
+  return (
+    <aside className="rounded-[30px] bg-white p-6 shadow-lg">
 
-export default function AssessmentSidebar({
-time,
-progress
-}:Props){
+      <h2 className="text-xl font-bold">
+        Question Navigator
+      </h2>
 
-return(
+      <div className="mt-6 grid grid-cols-5 gap-3">
 
-<div className="glass-card sticky top-24 rounded-3xl p-6 space-y-8">
+        {questions.map((question) => (
 
-<Timer time={time}/>
+          <button
+            key={question}
+            className="h-12 rounded-xl bg-slate-100 font-semibold transition hover:bg-blue-600 hover:text-white"
+          >
+            {question}
+          </button>
 
-<ProgressBar progress={progress}/>
+        ))}
 
-</div>
+      </div>
 
-)
-
+    </aside>
+  );
 }

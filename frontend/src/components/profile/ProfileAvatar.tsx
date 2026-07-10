@@ -1,26 +1,56 @@
 "use client";
 
-import { Camera, User } from "lucide-react";
+import { User } from "lucide-react";
 
-export default function ProfileAvatar() {
+interface ProfileAvatarProps {
+  image?: string;
+  name?: string;
+}
+
+export default function ProfileAvatar({
+  image,
+  name = "Rama",
+}: ProfileAvatarProps) {
   return (
-    <div className="relative mx-auto h-36 w-36">
-
-      <div className="flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 text-white shadow-xl">
-
-        <User size={70} />
-
-      </div>
-
-      <button className="absolute bottom-2 right-2 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg">
-
-        <Camera
-          size={18}
-          className="text-blue-600"
+    <div className="relative">
+      {image ? (
+        <img
+          src={image}
+          alt={name}
+          className="
+            h-32 w-32
+            rounded-full
+            object-cover
+            border-4 border-sky-100
+            shadow-lg
+          "
         />
+      ) : (
+        <div
+          className="
+            flex h-32 w-32
+            items-center justify-center
+            rounded-full
+            bg-gradient-to-br
+            from-sky-500
+            to-indigo-600
+            text-white
+            shadow-lg
+          "
+        >
+          <User size={52} />
+        </div>
+      )}
 
-      </button>
-
+      <div
+        className="
+          absolute bottom-2 right-2
+          h-5 w-5
+          rounded-full
+          border-2 border-white
+          bg-green-500
+        "
+      />
     </div>
   );
 }

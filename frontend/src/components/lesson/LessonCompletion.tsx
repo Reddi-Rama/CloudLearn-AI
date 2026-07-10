@@ -1,31 +1,31 @@
 "use client";
 
-import { CheckCircle2, Award } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 
 export default function LessonCompletion() {
   return (
-    <section className="rounded-[32px] bg-gradient-to-r from-green-500 to-emerald-600 p-10 text-white shadow-xl">
+    <section className="rounded-3xl bg-emerald-50 p-8 shadow-lg">
 
-      <div className="flex flex-col items-center text-center">
+      <div className="flex items-center gap-4">
 
-        <CheckCircle2 size={70} />
+        <CheckCircle2
+          className="text-emerald-600"
+          size={34}
+        />
 
-        <h2 className="mt-6 text-4xl font-black">
-          Lesson Completed!
-        </h2>
+        <div>
 
-        <p className="mt-5 max-w-2xl text-lg leading-8 text-green-100">
-          Congratulations! You have successfully completed this lesson.
-          Continue learning to unlock your course certificate.
-        </p>
+          <h2 className="text-3xl font-black">
 
-        <div className="mt-8 flex items-center gap-3 rounded-full bg-white/20 px-6 py-3">
+            Lesson Completed
 
-          <Award size={24} />
+          </h2>
 
-          <span className="font-semibold">
-            Progress Updated
-          </span>
+          <p className="mt-2 text-slate-600">
+
+            Great job! Continue to the next lesson.
+
+          </p>
 
         </div>
 

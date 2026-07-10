@@ -2,25 +2,27 @@
 
 export default function DangerZone() {
   return (
-    <div className="rounded-3xl border-2 border-red-300 bg-red-50 p-8">
+    <div className="rounded-3xl border border-red-200 bg-red-50 p-8">
 
       <h2 className="text-2xl font-bold text-red-600">
-
         Danger Zone
-
       </h2>
 
-      <p className="mt-4 text-slate-600">
-
-        Deleting your account is permanent and cannot be undone.
-
+      <p className="mt-4 text-red-500">
+        These actions cannot be undone.
       </p>
 
-      <button className="mt-8 rounded-2xl bg-red-600 px-6 py-3 font-semibold text-white hover:bg-red-700">
+      <div className="mt-6 flex gap-4">
 
-        Delete Account
+        <button className="rounded-xl bg-red-500 px-6 py-3 text-white">
+          Logout All Devices
+        </button>
 
-      </button>
+        <button className="rounded-xl bg-red-700 px-6 py-3 text-white">
+          Delete Account
+        </button>
+
+      </div>
 
     </div>
   );

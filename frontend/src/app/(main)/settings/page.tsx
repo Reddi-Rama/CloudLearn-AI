@@ -1,41 +1,31 @@
 import {
   SettingsHeader,
   AccountSettings,
-  SecuritySettings,
   NotificationSettings,
+  SecuritySettings,
   AppearanceSettings,
-  LanguageSettings,
   PrivacySettings,
   DangerZone,
-  SaveSettingsButton,
 } from "@/components/settings";
 
 export default function SettingsPage() {
   return (
-    <main className="container-custom space-y-8 py-10">
+    <div className="space-y-8">
 
       <SettingsHeader />
 
       <AccountSettings />
 
-      <SecuritySettings />
-
       <NotificationSettings />
 
-      <AppearanceSettings />
+      <SecuritySettings />
 
-      <LanguageSettings />
+      <AppearanceSettings />
 
       <PrivacySettings />
 
       <DangerZone />
 
-      <div className="flex justify-end">
-
-        <SaveSettingsButton onClick={() => {}} />
-
-      </div>
-
-    </main>
+    </div>
   );
 }

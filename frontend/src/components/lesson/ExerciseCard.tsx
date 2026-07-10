@@ -3,23 +3,18 @@
 import { PencilLine } from "lucide-react";
 
 interface ExerciseCardProps {
-  title: string;
-  instruction: string;
+  title?: string;
 }
 
 export default function ExerciseCard({
-  title,
-  instruction,
+  title = "Practice Exercise",
 }: ExerciseCardProps) {
   return (
-    <section className="rounded-[30px] bg-gradient-to-br from-emerald-50 to-green-100 p-8 shadow-lg">
+    <section className="rounded-3xl bg-white p-8 shadow-lg">
 
       <div className="flex items-center gap-3">
 
-        <PencilLine
-          size={26}
-          className="text-emerald-600"
-        />
+        <PencilLine className="text-sky-600" />
 
         <h2 className="text-2xl font-bold">
           {title}
@@ -27,9 +22,23 @@ export default function ExerciseCard({
 
       </div>
 
-      <p className="mt-6 leading-8 text-slate-700">
-        {instruction}
+      <p className="mt-5 text-slate-600 leading-8">
+
+        Create an HTML page containing:
+
       </p>
+
+      <ul className="mt-5 list-disc space-y-3 pl-6 text-slate-700">
+
+        <li>Heading</li>
+
+        <li>Paragraph</li>
+
+        <li>Image</li>
+
+        <li>Hyperlink</li>
+
+      </ul>
 
     </section>
   );

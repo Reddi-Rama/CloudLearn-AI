@@ -1,49 +1,63 @@
 "use client";
 
-interface Props{
-score:number;
-total:number;
-passed:boolean;
+interface ResultCardProps {
+  correct: number;
+  incorrect: number;
+  total: number;
 }
 
 export default function ResultCard({
-score,
-total,
-passed
-}:Props){
+  correct,
+  incorrect,
+  total,
+}: ResultCardProps) {
+  return (
+    <section className="rounded-[30px] bg-white p-8 shadow-lg">
 
-return(
+      <h2 className="text-2xl font-bold">
+        Assessment Summary
+      </h2>
 
-<div className="glass-card rounded-3xl p-8 text-center">
+      <div className="mt-8 grid gap-5 md:grid-cols-3">
 
-<h2 className="text-3xl font-bold">
+        <div className="rounded-2xl bg-green-50 p-6 text-center">
 
-Assessment Completed
+          <h3 className="text-4xl font-black text-green-600">
+            {correct}
+          </h3>
 
-</h2>
+          <p className="mt-2">
+            Correct
+          </p>
 
-<p className="mt-5 text-slate-600">
+        </div>
 
-You scored
+        <div className="rounded-2xl bg-red-50 p-6 text-center">
 
-<span className="font-bold">
+          <h3 className="text-4xl font-black text-red-600">
+            {incorrect}
+          </h3>
 
- {" "} {score}/{total}
+          <p className="mt-2">
+            Incorrect
+          </p>
 
-</span>
+        </div>
 
-</p>
+        <div className="rounded-2xl bg-blue-50 p-6 text-center">
 
-<p className="mt-4">
+          <h3 className="text-4xl font-black text-blue-600">
+            {total}
+          </h3>
 
-{passed
-?"Excellent work! You're ready for the next lesson."
-:"Don't worry. Review the lesson and try again."}
+          <p className="mt-2">
+            Total Questions
+          </p>
 
-</p>
+        </div>
 
-</div>
+      </div>
 
-)
-
+    </section>
+  );
 }

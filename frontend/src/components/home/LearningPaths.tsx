@@ -1,113 +1,82 @@
 "use client";
 
-import {
-  Brain,
-  Globe,
-  Database,
-  Cloud,
-  Shield,
-  Smartphone,
-} from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Clock3, BookOpen } from "lucide-react";
 
-import LearningPathCard from "./LearningPathCard";
+interface LearningPathCardProps {
+  title: string;
+  description: string;
+  lessons: number;
+  duration: string;
+  level: string;
+  progress?: number;
+}
 
-const learningPaths = [
-  {
-    title: "Artificial Intelligence",
-    description:
-      "Learn Machine Learning, Deep Learning and Generative AI step by step.",
-    icon: Brain,
-    color: "bg-violet-500",
-    courses: 18,
-    href: "/learning-paths/ai",
-  },
-  {
-    title: "Full Stack Development",
-    description:
-      "Become a modern full stack developer using React, Next.js and Node.js.",
-    icon: Globe,
-    color: "bg-blue-500",
-    courses: 22,
-    href: "/learning-paths/full-stack",
-  },
-  {
-    title: "Data Science",
-    description:
-      "Master Python, SQL, Statistics, Visualization and Machine Learning.",
-    icon: Database,
-    color: "bg-cyan-500",
-    courses: 16,
-    href: "/learning-paths/data-science",
-  },
-  {
-    title: "Cloud Computing",
-    description:
-      "Learn AWS, Azure, Docker, Kubernetes and DevOps practices.",
-    icon: Cloud,
-    color: "bg-sky-500",
-    courses: 14,
-    href: "/learning-paths/cloud",
-  },
-  {
-    title: "Cyber Security",
-    description:
-      "Build practical skills in networking, ethical hacking and security.",
-    icon: Shield,
-    color: "bg-red-500",
-    courses: 15,
-    href: "/learning-paths/cyber-security",
-  },
-  {
-    title: "Mobile Development",
-    description:
-      "Create Android and iOS apps using Flutter and modern mobile tools.",
-    icon: Smartphone,
-    color: "bg-emerald-500",
-    courses: 12,
-    href: "/learning-paths/mobile",
-  },
-];
-
-export default function LearningPaths() {
+export default function LearningPathCard({
+  title,
+  description,
+  lessons,
+  duration,
+  level,
+  progress = 0,
+}: LearningPathCardProps) {
   return (
-    <section className="section">
+    <div className="group rounded-[30px] border border-slate-200 bg-white p-8 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
 
-      <div className="container-custom">
+      <span className="rounded-full bg-sky-100 px-4 py-2 text-sm font-semibold text-sky-700">
+        {level}
+      </span>
 
-        <div className="mx-auto max-w-3xl text-center">
+      <h3 className="mt-6 text-2xl font-bold text-slate-900">
+        {title}
+      </h3>
 
-          <span className="rounded-full bg-blue-100 px-5 py-2 text-sm font-semibold text-blue-600">
-            Learning Paths
-          </span>
+      <p className="mt-4 text-slate-600">
+        {description}
+      </p>
 
-          <h2 className="mt-6 heading">
-            Follow a Complete
-            <br />
-            Career Roadmap
-          </h2>
+      <div className="mt-8 space-y-3">
 
-          <p className="sub-heading mt-6">
-            Choose a career path and progress from beginner to advanced
-            through carefully curated courses and practical exercises.
-          </p>
-
+        <div className="flex items-center gap-3 text-slate-600">
+          <BookOpen size={18} />
+          {lessons} Lessons
         </div>
 
-        <div className="mt-16 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-
-          {learningPaths.map((path) => (
-
-            <LearningPathCard
-              key={path.title}
-              {...path}
-            />
-
-          ))}
-
+        <div className="flex items-center gap-3 text-slate-600">
+          <Clock3 size={18} />
+          {duration}
         </div>
 
       </div>
 
-    </section>
+      <div className="mt-8">
+
+        <div className="mb-2 flex justify-between text-sm">
+          <span>Progress</span>
+          <span>{progress}%</span>
+        </div>
+
+        <div className="h-3 rounded-full bg-slate-200">
+          <div
+            className="h-3 rounded-full bg-sky-500"
+            style={{
+              width: `${progress}%`,
+            }}
+          />
+        </div>
+
+      </div>
+
+      <Link
+        href="/learning-paths"
+        className="mt-8 flex items-center gap-2 font-semibold text-sky-600"
+      >
+        Continue Learning
+
+        <ArrowRight size={18} />
+
+      </Link>
+
+    </div>
   );
 }

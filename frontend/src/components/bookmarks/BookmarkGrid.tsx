@@ -1,13 +1,38 @@
 "use client";
 
-import BookmarkList from "./BookmarkList";
+import BookmarkCard from "./BookmarkCard";
+
+const bookmarks = [
+  {
+    title: "Python Programming",
+    category: "Programming",
+    progress: 72,
+  },
+  {
+    title: "Cloud Computing",
+    category: "Cloud",
+    progress: 45,
+  },
+  {
+    title: "Machine Learning",
+    category: "AI",
+    progress: 18,
+  },
+];
 
 export default function BookmarkGrid() {
   return (
-    <section className="mt-8">
+    <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
 
-      <BookmarkList />
+      {bookmarks.map((bookmark) => (
 
-    </section>
+        <BookmarkCard
+          key={bookmark.title}
+          {...bookmark}
+        />
+
+      ))}
+
+    </div>
   );
 }

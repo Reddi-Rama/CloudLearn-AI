@@ -2,38 +2,43 @@
 
 const payments = [
   {
-    student: "Reddi Rama",
-    amount: "₹29",
+    id: "PAY001",
+    student: "Rama",
+    amount: "₹499",
     status: "Paid",
   },
   {
-    student: "Rahul",
-    amount: "₹29",
+    id: "PAY002",
+    student: "Teja",
+    amount: "₹499",
     status: "Pending",
+  },
+  {
+    id: "PAY003",
+    student: "Rahul",
+    amount: "₹999",
+    status: "Paid",
   },
 ];
 
-export default function PaymentsTable() {
+export default function PaymentTable() {
   return (
-    <section className="rounded-3xl bg-white p-8 shadow-lg">
+    <section className="rounded-[30px] bg-white p-8 shadow-lg">
 
-      <h1 className="mb-8 text-3xl font-black">
-
+      <h2 className="text-2xl font-bold">
         Payments
+      </h2>
 
-      </h1>
-
-      <table className="w-full">
+      <table className="mt-8 w-full">
 
         <thead>
 
           <tr className="border-b">
 
-            <th className="py-4 text-left">Student</th>
-
-            <th>Amount</th>
-
-            <th>Status</th>
+            <th className="py-3 text-left">Payment ID</th>
+            <th className="text-left">Student</th>
+            <th className="text-left">Amount</th>
+            <th className="text-left">Status</th>
 
           </tr>
 
@@ -41,35 +46,35 @@ export default function PaymentsTable() {
 
         <tbody>
 
-          {payments.map((payment,index)=>(
+          {payments.map((payment) => (
 
             <tr
-            key={index}
-            className="border-b"
+              key={payment.id}
+              className="border-b"
             >
 
-              <td className="py-5">
+              <td className="py-4">
+                {payment.id}
+              </td>
 
+              <td>
                 {payment.student}
-
               </td>
 
               <td>
-
                 {payment.amount}
-
               </td>
 
               <td>
 
-                <span className={`rounded-full px-4 py-2 text-sm font-semibold ${
-                  payment.status==="Paid"
-                  ? "bg-green-100 text-green-600"
-                  : "bg-yellow-100 text-yellow-700"
-                }`}>
-
+                <span
+                  className={`rounded-full px-3 py-1 text-sm ${
+                    payment.status === "Paid"
+                      ? "bg-green-100 text-green-700"
+                      : "bg-yellow-100 text-yellow-700"
+                  }`}
+                >
                   {payment.status}
-
                 </span>
 
               </td>

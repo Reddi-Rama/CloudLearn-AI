@@ -1,65 +1,72 @@
 "use client";
 
-import { Lock, Save } from "lucide-react";
+import { useState } from "react";
+import Link from "next/link";
+
+import PasswordInput from "./PasswordInput";
+import PasswordStrength from "./PasswordStrength";
+import LoadingButton from "./LoadingButton";
+import FormError from "./FormError";
+import FormSuccess from "./FormSuccess";
 
 export default function ResetPasswordForm() {
+  const [password, setPassword] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
+  const [error] = useState("");
+
+  const [success, setSuccess] = useState("");
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+      setSuccess("Password updated successfully.");
+    }, 1500);
+  }
+
   return (
-    <form className="space-y-6">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 rounded-[36px] border border-white/40 bg-white/80 p-8 shadow-2xl backdrop-blur-xl lg:p-10"
+    >
+      <PasswordInput
+        label="New Password"
+        placeholder="Enter new password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
 
-      <div>
+      <PasswordStrength password={password} />
 
-        <label className="mb-2 block font-medium">
+      <PasswordInput
+        label="Confirm Password"
+        placeholder="Confirm new password"
+      />
 
-          New Password
+      <FormError message={error} />
 
-        </label>
+      <FormSuccess message={success} />
 
-        <div className="flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-3">
+      <LoadingButton
+        loading={loading}
+        text="Reset Password"
+      />
 
-          <Lock size={18}/>
+      <p className="text-center text-sm text-slate-600">
+        Back to
 
-          <input
-            type="password"
-            placeholder="Enter new password"
-            className="w-full bg-transparent outline-none"
-          />
-
-        </div>
-
-      </div>
-
-      <div>
-
-        <label className="mb-2 block font-medium">
-
-          Confirm Password
-
-        </label>
-
-        <div className="flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-3">
-
-          <Lock size={18}/>
-
-          <input
-            type="password"
-            placeholder="Confirm password"
-            className="w-full bg-transparent outline-none"
-          />
-
-        </div>
-
-      </div>
-
-      <button
-        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-green-600 py-3 font-semibold text-white hover:bg-green-700"
-      >
-
-        <Save size={18}/>
-
-        Save Password
-
-      </button>
-
+        <Link
+          href="/login"
+          className="ml-2 font-semibold text-sky-600"
+        >
+          Login
+        </Link>
+      </p>
     </form>
   );
 }

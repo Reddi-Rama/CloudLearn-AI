@@ -1,82 +1,109 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, BookOpen, Sparkles } from "lucide-react";
-import { motion } from "framer-motion";
+import { ArrowRight, PlayCircle } from "lucide-react";
+
+const stats = [
+  {
+    value: "50K+",
+    label: "Students",
+  },
+  {
+    value: "500+",
+    label: "Lessons",
+  },
+  {
+    value: "25+",
+    label: "Domains",
+  },
+];
 
 export default function HeroContent() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 60 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-    >
-      {/* Badge */}
-      <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white/70 px-5 py-2 backdrop-blur-xl">
-        <Sparkles
-          size={18}
-          className="text-blue-600"
-        />
+    <div>
 
-        <span className="text-sm font-semibold text-blue-700">
-          Empowering B.Tech Students
+      <span className="inline-flex items-center rounded-full border border-sky-200 bg-sky-100 px-5 py-2 text-sm font-semibold text-sky-700">
+
+        ☁ Cloud-Based Learning Platform
+
+      </span>
+
+      <h1 className="mt-8 text-5xl font-black leading-tight text-slate-900 lg:text-7xl">
+
+        Learn.
+
+        <br />
+
+        Build.
+
+        <br />
+
+        <span className="bg-gradient-to-r from-sky-500 via-cyan-500 to-indigo-600 bg-clip-text text-transparent">
+
+          Grow.
+
         </span>
-      </div>
 
-      {/* Heading */}
-      <h1 className="mt-8 text-5xl font-extrabold leading-tight text-slate-900 md:text-6xl lg:text-7xl">
-        Learn
-        <span className="text-blue-600"> Beyond </span>
-        Limits
       </h1>
 
-      {/* Subtitle */}
       <p className="mt-8 max-w-xl text-lg leading-8 text-slate-600">
-        Master in-demand technologies through structured learning paths,
-        practical coding, quizzes, projects and certificates—all in one place.
+
+        Learn Cloud Computing, Programming,
+        Artificial Intelligence, Machine Learning,
+        Data Science and modern technologies with
+        beautifully designed learning paths,
+        assessments and certificates.
+
       </p>
 
-      {/* Buttons */}
-      <div className="mt-10 flex flex-wrap gap-5">
+      <div className="mt-10 flex flex-wrap gap-4">
+
         <Link
-          href="/courses"
-          className="btn-primary"
+          href="/domains"
+          className="flex items-center gap-2 rounded-2xl bg-sky-600 px-8 py-4 font-semibold text-white shadow-lg transition hover:-translate-y-1 hover:bg-sky-700"
         >
-          Explore Courses
-          <ArrowRight size={18} />
+          Start Learning
+
+          <ArrowRight size={20} />
+
         </Link>
 
         <Link
           href="/learning-paths"
-          className="btn-secondary"
+          className="flex items-center gap-2 rounded-2xl border border-slate-300 bg-white px-8 py-4 font-semibold text-slate-700 transition hover:border-sky-400 hover:text-sky-600"
         >
-          <BookOpen size={18} />
-          Learning Paths
+          <PlayCircle size={20} />
+
+          Explore Paths
+
         </Link>
+
       </div>
 
-      {/* Stats */}
-      <div className="mt-16 grid grid-cols-2 gap-6 md:grid-cols-4">
-        <div>
-          <h2 className="text-4xl font-bold text-blue-600">500+</h2>
-          <p className="mt-2 text-sm text-slate-500">Courses</p>
-        </div>
+      <div className="mt-14 flex flex-wrap gap-10">
 
-        <div>
-          <h2 className="text-4xl font-bold text-blue-600">40+</h2>
-          <p className="mt-2 text-sm text-slate-500">Domains</p>
-        </div>
+        {stats.map((item) => (
 
-        <div>
-          <h2 className="text-4xl font-bold text-blue-600">25K+</h2>
-          <p className="mt-2 text-sm text-slate-500">Students</p>
-        </div>
+          <div key={item.label}>
 
-        <div>
-          <h2 className="text-4xl font-bold text-blue-600">100%</h2>
-          <p className="mt-2 text-sm text-slate-500">Certificates</p>
-        </div>
+            <h2 className="text-3xl font-black text-slate-900">
+
+              {item.value}
+
+            </h2>
+
+            <p className="mt-2 text-slate-500">
+
+              {item.label}
+
+            </p>
+
+          </div>
+
+        ))}
+
       </div>
-    </motion.div>
+
+    </div>
   );
 }

@@ -2,34 +2,29 @@
 
 export default function NotificationSettings() {
   return (
-    <div className="glass-card rounded-3xl p-8">
-
+    <div className="rounded-3xl bg-white p-8 shadow-sm">
       <h2 className="text-2xl font-bold">
-
-        Notifications
-
+        Notification Settings
       </h2>
 
-      <div className="mt-8 space-y-5">
+      <div className="mt-6 space-y-4">
 
-        <label className="flex items-center justify-between">
-
-          Email Notifications
-
-          <input type="checkbox" />
-
+        <label className="flex justify-between">
+          Course Notifications
+          <input type="checkbox" defaultChecked />
         </label>
 
-        <label className="flex items-center justify-between">
-
+        <label className="flex justify-between">
           Assessment Reminders
+          <input type="checkbox" defaultChecked />
+        </label>
 
-          <input type="checkbox" />
-
+        <label className="flex justify-between">
+          Certificate Alerts
+          <input type="checkbox" defaultChecked />
         </label>
 
       </div>
-
     </div>
   );
 }

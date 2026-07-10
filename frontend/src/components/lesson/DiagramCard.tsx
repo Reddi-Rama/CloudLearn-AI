@@ -1,32 +1,25 @@
 "use client";
 
-import { Network } from "lucide-react";
+import Diagram from "./Diagram";
 
-interface DiagramCardProps {
-  title: string;
-  description: string;
-}
-
-export default function DiagramCard({
-  title,
-  description,
-}: DiagramCardProps) {
+export default function DiagramCard() {
   return (
-    <div className="rounded-3xl bg-gradient-to-br from-sky-50 to-blue-100 p-8 shadow">
+    <section className="rounded-3xl bg-white p-8 shadow-lg">
 
-      <Network
-        size={36}
-        className="text-blue-600"
-      />
+      <h2 className="text-2xl font-bold">
+        HTML Structure
+      </h2>
 
-      <h3 className="mt-6 text-xl font-bold">
-        {title}
-      </h3>
-
-      <p className="mt-4 leading-7 text-slate-600">
-        {description}
+      <p className="mt-3 text-slate-600">
+        Visual representation of a basic HTML document.
       </p>
 
-    </div>
+      <div className="mt-8">
+
+        <Diagram />
+
+      </div>
+
+    </section>
   );
 }

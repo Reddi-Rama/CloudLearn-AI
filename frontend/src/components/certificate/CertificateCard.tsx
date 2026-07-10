@@ -1,62 +1,44 @@
 "use client";
 
-import { Award } from "lucide-react";
-
 interface CertificateCardProps {
-  courseName: string;
+  course: string;
+  score: number;
   issueDate: string;
   credentialId: string;
 }
 
 export default function CertificateCard({
-  courseName,
+  course,
+  score,
   issueDate,
   credentialId,
 }: CertificateCardProps) {
   return (
-    <div className="glass-card rounded-3xl p-8">
+    <div className="rounded-3xl bg-white p-6 shadow-lg transition hover:shadow-xl">
 
-      <div className="flex items-center gap-4">
+      <h2 className="text-2xl font-bold text-slate-900">
+        {course}
+      </h2>
 
-        <div className="rounded-2xl bg-blue-100 p-4">
+      <div className="mt-6 space-y-2 text-slate-600">
 
-          <Award className="text-blue-600" size={30} />
-
-        </div>
-
-        <div>
-
-          <h2 className="text-2xl font-bold">
-
-            {courseName}
-
-          </h2>
-
-          <p className="text-slate-500">
-
-            Issued: {issueDate}
-
-          </p>
-
-        </div>
-
-      </div>
-
-      <div className="mt-8 rounded-2xl bg-slate-50 p-5">
-
-        <p className="text-sm text-slate-500">
-
-          Credential ID
-
+        <p>
+          Score: <span className="font-semibold">{score}%</span>
         </p>
 
-        <h3 className="mt-2 font-mono text-lg font-bold">
+        <p>
+          Issued: {issueDate}
+        </p>
 
+        <p className="text-sm text-slate-500">
           {credentialId}
-
-        </h3>
+        </p>
 
       </div>
+
+      <button className="mt-6 rounded-xl bg-sky-600 px-5 py-3 font-semibold text-white hover:bg-sky-700">
+        View Certificate
+      </button>
 
     </div>
   );

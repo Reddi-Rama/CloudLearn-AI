@@ -2,40 +2,24 @@
 
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-interface Props {
-  onPrevious: () => void;
-  onNext: () => void;
-  disablePrevious?: boolean;
-  disableNext?: boolean;
-}
-
-export default function NavigationButtons({
-  onPrevious,
-  onNext,
-  disablePrevious,
-  disableNext,
-}: Props) {
+export default function NavigationButtons() {
   return (
-    <div className="mt-10 flex justify-between">
+    <div className="flex justify-between">
 
-      <button
-        onClick={onPrevious}
-        disabled={disablePrevious}
-        className="btn-secondary"
-      >
+      <button className="flex items-center gap-2 rounded-2xl border border-slate-300 px-6 py-3 font-semibold transition hover:bg-slate-100">
+
         <ArrowLeft size={18} />
 
         Previous
+
       </button>
 
-      <button
-        onClick={onNext}
-        disabled={disableNext}
-        className="btn-primary"
-      >
+      <button className="flex items-center gap-2 rounded-2xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700">
+
         Next
 
         <ArrowRight size={18} />
+
       </button>
 
     </div>

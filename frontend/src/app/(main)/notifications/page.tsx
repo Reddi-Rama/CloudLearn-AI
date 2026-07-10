@@ -1,28 +1,26 @@
-import {
-  NotificationHeader,
-  NotificationFilter,
-  NotificationList,
-} from "@/components/notifications";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 import {
-  CloudBackground,
-  PageContainer,
-} from "@/components/common";
+  Notification,
+} from "@/components/notifications";
 
 export default function NotificationsPage() {
   return (
-    <CloudBackground>
+    <>
+      <Header />
 
-      <PageContainer>
+      <main className="min-h-screen bg-slate-50 pt-36 pb-20">
 
-        <NotificationHeader />
+        <div className="mx-auto max-w-6xl px-6">
 
-        <NotificationFilter />
+          <Notification />
 
-        <NotificationList />
+        </div>
 
-      </PageContainer>
+      </main>
 
-    </CloudBackground>
+      <Footer />
+    </>
   );
 }

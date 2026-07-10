@@ -1,28 +1,32 @@
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+
 import {
   BookmarksHeader,
   BookmarkFilter,
-  BookmarkGrid,
+  BookmarkList,
 } from "@/components/bookmarks";
-
-import {
-  CloudBackground,
-  PageContainer,
-} from "@/components/common";
 
 export default function BookmarksPage() {
   return (
-    <CloudBackground>
+    <>
+      <Header />
 
-      <PageContainer>
+      <main className="min-h-screen bg-[#F8FAFC] pt-32 pb-20">
 
-        <BookmarksHeader />
+        <div className="mx-auto max-w-7xl px-6 space-y-8">
 
-        <BookmarkFilter />
+          <BookmarksHeader />
 
-        <BookmarkGrid />
+          <BookmarkFilter />
 
-      </PageContainer>
+          <BookmarkList />
 
-    </CloudBackground>
+        </div>
+
+      </main>
+
+      <Footer />
+    </>
   );
 }

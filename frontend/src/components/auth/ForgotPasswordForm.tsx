@@ -1,39 +1,61 @@
 "use client";
 
-import { Mail, Send } from "lucide-react";
+import { useState } from "react";
+import Link from "next/link";
+
+import AuthInput from "./AuthInput";
+import LoadingButton from "./LoadingButton";
+import FormError from "./FormError";
+import FormSuccess from "./FormSuccess";
 
 export default function ForgotPasswordForm() {
+  const [loading, setLoading] = useState(false);
+
+  const [error] = useState("");
+
+  const [success, setSuccess] = useState("");
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+      setSuccess("Password reset link sent successfully.");
+    }, 1500);
+  }
+
   return (
-    <form className="space-y-6">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 rounded-[36px] border border-white/40 bg-white/80 p-8 shadow-2xl backdrop-blur-xl lg:p-10"
+    >
+      <AuthInput
+        label="Email Address"
+        type="email"
+        placeholder="Enter your email"
+      />
 
-      <div>
+      <FormError message={error} />
 
-        <label className="mb-2 block font-medium">
-          Registered Email
-        </label>
+      <FormSuccess message={success} />
 
-        <div className="flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-3">
+      <LoadingButton
+        loading={loading}
+        text="Send Reset Link"
+      />
 
-          <Mail size={18} />
+      <p className="text-center text-sm text-slate-600">
+        Remember your password?
 
-          <input
-            type="email"
-            placeholder="Enter your email"
-            className="w-full bg-transparent outline-none"
-          />
-
-        </div>
-
-      </div>
-
-      <button
-        type="submit"
-        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-blue-600 py-3 text-white"
-      >
-        <Send size={18} />
-        Send OTP
-      </button>
-
+        <Link
+          href="/login"
+          className="ml-2 font-semibold text-sky-600"
+        >
+          Login
+        </Link>
+      </p>
     </form>
   );
 }

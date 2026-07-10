@@ -1,65 +1,49 @@
 "use client";
 
 import {
-LayoutDashboard,
-BookOpen,
-Layers,
-Users,
-FileText,
-Award,
-CreditCard,
-BarChart3,
-Settings
+  LayoutDashboard,
+  Users,
+  BookOpen,
+  GraduationCap,
+  CreditCard,
+  ClipboardList,
+  BarChart3,
+  Settings,
 } from "lucide-react";
 
-const menu = [
-  { icon: LayoutDashboard, title: "Dashboard" },
-  { icon: Layers, title: "Domains" },
-  { icon: BookOpen, title: "Courses" },
-  { icon: FileText, title: "Lessons" },
-  { icon: Users, title: "Students" },
-  { icon: Award, title: "Certificates" },
-  { icon: CreditCard, title: "Payments" },
-  { icon: BarChart3, title: "Analytics" },
-  { icon: Settings, title: "Settings" },
+const items = [
+  { icon: LayoutDashboard, label: "Dashboard" },
+  { icon: Users, label: "Users" },
+  { icon: GraduationCap, label: "Students" },
+  { icon: BookOpen, label: "Courses" },
+  { icon: ClipboardList, label: "Lessons" },
+  { icon: CreditCard, label: "Payments" },
+  { icon: BarChart3, label: "Analytics" },
+  { icon: Settings, label: "Settings" },
 ];
 
 export default function AdminSidebar() {
   return (
-    <aside className="w-72 bg-white border-r shadow-lg">
+    <aside className="w-72 border-r bg-white p-6">
 
-      <div className="p-8">
+      <nav className="space-y-3">
 
-        <h1 className="text-3xl font-black text-sky-600">
+        {items.map(({ icon: Icon, label }) => (
 
-          CloudLearn
+          <button
+            key={label}
+            className="flex w-full items-center gap-4 rounded-2xl px-5 py-4 text-left transition hover:bg-sky-50 hover:text-sky-600"
+          >
 
-        </h1>
+            <Icon size={22} />
 
-      </div>
+            <span className="font-medium">
+              {label}
+            </span>
 
-      <nav className="space-y-2 px-5">
+          </button>
 
-        {menu.map((item) => {
-
-          const Icon = item.icon;
-
-          return (
-
-            <button
-              key={item.title}
-              className="flex w-full items-center gap-4 rounded-2xl px-5 py-4 hover:bg-sky-50"
-            >
-
-              <Icon size={20} />
-
-              {item.title}
-
-            </button>
-
-          );
-
-        })}
+        ))}
 
       </nav>
 

@@ -1,78 +1,100 @@
 "use client";
 
-import { User, Mail, Lock, UserPlus } from "lucide-react";
+import { useState } from "react";
+import Link from "next/link";
+
+import AuthInput from "./AuthInput";
+import PasswordInput from "./PasswordInput";
+import PasswordStrength from "./PasswordStrength";
+import TermsCheckbox from "./TermsCheckbox";
+import SocialLogin from "./SocialLogin";
+import Divider from "./Divider";
+import LoadingButton from "./LoadingButton";
+import FormError from "./FormError";
+import FormSuccess from "./FormSuccess";
 
 export default function RegisterForm() {
+
+  const [password, setPassword] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
+  const [error] = useState("");
+
+  const [success] = useState("");
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+  }
+
   return (
-    <form className="space-y-6">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 rounded-[36px] border border-white/40 bg-white/80 p-8 shadow-2xl backdrop-blur-xl lg:p-10"
+    >
+      <AuthInput
+        label="Full Name"
+        placeholder="John Doe"
+      />
 
-      <div>
+      <AuthInput
+        label="Email"
+        type="email"
+        placeholder="john@example.com"
+      />
 
-        <label className="mb-2 block font-medium">
-          Full Name
-        </label>
+      <AuthInput
+        label="Phone Number"
+        type="tel"
+        placeholder="+91 9876543210"
+      />
 
-        <div className="flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-3">
+      <PasswordInput
+        label="Password"
+        placeholder="Create Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
 
-          <User size={18} />
+      <PasswordStrength password={password} />
 
-          <input
-            type="text"
-            placeholder="Enter your full name"
-            className="w-full bg-transparent outline-none"
-          />
+      <PasswordInput
+        label="Confirm Password"
+        placeholder="Confirm Password"
+      />
 
-        </div>
+      <TermsCheckbox />
 
-      </div>
+      <FormError message={error} />
 
-      <div>
+      <FormSuccess message={success} />
 
-        <label className="mb-2 block font-medium">
-          Email
-        </label>
+      <LoadingButton
+        loading={loading}
+        text="Create Account"
+      />
 
-        <div className="flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-3">
+      <Divider text="OR SIGN UP WITH" />
 
-          <Mail size={18} />
+      <SocialLogin />
 
-          <input
-            type="email"
-            placeholder="Enter your email"
-            className="w-full bg-transparent outline-none"
-          />
+      <p className="pt-4 text-center text-sm text-slate-600">
+        Already have an account?
 
-        </div>
+        <Link
+          href="/login"
+          className="ml-2 font-semibold text-sky-600"
+        >
+          Login
+        </Link>
 
-      </div>
-
-      <div>
-
-        <label className="mb-2 block font-medium">
-          Password
-        </label>
-
-        <div className="flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-3">
-
-          <Lock size={18} />
-
-          <input
-            type="password"
-            placeholder="Create a password"
-            className="w-full bg-transparent outline-none"
-          />
-
-        </div>
-
-      </div>
-
-      <button
-        type="submit"
-        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700"
-      >
-        <UserPlus size={18} />
-        Create Account
-      </button>
+      </p>
 
     </form>
   );
