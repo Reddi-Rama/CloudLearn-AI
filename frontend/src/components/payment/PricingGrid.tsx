@@ -1,11 +1,10 @@
-"use client";
-
 import PricingCard from "./PricingCard";
-import { plans } from "./paymentData";
+import { plans } from "./PaymentData";
 
 export default function PricingGrid() {
   return (
-    <div className="grid gap-8 md:grid-cols-3">
+    <div className="grid gap-8 lg:grid-cols-3">
+
       {plans.map((plan) => (
         <PricingCard
           key={plan.id}
@@ -14,6 +13,7 @@ export default function PricingGrid() {
           features={plan.features}
         />
       ))}
+
     </div>
   );
 }

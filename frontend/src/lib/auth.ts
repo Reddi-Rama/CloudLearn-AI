@@ -1,23 +1,38 @@
-import { storage } from "./storage";
+export function isAuthenticated() {
+  if (typeof window === "undefined") {
+    return false;
+  }
 
-export const AUTH_TOKEN = "cloudlearn_token";
-export const USER_KEY = "cloudlearn_user";
+  const user = localStorage.getItem(
+    "cloudlearn-user"
+  );
 
-export const auth = {
-  login(token: string) {
-    storage.set(AUTH_TOKEN, token);
-  },
+  return !!user;
+}
 
-  logout() {
-    storage.remove(AUTH_TOKEN);
-    storage.remove(USER_KEY);
-  },
+export function login(userData: unknown) {
+  localStorage.setItem(
+    "cloudlearn-user",
+    JSON.stringify(userData)
+  );
+}
 
-  getToken() {
-    return storage.get<string>(AUTH_TOKEN);
-  },
+export function logout() {
+  localStorage.removeItem(
+    "cloudlearn-user"
+  );
+}
 
-  isAuthenticated() {
-    return Boolean(storage.get(AUTH_TOKEN));
-  },
-};
+export function getUser() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const user = localStorage.getItem(
+    "cloudlearn-user"
+  );
+
+  return user
+    ? JSON.parse(user)
+    : null;
+}
