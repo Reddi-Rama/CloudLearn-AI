@@ -1,65 +1,47 @@
-"use client";
-
-import { Bookmark, ArrowRight } from "lucide-react";
-
-interface BookmarkCardProps {
+interface Props {
   title: string;
-  category: string;
+  lesson: string;
   progress: number;
 }
 
 export default function BookmarkCard({
   title,
-  category,
+  lesson,
   progress,
-}: BookmarkCardProps) {
+}: Props) {
   return (
-    <div className="rounded-[30px] bg-white p-6 shadow-lg transition hover:-translate-y-1 hover:shadow-xl">
+    <div className="rounded-3xl bg-white p-8 shadow-sm border border-slate-200">
 
-      <div className="flex items-center justify-between">
-
-        <Bookmark className="text-sky-600" />
-
-        <span className="rounded-full bg-sky-100 px-3 py-1 text-sm font-semibold text-sky-700">
-          {category}
-        </span>
-
-      </div>
-
-      <h2 className="mt-5 text-2xl font-bold">
+      <h2 className="text-2xl font-bold">
         {title}
       </h2>
 
-      <div className="mt-6">
+      <p className="mt-3 text-slate-500">
+        {lesson}
+      </p>
 
-        <div className="flex justify-between text-sm">
-
-          <span>Progress</span>
-
-          <span>{progress}%</span>
-
-        </div>
-
-        <div className="mt-2 h-2 rounded-full bg-slate-200">
-
-          <div
-            className="h-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600"
-            style={{
-              width: `${progress}%`,
-            }}
-          />
-
-        </div>
-
+      <div className="mt-6 h-3 rounded-full bg-slate-200">
+        <div
+          className="h-3 rounded-full bg-sky-500"
+          style={{
+            width: `${progress}%`,
+          }}
+        />
       </div>
 
-      <button className="mt-8 flex items-center gap-2 font-semibold text-sky-600">
+      <p className="mt-4 text-sky-600">
+        {progress}% Completed
+      </p>
 
-        Continue Learning
+      <div className="mt-6 flex gap-4">
+        <button className="rounded-xl bg-sky-600 px-5 py-3 text-white">
+          Resume
+        </button>
 
-        <ArrowRight size={18} />
-
-      </button>
+        <button className="rounded-xl border border-red-200 px-5 py-3 text-red-500">
+          Remove
+        </button>
+      </div>
 
     </div>
   );

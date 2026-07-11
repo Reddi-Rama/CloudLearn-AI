@@ -1,33 +1,23 @@
-"use client";
+const filters = [
+  "All",
+  "Courses",
+  "Lessons",
+  "Assessments",
+];
 
 export default function BookmarkFilter() {
   return (
-    <section className="rounded-[28px] bg-white p-6 shadow-lg">
+    <div className="flex justify-center gap-4 py-10">
 
-      <h2 className="mb-4 text-xl font-bold">
-        Filter Bookmarks
-      </h2>
-
-      <div className="flex flex-wrap gap-3">
-
-        <button className="rounded-full bg-sky-600 px-5 py-2 font-semibold text-white">
-          All
+      {filters.map((filter) => (
+        <button
+          key={filter}
+          className="rounded-full bg-white px-6 py-3 shadow-sm hover:bg-sky-600 hover:text-white"
+        >
+          {filter}
         </button>
+      ))}
 
-        <button className="rounded-full bg-slate-100 px-5 py-2 font-semibold transition hover:bg-slate-200">
-          Programming
-        </button>
-
-        <button className="rounded-full bg-slate-100 px-5 py-2 font-semibold transition hover:bg-slate-200">
-          Cloud
-        </button>
-
-        <button className="rounded-full bg-slate-100 px-5 py-2 font-semibold transition hover:bg-slate-200">
-          AI & ML
-        </button>
-
-      </div>
-
-    </section>
+    </div>
   );
 }
