@@ -1,79 +1,82 @@
 "use client";
 
+import Link from "next/link";
+import {
+  User,
+  Bell,
+  Shield,
+  Moon,
+  ChevronRight,
+} from "lucide-react";
+
+const settings = [
+  {
+    title: "Profile Settings",
+    icon: User,
+    href: "/profile",
+  },
+  {
+    title: "Notifications",
+    icon: Bell,
+    href: "/notifications",
+  },
+  {
+    title: "Privacy & Security",
+    icon: Shield,
+    href: "/settings",
+  },
+  {
+    title: "Appearance",
+    icon: Moon,
+    href: "/settings",
+  },
+];
+
 export default function SettingsPanel() {
   return (
-    <section className="rounded-3xl bg-white p-10 shadow-xl">
+    <section className="mt-14">
 
-      <h1 className="text-4xl font-black">
+      <div className="rounded-[32px] bg-white p-8 shadow-lg">
 
-        Settings
+        <h2 className="mb-8 text-3xl font-bold">
+          Quick Settings
+        </h2>
 
-      </h1>
+        <div className="space-y-4">
 
-      <div className="mt-10 space-y-8">
+          {settings.map((item) => {
+            const Icon = item.icon;
 
-        <Setting
-          title="Dark Mode"
-          description="Coming Soon"
-        />
+            return (
+              <Link
+                key={item.title}
+                href={item.href}
+                className="flex items-center justify-between rounded-2xl bg-slate-50 p-5 transition hover:bg-blue-50"
+              >
 
-        <Setting
-          title="Email Notifications"
-          description="Enabled"
-        />
+                <div className="flex items-center gap-4">
 
-        <Setting
-          title="Language"
-          description="English"
-        />
+                  <Icon
+                    size={22}
+                    className="text-blue-600"
+                  />
 
-        <Setting
-          title="Certificate Visibility"
-          description="Public"
-        />
+                  <span className="font-medium">
+                    {item.title}
+                  </span>
+
+                </div>
+
+                <ChevronRight size={20} />
+
+              </Link>
+            );
+          })}
+
+        </div>
 
       </div>
 
     </section>
   );
-}
-
-function Setting({
-  title,
-  description,
-}:{
-  title:string;
-  description:string;
-}){
-
-  return(
-
-    <div className="flex items-center justify-between rounded-2xl border p-6">
-
-      <div>
-
-        <h3 className="font-bold">
-
-          {title}
-
-        </h3>
-
-        <p className="text-slate-500">
-
-          {description}
-
-        </p>
-
-      </div>
-
-      <button className="rounded-xl bg-sky-500 px-5 py-2 text-white">
-
-        Change
-
-      </button>
-
-    </div>
-
-  )
-
 }

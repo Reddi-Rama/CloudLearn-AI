@@ -1,77 +1,131 @@
 "use client";
 
-import { PlayCircle } from "lucide-react";
+import Link from "next/link";
+import {
+  Brain,
+  Cloud,
+  Code2,
+  ArrowRight,
+  Clock,
+} from "lucide-react";
 
-export default function ContinueLearning(){
+const courses = [
+  {
+    title: "Artificial Intelligence",
+    icon: Brain,
+    progress: 72,
+    duration: "3h 20m left",
+    color: "from-blue-500 to-indigo-600",
+  },
+  {
+    title: "Python Programming",
+    icon: Code2,
+    progress: 48,
+    duration: "5h 10m left",
+    color: "from-emerald-500 to-green-600",
+  },
+  {
+    title: "Cloud Computing",
+    icon: Cloud,
+    progress: 20,
+    duration: "8h 45m left",
+    color: "from-sky-500 to-cyan-600",
+  },
+];
 
-return(
+export default function ContinueLearning() {
+  return (
+    <section className="mt-14">
 
-<div className="rounded-3xl bg-white p-8 shadow-xl border">
+      <div className="mb-8 flex items-center justify-between">
 
-<div className="flex items-center justify-between">
+        <h2 className="text-3xl font-bold text-slate-900">
+          Continue Learning
+        </h2>
 
-<div>
+        <Link
+          href="/courses"
+          className="text-blue-600 font-semibold hover:underline"
+        >
+          View All
+        </Link>
 
-<p className="text-gray-500">
+      </div>
 
-Continue Learning
+      <div className="grid gap-8 lg:grid-cols-3">
 
-</p>
+        {courses.map((course) => {
+          const Icon = course.icon;
 
-<h2 className="mt-2 text-3xl font-bold">
+          return (
+            <div
+              key={course.title}
+              className="rounded-[32px] bg-white p-8 shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
+            >
 
-Python Programming
+              <div
+                className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-r ${course.color}`}
+              >
 
-</h2>
+                <Icon
+                  size={30}
+                  className="text-white"
+                />
 
-<p className="mt-3 text-gray-500">
+              </div>
 
-Module 2 • Lesson 1
+              <h3 className="mt-6 text-2xl font-bold text-slate-900">
+                {course.title}
+              </h3>
 
-</p>
+              <div className="mt-6 flex items-center justify-between">
 
-</div>
+                <span className="text-slate-600">
+                  Progress
+                </span>
 
-<button className="rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 px-6 py-4 text-white">
+                <span className="font-bold text-blue-600">
+                  {course.progress}%
+                </span>
 
-<PlayCircle/>
+              </div>
 
-</button>
+              <div className="mt-3 h-3 rounded-full bg-slate-200">
 
-</div>
+                <div
+                  className={`h-3 rounded-full bg-gradient-to-r ${course.color}`}
+                  style={{
+                    width: `${course.progress}%`,
+                  }}
+                />
 
-<div className="mt-8">
+              </div>
 
-<div className="flex justify-between">
+              <div className="mt-6 flex items-center gap-2 text-slate-500">
 
-<p>Progress</p>
+                <Clock size={18} />
 
-<p>42%</p>
+                <span>{course.duration}</span>
 
-</div>
+              </div>
 
-<div className="mt-3 h-4 overflow-hidden rounded-full bg-gray-200">
+              <Link
+                href="/courses"
+                className="mt-8 flex items-center justify-center gap-2 rounded-2xl bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700"
+              >
 
-<div className="h-full w-[42%] rounded-full bg-gradient-to-r from-sky-500 to-indigo-600"/>
+                Continue
 
-</div>
+                <ArrowRight size={18} />
 
-<p className="mt-4 text-gray-500">
+              </Link>
 
-5 / 12 Lessons Completed
+            </div>
+          );
+        })}
 
-</p>
+      </div>
 
-<button className="mt-8 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 px-8 py-4 text-white font-semibold">
-
-Resume Learning
-
-</button>
-
-</div>
-
-</div>
-
-);
-
+    </section>
+  );
 }

@@ -1,70 +1,45 @@
 "use client";
 
-import {
-Download,
-FileDown,
-Video,
-Link2
-} from "lucide-react";
+import { Download, FileText, Link2 } from "lucide-react";
 
-const resources=[
-{
-icon:Video,
-title:"Lesson Video"
-},
-{
-icon:FileDown,
-title:"PDF Notes"
-},
-{
-icon:Download,
-title:"Source Code"
-},
-{
-icon:Link2,
-title:"Useful Links"
-}
-];
+export default function LessonResources() {
+  return (
+    <section className="rounded-3xl bg-white p-8 shadow-lg">
 
-export default function LessonResources(){
+      <h2 className="text-2xl font-bold">
+        Lesson Resources
+      </h2>
 
-return(
+      <div className="mt-8 space-y-5">
 
-<section className="rounded-3xl bg-white p-8 shadow-lg">
+        <button className="flex w-full items-center justify-between rounded-2xl border p-5 hover:bg-slate-50">
 
-<h2 className="mb-8 text-2xl font-bold">
+          <div className="flex items-center gap-3">
 
-Resources
+            <FileText className="text-sky-600" />
 
-</h2>
+            HTML Notes PDF
 
-<div className="grid gap-5 md:grid-cols-2">
+          </div>
 
-{resources.map((item)=>{
+          <Download />
 
-const Icon=item.icon;
+        </button>
 
-return(
+        <button className="flex w-full items-center justify-between rounded-2xl border p-5 hover:bg-slate-50">
 
-<button
-key={item.title}
-className="flex items-center gap-4 rounded-2xl border p-6 hover:bg-sky-50"
->
+          <div className="flex items-center gap-3">
 
-<Icon className="text-sky-600"/>
+            <Link2 className="text-sky-600" />
 
-{item.title}
+            W3Schools Reference
 
-</button>
+          </div>
 
-);
+        </button>
 
-})}
+      </div>
 
-</div>
-
-</section>
-
-);
-
+    </section>
+  );
 }

@@ -1,33 +1,25 @@
 "use client";
 
-interface Props{
-title:string;
-image:string;
-}
+import Diagram from "./Diagram";
 
-export default function DiagramCard({
-title,
-image,
-}:Props){
+export default function DiagramCard() {
+  return (
+    <section className="rounded-3xl bg-white p-8 shadow-lg">
 
-return(
+      <h2 className="text-2xl font-bold">
+        HTML Structure
+      </h2>
 
-<div className="rounded-3xl bg-white p-8 shadow-lg">
+      <p className="mt-3 text-slate-600">
+        Visual representation of a basic HTML document.
+      </p>
 
-<h2 className="mb-6 text-2xl font-bold">
+      <div className="mt-8">
 
-{title}
+        <Diagram />
 
-</h2>
+      </div>
 
-<img
-src={image}
-alt={title}
-className="w-full rounded-2xl"
-/>
-
-</div>
-
-);
-
+    </section>
+  );
 }

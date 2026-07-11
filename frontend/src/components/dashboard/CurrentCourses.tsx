@@ -1,111 +1,143 @@
 "use client";
 
-import {
-  PlayCircle,
-  ArrowRight,
-  BookOpen
-} from "lucide-react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 const courses = [
   {
-    title: "Python Programming",
-    lessons: 12,
-    progress: 42,
-    color: "from-sky-500 to-blue-600",
+    title: "Artificial Intelligence",
+    progress: "72%",
+    level: "Intermediate",
+    lastAccessed: "Today",
+    color: "bg-blue-500",
   },
   {
-    title: "Machine Learning",
-    lessons: 12,
-    progress: 18,
-    color: "from-purple-500 to-indigo-600",
+    title: "Python Programming",
+    progress: "48%",
+    level: "Beginner",
+    lastAccessed: "Yesterday",
+    color: "bg-green-500",
   },
   {
     title: "Cloud Computing",
-    lessons: 12,
-    progress: 0,
-    color: "from-emerald-500 to-green-600",
+    progress: "20%",
+    level: "Intermediate",
+    lastAccessed: "2 Days Ago",
+    color: "bg-sky-500",
+  },
+  {
+    title: "Data Science",
+    progress: "91%",
+    level: "Advanced",
+    lastAccessed: "Today",
+    color: "bg-purple-500",
   },
 ];
 
 export default function CurrentCourses() {
   return (
-    <section className="mx-auto max-w-7xl">
+    <section className="mt-14">
 
-      <div className="flex items-center justify-between mb-8">
+      <div className="mb-8 flex items-center justify-between">
 
-        <h1 className="text-4xl font-black">
+        <h2 className="text-3xl font-bold text-slate-900">
+          My Current Courses
+        </h2>
 
-          My Courses
-
-        </h1>
-
-        <button className="flex items-center gap-2 rounded-xl bg-sky-500 px-5 py-3 text-white">
-
-          Browse More
-
-          <ArrowRight size={18}/>
-
-        </button>
+        <Link
+          href="/courses"
+          className="font-semibold text-blue-600 hover:underline"
+        >
+          View All
+        </Link>
 
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-3">
+      <div className="overflow-hidden rounded-[32px] bg-white shadow-xl">
 
-        {courses.map((course) => (
+        <table className="w-full">
 
-          <div
-            key={course.title}
-            className="rounded-3xl bg-white shadow-xl overflow-hidden"
-          >
+          <thead className="bg-slate-100">
 
-            <div className={`bg-gradient-to-r ${course.color} p-8 text-white`}>
+            <tr>
 
-              <BookOpen size={38}/>
+              <th className="px-8 py-5 text-left">Course</th>
 
-              <h2 className="mt-6 text-3xl font-bold">
+              <th className="px-8 py-5 text-left">Progress</th>
 
-                {course.title}
+              <th className="px-8 py-5 text-left">Level</th>
 
-              </h2>
+              <th className="px-8 py-5 text-left">Last Accessed</th>
 
-            </div>
+              <th className="px-8 py-5 text-center">Action</th>
 
-            <div className="p-8">
+            </tr>
 
-              <p>
+          </thead>
 
-                {course.lessons} Lessons
+          <tbody>
 
-              </p>
+            {courses.map((course) => (
 
-              <div className="mt-6 h-3 rounded-full bg-gray-200 overflow-hidden">
+              <tr
+                key={course.title}
+                className="border-t hover:bg-slate-50"
+              >
 
-                <div
-                  className={`h-full bg-gradient-to-r ${course.color}`}
-                  style={{ width: `${course.progress}%` }}
-                />
+                <td className="px-8 py-6">
 
-              </div>
+                  <div className="flex items-center gap-4">
 
-              <p className="mt-3">
+                    <div className={`h-4 w-4 rounded-full ${course.color}`} />
 
-                {course.progress}% Completed
+                    <span className="font-semibold">
+                      {course.title}
+                    </span>
 
-              </p>
+                  </div>
 
-              <button className="mt-8 flex items-center gap-2 rounded-xl bg-sky-500 px-5 py-3 text-white">
+                </td>
 
-                <PlayCircle size={18}/>
+                <td className="px-8 py-6">
 
-                Continue
+                  {course.progress}
 
-              </button>
+                </td>
 
-            </div>
+                <td className="px-8 py-6">
 
-          </div>
+                  {course.level}
 
-        ))}
+                </td>
+
+                <td className="px-8 py-6">
+
+                  {course.lastAccessed}
+
+                </td>
+
+                <td className="px-8 py-6 text-center">
+
+                  <Link
+                    href="/courses"
+                    className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2 font-medium text-white hover:bg-blue-700"
+                  >
+
+                    Continue
+
+                    <ArrowRight size={16} />
+
+                  </Link>
+
+                </td>
+
+              </tr>
+
+            ))}
+
+          </tbody>
+
+        </table>
 
       </div>
 

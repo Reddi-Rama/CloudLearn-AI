@@ -1,61 +1,73 @@
 "use client";
 
 import {
-Bell,
-CheckCircle
+  Bell,
+  BookOpen,
+  Award,
+  CalendarDays,
 } from "lucide-react";
 
-const notifications=[
-
-"Python lesson unlocked",
-
-"Assessment passed",
-
-"Certificate ready",
-
-"New AI course available"
-
+const notifications = [
+  {
+    title: "New AI lesson available",
+    icon: BookOpen,
+    color: "text-blue-600",
+  },
+  {
+    title: "Python Quiz tomorrow",
+    icon: CalendarDays,
+    color: "text-orange-500",
+  },
+  {
+    title: "Certificate generated",
+    icon: Award,
+    color: "text-green-600",
+  },
+  {
+    title: "Welcome to CloudLearn AI",
+    icon: Bell,
+    color: "text-purple-600",
+  },
 ];
 
-export default function NotificationPanel(){
+export default function NotificationPanel() {
+  return (
+    <section className="mt-14">
 
-return(
+      <div className="rounded-[32px] bg-white p-8 shadow-lg">
 
-<section className="mx-auto max-w-5xl rounded-3xl bg-white p-8 shadow-xl">
+        <h2 className="mb-8 text-3xl font-bold">
+          Notifications
+        </h2>
 
-<div className="flex items-center gap-4 mb-8">
+        <div className="space-y-5">
 
-<Bell className="text-sky-600"/>
+          {notifications.map((item) => {
+            const Icon = item.icon;
 
-<h1 className="text-3xl font-bold">
+            return (
+              <div
+                key={item.title}
+                className="flex items-center gap-5 rounded-2xl bg-slate-50 p-5"
+              >
 
-Notifications
+                <Icon
+                  size={24}
+                  className={item.color}
+                />
 
-</h1>
+                <span className="font-medium">
+                  {item.title}
+                </span>
 
-</div>
+              </div>
+            );
+          })}
 
-<div className="space-y-6">
+        </div>
 
-{notifications.map((item,index)=>(
+      </div>
 
-<div
-key={index}
-className="flex items-center gap-5 rounded-2xl bg-slate-50 p-5"
->
-
-<CheckCircle className="text-green-500"/>
-
-<p>{item}</p>
-
-</div>
-
-))}
-
-</div>
-
-</section>
-
-);
-
+    </section>
+  );
 }

@@ -1,151 +1,80 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
-  Laptop,
-  GraduationCap,
-  BookOpen,
   Cloud,
+  Brain,
   Code2,
-  BrainCircuit,
+  Database,
+  ShieldCheck,
+  Laptop,
 } from "lucide-react";
 
 export default function HeroIllustration() {
   return (
-    <div className="relative mx-auto flex h-[600px] w-full max-w-[560px] items-center justify-center">
+    <div className="relative flex items-center justify-center">
 
-      {/* Background Glow */}
+      {/* Glow */}
 
-      <div className="absolute h-[460px] w-[460px] rounded-full bg-blue-200/30 blur-[120px]" />
+      <div className="absolute h-[480px] w-[480px] rounded-full bg-sky-300/20 blur-3xl" />
 
-      {/* Center Circle */}
+      {/* Main Circle */}
 
-      <motion.div
-        animate={{
-          y: [0, -12, 0],
-        }}
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="glass-card relative flex h-72 w-72 items-center justify-center rounded-full"
-      >
+      <div className="relative flex h-[420px] w-[420px] items-center justify-center rounded-full border border-sky-200 bg-white shadow-2xl">
+
         <Laptop
-          size={90}
-          className="text-blue-600"
-        />
-      </motion.div>
-
-      {/* Graduation */}
-
-      <motion.div
-        animate={{
-          y: [0, -18, 0],
-        }}
-        transition={{
-          duration: 5,
-          repeat: Infinity,
-        }}
-        className="glass-card absolute left-4 top-10 flex h-20 w-20 items-center justify-center rounded-3xl"
-      >
-        <GraduationCap
-          size={34}
-          className="text-blue-600"
-        />
-      </motion.div>
-
-      {/* Book */}
-
-      <motion.div
-        animate={{
-          y: [0, 14, 0],
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-        }}
-        className="glass-card absolute right-0 top-24 flex h-20 w-20 items-center justify-center rounded-3xl"
-      >
-        <BookOpen
-          size={32}
-          className="text-indigo-600"
-        />
-      </motion.div>
-
-      {/* Code */}
-
-      <motion.div
-        animate={{
-          y: [0, -16, 0],
-        }}
-        transition={{
-          duration: 4.5,
-          repeat: Infinity,
-        }}
-        className="glass-card absolute bottom-20 left-2 flex h-20 w-20 items-center justify-center rounded-3xl"
-      >
-        <Code2
-          size={32}
+          size={110}
           className="text-sky-600"
         />
-      </motion.div>
 
-      {/* AI */}
+        {/* Floating Icons */}
 
-      <motion.div
-        animate={{
-          y: [0, 15, 0],
-        }}
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-        }}
-        className="glass-card absolute bottom-8 right-10 flex h-20 w-20 items-center justify-center rounded-3xl"
-      >
-        <BrainCircuit
-          size={32}
-          className="text-violet-600"
-        />
-      </motion.div>
+        <div className="absolute top-8 left-10 rounded-2xl bg-white p-4 shadow-xl animate-bounce">
 
-      {/* Cloud 1 */}
+          <Cloud
+            className="text-sky-500"
+            size={32}
+          />
 
-      <motion.div
-        animate={{
-          x: [-12, 12, -12],
-        }}
-        transition={{
-          duration: 12,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-        className="absolute left-10 top-48"
-      >
-        <Cloud
-          size={58}
-          className="text-white drop-shadow-xl"
-        />
-      </motion.div>
+        </div>
 
-      {/* Cloud 2 */}
+        <div className="absolute top-12 right-8 rounded-2xl bg-white p-4 shadow-xl animate-pulse">
 
-      <motion.div
-        animate={{
-          x: [12, -12, 12],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-        className="absolute right-12 bottom-40"
-      >
-        <Cloud
-          size={52}
-          className="text-white drop-shadow-xl"
-        />
-      </motion.div>
+          <Brain
+            className="text-indigo-600"
+            size={30}
+          />
+
+        </div>
+
+        <div className="absolute bottom-8 left-12 rounded-2xl bg-white p-4 shadow-xl animate-bounce">
+
+          <Code2
+            className="text-emerald-500"
+            size={30}
+          />
+
+        </div>
+
+        <div className="absolute bottom-10 right-12 rounded-2xl bg-white p-4 shadow-xl animate-pulse">
+
+          <Database
+            className="text-orange-500"
+            size={30}
+          />
+
+        </div>
+
+        <div className="absolute left-1/2 top-0 -translate-x-1/2 rounded-2xl bg-white p-4 shadow-xl animate-bounce">
+
+          <ShieldCheck
+            className="text-cyan-600"
+            size={28}
+          />
+
+        </div>
+
+      </div>
+
     </div>
   );
 }

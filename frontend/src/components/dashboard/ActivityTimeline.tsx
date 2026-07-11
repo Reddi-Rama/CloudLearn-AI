@@ -1,72 +1,43 @@
 "use client";
 
 const activities = [
-  {
-    title: "Completed Python Lesson 5",
-    time: "Today",
-  },
-  {
-    title: "Passed Assessment",
-    time: "Yesterday",
-  },
-  {
-    title: "Certificate Earned",
-    time: "2 Days Ago",
-  },
-  {
-    title: "Started Machine Learning",
-    time: "Last Week",
-  },
+  "Completed Artificial Intelligence Lesson",
+  "Finished Python Quiz",
+  "Downloaded AI Certificate",
+  "Started Cloud Computing Course",
+  "Completed Machine Learning Assignment",
 ];
 
 export default function ActivityTimeline() {
   return (
-    <section className="rounded-3xl border bg-white p-8 shadow-lg">
+    <section className="mt-14">
 
-      <h2 className="mb-8 text-2xl font-bold">
+      <div className="rounded-[32px] bg-white p-8 shadow-lg">
 
-        Recent Activity
+        <h2 className="mb-8 text-3xl font-bold">
+          Recent Activity
+        </h2>
 
-      </h2>
+        <div className="space-y-6">
 
-      <div className="space-y-8">
+          {activities.map((activity, index) => (
 
-        {activities.map((activity, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-5"
+            >
 
-          <div
-            key={index}
-            className="flex gap-5"
-          >
+              <div className="h-4 w-4 rounded-full bg-blue-600" />
 
-            <div className="flex flex-col items-center">
-
-              <div className="h-4 w-4 rounded-full bg-sky-500"></div>
-
-              {index !== activities.length - 1 && (
-                <div className="mt-2 h-14 w-[2px] bg-slate-300"></div>
-              )}
-
-            </div>
-
-            <div>
-
-              <h3 className="font-semibold">
-
-                {activity.title}
-
-              </h3>
-
-              <p className="text-sm text-slate-500">
-
-                {activity.time}
-
+              <p className="text-lg text-slate-700">
+                {activity}
               </p>
 
             </div>
 
-          </div>
+          ))}
 
-        ))}
+        </div>
 
       </div>
 

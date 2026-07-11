@@ -1,43 +1,34 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export default function LessonNavigation() {
   return (
-    <div className="mt-14 flex items-center justify-between">
+    <section className="flex items-center justify-between">
 
-      <button className="flex items-center gap-3 rounded-full border px-8 py-4 hover:bg-slate-100">
+      <Link
+        href="/lesson/1"
+        className="flex items-center gap-3 rounded-2xl border px-6 py-4 hover:bg-slate-100"
+      >
 
-        <ChevronLeft />
+        <ArrowLeft />
 
         Previous Lesson
 
-      </button>
+      </Link>
 
-      <button className="relative h-24 w-24 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 text-white shadow-xl transition hover:scale-105">
+      <Link
+        href="/lesson/3"
+        className="flex items-center gap-3 rounded-2xl bg-sky-600 px-6 py-4 font-semibold text-white hover:bg-sky-700"
+      >
 
-        <span className="absolute left-1/2 top-6 -translate-x-1/2 text-3xl font-black">
+        Next Lesson
 
-          6
+        <ArrowRight />
 
-        </span>
+      </Link>
 
-        <span className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs">
-
-          Next
-
-        </span>
-
-      </button>
-
-      <button className="flex items-center gap-3 rounded-full border px-8 py-4 hover:bg-slate-100">
-
-        Quiz Section
-
-        <ChevronRight />
-
-      </button>
-
-    </div>
+    </section>
   );
 }

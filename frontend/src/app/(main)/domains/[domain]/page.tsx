@@ -1,44 +1,34 @@
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import CloudDomains from "@/components/home/CloudDomains";
-import CTA from "@/components/home/CTA";
-import FAQ from "@/components/home/FAQ";
+interface Props {
+  params: {
+    slug: string;
+  };
+}
 
-export default function DomainsPage() {
+export default function DomainDetailsPage({
+  params,
+}: Props) {
   return (
-    <>
-      <Header />
+    <main className="container-custom py-40">
 
-      <main className="pt-36">
+      <h1 className="text-5xl font-bold">
 
-        <section className="py-20 text-center">
+        {params.slug
+          .split("-")
+          .map(
+            (word) =>
+              word.charAt(0).toUpperCase() +
+              word.slice(1)
+          )
+          .join(" ")}
 
-          <span className="rounded-full bg-sky-100 px-5 py-2 font-semibold text-sky-700">
-            ☁ Explore Learning Domains
-          </span>
+      </h1>
 
-          <h1 className="mt-8 text-6xl font-black text-slate-900">
-            Find Your Perfect Learning Path
-          </h1>
+      <p className="mt-6 text-slate-600 text-lg">
 
-          <p className="mx-auto mt-6 max-w-3xl text-xl leading-9 text-slate-600">
-            Choose from Programming, Artificial Intelligence,
-            Machine Learning, Data Science, Cloud Computing,
-            Cyber Security, DevOps, Full Stack Development,
-            AI Tools, B.Tech Subjects and much more.
-          </p>
+        Domain details page coming soon...
 
-        </section>
+      </p>
 
-        <CloudDomains />
-
-        <FAQ />
-
-        <CTA />
-
-      </main>
-
-      <Footer />
-    </>
+    </main>
   );
 }

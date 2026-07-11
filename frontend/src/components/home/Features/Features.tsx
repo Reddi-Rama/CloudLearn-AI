@@ -9,7 +9,7 @@ import {
   BarChart3,
 } from "lucide-react";
 
-import FeatureCard from "./FeatureCard";
+import FeaturedCard from "./FeaturedCard";
 
 const features = [
   {
@@ -86,7 +86,7 @@ export default function Features() {
 
           {features.map((feature) => (
 
-            <FeatureCard
+            <FeaturedCard
               key={feature.title}
               {...feature}
             />

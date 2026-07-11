@@ -1,89 +1,83 @@
 "use client";
 
 import {
-BookOpen,
-GraduationCap,
-Award,
-Clock,
-BarChart3
+  BookOpen,
+  GraduationCap,
+  Award,
+  TrendingUp,
 } from "lucide-react";
 
-const stats=[
-{
-title:"Courses Enrolled",
-value:"6",
-icon:BookOpen,
-color:"bg-blue-100 text-blue-600"
-},
-{
-title:"Completed",
-value:"2",
-icon:GraduationCap,
-color:"bg-green-100 text-green-600"
-},
-{
-title:"Certificates",
-value:"2",
-icon:Award,
-color:"bg-purple-100 text-purple-600"
-},
-{
-title:"Learning Hours",
-value:"48",
-icon:Clock,
-color:"bg-orange-100 text-orange-600"
-},
-{
-title:"Overall Progress",
-value:"65%",
-icon:BarChart3,
-color:"bg-indigo-100 text-indigo-600"
-}
+const stats = [
+  {
+    title: "Courses Enrolled",
+    value: "12",
+    icon: BookOpen,
+    color: "text-sky-600",
+    bg: "bg-sky-100",
+  },
+  {
+    title: "Lessons Completed",
+    value: "38",
+    icon: GraduationCap,
+    color: "text-indigo-600",
+    bg: "bg-indigo-100",
+  },
+  {
+    title: "Certificates Earned",
+    value: "4",
+    icon: Award,
+    color: "text-yellow-500",
+    bg: "bg-yellow-100",
+  },
+  {
+    title: "Overall Progress",
+    value: "84%",
+    icon: TrendingUp,
+    color: "text-emerald-600",
+    bg: "bg-emerald-100",
+  },
 ];
 
-export default function Statistics(){
+export default function Statistics() {
+  return (
+    <section className="mt-10">
 
-return(
+      <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
 
-<section className="grid gap-6 sm:grid-cols-2 xl:grid-cols-5">
+        {stats.map((item) => {
+          const Icon = item.icon;
 
-{stats.map((item)=>{
+          return (
+            <div
+              key={item.title}
+              className="rounded-[30px] bg-white p-8 shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
+            >
 
-const Icon=item.icon;
+              <div
+                className={`flex h-16 w-16 items-center justify-center rounded-2xl ${item.bg}`}
+              >
 
-return(
+                <Icon
+                  size={30}
+                  className={item.color}
+                />
 
-<div
-key={item.title}
-className="rounded-3xl bg-white p-6 shadow-lg border"
->
+              </div>
 
-<div className={`inline-flex rounded-2xl p-4 ${item.color}`}>
+              <h2 className="mt-6 text-4xl font-black text-slate-900">
+                {item.value}
+              </h2>
 
-<Icon size={28}/>
+              <p className="mt-2 text-slate-500">
+                {item.title}
+              </p>
 
-</div>
+            </div>
+          );
+        })}
 
-<p className="mt-5 text-gray-500">
+      </div>
 
-{item.title}
-
-</p>
-
-<h2 className="mt-2 text-4xl font-black">
-
-{item.value}
-
-</h2>
-
-</div>
-
-);
-
-})}
-
-</section>
-
-);
-
+    </section>
+  );
 }

@@ -1,34 +1,24 @@
 "use client";
 
-import { FileText } from "lucide-react";
-
 export default function LessonSummary() {
   return (
     <section className="rounded-3xl bg-white p-8 shadow-lg">
 
-      <div className="mb-6 flex items-center gap-3">
+      <h2 className="text-3xl font-black">
 
-        <FileText className="text-sky-600" />
+        Lesson Summary
 
-        <h2 className="text-2xl font-bold">
+      </h2>
 
-          Lesson Summary
+      <ul className="mt-6 list-disc space-y-3 pl-6 text-slate-700">
 
-        </h2>
+        <li>HTML is the foundation of webpages.</li>
 
-      </div>
+        <li>HTML uses tags to organize content.</li>
 
-      <ul className="space-y-4 text-slate-600">
+        <li>HTML works together with CSS and JavaScript.</li>
 
-        <li>• Python supports multiple built-in data types.</li>
-
-        <li>• Strings are immutable.</li>
-
-        <li>• Lists are mutable.</li>
-
-        <li>• Dictionaries store key-value pairs.</li>
-
-        <li>• Sets contain unique values.</li>
+        <li>Every webpage starts with an HTML document.</li>
 
       </ul>
 

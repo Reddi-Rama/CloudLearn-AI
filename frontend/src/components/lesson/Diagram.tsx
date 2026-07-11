@@ -1,57 +1,27 @@
 "use client";
 
-import { Database, ArrowDown } from "lucide-react";
-
 export default function Diagram() {
   return (
-    <section className="rounded-3xl bg-white p-10 shadow-lg border">
+    <div className="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-sky-300 bg-sky-50 p-10">
 
-      <h2 className="text-3xl font-bold mb-8">
-        Variable Flow
-      </h2>
+      <div className="rounded-xl bg-sky-600 px-6 py-3 text-white font-bold">
+        HTML
+      </div>
 
-      <div className="flex flex-col items-center gap-5">
+      <div className="my-4 h-10 w-1 bg-sky-300" />
 
-        <div className="rounded-full bg-sky-500 p-6 text-white">
+      <div className="flex gap-6">
 
-          <Database size={40} />
-
+        <div className="rounded-xl bg-white px-5 py-3 shadow">
+          Head
         </div>
 
-        <ArrowDown className="text-sky-500" />
-
-        <div className="rounded-3xl bg-sky-100 px-10 py-6">
-
-          name = "Rama"
-
-        </div>
-
-        <ArrowDown className="text-sky-500" />
-
-        <div className="rounded-3xl bg-green-100 px-10 py-6">
-
-          Stored in Memory
-
-        </div>
-
-        <ArrowDown className="text-sky-500" />
-
-        <div className="rounded-3xl bg-indigo-100 px-10 py-6">
-
-          print(name)
-
-        </div>
-
-        <ArrowDown className="text-sky-500" />
-
-        <div className="rounded-3xl bg-yellow-100 px-10 py-6">
-
-          Output → Rama
-
+        <div className="rounded-xl bg-white px-5 py-3 shadow">
+          Body
         </div>
 
       </div>
 
-    </section>
+    </div>
   );
 }

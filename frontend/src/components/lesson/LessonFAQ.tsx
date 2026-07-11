@@ -1,40 +1,59 @@
 "use client";
 
-import Accordion from "@/components/ui/Accordion";
+import { ChevronDown } from "lucide-react";
 
-export default function LessonFAQ(){
+const faqs = [
+  {
+    question: "What is HTML?",
+    answer: "HTML is the standard markup language used to create webpages.",
+  },
+  {
+    question: "Is HTML a programming language?",
+    answer: "No. HTML is a markup language that structures content.",
+  },
+  {
+    question: "Can I build websites using only HTML?",
+    answer: "Yes, but modern websites also use CSS and JavaScript.",
+  },
+];
 
-return(
+export default function LessonFAQ() {
+  return (
+    <section className="rounded-3xl bg-white p-8 shadow-lg">
 
-<section className="rounded-3xl bg-white p-8 shadow-lg">
+      <h2 className="text-3xl font-black">
+        Frequently Asked Questions
+      </h2>
 
-<h2 className="mb-8 text-2xl font-bold">
+      <div className="mt-8 space-y-5">
 
-Frequently Asked Questions
+        {faqs.map((faq) => (
 
-</h2>
+          <div
+            key={faq.question}
+            className="rounded-2xl border p-5"
+          >
 
-<div className="space-y-4">
+            <div className="flex items-center justify-between">
 
-<Accordion
-title="What is a List?"
-content="A list is an ordered and mutable collection in Python."
-/>
+              <h3 className="font-semibold">
+                {faq.question}
+              </h3>
 
-<Accordion
-title="What is a Tuple?"
-content="A tuple is ordered but immutable."
-/>
+              <ChevronDown />
 
-<Accordion
-title="What is Dictionary?"
-content="Dictionary stores data as key-value pairs."
-/>
+            </div>
 
-</div>
+            <p className="mt-4 text-slate-600">
+              {faq.answer}
+            </p>
 
-</section>
+          </div>
 
-);
+        ))}
 
+      </div>
+
+    </section>
+  );
 }

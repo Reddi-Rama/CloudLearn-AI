@@ -1,40 +1,39 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ClipboardCheck } from "lucide-react";
+import Link from "next/link";
+import { CircleHelp } from "lucide-react";
 
-interface QuizSectionProps {
-  questions?: number;
-  onClick?: () => void;
-}
-
-export default function QuizSection({
-  questions = 4,
-  onClick,
-}: QuizSectionProps) {
+export default function QuizSection() {
   return (
-    <motion.button
-      whileHover={{ scale: 1.04 }}
-      whileTap={{ scale: 0.96 }}
-      onClick={onClick}
-      className="flex items-center gap-4 rounded-3xl border border-violet-200 bg-white px-8 py-5 shadow-lg"
-    >
-      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-100">
-        <ClipboardCheck
-          size={28}
-          className="text-violet-600"
-        />
-      </div>
+    <section className="rounded-3xl bg-gradient-to-r from-indigo-600 to-sky-600 p-8 text-white shadow-xl">
 
-      <div className="text-left">
-        <h3 className="font-semibold text-slate-900">
+      <div className="flex items-center gap-3">
+
+        <CircleHelp size={30}/>
+
+        <h2 className="text-3xl font-black">
+
           Lesson Quiz
-        </h3>
 
-        <p className="text-sm text-slate-500">
-          {questions} Questions • 75% to Pass
-        </p>
+        </h2>
+
       </div>
-    </motion.button>
+
+      <p className="mt-5 text-sky-100">
+
+        Test your understanding before moving to the next lesson.
+
+      </p>
+
+      <Link
+      href="/assessments"
+      className="mt-8 inline-flex rounded-2xl bg-white px-6 py-4 font-semibold text-sky-700"
+      >
+
+        Start Quiz
+
+      </Link>
+
+    </section>
   );
 }

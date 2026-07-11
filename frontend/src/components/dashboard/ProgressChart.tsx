@@ -1,64 +1,168 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
+import {
+  TrendingUp,
+  Brain,
+  Code2,
+  Cloud,
+  Database,
+} from "lucide-react";
 
-const modules = [
-  { name: "Module 1", progress: 100 },
-  { name: "Module 2", progress: 75 },
-  { name: "Module 3", progress: 35 },
-  { name: "Module 4", progress: 0 },
+const progress = [
+  {
+    course: "Artificial Intelligence",
+    value: 84,
+    icon: Brain,
+    color: "bg-blue-500",
+  },
+  {
+    course: "Python Programming",
+    value: 68,
+    icon: Code2,
+    color: "bg-green-500",
+  },
+  {
+    course: "Cloud Computing",
+    value: 52,
+    icon: Cloud,
+    color: "bg-sky-500",
+  },
+  {
+    course: "Data Science",
+    value: 76,
+    icon: Database,
+    color: "bg-purple-500",
+  },
 ];
 
 export default function ProgressChart() {
   return (
-    <section className="rounded-3xl bg-white p-8 shadow-lg border">
+    <section className="mt-14">
 
-      <div className="flex items-center gap-3 mb-8">
+      <div className="rounded-[32px] bg-white p-8 shadow-xl">
 
-        <TrendingUp className="text-sky-600" />
+        <div className="mb-8 flex items-center justify-between">
 
-        <h2 className="text-2xl font-bold">
+          <div>
 
-          Progress Overview
+            <h2 className="text-3xl font-bold text-slate-900">
+              Learning Progress
+            </h2>
 
-        </h2>
+            <p className="mt-2 text-slate-500">
+              Track your progress across all enrolled courses.
+            </p>
 
-      </div>
+          </div>
 
-      <div className="space-y-6">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-100">
 
-        {modules.map((module) => (
+            <TrendingUp
+              size={32}
+              className="text-blue-600"
+            />
 
-          <div key={module.name}>
+          </div>
 
-            <div className="flex justify-between mb-2">
+        </div>
 
-              <span className="font-medium">
+        <div className="space-y-8">
 
-                {module.name}
+          {progress.map((item) => {
+            const Icon = item.icon;
 
-              </span>
+            return (
+              <div key={item.course}>
 
-              <span className="font-semibold text-sky-600">
+                <div className="mb-3 flex items-center justify-between">
 
-                {module.progress}%
+                  <div className="flex items-center gap-3">
 
-              </span>
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100">
+
+                      <Icon
+                        size={22}
+                        className="text-slate-700"
+                      />
+
+                    </div>
+
+                    <span className="font-semibold text-slate-800">
+                      {item.course}
+                    </span>
+
+                  </div>
+
+                  <span className="font-bold text-blue-600">
+                    {item.value}%
+                  </span>
+
+                </div>
+
+                <div className="h-3 rounded-full bg-slate-200">
+
+                  <div
+                    className={`h-3 rounded-full ${item.color}`}
+                    style={{
+                      width: `${item.value}%`,
+                    }}
+                  />
+
+                </div>
+
+              </div>
+            );
+          })}
+
+        </div>
+
+        <div className="mt-10 rounded-2xl bg-blue-50 p-6">
+
+          <h3 className="text-xl font-bold text-blue-700">
+            Weekly Summary
+          </h3>
+
+          <div className="mt-5 grid gap-6 md:grid-cols-3">
+
+            <div>
+
+              <h4 className="text-3xl font-black text-slate-900">
+                12
+              </h4>
+
+              <p className="text-slate-600">
+                Hours Learned
+              </p>
 
             </div>
 
-            <div className="h-3 rounded-full bg-slate-200 overflow-hidden">
+            <div>
 
-              <div
-                style={{ width: `${module.progress}%` }}
-                className="h-full rounded-full bg-gradient-to-r from-sky-500 to-indigo-600"
-              />
+              <h4 className="text-3xl font-black text-slate-900">
+                8
+              </h4>
+
+              <p className="text-slate-600">
+                Lessons Completed
+              </p>
+
+            </div>
+
+            <div>
+
+              <h4 className="text-3xl font-black text-slate-900">
+                3
+              </h4>
+
+              <p className="text-slate-600">
+                Quizzes Passed
+              </p>
 
             </div>
 
           </div>
 
-        ))}
+        </div>
 
       </div>
 

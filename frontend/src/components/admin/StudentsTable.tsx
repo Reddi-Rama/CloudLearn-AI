@@ -1,125 +1,76 @@
 "use client";
 
-import { Search, Eye, Pencil, Trash2 } from "lucide-react";
-
 const students = [
   {
-    id: "CL001",
-    name: "Reddi Rama",
-    email: "rama@email.com",
+    id: 1,
+    name: "Rama",
     course: "Python",
-    progress: "62%",
+    progress: "82%",
   },
   {
-    id: "CL002",
-    name: "Rahul Kumar",
-    email: "rahul@email.com",
-    course: "Machine Learning",
-    progress: "35%",
-  },
-  {
-    id: "CL003",
-    name: "Ananya",
-    email: "ananya@email.com",
+    id: 2,
+    name: "Teja",
     course: "Cloud Computing",
-    progress: "81%",
+    progress: "65%",
+  },
+  {
+    id: 3,
+    name: "Rahul",
+    course: "AI & ML",
+    progress: "94%",
   },
 ];
 
 export default function StudentsTable() {
   return (
-    <section className="rounded-3xl bg-white p-8 shadow-xl">
+    <section className="rounded-[30px] bg-white p-8 shadow-lg">
 
-      <div className="mb-8 flex items-center justify-between">
+      <h2 className="text-2xl font-bold">
+        Students
+      </h2>
 
-        <h1 className="text-3xl font-black">
+      <table className="mt-8 w-full">
 
-          Students
+        <thead>
 
-        </h1>
+          <tr className="border-b">
 
-        <div className="relative">
+            <th className="py-3 text-left">Student</th>
+            <th className="text-left">Course</th>
+            <th className="text-left">Progress</th>
 
-          <Search className="absolute left-4 top-3 text-slate-400"/>
+          </tr>
 
-          <input
-            placeholder="Search Student..."
-            className="rounded-xl border py-3 pl-12 pr-5"
-          />
+        </thead>
 
-        </div>
+        <tbody>
 
-      </div>
+          {students.map((student) => (
 
-      <div className="overflow-x-auto">
+            <tr
+              key={student.id}
+              className="border-b"
+            >
 
-        <table className="w-full">
+              <td className="py-4">
+                {student.name}
+              </td>
 
-          <thead>
+              <td>
+                {student.course}
+              </td>
 
-            <tr className="border-b">
-
-              <th className="py-4 text-left">ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Course</th>
-              <th>Progress</th>
-              <th>Actions</th>
+              <td className="font-semibold text-sky-600">
+                {student.progress}
+              </td>
 
             </tr>
 
-          </thead>
+          ))}
 
-          <tbody>
+        </tbody>
 
-            {students.map((student)=>(
-
-              <tr
-                key={student.id}
-                className="border-b hover:bg-slate-50"
-              >
-
-                <td className="py-5">{student.id}</td>
-                <td>{student.name}</td>
-                <td>{student.email}</td>
-                <td>{student.course}</td>
-                <td>{student.progress}</td>
-
-                <td>
-
-                  <div className="flex gap-3">
-
-                    <button className="rounded-lg bg-blue-100 p-2">
-
-                      <Eye size={18}/>
-
-                    </button>
-
-                    <button className="rounded-lg bg-green-100 p-2">
-
-                      <Pencil size={18}/>
-
-                    </button>
-
-                    <button className="rounded-lg bg-red-100 p-2">
-
-                      <Trash2 size={18}/>
-
-                    </button>
-
-                  </div>
-
-                </td>
-
-              </tr>
-
-            ))}
-
-          </tbody>
-
-        </table>
-
-      </div>
+      </table>
 
     </section>
   );

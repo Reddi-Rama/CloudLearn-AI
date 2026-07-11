@@ -1,51 +1,32 @@
 "use client";
 
-export default function LessonContent() {
-  return (
-    <section className="rounded-3xl bg-white p-10 shadow-lg">
+export default function LessonContent(){
 
-      <span className="rounded-full bg-sky-100 px-4 py-2 text-sky-600">
+return(
 
-        Module 2
+<section className="rounded-3xl bg-white p-10 shadow-lg">
 
-      </span>
+<h2 className="text-4xl font-black">
 
-      <h1 className="mt-6 text-5xl font-black">
+What is HTML?
 
-        Python Data Types
+</h2>
 
-      </h1>
+<p className="mt-8 leading-9 text-slate-600">
 
-      <p className="mt-8 text-lg leading-9 text-slate-600">
+HTML (HyperText Markup Language) is the standard
+markup language used to build webpages.
 
-        Python provides several built-in data types.
+It provides structure to every webpage using
+elements called tags.
 
-        The most common are integers, floats,
-        strings, booleans, lists, tuples,
-        dictionaries and sets.
+HTML works together with CSS and JavaScript to
+create modern web applications.
 
-      </p>
+</p>
 
-      <div className="mt-10 rounded-3xl bg-slate-100 p-8">
+</section>
 
-        <pre>
+);
 
-{`age = 20
-
-name = "Rama"
-
-price = 99.5
-
-print(type(age))
-
-print(type(name))
-
-print(type(price))`}
-
-        </pre>
-
-      </div>
-
-    </section>
-  );
 }

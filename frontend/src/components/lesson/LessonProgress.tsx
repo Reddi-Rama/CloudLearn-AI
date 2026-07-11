@@ -1,31 +1,48 @@
 "use client";
 
-export default function LessonProgress() {
-  return (
-    <section className="rounded-3xl bg-white p-8 shadow-lg">
+interface Props{
+    progress?:number;
+}
 
-      <div className="flex justify-between">
+export default function LessonProgress({
+    progress=35
+}:Props){
 
-        <h2 className="text-2xl font-bold">
+return(
 
-          Lesson Progress
+<section className="rounded-3xl bg-white p-8 shadow-lg">
 
-        </h2>
+<div className="flex justify-between">
 
-        <span className="font-bold text-sky-600">
+<h2 className="text-2xl font-bold">
+Lesson Progress
+</h2>
 
-          58%
+<span className="font-bold text-sky-600">
+{progress}%
+</span>
 
-        </span>
+</div>
 
-      </div>
+<div className="mt-6 h-4 rounded-full bg-slate-200">
 
-      <div className="mt-6 h-4 rounded-full bg-slate-200">
+<div
+className="h-4 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600"
+style={{
+width:`${progress}%`
+}}
+/>
 
-        <div className="h-full w-[58%] rounded-full bg-gradient-to-r from-sky-500 to-indigo-600"/>
+</div>
 
-      </div>
+<p className="mt-5 text-slate-500">
 
-    </section>
-  );
+Complete this lesson to unlock the next lesson.
+
+</p>
+
+</section>
+
+);
+
 }

@@ -1,57 +1,36 @@
 "use client";
 
-import Link from "next/link";
-import {
-CheckCircle2,
-ArrowRight
-} from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 
-export default function LessonCompletion(){
+export default function LessonCompletion() {
+  return (
+    <section className="rounded-3xl bg-emerald-50 p-8 shadow-lg">
 
-return(
+      <div className="flex items-center gap-4">
 
-<section className="rounded-3xl bg-gradient-to-r from-green-500 to-emerald-600 p-10 text-white shadow-2xl">
+        <CheckCircle2
+          className="text-emerald-600"
+          size={34}
+        />
 
-<CheckCircle2 size={70}/>
+        <div>
 
-<h2 className="mt-6 text-4xl font-black">
+          <h2 className="text-3xl font-black">
 
-Lesson Completed
+            Lesson Completed
 
-</h2>
+          </h2>
 
-<p className="mt-4 text-lg">
+          <p className="mt-2 text-slate-600">
 
-Great work! Continue to the next lesson or attempt the lesson assessment.
+            Great job! Continue to the next lesson.
 
-</p>
+          </p>
 
-<div className="mt-10 flex gap-5">
+        </div>
 
-<Link
-href="/assessments/python-introduction"
-className="rounded-2xl bg-white px-8 py-4 font-bold text-green-600"
->
+      </div>
 
-Lesson Assessment
-
-</Link>
-
-<Link
-href="/lessons/next"
-className="flex items-center gap-3 rounded-2xl bg-green-700 px-8 py-4 font-bold"
->
-
-Next Lesson
-
-<ArrowRight/>
-
-</Link>
-
-</div>
-
-</section>
-
-);
-
+    </section>
+  );
 }

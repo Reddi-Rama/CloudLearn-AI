@@ -1,44 +1,39 @@
 "use client";
 
-const points=[
-"Easy to understand explanations",
-"Real-world examples",
-"Visual diagrams",
-"Practice questions",
-"Mini assessment"
+const points = [
+  "HTML provides webpage structure.",
+  "Every HTML document begins with <!DOCTYPE html>.",
+  "Elements are represented using tags.",
+  "HTML works with CSS and JavaScript.",
 ];
 
-export default function KeyPoints(){
+export default function KeyPoints() {
+  return (
+    <section className="rounded-3xl bg-white p-8 shadow-lg">
 
-return(
+      <h2 className="text-2xl font-bold">
+        Key Takeaways
+      </h2>
 
-<section className="rounded-3xl bg-white p-8 shadow-lg">
+      <div className="mt-6 space-y-4">
 
-<h2 className="mb-8 text-2xl font-bold">
+        {points.map((point) => (
 
-Key Points
+          <div
+            key={point}
+            className="flex gap-3"
+          >
 
-</h2>
+            <div className="mt-2 h-3 w-3 rounded-full bg-sky-600" />
 
-<div className="space-y-4">
+            <span>{point}</span>
 
-{points.map(point=>(
+          </div>
 
-<div
-key={point}
-className="rounded-xl bg-slate-100 p-4"
->
+        ))}
 
-✅ {point}
+      </div>
 
-</div>
-
-))}
-
-</div>
-
-</section>
-
-);
-
+    </section>
+  );
 }

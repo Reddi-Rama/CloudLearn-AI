@@ -1,156 +1,77 @@
+"use client";
+
 import Link from "next/link";
-import {
-  GraduationCap,
-  Github,
-  Linkedin,
-  Mail,
-} from "lucide-react";
-
-const quickLinks = [
-  { name: "Home", href: "/" },
-  { name: "Domains", href: "/domains" },
-  { name: "Courses", href: "/courses" },
-  { name: "Learning Paths", href: "/learning-paths" },
-];
-
-const supportLinks = [
-  { name: "About", href: "/about" },
-  { name: "Contact", href: "/contact" },
-  { name: "Certificates", href: "/certificates" },
-  { name: "Profile", href: "/profile" },
-];
 
 export default function Footer() {
   return (
-    <footer className="mt-24 border-t border-blue-100 bg-white/70 backdrop-blur-xl">
+    <footer className="mt-24 border-t border-slate-200 bg-white">
+      <div className="mx-auto max-w-7xl px-6 py-16">
 
-      <div className="container-custom py-16">
+        <div className="grid gap-10 md:grid-cols-4">
 
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
-
+          {/* Brand */}
           <div>
+            <h2 className="text-2xl font-bold text-sky-600">
+              CloudLearn AI
+            </h2>
 
-            <div className="flex items-center gap-3">
-
-              <GraduationCap
-                className="text-blue-600"
-                size={34}
-              />
-
-              <div>
-
-                <h2 className="text-2xl font-bold">
-                  CloudLearn AI
-                </h2>
-
-                <p className="text-sm text-slate-500">
-                  Learn Beyond Limits
-                </p>
-
-              </div>
-
-            </div>
-
-            <p className="mt-5 text-slate-600 leading-7">
-              A modern cloud-inspired learning platform
-              designed to help students build skills,
-              practice consistently and achieve their goals.
+            <p className="mt-4 text-sm text-slate-600 leading-7">
+              Learn modern technology skills through structured
+              cloud-based learning paths and hands-on projects.
             </p>
-
           </div>
 
+          {/* Platform */}
           <div>
-
-            <h3 className="font-semibold text-lg">
-              Quick Links
+            <h3 className="text-lg font-semibold text-slate-900">
+              Platform
             </h3>
 
-            <div className="mt-5 flex flex-col gap-3">
-
-              {quickLinks.map((item) => (
-
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-slate-600 hover:text-blue-600 transition"
-                >
-                  {item.name}
-                </Link>
-
-              ))}
-
+            <div className="mt-5 flex flex-col gap-3 text-slate-600">
+              <Link href="/courses">Courses</Link>
+              <Link href="/domains">Domains</Link>
+              <Link href="/learning-paths">Learning Paths</Link>
+              <Link href="/certificates">Certificates</Link>
             </div>
-
           </div>
 
+          {/* Company */}
           <div>
+            <h3 className="text-lg font-semibold text-slate-900">
+              Company
+            </h3>
 
-            <h3 className="font-semibold text-lg">
+            <div className="mt-5 flex flex-col gap-3 text-slate-600">
+              <Link href="/about">About</Link>
+              <Link href="/contact">Contact</Link>
+              <Link href="/privacy-policy">Privacy Policy</Link>
+              <Link href="/terms">Terms of Service</Link>
+            </div>
+          </div>
+
+          {/* Support */}
+          <div>
+            <h3 className="text-lg font-semibold text-slate-900">
               Support
             </h3>
 
-            <div className="mt-5 flex flex-col gap-3">
-
-              {supportLinks.map((item) => (
-
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-slate-600 hover:text-blue-600 transition"
-                >
-                  {item.name}
-                </Link>
-
-              ))}
-
+            <div className="mt-5 flex flex-col gap-3 text-slate-600">
+              <Link href="/help">Help Center</Link>
+              <Link href="/faq">FAQ</Link>
+              <Link href="/verify-certificate">
+                Verify Certificate
+              </Link>
+              <Link href="/feedback">Feedback</Link>
             </div>
-
-          </div>
-
-          <div>
-
-            <h3 className="font-semibold text-lg">
-              Connect
-            </h3>
-
-            <div className="mt-6 flex gap-4">
-
-              <Link
-                href="#"
-                className="rounded-full bg-blue-100 p-3 text-blue-600 hover:bg-blue-600 hover:text-white transition"
-              >
-                <Github size={20} />
-              </Link>
-
-              <Link
-                href="#"
-                className="rounded-full bg-blue-100 p-3 text-blue-600 hover:bg-blue-600 hover:text-white transition"
-              >
-                <Linkedin size={20} />
-              </Link>
-
-              <Link
-                href="#"
-                className="rounded-full bg-blue-100 p-3 text-blue-600 hover:bg-blue-600 hover:text-white transition"
-              >
-                <Mail size={20} />
-              </Link>
-
-            </div>
-
           </div>
 
         </div>
 
-        <div className="mt-14 border-t border-blue-100 pt-6 text-center text-sm text-slate-500">
-
-          © {new Date().getFullYear()} CloudLearn AI.
-          All rights reserved.
-
+        <div className="mt-12 border-t border-slate-200 pt-8 text-center text-sm text-slate-500">
+          © {new Date().getFullYear()} CloudLearn AI. All rights reserved.
         </div>
 
       </div>
-
     </footer>
   );
 }

@@ -1,75 +1,93 @@
 "use client";
 
-import { Sparkles, BookOpen, Award } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Flame, Sparkles } from "lucide-react";
 
 export default function WelcomeCard() {
   return (
-    <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 p-8 md:p-10 text-white shadow-2xl">
+    <section className="rounded-[36px] bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-700 p-10 text-white shadow-2xl">
 
-      <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-white/10 blur-3xl"></div>
+      <div className="flex flex-col justify-between gap-10 lg:flex-row lg:items-center">
 
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+        {/* Left */}
 
         <div>
 
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 backdrop-blur">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2">
 
             <Sparkles size={18} />
 
-            Welcome Back
+            <span className="text-sm font-medium">
+              Welcome Back
+            </span>
 
           </div>
 
-          <h1 className="mt-5 text-5xl font-black">
-
+          <h1 className="text-5xl font-black leading-tight">
             Hello, Rama 👋
-
           </h1>
 
-          <p className="mt-4 max-w-2xl text-lg text-white/90">
+          <p className="mt-6 max-w-2xl text-lg text-blue-100 leading-8">
 
-            Continue learning where you left off.
-            Complete courses, pass assessments and earn verified certificates.
+            Continue your cloud learning journey. You're making
+            excellent progress toward becoming an industry-ready
+            engineer.
 
           </p>
 
+          <Link
+            href="/courses"
+            className="mt-8 inline-flex items-center gap-3 rounded-2xl bg-white px-7 py-4 font-semibold text-blue-700 transition hover:scale-105"
+          >
+            Continue Learning
+
+            <ArrowRight size={20} />
+          </Link>
+
         </div>
 
-        <div className="grid grid-cols-2 gap-5">
+        {/* Right */}
 
-          <div className="rounded-2xl bg-white/15 p-5 backdrop-blur">
+        <div className="rounded-[32px] bg-white/15 p-8 backdrop-blur-lg">
 
-            <BookOpen className="mb-3"/>
+          <div className="flex items-center gap-3">
 
-            <p className="text-sm opacity-80">
+            <Flame
+              size={34}
+              className="text-yellow-300"
+            />
 
-              Current Course
+            <div>
 
-            </p>
+              <h2 className="text-4xl font-black">
+                15 Days
+              </h2>
 
-            <h3 className="font-bold">
+              <p className="text-blue-100">
+                Learning Streak
+              </p>
 
-              Python
-
-            </h3>
+            </div>
 
           </div>
 
-          <div className="rounded-2xl bg-white/15 p-5 backdrop-blur">
+          <div className="mt-8 space-y-4">
 
-            <Award className="mb-3"/>
+            <div className="flex justify-between">
 
-            <p className="text-sm opacity-80">
+              <span>Overall Progress</span>
 
-              Certificates
+              <span className="font-bold">
+                84%
+              </span>
 
-            </p>
+            </div>
 
-            <h3 className="font-bold">
+            <div className="h-3 rounded-full bg-white/30">
 
-              2 Earned
+              <div className="h-3 w-[84%] rounded-full bg-yellow-300" />
 
-            </h3>
+            </div>
 
           </div>
 
@@ -77,6 +95,6 @@ export default function WelcomeCard() {
 
       </div>
 
-    </div>
+    </section>
   );
 }

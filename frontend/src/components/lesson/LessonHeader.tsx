@@ -1,62 +1,46 @@
 "use client";
 
-import { Clock, BookOpen, GraduationCap } from "lucide-react";
+import { BookOpen, Clock3, Layers } from "lucide-react";
 
-export default function LessonHeader() {
+interface LessonHeaderProps {
+  title?: string;
+  module?: string;
+  duration?: string;
+  lesson?: number;
+}
+
+export default function LessonHeader({
+  title = "HTML Introduction",
+  module = "Frontend Development",
+  duration = "20 Minutes",
+  lesson = 1,
+}: LessonHeaderProps) {
   return (
-    <section className="overflow-hidden rounded-[32px] bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-700 p-10 text-white shadow-2xl">
+    <section className="rounded-[32px] bg-gradient-to-r from-sky-600 via-cyan-500 to-indigo-600 p-10 text-white shadow-xl">
 
-      <div className="flex flex-col justify-between gap-8 lg:flex-row">
+      <span className="rounded-full bg-white/20 px-4 py-2 text-sm">
+        {module}
+      </span>
 
-        <div>
+      <h1 className="mt-6 text-5xl font-black">
+        {title}
+      </h1>
 
-          <span className="rounded-full bg-white/20 px-4 py-2 text-sm">
+      <div className="mt-8 flex flex-wrap gap-8">
 
-            Module 2 • Lesson 1
-
-          </span>
-
-          <h1 className="mt-6 text-5xl font-black">
-
-            Python Data Types
-
-          </h1>
-
-          <p className="mt-6 max-w-3xl text-lg leading-8 text-white/90">
-
-            Learn Python Data Types with examples,
-            visual diagrams and practical coding.
-
-          </p>
-
+        <div className="flex items-center gap-2">
+          <BookOpen size={20}/>
+          Lesson {lesson}
         </div>
 
-        <div className="grid gap-4">
+        <div className="flex items-center gap-2">
+          <Clock3 size={20}/>
+          {duration}
+        </div>
 
-          <div className="flex items-center gap-3 rounded-2xl bg-white/15 p-4">
-
-            <Clock />
-
-            <span>45 Minutes</span>
-
-          </div>
-
-          <div className="flex items-center gap-3 rounded-2xl bg-white/15 p-4">
-
-            <BookOpen />
-
-            <span>Lesson 5 / 12</span>
-
-          </div>
-
-          <div className="flex items-center gap-3 rounded-2xl bg-white/15 p-4">
-
-            <GraduationCap />
-
-            <span>Intermediate</span>
-
-          </div>
-
+        <div className="flex items-center gap-2">
+          <Layers size={20}/>
+          Beginner
         </div>
 
       </div>

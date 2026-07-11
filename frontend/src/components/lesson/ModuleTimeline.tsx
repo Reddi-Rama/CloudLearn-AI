@@ -2,47 +2,48 @@
 
 const timeline = [
   "Introduction",
-  "Theory",
-  "Examples",
-  "Real World Example",
-  "Summary",
-  "Assessment",
+  "HTML Basics",
+  "HTML Elements",
+  "Lists",
+  "Tables",
+  "Forms",
+  "Semantic HTML",
 ];
 
 export default function ModuleTimeline() {
   return (
     <section className="rounded-3xl bg-white p-8 shadow-lg">
 
-      <h2 className="mb-8 text-2xl font-bold">
+      <h2 className="text-3xl font-black">
 
-        Lesson Flow
+        Module Timeline
 
       </h2>
 
-      <div className="space-y-6">
+      <div className="mt-8 space-y-5">
 
-        {timeline.map((item, index) => (
+        {timeline.map((item,index)=>(
 
           <div
-            key={item}
-            className="flex gap-5"
+          key={item}
+          className="flex items-start gap-4"
           >
 
-            <div>
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sky-600 text-sm font-bold text-white">
 
-              <div className="h-5 w-5 rounded-full bg-sky-500"></div>
-
-              {index !== timeline.length - 1 && (
-                <div className="ml-2 h-12 w-[2px] bg-sky-300"></div>
-              )}
+              {index+1}
 
             </div>
 
-            <h3 className="font-semibold">
+            <div>
 
-              {item}
+              <h3 className="font-semibold">
 
-            </h3>
+                {item}
+
+              </h3>
+
+            </div>
 
           </div>
 

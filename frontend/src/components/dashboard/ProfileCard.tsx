@@ -1,76 +1,65 @@
 "use client";
 
 import {
+  UserCircle2,
   Mail,
   GraduationCap,
-  UserCircle,
 } from "lucide-react";
 
 export default function ProfileCard() {
   return (
-    <section className="rounded-3xl border bg-white p-8 shadow-lg">
+    <section className="mt-14">
 
-      <div className="text-center">
+      <div className="rounded-[32px] bg-white p-8 shadow-lg">
 
-        <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 text-white">
+        <div className="flex items-center gap-6">
 
-          <UserCircle size={60} />
+          <UserCircle2
+            size={80}
+            className="text-blue-600"
+          />
+
+          <div>
+
+            <h2 className="text-3xl font-bold">
+              Rama
+            </h2>
+
+            <p className="mt-2 text-slate-500">
+              B.Tech Information Technology
+            </p>
+
+          </div>
 
         </div>
 
-        <h2 className="mt-6 text-2xl font-bold">
+        <div className="mt-8 space-y-5">
 
-          Reddi Rama
+          <div className="flex items-center gap-3">
 
-        </h2>
+            <Mail
+              size={20}
+              className="text-blue-600"
+            />
 
-        <p className="mt-2 text-slate-500">
+            <span>rama@email.com</span>
 
-          B.Tech Student
+          </div>
 
-        </p>
+          <div className="flex items-center gap-3">
 
-      </div>
+            <GraduationCap
+              size={20}
+              className="text-blue-600"
+            />
 
-      <div className="mt-10 space-y-5">
+            <span>CloudLearn AI Student</span>
 
-        <div className="flex items-center gap-4">
-
-          <Mail
-            size={20}
-            className="text-sky-600"
-          />
-
-          <span>
-
-            rama@email.com
-
-          </span>
-
-        </div>
-
-        <div className="flex items-center gap-4">
-
-          <GraduationCap
-            size={20}
-            className="text-indigo-600"
-          />
-
-          <span>
-
-            Information Technology
-
-          </span>
+          </div>
 
         </div>
 
       </div>
-
-      <button className="mt-10 w-full rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 py-4 font-semibold text-white">
-
-        Edit Profile
-
-      </button>
 
     </section>
   );

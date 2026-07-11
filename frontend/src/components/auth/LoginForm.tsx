@@ -1,65 +1,89 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { Eye, Mail, Lock } from "lucide-react";
+
+import AuthInput from "./AuthInput";
+import PasswordInput from "./PasswordInput";
+import RememberMe from "./RememberMe";
+import SocialLogin from "./SocialLogin";
+import Divider from "./Divider";
+import LoadingButton from "./LoadingButton";
+import FormError from "./FormError";
+import FormSuccess from "./FormSuccess";
 
 export default function LoginForm() {
+  const [loading, setLoading] = useState(false);
+
+  const [error] = useState("");
+
+  const [success] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+  };
+
   return (
-    <div className="w-full max-w-md rounded-3xl bg-white p-10 shadow-2xl">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 rounded-[36px] border border-white/40 bg-white/80 p-8 shadow-2xl backdrop-blur-xl lg:p-10"
+    >
+      <AuthInput
+        label="Email Address"
+        type="email"
+        placeholder="Enter your email"
+      />
 
-      <h1 className="text-4xl font-black text-center">
-        Welcome Back
-      </h1>
+      <PasswordInput
+        label="Password"
+        placeholder="Enter your password"
+      />
 
-      <p className="mt-3 text-center text-slate-500">
-        Login to continue learning.
-      </p>
+      <div className="flex items-center justify-between">
 
-      <div className="mt-10 space-y-6">
+        <RememberMe />
 
-        <div className="relative">
-          <Mail className="absolute left-4 top-4 text-slate-400" />
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full rounded-2xl border pl-12 pr-4 py-4 outline-none focus:border-sky-500"
-          />
-        </div>
-
-        <div className="relative">
-          <Lock className="absolute left-4 top-4 text-slate-400" />
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full rounded-2xl border pl-12 pr-12 py-4 outline-none focus:border-sky-500"
-          />
-          <Eye className="absolute right-4 top-4 text-slate-400 cursor-pointer" />
-        </div>
-
-        <div className="flex justify-end">
-          <Link
-            href="/forgot-password"
-            className="text-sky-600 font-medium"
-          >
-            Forgot Password?
-          </Link>
-        </div>
-
-        <button className="w-full rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 py-4 text-white font-bold">
-          Login
-        </button>
-
-        <p className="text-center text-slate-500">
-          Don't have an account?{" "}
-          <Link
-            href="/register"
-            className="font-semibold text-sky-600"
-          >
-            Register
-          </Link>
-        </p>
+        <Link
+          href="/forgot-password"
+          className="text-sm font-semibold text-sky-600 hover:text-sky-700"
+        >
+          Forgot Password?
+        </Link>
 
       </div>
-    </div>
+
+      <FormError message={error} />
+
+      <FormSuccess message={success} />
+
+      <LoadingButton
+        loading={loading}
+        text="Sign In"
+      />
+
+      <Divider text="OR CONTINUE WITH" />
+
+      <SocialLogin />
+
+      <p className="pt-4 text-center text-sm text-slate-600">
+
+        Don't have an account?
+
+        <Link
+          href="/register"
+          className="ml-2 font-semibold text-sky-600"
+        >
+          Register
+        </Link>
+
+      </p>
+
+    </form>
   );
 }

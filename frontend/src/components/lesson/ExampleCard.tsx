@@ -1,33 +1,49 @@
 "use client";
 
-interface Props{
-title:string;
-description:string;
+import { Lightbulb } from "lucide-react";
+
+interface ExampleCardProps {
+  title?: string;
+  description?: string;
+  code?: string;
 }
 
 export default function ExampleCard({
-title,
-description,
-}:Props){
+  title = "Example",
+  description = "Basic HTML document example.",
+  code = `<!DOCTYPE html>
+<html>
+<head>
+<title>CloudLearn</title>
+</head>
+<body>
 
-return(
+<h1>Hello World</h1>
 
-<div className="rounded-3xl border border-sky-100 bg-sky-50 p-8">
+</body>
+</html>`,
+}: ExampleCardProps) {
+  return (
+    <section className="rounded-3xl bg-white p-8 shadow-lg">
 
-<h2 className="text-2xl font-bold">
+      <div className="flex items-center gap-3">
 
-{title}
+        <Lightbulb className="text-yellow-500" />
 
-</h2>
+        <h2 className="text-2xl font-bold">
+          {title}
+        </h2>
 
-<p className="mt-4 leading-8 text-slate-700">
+      </div>
 
-{description}
+      <p className="mt-5 text-slate-600">
+        {description}
+      </p>
 
-</p>
+      <pre className="mt-6 overflow-x-auto rounded-2xl bg-slate-900 p-6 text-green-400">
+        <code>{code}</code>
+      </pre>
 
-</div>
-
-);
-
+    </section>
+  );
 }
