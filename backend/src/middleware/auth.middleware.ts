@@ -1,6 +1,43 @@
-// Request filter checks: Token parsing, permission validation, error boundaries.
 import { Request, Response, NextFunction } from "express";
-export function authenticate(req: Request, res: Response, next: NextFunction) {
-  // TODO: Decrypt JWT, verify expiry, attach user to request object
-  next();
+import jwt from "jsonwebtoken";
+
+const ACCESS_SECRET =
+  process.env.JWT_ACCESS_SECRET || "access_secret";
+
+export interface AuthRequest extends Request {
+  user?: {
+    userId: string;
+  };
 }
+
+export const authenticate = (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
+        success: false,
+        message: "Access token missing",
+      });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    const decoded = jwt.verify(token, ACCESS_SECRET) as {
+      userId: string;
+    };
+
+    req.user = decoded;
+
+    next();
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid or expired access token",
+    });
+  }
+};

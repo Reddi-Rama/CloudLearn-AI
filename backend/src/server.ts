@@ -1,8 +1,14 @@
-// App launcher entrypoint. Standard port listening, logger, and server initialization.
-import app from "./app";
 import dotenv from "dotenv";
 dotenv.config();
-const PORT = process.env.PORT || 5000;
+
+import app from "./app";
+
+const PORT = Number(process.env.PORT) || 5000;
+
 app.listen(PORT, () => {
-  console.log(`CloudLearn server running on port ${PORT}`);
+  console.log("");
+  console.log("==================================");
+  console.log("🚀 CloudLearn Backend Started");
+  console.log(`🌍 http://localhost:${PORT}`);
+  console.log("==================================");
 });
