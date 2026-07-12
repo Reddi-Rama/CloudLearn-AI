@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
-import { domainService } from "./domain.service";
+import { lessonService } from "./lesson.service";
 
-export const domainController = {
+export const lessonController = {
   async create(req: Request, res: Response) {
     try {
-      const domain = await domainService.create(req.body);
+      const lesson = await lessonService.create(req.body);
 
       return res.status(201).json({
         success: true,
-        message: "Domain created successfully.",
-        data: domain,
+        message: "Lesson created successfully.",
+        data: lesson,
       });
     } catch (error) {
       return res.status(400).json({
@@ -17,23 +17,23 @@ export const domainController = {
         message:
           error instanceof Error
             ? error.message
-            : "Failed to create domain.",
+            : "Failed to create lesson.",
       });
     }
   },
 
   async findAll(req: Request, res: Response) {
     try {
-      const domains = await domainService.findAll();
+      const lessons = await lessonService.findAll();
 
       return res.status(200).json({
         success: true,
-        data: domains,
+        data: lessons,
       });
     } catch {
       return res.status(500).json({
         success: false,
-        message: "Failed to fetch domains.",
+        message: "Failed to fetch lessons.",
       });
     }
   },
@@ -42,11 +42,11 @@ export const domainController = {
     try {
       const id = req.params.id as string;
 
-      const domain = await domainService.findById(id);
+      const lesson = await lessonService.findById(id);
 
       return res.status(200).json({
         success: true,
-        data: domain,
+        data: lesson,
       });
     } catch (error) {
       return res.status(404).json({
@@ -54,7 +54,26 @@ export const domainController = {
         message:
           error instanceof Error
             ? error.message
-            : "Domain not found.",
+            : "Lesson not found.",
+      });
+    }
+  },
+
+  async findByModule(req: Request, res: Response) {
+    try {
+      const moduleId = req.params.moduleId as string;
+
+      const lessons =
+        await lessonService.findByModule(moduleId);
+
+      return res.status(200).json({
+        success: true,
+        data: lessons,
+      });
+    } catch {
+      return res.status(500).json({
+        success: false,
+        message: "Failed to fetch module lessons.",
       });
     }
   },
@@ -63,15 +82,15 @@ export const domainController = {
     try {
       const id = req.params.id as string;
 
-      const domain = await domainService.update(
+      const lesson = await lessonService.update(
         id,
         req.body
       );
 
       return res.status(200).json({
         success: true,
-        message: "Domain updated successfully.",
-        data: domain,
+        message: "Lesson updated successfully.",
+        data: lesson,
       });
     } catch (error) {
       return res.status(400).json({
@@ -79,7 +98,7 @@ export const domainController = {
         message:
           error instanceof Error
             ? error.message
-            : "Failed to update domain.",
+            : "Failed to update lesson.",
       });
     }
   },
@@ -88,7 +107,7 @@ export const domainController = {
     try {
       const id = req.params.id as string;
 
-      const result = await domainService.delete(id);
+      const result = await lessonService.delete(id);
 
       return res.status(200).json({
         success: true,
@@ -100,7 +119,7 @@ export const domainController = {
         message:
           error instanceof Error
             ? error.message
-            : "Failed to delete domain.",
+            : "Failed to delete lesson.",
       });
     }
   },

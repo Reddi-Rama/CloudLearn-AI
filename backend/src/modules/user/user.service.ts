@@ -1,22 +1,13 @@
-// src/modules/user/user.service.ts
-import bcrypt from 'bcryptjs';
-import { User } from '@prisma/client';
-import { userRepository } from './user.repository';
-import { AppError } from '../../shared/errors/AppError';
-import { ChangePasswordInput, UpdateProfileInput } from './user.validator';
-
-const SALT_ROUNDS = 10;
+import bcrypt from "bcryptjs";
+import { User } from "@prisma/client";
+import { userRepository } from "./user.repository";
+import {
+  ChangePasswordInput,
+  UpdateProfileInput,
+} from "./user.validator";
 
 function toPublicUser(user: User) {
-  const {
-    passwordHash,
-    emailVerifyToken,
-    emailVerifyExpiry,
-    resetToken,
-    resetTokenExpiry,
-    ...publicUser
-  } = user;
-
+  const { password, ...publicUser } = user;
   return publicUser;
 }
 
@@ -25,60 +16,80 @@ export const userService = {
     const user = await userRepository.findById(userId);
 
     if (!user) {
-      throw new AppError('User not found.', 404);
+      throw new Error("User not found.");
     }
 
     return toPublicUser(user);
   },
 
-  async updateMe(userId: string, data: UpdateProfileInput) {
+  async updateMe(
+    userId: string,
+    data: UpdateProfileInput
+  ) {
     const existing = await userRepository.findById(userId);
 
     if (!existing) {
-      throw new AppError('User not found.', 404);
+      throw new Error("User not found.");
     }
 
-    const updated = await userRepository.updateById(userId, data);
+    const updateData = {
+      fullName: data.fullName,
+      avatar: data.avatar,
+    };
+
+    const updated = await userRepository.updateById(
+      userId,
+      updateData
+    );
 
     return toPublicUser(updated);
   },
 
-  async changePassword(userId: string, data: ChangePasswordInput) {
+  async changePassword(
+    userId: string,
+    data: ChangePasswordInput
+  ) {
     const user = await userRepository.findById(userId);
 
     if (!user) {
-      throw new AppError('User not found.', 404);
+      throw new Error("User not found.");
     }
 
-    if (!user.passwordHash) {
-      throw new AppError(
-        'This account signs in via a social provider and has no password to change.',
-        400
-      );
-    }
-
-    const isMatch = await bcrypt.compare(data.currentPassword, user.passwordHash);
+    const isMatch = await bcrypt.compare(
+      data.currentPassword,
+      user.password
+    );
 
     if (!isMatch) {
-      throw new AppError('Current password is incorrect.', 401);
+      throw new Error("Current password is incorrect.");
     }
 
-    const passwordHash = await bcrypt.hash(data.newPassword, SALT_ROUNDS);
+    const hashedPassword = await bcrypt.hash(
+      data.newPassword,
+      10
+    );
 
-    await userRepository.updatePassword(userId, passwordHash);
+    await userRepository.updatePassword(
+      userId,
+      hashedPassword
+    );
 
-    return { message: 'Password changed successfully.' };
+    return {
+      message: "Password changed successfully.",
+    };
   },
 
   async deleteMe(userId: string) {
     const existing = await userRepository.findById(userId);
 
     if (!existing) {
-      throw new AppError('User not found.', 404);
+      throw new Error("User not found.");
     }
 
     await userRepository.deleteById(userId);
 
-    return { message: 'Account deleted successfully.' };
+    return {
+      message: "Account deleted successfully.",
+    };
   },
 };

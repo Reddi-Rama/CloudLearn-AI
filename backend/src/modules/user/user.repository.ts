@@ -20,12 +20,12 @@ export const userRepository = {
 
   async updatePassword(
     id: string,
-    passwordHash: string
+    password: string
   ): Promise<User> {
     return prisma.user.update({
       where: { id },
       data: {
-        passwordHash,
+        password,
       },
     });
   },
