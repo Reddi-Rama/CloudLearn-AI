@@ -5,16 +5,15 @@ import {
   findUserProfile,
   saveRefreshToken,
   clearRefreshToken,
-} from "../repositories/user.repository";
+} from "../user/user.repository";
 
-import { hashPassword, comparePassword } from "../helpers/password";
+import { hashPassword, comparePassword } from "../../helpers/password";
 
 import {
   generateAccessToken,
   generateRefreshToken,
   verifyRefreshToken,
-} from "../lib/jwt";
-
+} from "../../lib/jwt";
 export async function registerUser(
   fullName: string,
   email: string,

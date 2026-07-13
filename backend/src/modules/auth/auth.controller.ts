@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AuthRequest } from "../middleware/auth.middleware";
+import { AuthRequest } from "../../middleware/auth.middleware";
 
 import {
   loginUser,
@@ -7,7 +7,7 @@ import {
   getCurrentUser,
   refreshAccessToken,
   logoutUser,
-} from "../services/auth.service";
+} from "./auth.service";
 
 export async function register(
   req: Request,

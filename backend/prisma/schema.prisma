@@ -20,6 +20,7 @@ model User {
   updatedAt          DateTime     @updatedAt
   role               Role         @default(STUDENT)
   enrollments        Enrollment[]
+  progress Progress[]
 }
 
 model Domain {
@@ -105,4 +106,23 @@ enum CourseLevel {
 enum EnrollmentStatus {
   ACTIVE
   COMPLETED
+}
+model Progress {
+  id          String   @id @default(cuid())
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  courseSlug  String
+  moduleSlug  String
+  lessonSlug  String
+
+  completed   Boolean  @default(false)
+
+  completedAt DateTime?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, lessonSlug])
 }

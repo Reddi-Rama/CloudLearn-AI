@@ -6,9 +6,9 @@ import {
   me,
   refresh,
   register,
-} from "../controllers/auth.controller";
+} from "./auth.controller";
 
-import { authenticate } from "../middleware/auth.middleware";
+import { authenticate } from "../../middleware/auth.middleware";
 
 const router = Router();
 
