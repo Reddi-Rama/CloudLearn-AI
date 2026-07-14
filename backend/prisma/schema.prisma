@@ -21,6 +21,7 @@ model User {
   role               Role         @default(STUDENT)
   enrollments        Enrollment[]
   progress Progress[]
+  certificates Certificate[]
 }
 
 model Domain {
@@ -125,4 +126,23 @@ model Progress {
   updatedAt   DateTime @updatedAt
 
   @@unique([userId, lessonSlug])
+}
+model Certificate {
+  id             String   @id @default(cuid())
+
+  certificateId  String   @unique
+
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  courseSlug     String
+  courseTitle    String
+
+  filePath       String
+
+  paymentStatus  Boolean  @default(true)
+
+  issuedAt       DateTime @default(now())
+
+  createdAt      DateTime @default(now())
 }
