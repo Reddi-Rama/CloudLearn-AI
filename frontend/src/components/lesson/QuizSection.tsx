@@ -1,39 +1,25 @@
-"use client";
-
-import Link from "next/link";
-import { CircleHelp } from "lucide-react";
-
 export default function QuizSection() {
   return (
-    <section className="rounded-3xl bg-gradient-to-r from-indigo-600 to-sky-600 p-8 text-white shadow-xl">
+    <div className="rounded-3xl border border-purple-200 bg-purple-50 p-8">
+      <h2 className="text-2xl font-bold text-purple-700">
+        Quick Check
+      </h2>
 
-      <div className="flex items-center gap-3">
+      <div className="mt-6 rounded-2xl bg-white p-6">
+        <p className="font-medium text-slate-800">
+          Did you understand the concepts covered in this lesson?
+        </p>
 
-        <CircleHelp size={30}/>
+        <div className="mt-5 flex gap-4">
+          <button className="rounded-xl bg-green-500 px-5 py-3 text-white">
+            Yes
+          </button>
 
-        <h2 className="text-3xl font-black">
-
-          Lesson Quiz
-
-        </h2>
-
+          <button className="rounded-xl bg-red-500 px-5 py-3 text-white">
+            Need Revision
+          </button>
+        </div>
       </div>
-
-      <p className="mt-5 text-sky-100">
-
-        Test your understanding before moving to the next lesson.
-
-      </p>
-
-      <Link
-      href="/assessments"
-      className="mt-8 inline-flex rounded-2xl bg-white px-6 py-4 font-semibold text-sky-700"
-      >
-
-        Start Quiz
-
-      </Link>
-
-    </section>
+    </div>
   );
 }

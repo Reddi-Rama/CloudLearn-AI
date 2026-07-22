@@ -1,39 +1,30 @@
-"use client";
+interface KeyPointsProps {
+  points: string[];
+}
 
-const points = [
-  "HTML provides webpage structure.",
-  "Every HTML document begins with <!DOCTYPE html>.",
-  "Elements are represented using tags.",
-  "HTML works with CSS and JavaScript.",
-];
-
-export default function KeyPoints() {
+export default function KeyPoints({
+  points,
+}: KeyPointsProps) {
   return (
-    <section className="rounded-3xl bg-white p-8 shadow-lg">
-
-      <h2 className="text-2xl font-bold">
+    <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+      <h2 className="text-2xl font-bold text-slate-900">
         Key Takeaways
       </h2>
 
       <div className="mt-6 space-y-4">
-
-        {points.map((point) => (
-
+        {points.map((point, index) => (
           <div
-            key={point}
-            className="flex gap-3"
+            key={index}
+            className="flex items-start gap-4"
           >
+            <div className="mt-2 h-3 w-3 rounded-full bg-sky-500" />
 
-            <div className="mt-2 h-3 w-3 rounded-full bg-sky-600" />
-
-            <span>{point}</span>
-
+            <p className="text-slate-700">
+              {point}
+            </p>
           </div>
-
         ))}
-
       </div>
-
-    </section>
+    </div>
   );
 }

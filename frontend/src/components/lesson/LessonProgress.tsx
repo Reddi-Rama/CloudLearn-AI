@@ -1,48 +1,32 @@
-"use client";
-
-interface Props{
-    progress?:number;
+interface LessonProgressProps {
+  completed: number;
+  total: number;
 }
 
 export default function LessonProgress({
-    progress=35
-}:Props){
+  completed,
+  total,
+}: LessonProgressProps) {
+  const percentage = (completed / total) * 100;
 
-return(
+  return (
+    <div className="rounded-3xl bg-white p-6 shadow-sm border border-slate-200">
+      <h3 className="font-semibold text-slate-800">
+        Course Progress
+      </h3>
 
-<section className="rounded-3xl bg-white p-8 shadow-lg">
+      <div className="mt-4 h-3 rounded-full bg-slate-200 overflow-hidden">
+        <div
+          className="h-full rounded-full bg-sky-500"
+          style={{
+            width: `${percentage}%`,
+          }}
+        />
+      </div>
 
-<div className="flex justify-between">
-
-<h2 className="text-2xl font-bold">
-Lesson Progress
-</h2>
-
-<span className="font-bold text-sky-600">
-{progress}%
-</span>
-
-</div>
-
-<div className="mt-6 h-4 rounded-full bg-slate-200">
-
-<div
-className="h-4 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600"
-style={{
-width:`${progress}%`
-}}
-/>
-
-</div>
-
-<p className="mt-5 text-slate-500">
-
-Complete this lesson to unlock the next lesson.
-
-</p>
-
-</section>
-
-);
-
+      <p className="mt-3 text-sm text-slate-600">
+        {completed} of {total} lessons completed
+      </p>
+    </div>
+  );
 }

@@ -1,50 +1,29 @@
-"use client";
-
-import { BookOpen, Clock3, Layers } from "lucide-react";
-
 interface LessonHeaderProps {
-  title?: string;
-  module?: string;
-  duration?: string;
-  lesson?: number;
+  title: string;
+  module: string;
+  duration: string;
+  difficulty: string;
 }
 
 export default function LessonHeader({
-  title = "HTML Introduction",
-  module = "Frontend Development",
-  duration = "20 Minutes",
-  lesson = 1,
+  title,
+  module,
+  duration,
+  difficulty,
 }: LessonHeaderProps) {
   return (
-    <section className="rounded-[32px] bg-gradient-to-r from-sky-600 via-cyan-500 to-indigo-600 p-10 text-white shadow-xl">
+    <div className="rounded-3xl bg-white p-8 shadow-sm border border-slate-200">
+      <p className="text-sky-600 font-medium">{module}</p>
 
-      <span className="rounded-full bg-white/20 px-4 py-2 text-sm">
-        {module}
-      </span>
-
-      <h1 className="mt-6 text-5xl font-black">
+      <h1 className="mt-2 text-4xl font-bold text-slate-900">
         {title}
       </h1>
 
-      <div className="mt-8 flex flex-wrap gap-8">
-
-        <div className="flex items-center gap-2">
-          <BookOpen size={20}/>
-          Lesson {lesson}
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Clock3 size={20}/>
-          {duration}
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Layers size={20}/>
-          Beginner
-        </div>
-
+      <div className="mt-5 flex gap-4 text-sm text-slate-600">
+        <span>{duration}</span>
+        <span>•</span>
+        <span>{difficulty}</span>
       </div>
-
-    </section>
+    </div>
   );
 }

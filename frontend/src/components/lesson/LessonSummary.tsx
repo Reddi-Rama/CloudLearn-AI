@@ -1,27 +1,14 @@
-"use client";
-
 export default function LessonSummary() {
   return (
-    <section className="rounded-3xl bg-white p-8 shadow-lg">
-
-      <h2 className="text-3xl font-black">
-
+    <div className="rounded-3xl border border-green-200 bg-green-50 p-8">
+      <h2 className="text-2xl font-bold text-green-700">
         Lesson Summary
-
       </h2>
 
-      <ul className="mt-6 list-disc space-y-3 pl-6 text-slate-700">
-
-        <li>HTML is the foundation of webpages.</li>
-
-        <li>HTML uses tags to organize content.</li>
-
-        <li>HTML works together with CSS and JavaScript.</li>
-
-        <li>Every webpage starts with an HTML document.</li>
-
-      </ul>
-
-    </section>
+      <p className="mt-5 text-slate-700 leading-8">
+        You have successfully completed this lesson.
+        Review the key concepts before moving to the next lesson.
+      </p>
+    </div>
   );
 }

@@ -1,34 +1,19 @@
-"use client";
-
-import { TriangleAlert } from "lucide-react";
-
 interface WarningBoxProps {
-  children?: React.ReactNode;
+  warning: string;
 }
 
 export default function WarningBox({
-  children,
+  warning,
 }: WarningBoxProps) {
   return (
-    <div className="rounded-3xl border-l-4 border-red-500 bg-red-50 p-6">
+    <div className="rounded-3xl border border-red-200 bg-red-50 p-6">
+      <h3 className="text-xl font-semibold text-red-700">
+        ⚠️ Important Note
+      </h3>
 
-      <div className="flex items-center gap-3">
-
-        <TriangleAlert className="text-red-600" />
-
-        <h3 className="text-xl font-bold text-red-700">
-          Important
-        </h3>
-
-      </div>
-
-      <p className="mt-4 leading-8 text-slate-700">
-
-        {children ||
-          "Always close HTML tags correctly. Invalid HTML can cause layout issues."}
-
+      <p className="mt-4 text-slate-700 leading-8">
+        {warning}
       </p>
-
     </div>
   );
 }

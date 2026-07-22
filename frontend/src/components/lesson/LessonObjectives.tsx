@@ -1,39 +1,31 @@
-"use client";
-
-const objectives = [
-  "Understand HTML structure",
-  "Create basic webpages",
-  "Use headings and paragraphs",
-  "Understand HTML tags",
-];
-
 export default function LessonObjectives() {
-  return (
-    <section className="rounded-3xl bg-white p-8 shadow-lg">
+  const objectives = [
+    "Understand the core concept.",
+    "Learn real-world applications.",
+    "Practice using examples.",
+    "Prepare for assessments.",
+  ];
 
-      <h2 className="text-2xl font-bold">
+  return (
+    <div className="rounded-3xl bg-white p-8 shadow-sm border border-slate-200">
+      <h2 className="text-2xl font-bold text-slate-900">
         Learning Objectives
       </h2>
 
-      <div className="mt-6 space-y-4">
-
-        {objectives.map((item) => (
-
-          <div
-            key={item}
+      <ul className="mt-5 space-y-4">
+        {objectives.map((objective) => (
+          <li
+            key={objective}
             className="flex items-center gap-3"
           >
+            <div className="h-3 w-3 rounded-full bg-sky-500" />
 
-            <div className="h-3 w-3 rounded-full bg-sky-600"/>
-
-            {item}
-
-          </div>
-
+            <span className="text-slate-700">
+              {objective}
+            </span>
+          </li>
         ))}
-
-      </div>
-
-    </section>
+      </ul>
+    </div>
   );
 }

@@ -1,59 +1,41 @@
-"use client";
-
-import { ChevronDown } from "lucide-react";
-
-const faqs = [
-  {
-    question: "What is HTML?",
-    answer: "HTML is the standard markup language used to create webpages.",
-  },
-  {
-    question: "Is HTML a programming language?",
-    answer: "No. HTML is a markup language that structures content.",
-  },
-  {
-    question: "Can I build websites using only HTML?",
-    answer: "Yes, but modern websites also use CSS and JavaScript.",
-  },
-];
-
 export default function LessonFAQ() {
-  return (
-    <section className="rounded-3xl bg-white p-8 shadow-lg">
+  const faqs = [
+    {
+      question: "Is this lesson important for interviews?",
+      answer: "Yes. These concepts are commonly asked in interviews.",
+    },
+    {
+      question: "Should I complete exercises?",
+      answer: "Yes. Practice improves understanding and retention.",
+    },
+    {
+      question: "Can I skip lessons?",
+      answer: "It is recommended to complete lessons sequentially.",
+    },
+  ];
 
-      <h2 className="text-3xl font-black">
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+      <h2 className="text-2xl font-bold text-slate-900">
         Frequently Asked Questions
       </h2>
 
-      <div className="mt-8 space-y-5">
-
-        {faqs.map((faq) => (
-
+      <div className="mt-6 space-y-6">
+        {faqs.map((faq, index) => (
           <div
-            key={faq.question}
-            className="rounded-2xl border p-5"
+            key={index}
+            className="rounded-2xl border border-slate-200 p-5"
           >
+            <h3 className="font-semibold text-slate-900">
+              {faq.question}
+            </h3>
 
-            <div className="flex items-center justify-between">
-
-              <h3 className="font-semibold">
-                {faq.question}
-              </h3>
-
-              <ChevronDown />
-
-            </div>
-
-            <p className="mt-4 text-slate-600">
+            <p className="mt-3 text-slate-600">
               {faq.answer}
             </p>
-
           </div>
-
         ))}
-
       </div>
-
-    </section>
+    </div>
   );
 }

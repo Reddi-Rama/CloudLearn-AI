@@ -1,25 +1,25 @@
-"use client";
+interface DiagramCardProps {
+  title: string;
+  description: string;
+}
 
-import Diagram from "./Diagram";
-
-export default function DiagramCard() {
+export default function DiagramCard({
+  title,
+  description,
+}: DiagramCardProps) {
   return (
-    <section className="rounded-3xl bg-white p-8 shadow-lg">
+    <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+      <h3 className="text-xl font-semibold text-slate-900">
+        📊 {title}
+      </h3>
 
-      <h2 className="text-2xl font-bold">
-        HTML Structure
-      </h2>
-
-      <p className="mt-3 text-slate-600">
-        Visual representation of a basic HTML document.
+      <p className="mt-4 text-slate-700">
+        {description}
       </p>
 
-      <div className="mt-8">
-
-        <Diagram />
-
+      <div className="mt-6 flex h-48 items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50">
+        Diagram Placeholder
       </div>
-
-    </section>
+    </div>
   );
 }

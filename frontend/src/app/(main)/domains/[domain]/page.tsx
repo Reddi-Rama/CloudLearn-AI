@@ -1,33 +1,46 @@
-interface Props {
-  params: {
-    slug: string;
-  };
-}
+import Link from "next/link";
 
-export default function DomainDetailsPage({
+export default function DomainPage({
   params,
-}: Props) {
+}: {
+  params: {
+    domain: string;
+  };
+}) {
+  const courses = {
+    programming: [
+      "python-development",
+      "cpp-development",
+      "java-development",
+      "c-development",
+    ],
+  };
+
+  const domainCourses =
+    courses[
+      params.domain as keyof typeof courses
+    ] || [];
+
   return (
-    <main className="container-custom py-40">
+    <main className="mx-auto max-w-7xl py-20">
 
-      <h1 className="text-5xl font-bold">
-
-        {params.slug
-          .split("-")
-          .map(
-            (word) =>
-              word.charAt(0).toUpperCase() +
-              word.slice(1)
-          )
-          .join(" ")}
-
+      <h1 className="text-5xl font-bold mb-12 capitalize">
+        {params.domain}
       </h1>
 
-      <p className="mt-6 text-slate-600 text-lg">
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
 
-        Domain details page coming soon...
+        {domainCourses.map((course) => (
+          <Link
+            key={course}
+            href={`/courses/${course}`}
+            className="rounded-3xl bg-white p-8 shadow-sm"
+          >
+            {course.replace("-", " ")}
+          </Link>
+        ))}
 
-      </p>
+      </div>
 
     </main>
   );

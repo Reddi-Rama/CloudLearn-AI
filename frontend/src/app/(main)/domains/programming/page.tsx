@@ -1,8 +1,8 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
-import ProgrammingHero from "@/components/programming/ProgrammingHero";
-import CourseGrid from "@/components/programming/CourseGrid";
+import ProgrammingHero from "../../../../components/programming/ProgrammingHero";
+import CourseGrid from "@/components/courses/CourseGrid";
 
 export default function ProgrammingPage() {
   return (

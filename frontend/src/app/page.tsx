@@ -2,7 +2,7 @@ import Header from "@/components/layout/Header";
 import Hero from "@/components/home/Hero";
 import WhyCloudLearn from "@/components/home/WhyCloudLearn";
 import CloudDomains from "@/components/home/CloudDomains";
-import LearningPaths from "@/components/home/LearningPaths";
+import { PathGrid as LearningPaths } from "@/components/learning-Paths";
 import CertificatePreview from "@/components/home/CertificatePreview";
 import Partners from "@/components/home/Partners";
 import Testimonials from "@/components/home/Testimonials";

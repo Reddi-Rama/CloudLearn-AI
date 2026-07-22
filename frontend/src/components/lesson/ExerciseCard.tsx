@@ -1,45 +1,25 @@
-"use client";
-
-import { PencilLine } from "lucide-react";
-
 interface ExerciseCardProps {
-  title?: string;
+  title: string;
+  instruction: string;
 }
 
 export default function ExerciseCard({
-  title = "Practice Exercise",
+  title,
+  instruction,
 }: ExerciseCardProps) {
   return (
-    <section className="rounded-3xl bg-white p-8 shadow-lg">
+    <div className="rounded-3xl border border-orange-200 bg-orange-50 p-6">
+      <h3 className="text-xl font-semibold text-orange-700">
+        📝 {title}
+      </h3>
 
-      <div className="flex items-center gap-3">
-
-        <PencilLine className="text-sky-600" />
-
-        <h2 className="text-2xl font-bold">
-          {title}
-        </h2>
-
-      </div>
-
-      <p className="mt-5 text-slate-600 leading-8">
-
-        Create an HTML page containing:
-
+      <p className="mt-4 text-slate-700 leading-8">
+        {instruction}
       </p>
 
-      <ul className="mt-5 list-disc space-y-3 pl-6 text-slate-700">
-
-        <li>Heading</li>
-
-        <li>Paragraph</li>
-
-        <li>Image</li>
-
-        <li>Hyperlink</li>
-
-      </ul>
-
-    </section>
+      <button className="mt-6 rounded-xl bg-orange-500 px-5 py-3 font-medium text-white transition hover:bg-orange-600">
+        Start Exercise
+      </button>
+    </div>
   );
 }

@@ -1,56 +1,25 @@
-"use client";
+interface ModuleTimelineProps {
+  courseId?: string;
+  moduleId?: string;
+  lessonId?: string;
+}
 
-const timeline = [
-  "Introduction",
-  "HTML Basics",
-  "HTML Elements",
-  "Lists",
-  "Tables",
-  "Forms",
-  "Semantic HTML",
-];
-
-export default function ModuleTimeline() {
+export default function ModuleTimeline({
+  moduleId,
+}: ModuleTimelineProps) {
   return (
-    <section className="rounded-3xl bg-white p-8 shadow-lg">
+    <div className="rounded-3xl bg-white p-6 shadow-sm border border-slate-200">
+      <h3 className="font-semibold text-slate-800 mb-5">
+        Current Module
+      </h3>
 
-      <h2 className="text-3xl font-black">
+      <div className="flex items-center gap-3">
+        <div className="h-4 w-4 rounded-full bg-green-500" />
 
-        Module Timeline
-
-      </h2>
-
-      <div className="mt-8 space-y-5">
-
-        {timeline.map((item,index)=>(
-
-          <div
-          key={item}
-          className="flex items-start gap-4"
-          >
-
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sky-600 text-sm font-bold text-white">
-
-              {index+1}
-
-            </div>
-
-            <div>
-
-              <h3 className="font-semibold">
-
-                {item}
-
-              </h3>
-
-            </div>
-
-          </div>
-
-        ))}
-
+        <p className="text-slate-700 capitalize">
+          {moduleId}
+        </p>
       </div>
-
-    </section>
+    </div>
   );
 }
