@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { modules } from "@/content/programming/python/lessons/module";
+import { modules as pythonModules } from "@/content/programming/python/lessons/module";
+import { modules as cppModules } from "@/content/programming/cpp/lessons/module";
 
 
 interface PageProps {
@@ -191,6 +192,18 @@ lessonId
 
 
 
+const modules =
+courseId === "cpp-development"
+?
+cppModules
+:
+pythonModules;
+
+
+
+
+
+
 const moduleData =
 
 (modules as ModuleData[])
@@ -249,7 +262,6 @@ const current = pages[currentIndex];
 
 
 
-// Previous
 
 const previousLesson =
 currentIndex > 0
@@ -262,7 +274,7 @@ null;
 
 
 
-// Next inside same module
+
 
 const nextLesson =
 currentIndex < pages.length-1
@@ -275,7 +287,8 @@ null;
 
 
 
-// Next module
+
+
 
 const moduleNumber =
 Number(
@@ -284,13 +297,13 @@ moduleId.replace("module","")
 
 
 
+
+
 const nextModule =
 modules.find(
 (m:any)=>
 m.id===`module${moduleNumber+1}`
 );
-
-
 
 
 
@@ -313,8 +326,6 @@ text-white
 
 
 
-
-{/* STARS */}
 
 <div
 className="
@@ -376,10 +387,6 @@ pt-20
 
 
 
-
-{/* SIDEBAR */}
-
-
 <aside
 className="
 sticky
@@ -404,7 +411,7 @@ backdrop-blur-xl
 
 <Link
 
-href="/courses/python-development"
+href={`/courses/${courseId}`}
 
 className="
 mb-8
@@ -420,10 +427,9 @@ hover:bg-sky-700
 
 >
 
-← Back to Python Course
+← Back to Course
 
 </Link>
-
 
 
 
@@ -465,11 +471,17 @@ key={lesson.id}
 href={`/lesson/${courseId}/${moduleId}/${lesson.id}`}
 
 className={`
+
 block
+
 rounded-xl
+
 px-5
+
 py-3
+
 text-base
+
 
 ${
 lesson.id===current.id
@@ -516,10 +528,6 @@ lesson.id===current.id
 
 
 
-
-
-
-{/* CONTENT */}
 
 
 
@@ -641,10 +649,6 @@ text-gray-200
 
 
 
-{/* NAVIGATION */}
-
-
-
 <div
 className="
 mt-16
@@ -688,6 +692,7 @@ font-semibold
 :
 
 <div/>
+
 
 }
 
@@ -755,7 +760,11 @@ Next Module →
 
 
 
+
+
 </div>
+
+
 
 
 
@@ -767,7 +776,9 @@ Next Module →
 
 
 
+
 </div>
+
 
 
 

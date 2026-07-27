@@ -1,20 +1,11 @@
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-
-import ProgrammingHero from "../../../../components/programming/ProgrammingHero";
-import CourseGrid from "@/components/courses/CourseGrid";
+import ProgrammingHero from "@/components/programming/ProgrammingHero";
 
 export default function ProgrammingPage() {
   return (
-    <>
-      <Navbar />
+    <main className="min-h-screen bg-[#F8FBFF] pt-28">
 
-      <main className="bg-[#F8FBFF] pt-28">
-        <ProgrammingHero />
-        <CourseGrid />
-      </main>
+      <ProgrammingHero />
 
-      <Footer />
-    </>
+    </main>
   );
 }
