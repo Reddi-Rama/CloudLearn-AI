@@ -133,9 +133,7 @@ function renderContent(content: string) {
             "
           />
 
-          <span>
-            {text.replace("- ", "")}
-          </span>
+          <span>{text.replace("- ", "")}</span>
         </div>
       );
     }
@@ -162,9 +160,7 @@ function renderContent(content: string) {
    GET COURSE MODULES
 ========================================================= */
 
-function getCourseModules(
-  courseId: string
-): ModuleData[] | null {
+function getCourseModules(courseId: string): ModuleData[] | null {
   if (courseId === "python-development") {
     return pythonModules as ModuleData[];
   }
@@ -197,30 +193,21 @@ function getCourseName(courseId: string) {
     return "Java Development";
   }
 
-  return courseId
-    .replace(/-/g, " ")
-    .replace(/\b\w/g, (char) =>
-      char.toUpperCase()
-    );
+  return courseId.replace(/-/g, " ").replace(/\b\w/g, (char) =>
+    char.toUpperCase()
+  );
 }
 
 /* =========================================================
    LESSON PAGE
 ========================================================= */
 
-export default async function LessonPage({
-  params,
-}: PageProps) {
-  const {
-    courseId,
-    moduleId,
-    lessonId,
-  } = await params;
+export default async function LessonPage({ params }: PageProps) {
+  const { courseId, moduleId, lessonId } = await params;
 
   /* GET COURSE */
 
-  const modules =
-    getCourseModules(courseId);
+  const modules = getCourseModules(courseId);
 
   if (!modules) {
     return notFound();
@@ -228,11 +215,7 @@ export default async function LessonPage({
 
   /* GET MODULE */
 
-  const moduleData =
-    modules.find(
-      (module) =>
-        module.id === moduleId
-    );
+  const moduleData = modules.find((module) => module.id === moduleId);
 
   if (!moduleData) {
     return notFound();
@@ -247,25 +230,20 @@ export default async function LessonPage({
 
   /* CURRENT LESSON */
 
-  const currentIndex =
-    pages.findIndex(
-      (page) =>
-        page.id === lessonId
-    );
+  const currentIndex = pages.findIndex(
+    (page) => page.id === lessonId
+  );
 
   if (currentIndex === -1) {
     return notFound();
   }
 
-  const current =
-    pages[currentIndex];
+  const current = pages[currentIndex];
 
   /* PREVIOUS LESSON */
 
   const previousLesson =
-    currentIndex > 0
-      ? pages[currentIndex - 1]
-      : null;
+    currentIndex > 0 ? pages[currentIndex - 1] : null;
 
   /* NEXT LESSON */
 
@@ -276,27 +254,20 @@ export default async function LessonPage({
 
   /* CURRENT MODULE NUMBER */
 
-  const moduleNumber =
-    Number(
-      moduleId.replace(
-        "module",
-        ""
-      )
-    );
+  const moduleNumber = Number(
+    moduleId.replace("module", "")
+  );
 
   /* NEXT MODULE */
 
-  const nextModule =
-    modules.find(
-      (module) =>
-        module.id ===
-        `module${moduleNumber + 1}`
-    );
+  const nextModule = modules.find(
+    (module) =>
+      module.id === `module${moduleNumber + 1}`
+  );
 
   /* COURSE NAME */
 
-  const courseName =
-    getCourseName(courseId);
+  const courseName = getCourseName(courseId);
 
   return (
     <main
@@ -321,9 +292,7 @@ export default async function LessonPage({
           overflow-hidden
         "
       >
-        {Array.from({
-          length: 150,
-        }).map((_, i) => (
+        {Array.from({ length: 150 }).map((_, i) => (
           <span
             key={i}
             className="
@@ -336,11 +305,8 @@ export default async function LessonPage({
               animate-pulse
             "
             style={{
-              top:
-                `${(i * 19) % 100}%`,
-
-              left:
-                `${(i * 37) % 100}%`,
+              top: `${(i * 19) % 100}%`,
+              left: `${(i * 37) % 100}%`,
             }}
           />
         ))}
@@ -371,6 +337,7 @@ export default async function LessonPage({
             py-6
             sm:px-8
             lg:px-10
+            lg:pl-[calc((100vw-1088px)/2)]
           "
         >
           <Link
@@ -418,7 +385,6 @@ export default async function LessonPage({
               lg:block
             "
           >
-
             <div
               className="
                 sticky
@@ -443,7 +409,6 @@ export default async function LessonPage({
                   pb-6
                 "
               >
-
                 <p
                   className="
                     text-sm
@@ -466,7 +431,6 @@ export default async function LessonPage({
                 >
                   {courseName}
                 </h2>
-
               </div>
 
               {/* ALL MODULES */}
@@ -477,179 +441,154 @@ export default async function LessonPage({
                   space-y-3
                 "
               >
+                {modules.map((module, moduleIndex) => {
+                  const isCurrentModule =
+                    module.id === moduleId;
 
-                {modules.map(
-                  (
-                    module,
-                    moduleIndex
-                  ) => {
+                  const modulePages: LessonData[] = [
+                    module.about,
+                    ...module.lessons,
+                  ];
 
-                    const isCurrentModule =
-                      module.id === moduleId;
+                  return (
+                    <details
+                      key={module.id}
+                      open={isCurrentModule}
+                      className="
+                        group
+                        overflow-hidden
+                        rounded-2xl
+                        border
+                        border-slate-700
+                        bg-slate-950/40
+                      "
+                    >
 
-                    const modulePages:
-                      LessonData[] = [
-                        module.about,
-                        ...module.lessons,
-                      ];
+                      {/* MODULE HEADER */}
 
-                    return (
-                      <details
-                        key={module.id}
-                        open={isCurrentModule}
+                      <summary
                         className="
-                          group
-                          overflow-hidden
-                          rounded-2xl
-                          border
-                          border-slate-700
-                          bg-slate-950/40
+                          flex
+                          cursor-pointer
+                          list-none
+                          items-center
+                          gap-3
+                          bg-slate-800
+                          px-4
+                          py-4
+                          transition
+                          hover:bg-slate-700
                         "
                       >
-
-                        {/* MODULE HEADER */}
-
-                        <summary
+                        <span
                           className="
                             flex
-                            cursor-pointer
-                            list-none
+                            h-9
+                            w-9
+                            shrink-0
                             items-center
-                            gap-3
-                            bg-slate-800
-                            px-4
-                            py-4
-                            transition
-                            hover:bg-slate-700
+                            justify-center
+                            rounded-xl
+                            bg-sky-500
+                            text-sm
+                            font-bold
+                            text-white
                           "
                         >
+                          {moduleIndex + 1}
+                        </span>
 
-                          <span
-                            className="
-                              flex
-                              h-9
-                              w-9
-                              shrink-0
-                              items-center
-                              justify-center
-                              rounded-xl
-                              bg-sky-500
-                              text-sm
-                              font-bold
-                              text-white
-                            "
-                          >
-                            {moduleIndex + 1}
-                          </span>
-
-                          <span
-                            className="
-                              min-w-0
-                              flex-1
-                              text-base
-                              font-bold
-                              leading-6
-                              text-white
-                            "
-                          >
-                            {module.title}
-                          </span>
-
-                          <span
-                            className="
-                              text-sm
-                              text-slate-400
-                              transition
-                              group-open:rotate-180
-                            "
-                          >
-                            ▲
-                          </span>
-
-                        </summary>
-
-                        {/* LESSON LIST */}
-
-                        <div
+                        <span
                           className="
-                            border-t
-                            border-slate-700
-                            px-3
-                            py-3
+                            min-w-0
+                            flex-1
+                            text-base
+                            font-bold
+                            leading-6
+                            text-white
                           "
                         >
+                          {module.title}
+                        </span>
 
-                          {modulePages.map(
-                            (
-                              lesson,
-                              lessonIndex
-                            ) => {
+                        <span
+                          className="
+                            text-sm
+                            text-slate-400
+                            transition
+                            group-open:rotate-180
+                          "
+                        >
+                          ▲
+                        </span>
+                      </summary>
 
-                              const isCurrent =
-                                lesson.id ===
-                                current.id;
+                      {/* LESSON LIST */}
 
-                              return (
-                                <Link
-                                  key={
-                                    lesson.id
+                      <div
+                        className="
+                          border-t
+                          border-slate-700
+                          px-3
+                          py-3
+                        "
+                      >
+                        {modulePages.map(
+                          (lesson, lessonIndex) => {
+                            const isCurrent =
+                              lesson.id === current.id;
+
+                            return (
+                              <Link
+                                key={lesson.id}
+                                href={`/lesson/${courseId}/${module.id}/${lesson.id}`}
+                                className={`
+                                  mb-1
+                                  flex
+                                  items-start
+                                  gap-3
+                                  rounded-xl
+                                  px-3
+                                  py-3
+                                  text-sm
+                                  leading-5
+                                  transition
+
+                                  ${
+                                    isCurrent
+                                      ? "bg-green-600 font-bold text-white"
+                                      : "text-slate-300 hover:bg-slate-800 hover:text-white"
                                   }
-                                  href={`/lesson/${courseId}/${module.id}/${lesson.id}`}
+                                `}
+                              >
+                                <span
                                   className={`
-                                    mb-1
-                                    flex
-                                    items-start
-                                    gap-3
-                                    rounded-xl
-                                    px-3
-                                    py-3
-                                    text-sm
-                                    leading-5
-                                    transition
+                                    shrink-0
+                                    text-xs
 
                                     ${
                                       isCurrent
-                                        ? "bg-green-600 font-bold text-white"
-                                        : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                                        ? "text-green-200"
+                                        : "text-slate-500"
                                     }
                                   `}
                                 >
+                                  {lessonIndex + 1}.
+                                </span>
 
-                                  <span
-                                    className={`
-                                      shrink-0
-                                      text-xs
-
-                                      ${
-                                        isCurrent
-                                          ? "text-green-200"
-                                          : "text-slate-500"
-                                      }
-                                    `}
-                                  >
-                                    {lessonIndex + 1}.
-                                  </span>
-
-                                  <span>
-                                    {lesson.title}
-                                  </span>
-
-                                </Link>
-                              );
-                            }
-                          )}
-
-                        </div>
-
-                      </details>
-                    );
-                  }
-                )}
-
+                                <span>
+                                  {lesson.title}
+                                </span>
+                              </Link>
+                            );
+                          }
+                        )}
+                      </div>
+                    </details>
+                  );
+                })}
               </div>
-
             </div>
-
           </aside>
 
           {/* =================================================
@@ -666,7 +605,6 @@ export default async function LessonPage({
               lg:px-10
             "
           >
-
             <article
               className="
                 w-full
@@ -702,14 +640,8 @@ export default async function LessonPage({
 
               {/* LESSON CONTENT */}
 
-              <div
-                className="
-                  w-full
-                "
-              >
-                {renderContent(
-                  current.content
-                )}
+              <div className="w-full">
+                {renderContent(current.content)}
               </div>
 
               {/* =================================================
@@ -724,12 +656,8 @@ export default async function LessonPage({
                       space-y-7
                     "
                   >
-
                     {current.examples.map(
-                      (
-                        example,
-                        index
-                      ) => (
+                      (example, index) => (
                         <div
                           key={index}
                           className="
@@ -752,7 +680,6 @@ export default async function LessonPage({
                                 py-4
                               "
                             >
-
                               <h3
                                 className="
                                   text-xl
@@ -762,7 +689,6 @@ export default async function LessonPage({
                               >
                                 {example.title}
                               </h3>
-
                             </div>
                           )}
 
@@ -794,14 +720,12 @@ export default async function LessonPage({
                                 border-slate-700
                               "
                             >
-
                               <div
                                 className="
                                   px-6
                                   py-4
                                 "
                               >
-
                                 <p
                                   className="
                                     mb-3
@@ -830,16 +754,13 @@ export default async function LessonPage({
                                     {example.output}
                                   </code>
                                 </pre>
-
                               </div>
-
                             </div>
                           )}
 
                         </div>
                       )
                     )}
-
                   </div>
                 )}
 
@@ -855,7 +776,6 @@ export default async function LessonPage({
                   pt-7
                 "
               >
-
                 <div
                   className="
                     flex
@@ -946,17 +866,13 @@ export default async function LessonPage({
                   )}
 
                 </div>
-
               </div>
 
             </article>
-
           </section>
 
         </div>
-
       </div>
-
     </main>
   );
 }
