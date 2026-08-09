@@ -16,17 +16,14 @@ import lesson13 from "./lesson13";
 import lesson14 from "./lesson14";
 import lesson15 from "./lesson15";
 
-
 const module6 = {
-
   id: "module6",
 
-  title: "Inheritance and Polymorphism",
+  title: "Module 6",
 
   about,
 
   lessons: [
-
     lesson1,
     lesson2,
     lesson3,
@@ -41,11 +38,27 @@ const module6 = {
     lesson12,
     lesson13,
     lesson14,
-    lesson15
-
-  ]
-
+    lesson15,
+  ],
 };
 
+export {
+  about,
+  lesson1,
+  lesson2,
+  lesson3,
+  lesson4,
+  lesson5,
+  lesson6,
+  lesson7,
+  lesson8,
+  lesson9,
+  lesson10,
+  lesson11,
+  lesson12,
+  lesson13,
+  lesson14,
+  lesson15,
+};
 
 export default module6;

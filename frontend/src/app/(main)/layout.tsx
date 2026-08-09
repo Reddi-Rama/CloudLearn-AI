@@ -7,14 +7,16 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div className="min-h-screen w-full">
+
       <Header />
 
-      <main>
+      <main className="w-full">
         {children}
       </main>
 
       <Footer />
-    </>
+
+    </div>
   );
 }

@@ -1,4 +1,5 @@
 import about from "./about";
+
 import lesson1 from "./lesson1";
 import lesson2 from "./lesson2";
 import lesson3 from "./lesson3";
@@ -15,17 +16,14 @@ import lesson13 from "./lesson13";
 import lesson14 from "./lesson14";
 import lesson15 from "./lesson15";
 
-
-export default {
-
+const module2 = {
   id: "module2",
 
-  title: "Variables, Data Types & Operators",
+  title: "Variables and Data Types",
 
   about,
 
   lessons: [
-
     lesson1,
     lesson2,
     lesson3,
@@ -40,8 +38,27 @@ export default {
     lesson12,
     lesson13,
     lesson14,
-    lesson15
-
-  ]
-
+    lesson15,
+  ],
 };
+
+export {
+  about,
+  lesson1,
+  lesson2,
+  lesson3,
+  lesson4,
+  lesson5,
+  lesson6,
+  lesson7,
+  lesson8,
+  lesson9,
+  lesson10,
+  lesson11,
+  lesson12,
+  lesson13,
+  lesson14,
+  lesson15,
+};
+
+export default module2;
