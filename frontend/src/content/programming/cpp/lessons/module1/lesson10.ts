@@ -70,9 +70,7 @@ Some commonly used keywords are:
 
 Example:
 
-\`\`\`cpp
 int age = 20;
-\`\`\`
 
 Here, int is a keyword used to define an integer variable.
 
@@ -84,9 +82,8 @@ Keywords cannot be used as identifiers.
 
 Incorrect example:
 
-\`\`\`cpp
 int class = 10;
-\`\`\`
+
 
 The compiler generates an error because class is a reserved keyword.
 
@@ -112,14 +109,12 @@ Identifiers are used for:
 
 Examples:
 
-\`\`\`
 studentName
 
 calculateTotal
 
 employeeSalary
 
-\`\`\`
 
 
 
@@ -131,20 +126,16 @@ C++ follows specific rules for creating identifiers.
 
 Valid:
 
-\`\`\`
 age
 
 _student
 
 totalMarks
-\`\`\`
 
 
 Invalid:
 
-\`\`\`
 2value
-\`\`\`
 
 
 
@@ -152,15 +143,11 @@ Invalid:
 
 Invalid:
 
-\`\`\`
 student name
-\`\`\`
 
 Valid:
 
-\`\`\`
 studentName
-\`\`\`
 
 
 
@@ -168,9 +155,7 @@ studentName
 
 Invalid:
 
-\`\`\`
 int class;
-\`\`\`
 
 
 
@@ -180,11 +165,9 @@ C++ treats uppercase and lowercase letters differently.
 
 Example:
 
-\`\`\`
 Age
 
 age
-\`\`\`
 
 Both are different identifiers.
 
@@ -208,15 +191,11 @@ Example:
 
 Good:
 
-\`\`\`cpp
 employeeSalary
-\`\`\`
 
 Poor:
 
-\`\`\`cpp
 es
-\`\`\`
 
 
 
@@ -224,13 +203,11 @@ es
 
 Consider a banking application:
 
-\`\`\`cpp
 double accountBalance;
 
 string customerName;
 
 int accountNumber;
-\`\`\`
 
 These identifiers clearly describe their purpose.
 
