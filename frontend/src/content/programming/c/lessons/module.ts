@@ -9,11 +9,8 @@ import module8 from "./module8";
 import module9 from "./module9";
 import module10 from "./module10";
 import module11 from "./module11";
-import module12 from "./module12";
-import module13 from "./module13";
 
 export const modules = [
-
   module1,
   module2,
   module3,
@@ -25,7 +22,4 @@ export const modules = [
   module9,
   module10,
   module11,
-  module12,
-  module13,
-
 ];

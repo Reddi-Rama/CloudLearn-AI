@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { modules as pythonModules } from "@/content/programming/python/lessons/module";
 import { modules as cppModules } from "@/content/programming/cpp/lessons/module";
 import { modules as javaModules } from "@/content/programming/java/lessons/module";
+import { modules as cModules } from "@/content/programming/c/lessons/module";
 
 interface PageProps {
   params: Promise<{
@@ -1235,6 +1236,10 @@ function getCourseModules(
     return javaModules as ModuleData[];
   }
 
+  if (courseId === "c-development") {
+    return cModules as ModuleData[];
+  }
+
   return null;
 }
 
@@ -1255,6 +1260,10 @@ function getCourseName(courseId: string) {
 
   if (courseId === "java-development") {
     return "Java Development";
+  }
+
+  if (courseId === "c-development") {
+    return "C Programming";
   }
 
   return courseId
