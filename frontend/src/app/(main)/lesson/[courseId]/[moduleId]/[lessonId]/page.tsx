@@ -1588,11 +1588,11 @@ export default async function LessonPage({
                 "
               >
 
-                {modules.map(
-                  (
-                    module,
-                    moduleIndex
-                  ) => {
+                {modules.map((module, moduleIndex) => {
+                  
+                    
+                    
+                  
 
                     const isCurrentModule =
                       module.id ===
@@ -1607,7 +1607,9 @@ export default async function LessonPage({
 
                     return (
                       <details
-                        key={module.id}
+  key={`${courseId}-${module.id}-${moduleIndex}`}
+ 
+                        
                         open={
                           isCurrentModule
                         }
@@ -1696,11 +1698,11 @@ export default async function LessonPage({
                           "
                         >
 
-                          {modulePages.map(
-                            (
-                              lesson,
-                              lessonIndex
-                            ) => {
+                          {module.lessons.map((lesson, lessonIndex) => {
+                            
+                              
+                              
+                            
 
                               const isCurrent =
                                 lesson.id ===
@@ -1709,9 +1711,10 @@ export default async function LessonPage({
 
                               return (
                                 <Link
-                                  key={
-                                    lesson.id
-                                  }
+  key={`${courseId}-${module.id}-${lesson.id}-${lessonIndex}`}
+                                  
+                                    
+                                  
                                   href={`/lesson/${courseId}/${module.id}/${lesson.id}`}
                                   className={`
                                     mb-1
