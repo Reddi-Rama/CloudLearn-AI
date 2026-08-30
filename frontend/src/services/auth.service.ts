@@ -1,28 +1,67 @@
-import { auth } from "@/lib";
+import { API } from "@/lib/api";
 
 export const authService = {
   async login(email: string, password: string) {
-    console.log("Login", email, password);
+    const response = await fetch(
+      `${API.BASE_URL}${API.ENDPOINTS.LOGIN}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      }
+    );
 
-    auth.login("demo-token");
+    const data = await response.json();
 
-    return {
-      success: true,
-      token: "demo-token",
-    };
+    if (!response.ok || !data.success) {
+      throw new Error(
+        data.message || "Login failed"
+      );
+    }
+
+    // Handle both possible backend response formats
+    const result = data.data;
+
+    if (result?.user) {
+      return {
+        ...result.user,
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+      };
+    }
+
+    return result;
   },
 
   async register(data: unknown) {
-    console.log(data);
+    const response = await fetch(
+      `${API.BASE_URL}${API.ENDPOINTS.REGISTER}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
 
-    return {
-      success: true,
-    };
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || "Registration failed"
+      );
+    }
+
+    return result.data;
   },
 
   async logout() {
-    auth.logout();
-
     return {
       success: true,
     };

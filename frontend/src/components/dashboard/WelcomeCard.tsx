@@ -1,38 +1,51 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Flame, Sparkles } from "lucide-react";
+import { getUser } from "@/lib/auth";
 
 export default function WelcomeCard() {
+  const [userName, setUserName] = useState("Student");
+
+  useEffect(() => {
+    const user = getUser();
+
+    if (user) {
+      const name =
+        user.name ||
+        user.fullName ||
+        user.username ||
+        user.email?.split("@")[0] ||
+        "Student";
+
+      setUserName(name);
+    }
+  }, []);
+
   return (
     <section className="rounded-[36px] bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-700 p-10 text-white shadow-2xl">
-
       <div className="flex flex-col justify-between gap-10 lg:flex-row lg:items-center">
 
         {/* Left */}
-
         <div>
 
           <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2">
-
             <Sparkles size={18} />
 
             <span className="text-sm font-medium">
               Welcome Back
             </span>
-
           </div>
 
           <h1 className="text-5xl font-black leading-tight">
-            Hello, Rama 👋
+            Hello, {userName} 👋
           </h1>
 
-          <p className="mt-6 max-w-2xl text-lg text-blue-100 leading-8">
-
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-blue-100">
             Continue your cloud learning journey. You're making
             excellent progress toward becoming an industry-ready
             engineer.
-
           </p>
 
           <Link
@@ -40,14 +53,12 @@ export default function WelcomeCard() {
             className="mt-8 inline-flex items-center gap-3 rounded-2xl bg-white px-7 py-4 font-semibold text-blue-700 transition hover:scale-105"
           >
             Continue Learning
-
             <ArrowRight size={20} />
           </Link>
 
         </div>
 
         {/* Right */}
-
         <div className="rounded-[32px] bg-white/15 p-8 backdrop-blur-lg">
 
           <div className="flex items-center gap-3">
@@ -94,7 +105,6 @@ export default function WelcomeCard() {
         </div>
 
       </div>
-
     </section>
   );
 }

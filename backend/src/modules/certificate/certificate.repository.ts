@@ -10,7 +10,11 @@ export const certificateRepository = {
   }) {
     return prisma.certificate.create({
       data: {
-        ...data,
+        certificateId: data.certificateId,
+        userId: data.userId,
+        courseSlug: data.courseSlug,
+        courseTitle: data.courseTitle,
+        filePath: data.filePath,
         paymentStatus: true,
       },
     });
@@ -35,6 +39,17 @@ export const certificateRepository = {
       where: {
         userId,
         courseSlug,
+      },
+    });
+  },
+
+  async findUserCertificates(userId: string) {
+    return prisma.certificate.findMany({
+      where: {
+        userId,
+      },
+      orderBy: {
+        issuedAt: "desc",
       },
     });
   },

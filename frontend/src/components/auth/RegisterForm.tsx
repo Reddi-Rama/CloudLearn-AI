@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import AuthInput from "./AuthInput";
 import PasswordInput from "./PasswordInput";
@@ -13,24 +14,60 @@ import LoadingButton from "./LoadingButton";
 import FormError from "./FormError";
 import FormSuccess from "./FormSuccess";
 
+import { authService } from "@/services/auth.service";
+import { login } from "@/lib/auth";
+
 export default function RegisterForm() {
+  const router = useRouter();
+
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
 
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const [error] = useState("");
-
-  const [success] = useState("");
-
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    setError("");
+    setSuccess("");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
 
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      const data = await authService.register({
+        fullName,
+        email,
+        password,
+        phone,
+      });
+
+      // Save the newly registered user
+      login(data);
+
+      setSuccess("Account created successfully!");
+
+      // Go directly to Home
+      router.replace("/");
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Registration failed"
+      );
+
       setLoading(false);
-    }, 1500);
+    }
   }
 
   return (
@@ -41,18 +78,26 @@ export default function RegisterForm() {
       <AuthInput
         label="Full Name"
         placeholder="John Doe"
+        value={fullName}
+        onChange={(e) => setFullName(e.target.value)}
+        required
       />
 
       <AuthInput
         label="Email"
         type="email"
         placeholder="john@example.com"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
       />
 
       <AuthInput
         label="Phone Number"
         type="tel"
         placeholder="+91 9876543210"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
       />
 
       <PasswordInput
@@ -60,6 +105,7 @@ export default function RegisterForm() {
         placeholder="Create Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        required
       />
 
       <PasswordStrength password={password} />
@@ -67,6 +113,9 @@ export default function RegisterForm() {
       <PasswordInput
         label="Confirm Password"
         placeholder="Confirm Password"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        required
       />
 
       <TermsCheckbox />
@@ -93,9 +142,7 @@ export default function RegisterForm() {
         >
           Login
         </Link>
-
       </p>
-
     </form>
   );
 }

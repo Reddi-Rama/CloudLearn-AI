@@ -1,25 +1,35 @@
 import { certificateRepository } from "./certificate.repository";
-import { generateCertificate } from "../../generators/certificate.generator";
+import { generateCertificate as generateCertificatePdf } from "../../generators/certificate.generator";
 import { generateCertificateId } from "../../utils/certificateId";
 import { prisma } from "../../lib/prisma";
 
 export const certificateService = {
+  /**
+   * Generate a certificate for a completed course
+   */
   async generate(
     userId: string,
     courseSlug: string,
     courseTitle: string
   ) {
-    // Check if certificate already exists
-    const existing = await certificateRepository.findUserCertificate(
-      userId,
-      courseSlug
-    );
+    if (!courseSlug || !courseTitle) {
+      throw new Error(
+        "Course slug and course title are required"
+      );
+    }
+
+    // Check whether the user already has this certificate
+    const existing =
+      await certificateRepository.findUserCertificate(
+        userId,
+        courseSlug
+      );
 
     if (existing) {
       return existing;
     }
 
-    // Get user details
+    // Get user information
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
@@ -31,28 +41,42 @@ export const certificateService = {
     }
 
     // Generate unique certificate ID
-    const certificateId = generateCertificateId(courseSlug);
+    const certificateId =
+      generateCertificateId(courseSlug);
 
-    // Generate PDF
-    const filePath = await generateCertificate({
+    // Generate certificate PDF
+    const filePath = await generateCertificatePdf({
       studentName: user.fullName,
       courseTitle,
       certificateId,
       issueDate: new Date().toLocaleDateString("en-IN"),
     });
 
-    // Save in database
-    const certificate = await certificateRepository.create({
-      certificateId,
-      userId,
-      courseSlug,
-      courseTitle,
-      filePath,
-    });
+    // Store certificate in database
+    const certificate =
+      await certificateRepository.create({
+        certificateId,
+        userId,
+        courseSlug,
+        courseTitle,
+        filePath,
+      });
 
     return certificate;
   },
 
+  /**
+   * Get all certificates belonging to one user
+   */
+  async getUserCertificates(userId: string) {
+    return certificateRepository.findUserCertificates(
+      userId
+    );
+  },
+
+  /**
+   * Find certificate by certificate ID
+   */
   async findByCertificateId(certificateId: string) {
     return certificateRepository.findByCertificateId(
       certificateId

@@ -8,20 +8,21 @@ datasource db {
 }
 
 model User {
-  id                 String       @id @default(cuid())
+  id                 String        @id @default(cuid())
   fullName           String
-  email              String       @unique
+  email              String        @unique
   password           String
   avatar             String?
+  isVerified         Boolean       @default(false)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  role               Role          @default(STUDENT)
   refreshToken       String?
   refreshTokenExpiry DateTime?
-  isVerified         Boolean      @default(false)
-  createdAt          DateTime     @default(now())
-  updatedAt          DateTime     @updatedAt
-  role               Role         @default(STUDENT)
+  certificates       Certificate[]
   enrollments        Enrollment[]
-  progress Progress[]
-  certificates Certificate[]
+  Payment            Payment[]
+  progress           Progress[]
 }
 
 model Domain {
@@ -57,27 +58,23 @@ model Module {
   title     String
   position  Int
   createdAt DateTime @default(now())
-
-  courseId String
-
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-
-  lessons Lesson[]
+  courseId  String
+  lessons   Lesson[]
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }
 
 model Lesson {
   id                String   @id @default(cuid())
   title             String
-  slug              String   @unique
   content           String
   position          Int
+  createdAt         DateTime @default(now())
+  moduleId          String
   estimatedReadTime Int
   isPublished       Boolean  @default(true)
-  createdAt         DateTime @default(now())
+  slug              String   @unique
   updatedAt         DateTime @updatedAt
-
-  moduleId String
-  module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  module            Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
 }
 
 model Enrollment {
@@ -91,6 +88,46 @@ model Enrollment {
   user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
+}
+
+model Progress {
+  id          String    @id @default(cuid())
+  userId      String
+  courseSlug  String
+  moduleSlug  String
+  lessonSlug  String
+  completed   Boolean   @default(false)
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonSlug])
+}
+
+model Certificate {
+  id            String   @id @default(cuid())
+  certificateId String   @unique
+  userId        String
+  courseSlug    String
+  courseTitle   String
+  filePath      String
+  paymentStatus Boolean  @default(true)
+  issuedAt      DateTime @default(now())
+  createdAt     DateTime @default(now())
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id                String        @id
+  userId            String
+  courseSlug        String
+  amount            Float
+  status            PaymentStatus @default(PENDING)
+  razorpayOrderId   String?
+  razorpayPaymentId String?
+  createdAt         DateTime      @default(now())
+  User              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum Role {
@@ -108,41 +145,9 @@ enum EnrollmentStatus {
   ACTIVE
   COMPLETED
 }
-model Progress {
-  id          String   @id @default(cuid())
 
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  courseSlug  String
-  moduleSlug  String
-  lessonSlug  String
-
-  completed   Boolean  @default(false)
-
-  completedAt DateTime?
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@unique([userId, lessonSlug])
-}
-model Certificate {
-  id             String   @id @default(cuid())
-
-  certificateId  String   @unique
-
-  userId         String
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  courseSlug     String
-  courseTitle    String
-
-  filePath       String
-
-  paymentStatus  Boolean  @default(true)
-
-  issuedAt       DateTime @default(now())
-
-  createdAt      DateTime @default(now())
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
 }

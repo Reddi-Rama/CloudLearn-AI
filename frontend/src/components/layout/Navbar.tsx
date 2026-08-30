@@ -16,6 +16,10 @@ const links = [
     href: "/learning-paths",
   },
   {
+    title: "My Certificates",
+    href: "/my-certificates",
+  },
+  {
     title: "About",
     href: "/about",
   },
@@ -28,21 +32,15 @@ const links = [
 export default function Navbar() {
   return (
     <nav className="hidden lg:flex items-center gap-8">
-
       {links.map((link) => (
-
         <Link
           key={link.title}
           href={link.href}
           className="font-medium text-slate-700 transition hover:text-sky-600"
         >
-
           {link.title}
-
         </Link>
-
       ))}
-
     </nav>
   );
 }
