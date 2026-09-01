@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
+import MouseGlow from "@/components/effects/MouseGlow";
+import BackButton from "@/components/layout/BackButton";
+import NavigationLoading from "@/components/layout/NavigationLoading";
+
 import "./globals.css";
 
 import { AppProvider } from "../providers";
-import NavigationLoading from "@/components/layout/NavigationLoading";
 
 export const metadata: Metadata = {
   title: {
     default: "CloudLearn AI",
     template: "%s | CloudLearn AI",
   },
+
   description:
     "A modern cloud-based learning platform for B.Tech students.",
 
@@ -56,6 +60,10 @@ export default function RootLayout({
       <body className="min-h-screen bg-slate-50 text-slate-900 antialiased">
 
         <NavigationLoading />
+
+        <BackButton />
+
+        <MouseGlow />
 
         <AppProvider>
           {children}

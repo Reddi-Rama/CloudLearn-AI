@@ -8,8 +8,7 @@ import CTA from "@/components/home/CTA";
 
 export default function AboutPage() {
   return (
-    <main className="overflow-hidden">
-
+    <main className="about-page min-h-screen overflow-hidden">
       <AboutHero />
 
       <Mission />
@@ -23,7 +22,6 @@ export default function AboutPage() {
       <Journey />
 
       <CTA />
-
     </main>
   );
 }

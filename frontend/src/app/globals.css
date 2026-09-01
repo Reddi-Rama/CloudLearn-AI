@@ -1,314 +1,837 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ============================================
-   GOOGLE FONT
-============================================ */
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
-
-/* ============================================
+/* ============================================================
    ROOT COLORS
-============================================ */
+============================================================ */
 
 :root {
-  --background: #f7fbff;
+  --background: #f7faff;
   --foreground: #0f172a;
 
-  --primary: #2563eb;
-  --primary-light: #dbeafe;
+  --primary: #0284c7;
+  --primary-light: #e0f2fe;
 
-  --secondary: #7c3aed;
-  --secondary-light: #ede9fe;
+  --secondary: #6366f1;
+  --secondary-light: #eef2ff;
 
-  --border: #dbeafe;
+  --border: #dbe7f3;
 
-  --card: rgba(255,255,255,.75);
+  --card: rgba(255, 255, 255, 0.82);
 
   --muted: #64748b;
 
   --shadow:
-    0 8px 30px rgba(37,99,235,.08);
+    0 12px 40px rgba(15, 23, 42, 0.07);
 
   --radius: 22px;
 }
 
-/* ============================================
+
+/* ============================================================
    DARK MODE
-============================================ */
+============================================================ */
 
-.dark{
+.dark {
+  --background: #020617;
+  --foreground: #f8fafc;
 
-  --background:#020617;
+  --card: rgba(15, 23, 42, 0.82);
 
-  --foreground:#f8fafc;
+  --border: #26354d;
 
-  --card:rgba(15,23,42,.75);
-
-  --border:#334155;
-
-  --muted:#cbd5e1;
+  --muted: #cbd5e1;
 }
 
-/* ============================================
+
+/* ============================================================
    RESET
-============================================ */
+============================================================ */
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-html{
 
-  scroll-behavior:smooth;
+/* ============================================================
+   HTML
+============================================================ */
 
+html {
+  scroll-behavior: smooth;
 }
 
-body{
 
-  font-family:"Inter",sans-serif;
+/* ============================================================
+   BODY
+   Main global website background
+============================================================ */
 
-  background:var(--background);
+body {
+  position: relative;
 
-  color:var(--foreground);
+  min-height: 100vh;
 
-  overflow-x:hidden;
+  font-family: "Inter", sans-serif;
 
-}
+  color: var(--foreground);
 
-/* ============================================
-   SCROLLBAR
-============================================ */
-
-::-webkit-scrollbar{
-
-  width:8px;
-
-}
-
-::-webkit-scrollbar-thumb{
-
-  background:#93c5fd;
-
-  border-radius:999px;
-
-}
-
-::-webkit-scrollbar-track{
-
-  background:#eff6ff;
-
-}
-
-/* ============================================
-   SECTIONS
-============================================ */
-
-.section{
-
-  padding:100px 0;
-
-}
-
-.container-custom{
-
-  width:100%;
-
-  max-width:1280px;
-
-  margin:auto;
-
-  padding-inline:24px;
-
-}
-
-/* ============================================
-   GLASS CARD
-============================================ */
-
-.glass-card{
-
-  background:rgba(255,255,255,.72);
-
-  backdrop-filter:blur(18px);
-
-  border:1px solid rgba(255,255,255,.5);
-
-  box-shadow:var(--shadow);
-
-}
-
-/* ============================================
-   BUTTONS
-============================================ */
-
-.btn-primary{
-
-  display:inline-flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  gap:10px;
-
-  padding:14px 28px;
-
-  background:var(--primary);
-
-  color:white;
-
-  border-radius:999px;
-
-  transition:.3s;
-
-  font-weight:600;
-
-}
-
-.btn-primary:hover{
-
-  transform:translateY(-2px);
-
-  background:#1d4ed8;
-
-}
-
-.btn-secondary{
-
-  display:inline-flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  gap:10px;
-
-  padding:14px 28px;
-
-  border-radius:999px;
-
-  border:1px solid var(--border);
-
-  background:white;
-
-  transition:.3s;
-
-}
-
-.btn-secondary:hover{
-
-  background:#eff6ff;
-
-}
-
-/* ============================================
-   TITLES
-============================================ */
-
-.heading{
-
-  font-size:clamp(2.2rem,5vw,4rem);
-
-  line-height:1.1;
-
-  font-weight:800;
-
-}
-
-.sub-heading{
-
-  font-size:clamp(1.2rem,2vw,1.5rem);
-
-  color:var(--muted);
-
-  line-height:1.8;
-
-}
-
-/* ============================================
-   CLOUD BACKGROUND
-============================================ */
-
-.cloud-bg{
-
-  position:fixed;
-
-  inset:0;
-
-  z-index:-10;
-
-  overflow:hidden;
+  overflow-x: hidden;
 
   background:
+    radial-gradient(
+      circle at 8% 8%,
+      rgba(186, 230, 253, 0.42),
+      transparent 26%
+    ),
+    radial-gradient(
+      circle at 92% 15%,
+      rgba(207, 250, 254, 0.36),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 78% 72%,
+      rgba(224, 231, 255, 0.26),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 22% 88%,
+      rgba(219, 234, 254, 0.22),
+      transparent 28%
+    ),
+    linear-gradient(
+      135deg,
+      #f8fbff 0%,
+      #f4f9ff 45%,
+      #f8fbff 100%
+    );
 
-  radial-gradient(circle at top,#dbeafe 0%,#eff6ff 45%,#f8fbff 100%);
-
+  background-attachment: fixed;
 }
 
-/* ============================================
+
+/* ============================================================
+   DARK MODE BODY
+============================================================ */
+
+.dark body {
+  background:
+    radial-gradient(
+      circle at 10% 10%,
+      rgba(14, 116, 144, 0.10),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 90% 20%,
+      rgba(37, 99, 235, 0.08),
+      transparent 28%
+    ),
+    linear-gradient(
+      135deg,
+      #020617 0%,
+      #030b1d 50%,
+      #020617 100%
+    );
+}
+
+
+/* ============================================================
+   SUBTLE GLOBAL ATMOSPHERE
+============================================================ */
+
+body::before {
+  content: "";
+
+  position: fixed;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  z-index: -1;
+
+  opacity: 0.55;
+
+  background:
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      rgba(56, 189, 248, 0.025) 35%,
+      rgba(99, 102, 241, 0.02) 65%,
+      transparent 100%
+    );
+
+  background-size: 180% 180%;
+
+  animation:
+    ambientMove 18s ease-in-out infinite alternate;
+}
+
+
+/* ============================================================
+   VERY SUBTLE GRID TEXTURE
+============================================================ */
+
+body::after {
+  content: "";
+
+  position: fixed;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  z-index: -2;
+
+  opacity: 0.18;
+
+  background-image:
+    linear-gradient(
+      rgba(148, 163, 184, 0.035) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(148, 163, 184, 0.035) 1px,
+      transparent 1px
+    );
+
+  background-size: 48px 48px;
+}
+
+
+/* ============================================================
+   AMBIENT ANIMATION
+============================================================ */
+
+@keyframes ambientMove {
+  0% {
+    background-position: 0% 20%;
+  }
+
+  50% {
+    background-position: 60% 70%;
+  }
+
+  100% {
+    background-position: 100% 20%;
+  }
+}
+
+
+/* ============================================================
+   SCROLLBAR
+============================================================ */
+
+::-webkit-scrollbar {
+  width: 9px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    #7dd3fc,
+    #38bdf8
+  );
+
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-track {
+  background: #eef5fb;
+}
+
+
+/* ============================================================
+   SECTIONS
+============================================================ */
+
+.section {
+  padding: 100px 0;
+}
+
+.container-custom {
+  width: 100%;
+
+  max-width: 1280px;
+
+  margin: auto;
+
+  padding-inline: 24px;
+}
+
+
+/* ============================================================
+   GLASS CARD
+============================================================ */
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.76);
+
+  backdrop-filter: blur(18px);
+
+  -webkit-backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255, 255, 255, 0.72);
+
+  box-shadow:
+    0 12px 35px rgba(15, 23, 42, 0.07);
+}
+
+
+/* ============================================================
+   BUTTONS
+============================================================ */
+
+.btn-primary {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  padding: 14px 28px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0284c7,
+      #0ea5e9
+    );
+
+  color: white;
+
+  border-radius: 999px;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    filter 0.3s ease;
+
+  font-weight: 600;
+
+  box-shadow:
+    0 8px 24px rgba(14, 165, 233, 0.18);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+
+  filter: brightness(1.04);
+
+  box-shadow:
+    0 14px 32px rgba(14, 165, 233, 0.25);
+}
+
+
+.btn-secondary {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  padding: 14px 28px;
+
+  border-radius: 999px;
+
+  border: 1px solid var(--border);
+
+  background: rgba(255, 255, 255, 0.82);
+
+  color: var(--foreground);
+
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+
+  box-shadow:
+    0 6px 20px rgba(15, 23, 42, 0.05);
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+
+  background: #ffffff;
+
+  box-shadow:
+    0 12px 28px rgba(15, 23, 42, 0.08);
+}
+
+
+/* ============================================================
+   TITLES
+============================================================ */
+
+.heading {
+  font-size: clamp(2.2rem, 5vw, 4rem);
+
+  line-height: 1.1;
+
+  font-weight: 800;
+
+  letter-spacing: -0.035em;
+}
+
+.sub-heading {
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+
+  color: var(--muted);
+
+  line-height: 1.8;
+}
+
+
+/* ============================================================
+   CLOUD BACKGROUND
+============================================================ */
+
+.cloud-bg {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: -10;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 10% 10%,
+      rgba(186, 230, 253, 0.38),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 90% 20%,
+      rgba(207, 250, 254, 0.30),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 70% 85%,
+      rgba(224, 231, 255, 0.22),
+      transparent 30%
+    ),
+    linear-gradient(
+      135deg,
+      #f8fbff 0%,
+      #f3f8ff 50%,
+      #f8fbff 100%
+    );
+}
+
+
+/* ============================================================
    FLOATING
-============================================ */
+============================================================ */
 
-@keyframes float{
-
-  0%{
-
-    transform:translateY(0px);
-
+@keyframes float {
+  0% {
+    transform: translateY(0px);
   }
 
-  50%{
-
-    transform:translateY(-18px);
-
+  50% {
+    transform: translateY(-18px);
   }
 
-  100%{
-
-    transform:translateY(0px);
-
+  100% {
+    transform: translateY(0px);
   }
-
 }
 
-.float{
-
-  animation:float 6s ease-in-out infinite;
-
+.float {
+  animation: float 6s ease-in-out infinite;
 }
 
-.float-slow{
-
-  animation:float 10s ease-in-out infinite;
-
+.float-slow {
+  animation: float 10s ease-in-out infinite;
 }
 
-.float-fast{
-
-  animation:float 4s ease-in-out infinite;
-
+.float-fast {
+  animation: float 4s ease-in-out infinite;
 }
 
-/* ============================================
+
+/* ============================================================
+   HOVER LIFT
+============================================================ */
+
+.hover-lift {
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-6px);
+
+  box-shadow:
+    0 20px 45px rgba(15, 23, 42, 0.12);
+}
+
+
+/* ============================================================
+   PREMIUM SURFACE
+============================================================ */
+
+.surface {
+  background:
+    rgba(255, 255, 255, 0.78);
+
+  backdrop-filter: blur(18px);
+
+  -webkit-backdrop-filter: blur(18px);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.72);
+
+  box-shadow:
+    0 12px 40px rgba(15, 23, 42, 0.06);
+}
+
+
+/* ============================================================
+   LEARNING PATHS
+   One continuous background
+============================================================ */
+
+.learning-paths-page {
+  position: relative;
+
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 12% 12%,
+      rgba(186, 230, 253, 0.30),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 88% 28%,
+      rgba(207, 250, 254, 0.22),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 50% 90%,
+      rgba(224, 231, 255, 0.18),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      #f8fbff 0%,
+      #f4f9ff 48%,
+      #f8fbff 100%
+    );
+
+  background-attachment: fixed;
+}
+
+
+/*
+   Remove backgrounds from the major sections
+   so the page remains one continuous canvas.
+*/
+
+.learning-paths-page > * {
+  background-color: transparent !important;
+}
+
+
+/*
+   Remove background images from top-level sections.
+*/
+
+.learning-paths-page > * {
+  background-image: none;
+}
+
+
+/* ============================================================
+   DOMAINS
+   One continuous background
+============================================================ */
+
+.domains-page {
+  position: relative;
+
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 12% 12%,
+      rgba(186, 230, 253, 0.30),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 88% 25%,
+      rgba(207, 250, 254, 0.22),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 50% 85%,
+      rgba(224, 231, 255, 0.18),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      #f8fbff 0%,
+      #f4f9ff 48%,
+      #f8fbff 100%
+    );
+
+  background-attachment: fixed;
+}
+
+
+/*
+   Remove section backgrounds.
+*/
+
+.domains-page > * {
+  background-color: transparent !important;
+}
+
+.domains-page > * {
+  background-image: none;
+}
+
+
+/* ============================================================
+   ABOUT
+   One continuous background
+============================================================ */
+
+.about-page {
+  position: relative;
+
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 10% 8%,
+      rgba(186, 230, 253, 0.32),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 90% 22%,
+      rgba(207, 250, 254, 0.25),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 72% 58%,
+      rgba(224, 231, 255, 0.20),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 25% 90%,
+      rgba(219, 234, 254, 0.18),
+      transparent 30%
+    ),
+    linear-gradient(
+      135deg,
+      #f8fbff 0%,
+      #f4f9ff 48%,
+      #f8fbff 100%
+    );
+
+  background-attachment: fixed;
+}
+
+
+/*
+   IMPORTANT:
+   Every direct About-page component gets a transparent
+   background. This removes the horizontal bands between
+   AboutHero, Mission, Vision, Stats, WhyChooseUs, Journey
+   and CTA.
+*/
+
+.about-page > * {
+  background-color: transparent !important;
+
+  background-image: none !important;
+}
+
+
+/*
+   Also handle common wrapper elements directly inside
+   About page components.
+*/
+
+.about-page > * > .bg-white,
+.about-page > * > .bg-slate-50,
+.about-page > * > .bg-slate-100,
+.about-page > * > .bg-gray-50,
+.about-page > * > .bg-gray-100 {
+  background-color: transparent !important;
+
+  background-image: none !important;
+}
+
+
+/*
+   Remove full-width separator lines that can visually
+   create another horizontal division.
+*/
+
+.about-page > * {
+  border-top-color: transparent;
+}
+
+
+/* ============================================================
+   GLOBAL CONTENT SURFACE
+   Useful for pages that don't have their own page class
+============================================================ */
+
+.page-surface {
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 12% 10%,
+      rgba(186, 230, 253, 0.26),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 88% 25%,
+      rgba(207, 250, 254, 0.20),
+      transparent 30%
+    ),
+    linear-gradient(
+      135deg,
+      #f8fbff 0%,
+      #f4f9ff 50%,
+      #f8fbff 100%
+    );
+
+  background-attachment: fixed;
+}
+
+
+/* ============================================================
    RESPONSIVE
-============================================ */
+============================================================ */
 
-@media(max-width:768px){
-
-  .section{
-
-    padding:70px 0;
-
+@media (max-width: 768px) {
+  .section {
+    padding: 70px 0;
   }
 
-  .container-custom{
-
-    padding-inline:18px;
-
+  .container-custom {
+    padding-inline: 18px;
   }
 
+  body::after {
+    background-size: 38px 38px;
+
+    opacity: 0.12;
+  }
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+
+    animation-iteration-count: 1 !important;
+
+    transition-duration: 0.01ms !important;
+  }
+}
+/* ============================================================
+   CONTACT PAGE
+   SINGLE CONTINUOUS BACKGROUND
+============================================================ */
+
+.contact-page {
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 10% 8%,
+      rgba(186, 230, 253, 0.30),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 90% 20%,
+      rgba(207, 250, 254, 0.24),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 75% 60%,
+      rgba(224, 231, 255, 0.20),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 20% 90%,
+      rgba(219, 234, 254, 0.18),
+      transparent 30%
+    ),
+    linear-gradient(
+      135deg,
+      #f8fbff 0%,
+      #f4f9ff 48%,
+      #f8fbff 100%
+    );
+
+  background-attachment: fixed;
+}
+
+
+/* ============================================================
+   MAKE CONTACT SECTIONS USE THE SAME CANVAS
+============================================================ */
+
+.contact-page > * {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+
+/* The middle form/info wrapper is also transparent */
+.contact-page > div {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+
+/* ============================================================
+   PRESERVE ACTUAL WHITE CARDS
+============================================================ */
+
+.contact-page .bg-white {
+  background-color: #ffffff !important;
+}
+
+
+/* Preserve glass surfaces */
+.contact-page .glass-card {
+  background: rgba(255, 255, 255, 0.76) !important;
+}
+
+
+/* Preserve premium surfaces */
+.contact-page .surface {
+  background: rgba(255, 255, 255, 0.78) !important;
 }

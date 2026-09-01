@@ -6,16 +6,13 @@ import MapSection from "@/components/contact/MapSection";
 
 export default function ContactPage() {
   return (
-    <main>
+    <main className="contact-page min-h-screen overflow-hidden">
 
       <ContactHero />
 
-      <div className="mx-auto grid max-w-7xl gap-12 px-6 py-24 lg:grid-cols-2">
-
+      <div className="mx-auto grid max-w-7xl gap-12 bg-transparent px-6 py-24 lg:grid-cols-2">
         <ContactForm />
-
         <ContactInfo />
-
       </div>
 
       <FAQPreview />

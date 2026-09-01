@@ -1,260 +1,187 @@
-"use client";
-
 import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer
-      className="
-      w-full
-      bg-white
-      text-slate-700
-      "
-    >
+    <footer className="border-t border-slate-200 bg-white">
 
-      <div
-        className="
-        mx-auto
-        w-full
-        max-w-7xl
-        px-6
-        py-14
-        "
-      >
+      <div className="mx-auto max-w-7xl px-6 py-16">
 
-        <div
-          className="
-          grid
-          w-full
-          grid-cols-1
-          gap-8
-          sm:grid-cols-2
-          lg:grid-cols-4
-          "
-        >
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
 
-          {/* Brand */}
+          {/* ====================================================
+              BRAND
+          ==================================================== */}
 
-          <div className="min-w-0">
-
-            <h2
+          <div>
+            <Link
+              href="/"
               className="
-              text-2xl
-              font-bold
-              text-sky-600
+                inline-block
+                text-2xl
+                font-extrabold
+                tracking-tight
+                text-sky-600
+                transition
+                hover:text-sky-700
               "
             >
               CloudLearn AI
-            </h2>
+            </Link>
 
             <p
               className="
-              mt-4
-              max-w-sm
-              text-sm
-              leading-7
-              text-slate-600
+                mt-5
+                max-w-sm
+                text-base
+                leading-7
+                text-slate-600
               "
             >
               Learn modern technology skills through structured
               cloud-based learning paths and hands-on projects.
             </p>
-
           </div>
 
 
-          {/* Platform */}
+          {/* ====================================================
+              PLATFORM
+          ==================================================== */}
 
           <div>
-
-            <h3
-              className="
-              text-lg
-              font-semibold
-              text-slate-900
-              "
-            >
+            <h3 className="text-base font-bold text-slate-900">
               Platform
             </h3>
 
-            <div
-              className="
-              mt-4
-              flex
-              flex-col
-              gap-3
-              text-slate-600
-              "
-            >
+            <nav className="mt-6 flex flex-col gap-4">
 
               <Link
                 href="/courses"
-                className="transition hover:text-sky-600"
+                className="text-slate-600 transition hover:text-sky-600"
               >
                 Courses
               </Link>
 
               <Link
                 href="/domains"
-                className="transition hover:text-sky-600"
+                className="text-slate-600 transition hover:text-sky-600"
               >
                 Domains
               </Link>
 
               <Link
                 href="/learning-paths"
-                className="transition hover:text-sky-600"
+                className="text-slate-600 transition hover:text-sky-600"
               >
                 Learning Paths
               </Link>
 
               <Link
-                href="/certificates"
-                className="transition hover:text-sky-600"
+                href="/certificate"
+                className="text-slate-600 transition hover:text-sky-600"
               >
                 Certificates
               </Link>
 
-            </div>
-
+            </nav>
           </div>
 
 
-          {/* Company */}
+          {/* ====================================================
+              COMPANY
+          ==================================================== */}
 
           <div>
-
-            <h3
-              className="
-              text-lg
-              font-semibold
-              text-slate-900
-              "
-            >
+            <h3 className="text-base font-bold text-slate-900">
               Company
             </h3>
 
-            <div
-              className="
-              mt-4
-              flex
-              flex-col
-              gap-3
-              text-slate-600
-              "
-            >
+            <nav className="mt-6 flex flex-col gap-4">
 
               <Link
                 href="/about"
-                className="transition hover:text-sky-600"
+                className="text-slate-600 transition hover:text-sky-600"
               >
                 About
               </Link>
 
               <Link
                 href="/contact"
-                className="transition hover:text-sky-600"
+                className="text-slate-600 transition hover:text-sky-600"
               >
                 Contact
               </Link>
 
               <Link
-                href="/privacy-policy"
-                className="transition hover:text-sky-600"
+                href="/coming-soon"
+                className="text-slate-600 transition hover:text-sky-600"
               >
                 Privacy Policy
               </Link>
 
               <Link
-                href="/terms"
-                className="transition hover:text-sky-600"
+                href="/coming-soon"
+                className="text-slate-600 transition hover:text-sky-600"
               >
                 Terms of Service
               </Link>
 
-            </div>
-
+            </nav>
           </div>
 
 
-          {/* Support */}
+          {/* ====================================================
+              SUPPORT
+          ==================================================== */}
 
           <div>
-
-            <h3
-              className="
-              text-lg
-              font-semibold
-              text-slate-900
-              "
-            >
+            <h3 className="text-base font-bold text-slate-900">
               Support
             </h3>
 
-            <div
-              className="
-              mt-4
-              flex
-              flex-col
-              gap-3
-              text-slate-600
-              "
-            >
+            <nav className="mt-6 flex flex-col gap-4">
 
               <Link
-                href="/help"
-                className="transition hover:text-sky-600"
+                href="/coming-soon"
+                className="text-slate-600 transition hover:text-sky-600"
               >
                 Help Center
               </Link>
 
               <Link
-                href="/faq"
-                className="transition hover:text-sky-600"
+                href="/#faq"
+                className="text-slate-600 transition hover:text-sky-600"
               >
                 FAQ
               </Link>
 
               <Link
-                href="/verify-certificate"
-                className="transition hover:text-sky-600"
+                href="/coming-soon"
+                className="text-slate-600 transition hover:text-sky-600"
               >
                 Verify Certificate
               </Link>
 
               <Link
-                href="/feedback"
-                className="transition hover:text-sky-600"
+                href="/coming-soon"
+                className="text-slate-600 transition hover:text-sky-600"
               >
                 Feedback
               </Link>
 
-            </div>
-
+            </nav>
           </div>
 
         </div>
 
 
-        {/* Copyright */}
+        {/* ====================================================
+            BOTTOM
+        ==================================================== */}
 
-        <div
-          className="
-          mt-10
-          border-t
-          border-slate-200
-          pt-7
-          text-center
-          "
-        >
+        <div className="mt-12 border-t border-slate-200 pt-8">
 
-          <p
-            className="
-            text-sm
-            text-slate-500
-            "
-          >
-            © {new Date().getFullYear()} CloudLearn AI. All rights reserved.
+          <p className="text-center text-sm text-slate-500">
+            © 2026 CloudLearn AI. All rights reserved.
           </p>
 
         </div>
