@@ -11,19 +11,20 @@ import {
   CTA,
 } from "@/components/learning-Paths";
 
+import BackButton from "@/components/layout/BackButton";
+
 export default function LearningPathsPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] =
+    useState("All");
 
   return (
-    <main
-      className="
-        min-h-screen
-        overflow-hidden
-        bg-[#f7fbff]
-        text-slate-900
-      "
-    >
+    <main className="learning-paths-page min-h-screen overflow-hidden">
+
+      <div className="px-6 pt-6">
+        <BackButton />
+      </div>
+
       <Hero />
 
       <Search
@@ -31,7 +32,7 @@ export default function LearningPathsPage() {
         onQueryChange={setSearchQuery}
       />
 
-      <section className="px-6 pt-8 md:px-10">
+      <section className="bg-transparent px-6 pt-8 md:px-10">
         <div className="mx-auto max-w-[1400px] text-center">
 
           <div
@@ -97,6 +98,7 @@ export default function LearningPathsPage() {
       <CareerSection />
 
       <CTA />
+
     </main>
   );
 }

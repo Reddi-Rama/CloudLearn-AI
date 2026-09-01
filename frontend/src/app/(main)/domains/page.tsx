@@ -6,6 +6,7 @@ import DomainHero from "@/components/domains/DomainHero";
 import DomainSearch from "@/components/domains/DomainSearch";
 import DomainFilter from "@/components/domains/DomainFilter";
 import DomainGrid from "@/components/domains/DomainGrid";
+import BackButton from "@/components/layout/BackButton";
 
 export default function DomainsPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -14,30 +15,22 @@ export default function DomainsPage() {
   return (
     <main className="domains-page min-h-screen overflow-hidden">
 
-      {/* =========================================================
-          HERO
-      ========================================================= */}
+      <div className="px-6 pt-6">
+        <BackButton />
+      </div>
+
       <DomainHero />
 
-      {/* =========================================================
-          SEARCH
-      ========================================================= */}
       <DomainSearch
         query={searchQuery}
         onQueryChange={setSearchQuery}
       />
 
-      {/* =========================================================
-          FILTER
-      ========================================================= */}
       <DomainFilter
         selected={selectedCategory}
         onSelect={setSelectedCategory}
       />
 
-      {/* =========================================================
-          DOMAIN CARDS
-      ========================================================= */}
       <DomainGrid
         query={searchQuery}
         selectedCategory={selectedCategory}
