@@ -1,5 +1,5 @@
 /*
- * CloudLearn AI — Artificial Intelligence Learning Path
+ * CloudLearn — Artificial Intelligence Learning Path
  */
 
 export interface LearningPathTopicGroup {
@@ -944,7 +944,7 @@ const artificialIntelligencePath: LearningPathContent = {
 
       project: "Build an Enterprise AI Platform.",
 
-      achievement: "CloudLearn AI Certified AI Engineer & Architect",
+      achievement: "CloudLearn Certified AI Engineer & Architect",
     },
   ],
 
@@ -1020,7 +1020,7 @@ const artificialIntelligencePath: LearningPathContent = {
 
   certificationGuidance: {
     description: [
-      "CloudLearn AI provides achievement credentials throughout the learning path so students can demonstrate their progress.",
+      "CloudLearn provides achievement credentials throughout the learning path so students can demonstrate their progress.",
 
       "External certifications can be recommended according to the learner's target role and specialization.",
 
@@ -1161,7 +1161,7 @@ const artificialIntelligencePath: LearningPathContent = {
     "AI Deployment Engineer",
     "AI System Designer",
     "Advanced AI Engineer",
-    "CloudLearn AI Certified AI Engineer & Architect",
+    "CloudLearn Certified AI Engineer & Architect",
   ],
 
   /* ============================================================

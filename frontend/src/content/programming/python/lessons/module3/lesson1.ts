@@ -98,13 +98,13 @@ IMPORTANT: Loops are one of the most fundamental concepts in programming. Master
       title: "Example 1: Repeating a Message Using a Loop",
 
       code: `for i in range(5):
-    print("Welcome to CloudLearn AI")`,
+    print("Welcome to CloudLearn")`,
 
-      output: `Welcome to CloudLearn AI
-Welcome to CloudLearn AI
-Welcome to CloudLearn AI
-Welcome to CloudLearn AI
-Welcome to CloudLearn AI`,
+      output: `Welcome to CloudLearn
+Welcome to CloudLearn
+Welcome to CloudLearn
+Welcome to CloudLearn
+Welcome to CloudLearn`,
     },
 
     {

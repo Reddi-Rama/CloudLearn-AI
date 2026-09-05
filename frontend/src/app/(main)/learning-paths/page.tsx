@@ -14,25 +14,47 @@ import {
 import BackButton from "@/components/layout/BackButton";
 
 export default function LearningPathsPage() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] =
+    useState("");
+
   const [selectedCategory, setSelectedCategory] =
     useState("All");
 
   return (
     <main className="learning-paths-page min-h-screen overflow-hidden">
 
+      {/* ======================================================
+          BACK TO HOME
+      ====================================================== */}
+
       <div className="px-6 pt-6">
-        <BackButton />
+        <BackButton
+          href="/"
+          label="Back to Home"
+        />
       </div>
 
+      {/* ======================================================
+          HERO
+      ====================================================== */}
+
       <Hero />
+
+      {/* ======================================================
+          SEARCH
+      ====================================================== */}
 
       <Search
         query={searchQuery}
         onQueryChange={setSearchQuery}
       />
 
+      {/* ======================================================
+          HEADING
+      ====================================================== */}
+
       <section className="bg-transparent px-6 pt-8 md:px-10">
+
         <div className="mx-auto max-w-[1400px] text-center">
 
           <div
@@ -78,24 +100,42 @@ export default function LearningPathsPage() {
               md:text-lg
             "
           >
-            Follow a structured path from fundamentals to advanced
-            industry-ready skills through practical learning and projects.
+            Follow a structured path from fundamentals
+            to advanced industry-ready skills through
+            practical learning and projects.
           </p>
 
         </div>
+
       </section>
+
+      {/* ======================================================
+          FILTER
+      ====================================================== */}
 
       <Filter
         selected={selectedCategory}
         onSelect={setSelectedCategory}
       />
 
+      {/* ======================================================
+          PATH GRID
+      ====================================================== */}
+
       <PathGrid
         searchQuery={searchQuery}
         selectedCategory={selectedCategory}
       />
 
+      {/* ======================================================
+          CAREER
+      ====================================================== */}
+
       <CareerSection />
+
+      {/* ======================================================
+          CTA
+      ====================================================== */}
 
       <CTA />
 

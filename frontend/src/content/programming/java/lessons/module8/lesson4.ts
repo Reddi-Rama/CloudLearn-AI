@@ -153,7 +153,7 @@ Suppose data.txt contains:
 \`\`\`text
 Hello Java
 File Handling
-CloudLearn AI
+CloudLearn
 \`\`\`
 
 
@@ -202,7 +202,7 @@ Output:
 \`\`\`text
 Hello Java
 File Handling
-CloudLearn AI
+CloudLearn
 \`\`\`
 
 

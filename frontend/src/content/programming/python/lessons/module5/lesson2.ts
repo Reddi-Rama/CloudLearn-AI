@@ -50,13 +50,13 @@ Here:
 Example:
 
 def display_welcome():
-    print("Welcome to CloudLearn AI")
+    print("Welcome to CloudLearn")
 
 display_welcome()
 
 Output:
 
-Welcome to CloudLearn AI
+Welcome to CloudLearn
 
 ## Understanding Function Creation
 
@@ -214,11 +214,11 @@ IMPORTANT: Creating well-designed functions is the foundation of modular program
       title: "Example 1: Creating Your First Function",
 
       code: `def display_welcome():
-    print("Welcome to CloudLearn AI")
+    print("Welcome to CloudLearn")
 
 display_welcome()`,
 
-      output: `Welcome to CloudLearn AI`,
+      output: `Welcome to CloudLearn`,
     },
 
     {

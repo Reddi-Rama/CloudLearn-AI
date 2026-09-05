@@ -79,7 +79,7 @@ export default function StudentSidebar() {
 
           <h2 className="text-xl font-bold">
 
-            CloudLearn AI
+            CloudLearn
 
           </h2>
 

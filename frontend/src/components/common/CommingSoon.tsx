@@ -9,7 +9,7 @@ interface ComingSoonProps {
 
 export default function ComingSoon({
   title = "Coming Soon",
-  description = "We're working hard to bring this feature to CloudLearn AI.",
+  description = "We're working hard to bring this feature to CloudLearn.",
 }: ComingSoonProps) {
   return (
     <div className="rounded-3xl border border-sky-200 bg-gradient-to-br from-sky-50 to-white p-12 text-center shadow-lg">

@@ -14,7 +14,7 @@ export default function ContactHero() {
         </h1>
 
         <p className="mx-auto mt-8 max-w-3xl text-xl text-slate-600">
-          Have questions about CloudLearn AI?
+          Have questions about CloudLearn?
           Need help with courses, certificates or assessments?
           Our team is always ready to help you.
         </p>

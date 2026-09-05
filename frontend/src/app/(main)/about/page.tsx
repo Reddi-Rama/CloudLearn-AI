@@ -11,8 +11,15 @@ export default function AboutPage() {
   return (
     <main className="about-page min-h-screen overflow-hidden">
 
+      {/* ======================================================
+          BACK TO HOME
+      ====================================================== */}
+
       <div className="px-6 pt-6">
-        <BackButton />
+        <BackButton
+          href="/"
+          label="Back to Home"
+        />
       </div>
 
       <AboutHero />

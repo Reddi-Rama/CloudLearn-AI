@@ -43,7 +43,7 @@ export default function WhyCloudLearn() {
         <div className="text-center">
 
           <span className="rounded-full bg-sky-100 px-5 py-2 text-sm font-semibold text-sky-700">
-            Why CloudLearn AI?
+            Why CloudLearn?
           </span>
 
           <h2 className="mt-6 text-5xl font-black text-slate-900">

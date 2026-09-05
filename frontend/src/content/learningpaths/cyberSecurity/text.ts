@@ -1,5 +1,5 @@
 /*
- * CloudLearn AI — Cybersecurity Learning Path
+ * CloudLearn — Cybersecurity Learning Path
  */
 
 export interface LearningPathTopicGroup {
@@ -978,7 +978,7 @@ const cyberSecurityPath: LearningPathContent = {
         "Build an Enterprise Cybersecurity Capstone.",
 
       achievement:
-        "CloudLearn AI Certified Cybersecurity Engineer & Architect",
+        "CloudLearn Certified Cybersecurity Engineer & Architect",
     },
   ],
 
@@ -1018,7 +1018,7 @@ const cyberSecurityPath: LearningPathContent = {
 
   certificationGuidance: {
     description: [
-      "CloudLearn AI provides achievement credentials throughout the cybersecurity learning path so students can demonstrate their progress.",
+      "CloudLearn provides achievement credentials throughout the cybersecurity learning path so students can demonstrate their progress.",
 
       "External certifications can be selected according to the learner's target role, specialization, technology stack, and career direction.",
 
@@ -1171,7 +1171,7 @@ const cyberSecurityPath: LearningPathContent = {
     "Container Security Engineering",
     "Cybersecurity Governance",
     "Advanced Cybersecurity Engineering",
-    "CloudLearn AI Certified Cybersecurity Engineer & Architect",
+    "CloudLearn Certified Cybersecurity Engineer & Architect",
   ],
 
   /* ============================================================

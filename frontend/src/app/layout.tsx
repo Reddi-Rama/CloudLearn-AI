@@ -1,40 +1,48 @@
 import type { Metadata } from "next";
-import MouseGlow from "@/components/effects/MouseGlow";
-import BackButton from "@/components/layout/BackButton";
+
+import BackNavigation from "@/components/layout/BackNavigation";
 import NavigationLoading from "@/components/layout/NavigationLoading";
+import MouseGlow from "@/components/effects/MouseGlow";
+
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
+import { AppProvider } from "../providers";
 
 import "./globals.css";
 
-import { AppProvider } from "../providers";
+
+/* ============================================================
+   METADATA
+============================================================ */
 
 export const metadata: Metadata = {
   title: {
-    default: "CloudLearn AI",
-    template: "%s | CloudLearn AI",
+    default: "CloudLearn",
+    template: "%s | CloudLearn",
   },
 
   description:
-    "A modern cloud-based learning platform for B.Tech students.",
+    "A modern learning platform for students.",
 
   keywords: [
-    "CloudLearn AI",
+    "CloudLearn",
     "B.Tech",
     "Learning Platform",
     "Programming",
-    "AI",
+    "Artificial Intelligence",
     "Cloud Computing",
     "Machine Learning",
     "Web Development",
     "Data Science",
+    "Cyber Security",
   ],
 
   authors: [
     {
-      name: "CloudLearn AI Team",
+      name: "CloudLearn Team",
     },
   ],
 
-  creator: "CloudLearn AI",
+  creator: "CloudLearn",
 
   icons: {
     icon: "/favicon.ico",
@@ -42,8 +50,15 @@ export const metadata: Metadata = {
     apple: "/favicon.ico",
   },
 
-  metadataBase: new URL("https://cloudlearn.ai"),
+  metadataBase: new URL(
+    "https://cloudlearn.ai"
+  ),
 };
+
+
+/* ============================================================
+   ROOT LAYOUT
+============================================================ */
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -57,17 +72,55 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
     >
-      <body className="min-h-screen bg-slate-50 text-slate-900 antialiased">
+      <body
+        className="
+          min-h-screen
+          antialiased
+        "
+      >
+
+        {/* ==================================================
+            NAVIGATION LOADING
+        ================================================== */}
 
         <NavigationLoading />
 
-        <BackButton />
+
+        {/* ==================================================
+            THEME
+        ================================================== */}
+
+        <ThemeProvider>
+
+          {/* =================================================
+              APP PROVIDER
+          ================================================= */}
+
+          <AppProvider>
+
+            {/* ===============================================
+                GLOBAL BACK NAVIGATION
+            =============================================== */}
+
+            <BackNavigation />
+
+
+            {/* ===============================================
+                PAGE
+            =============================================== */}
+
+            {children}
+
+          </AppProvider>
+
+        </ThemeProvider>
+
+
+        {/* ==================================================
+            MOUSE EFFECT
+        ================================================== */}
 
         <MouseGlow />
-
-        <AppProvider>
-          {children}
-        </AppProvider>
 
       </body>
     </html>

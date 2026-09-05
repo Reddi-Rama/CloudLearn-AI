@@ -9,7 +9,7 @@ interface OutputQuestionProps {
 
 export default function OutputQuestion({
   question = "Predict the output of the following program.",
-  code = `print("Hello CloudLearn AI")`,
+  code = `print("Hello CloudLearn")`,
 }: OutputQuestionProps) {
   return (
     <section className="rounded-[32px] bg-white p-8 shadow-lg">

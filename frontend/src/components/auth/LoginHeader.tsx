@@ -6,7 +6,7 @@ export default function LoginHeader() {
       </h1>
 
       <p className="text-sm text-slate-600">
-        Sign in to continue learning with CloudLearn AI.
+        Sign in to continue learning with CloudLearn.
       </p>
     </div>
   );

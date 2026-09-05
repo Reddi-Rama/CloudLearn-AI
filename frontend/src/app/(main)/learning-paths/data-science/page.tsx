@@ -297,7 +297,7 @@ export default function DataSciencePage() {
 
               <div className="flex items-center gap-2 text-lg font-semibold text-sky-400">
                 <BookOpen size={21} />
-                CloudLearn AI
+                CloudLearn
               </div>
 
               <h1
@@ -627,7 +627,7 @@ export default function DataSciencePage() {
                     >
 
                       <p className="text-sm font-semibold uppercase tracking-wide text-sky-400">
-                        CloudLearn AI Achievement
+                        CloudLearn Achievement
                       </p>
 
                       <p className="mt-3 text-xl font-semibold leading-8 text-slate-100">
@@ -711,7 +711,7 @@ export default function DataSciencePage() {
               >
 
                 <p className="text-lg font-semibold uppercase tracking-wide text-sky-400">
-                  CloudLearn AI Achievement Path
+                  CloudLearn Achievement Path
                 </p>
 
                 <h2 className="mt-2 text-3xl font-bold text-white md:text-4xl">
@@ -763,7 +763,7 @@ export default function DataSciencePage() {
               >
 
                 <p className="text-lg font-semibold uppercase tracking-wide text-sky-400">
-                  The CloudLearn AI Learning Philosophy
+                  The CloudLearn Learning Philosophy
                 </p>
 
                 <h2 className="mt-2 text-3xl font-bold text-white md:text-4xl">

@@ -24,7 +24,7 @@ export default function CertificatesPage() {
         <p className="mt-4 max-w-2xl text-lg text-sky-100">
 
           View, download and verify all certificates
-          earned from CloudLearn AI courses.
+          earned from CloudLearn courses.
 
         </p>
 

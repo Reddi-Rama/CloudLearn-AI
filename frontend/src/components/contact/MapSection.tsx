@@ -9,7 +9,7 @@ export default function MapSection() {
         <div className="overflow-hidden rounded-[32px] shadow-xl">
 
           <iframe
-            title="CloudLearn AI Location"
+            title="CloudLearn Location"
             src="https://www.google.com/maps?q=Andhra%20Pradesh&output=embed"
             width="100%"
             height="450"

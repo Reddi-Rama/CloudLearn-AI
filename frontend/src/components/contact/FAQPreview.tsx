@@ -2,7 +2,7 @@
 
 const faqs = [
   {
-    question: "Is CloudLearn AI free?",
+    question: "Is CloudLearn free?",
     answer:
       "Yes, many beginner courses are available for free.",
   },
@@ -14,7 +14,7 @@ const faqs = [
   {
     question: "Can I access courses on mobile?",
     answer:
-      "Yes, CloudLearn AI is fully responsive.",
+      "Yes, CloudLearn is fully responsive.",
   },
 ];
 

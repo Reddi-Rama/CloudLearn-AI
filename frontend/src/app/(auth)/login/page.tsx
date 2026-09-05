@@ -11,33 +11,43 @@ import {
 export default function LoginPage() {
   return (
     <AuthLayout>
+      <main className="auth-page min-h-screen">
 
-      <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
+        <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
 
-        <AuthHero />
+          {/* ==================================================
+              LEFT SIDE
+          ================================================== */}
 
-        <div className="flex items-center justify-center p-8">
+          <AuthHero />
 
-          <AuthCard>
+          {/* ==================================================
+              RIGHT SIDE
+          ================================================== */}
 
-            <div className="space-y-8">
+          <div className="flex items-center justify-center p-6 sm:p-8">
 
-              <AuthLogo />
+            <AuthCard>
 
-              <LoginHeader />
+              <div className="space-y-8">
 
-              <LoginForm />
+                <AuthLogo />
 
-              <LoginFooter />
+                <LoginHeader />
 
-            </div>
+                <LoginForm />
 
-          </AuthCard>
+                <LoginFooter />
+
+              </div>
+
+            </AuthCard>
+
+          </div>
 
         </div>
 
-      </div>
-
+      </main>
     </AuthLayout>
   );
 }

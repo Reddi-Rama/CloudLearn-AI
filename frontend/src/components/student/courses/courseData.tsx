@@ -2,7 +2,7 @@ export const courses = [
   {
     id: 1,
     title: "Frontend Development",
-    instructor: "CloudLearn AI",
+    instructor: "CloudLearn",
     lessons: 82,
     completed: 59,
     duration: "10 Weeks",
@@ -13,7 +13,7 @@ export const courses = [
   {
     id: 2,
     title: "Cloud Computing",
-    instructor: "CloudLearn AI",
+    instructor: "CloudLearn",
     lessons: 96,
     completed: 40,
     duration: "12 Weeks",
@@ -24,7 +24,7 @@ export const courses = [
   {
     id: 3,
     title: "Python Programming",
-    instructor: "CloudLearn AI",
+    instructor: "CloudLearn",
     lessons: 75,
     completed: 18,
     duration: "8 Weeks",

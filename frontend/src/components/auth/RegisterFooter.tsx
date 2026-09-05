@@ -10,7 +10,7 @@ export default function RegisterFooter() {
       </p>
 
       <p className="text-xs text-slate-400">
-        © 2026 CloudLearn AI. All rights reserved.
+        © 2026 CloudLearn. All rights reserved.
       </p>
 
     </div>

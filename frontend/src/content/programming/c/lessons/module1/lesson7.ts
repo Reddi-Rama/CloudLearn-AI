@@ -377,7 +377,7 @@ int main()
     printf("================================\\\\n");
     printf("      C PROGRAMMING COURSE       \\\\n");
     printf("================================\\\\n");
-    printf("Welcome to CloudLearn AI!\\\\n");
+    printf("Welcome to CloudLearn!\\\\n");
     return 0;
 }
 \`\`\`
@@ -388,7 +388,7 @@ Output:
 ================================
       C PROGRAMMING COURSE
 ================================
-Welcome to CloudLearn AI!
+Welcome to CloudLearn!
 \`\`\`
 
 This is still a very simple program, but you are already using:

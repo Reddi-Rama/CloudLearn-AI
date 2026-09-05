@@ -36,7 +36,7 @@ export default function WhyChooseUs() {
 
           <h2 className="text-5xl font-black">
 
-            Why Choose CloudLearn AI?
+            Why Choose CloudLearn?
 
           </h2>
 

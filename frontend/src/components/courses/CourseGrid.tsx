@@ -5,19 +5,19 @@ import CourseCard from "./CourseCard";
 const courses = [
   {
     title: "Python Programming",
-    instructor: "CloudLearn AI",
+    instructor: "CloudLearn",
     lessons: 24,
     progress: 60,
   },
   {
     title: "Data Structures",
-    instructor: "CloudLearn AI",
+    instructor: "CloudLearn",
     lessons: 32,
     progress: 35,
   },
   {
     title: "Machine Learning",
-    instructor: "CloudLearn AI",
+    instructor: "CloudLearn",
     lessons: 28,
     progress: 15,
   },

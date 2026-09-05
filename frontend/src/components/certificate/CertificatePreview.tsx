@@ -42,7 +42,7 @@ export default function CertificatePreview() {
       <div className="mt-12 flex flex-col items-center justify-between gap-10 lg:flex-row">
 
         <CertificateSignature
-          signer="CloudLearn AI"
+          signer="CloudLearn"
           designation="Founder & CEO"
         />
 

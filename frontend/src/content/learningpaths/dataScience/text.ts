@@ -1,5 +1,5 @@
 /*
- * CloudLearn AI — Data Science Learning Path
+ * CloudLearn — Data Science Learning Path
  */
 
 export interface LearningPathTopicGroup {
@@ -914,7 +914,7 @@ const dataSciencePath: LearningPathContent = {
       project: "Enterprise Data Science Capstone",
 
       achievement:
-        "CloudLearn AI Certified Data Scientist & Data Science Engineer",
+        "CloudLearn Certified Data Scientist & Data Science Engineer",
     },
   ],
 
@@ -975,7 +975,7 @@ const dataSciencePath: LearningPathContent = {
     "Responsible Data Science",
     "Data Science Engineering & MLOps",
     "Applied Data & AI Engineering",
-    "CloudLearn AI Certified Data Scientist & Data Science Engineer",
+    "CloudLearn Certified Data Scientist & Data Science Engineer",
   ],
 
   /* ============================================================
@@ -1005,7 +1005,7 @@ const dataSciencePath: LearningPathContent = {
 
   certificationGuidance: {
     description: [
-      "CloudLearn AI provides achievement credentials throughout the learning path so students can demonstrate their progress.",
+      "CloudLearn provides achievement credentials throughout the learning path so students can demonstrate their progress.",
 
       "External certifications can be recommended according to the learner's target role, technology stack, specialization, and career direction.",
 

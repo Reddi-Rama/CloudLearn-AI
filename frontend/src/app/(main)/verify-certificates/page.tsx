@@ -18,7 +18,7 @@ export default function CertificatesPage() {
         <div className="mx-auto max-w-6xl px-6">
 
           <CertificateHeader
-            title="CloudLearn AI Certificates"
+            title="CloudLearn Certificates"
           />
 
           <div className="mt-14">

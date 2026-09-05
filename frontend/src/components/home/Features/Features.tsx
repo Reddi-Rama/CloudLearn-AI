@@ -75,7 +75,7 @@ export default function Features() {
           </h2>
 
           <p className="sub-heading mt-6">
-            CloudLearn AI combines structured learning,
+            CloudLearn combines structured learning,
             practical coding, assessments and certifications
             into one seamless learning experience.
           </p>

@@ -53,7 +53,7 @@ export default function ProfileCard() {
               className="text-blue-600"
             />
 
-            <span>CloudLearn AI Student</span>
+            <span>CloudLearn Student</span>
 
           </div>
 

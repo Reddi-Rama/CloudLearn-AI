@@ -1,5 +1,5 @@
 export const SITE_CONFIG = {
-  name: "CloudLearn AI",
+  name: "CloudLearn",
   description:
     "Cloud-based learning platform for modern technologies.",
   url: "https://cloudlearn.ai",

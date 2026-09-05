@@ -1,5 +1,5 @@
 export const CERTIFICATE = {
-  issuer: "CloudLearn AI",
+  issuer: "CloudLearn",
 
   validity: "Lifetime",
 

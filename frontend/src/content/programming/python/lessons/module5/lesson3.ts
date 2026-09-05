@@ -22,7 +22,7 @@ Suppose you create a function to welcome users.
 Without parameters:
 
 def welcome():
-    print("Welcome to CloudLearn AI")
+    print("Welcome to CloudLearn")
 
 Every time the function runs, it displays the same message.
 

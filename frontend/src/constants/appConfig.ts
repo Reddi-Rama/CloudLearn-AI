@@ -1,5 +1,5 @@
 export const APP_CONFIG = {
-  appName: "CloudLearn AI",
+  appName: "CloudLearn",
   version: "1.0.0",
   defaultTheme: "light",
 };

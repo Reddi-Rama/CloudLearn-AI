@@ -6,7 +6,7 @@ export default function BillingHeader() {
       </h1>
 
       <p className="mt-4 text-sky-100">
-        Manage your CloudLearn AI subscription.
+        Manage your CloudLearn subscription.
       </p>
     </div>
   );

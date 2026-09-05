@@ -83,7 +83,7 @@ export default function NavigationLoading() {
         </div>
 
         <h2 className="mt-5 text-2xl font-black text-slate-900">
-          CloudLearn AI
+          CloudLearn
         </h2>
 
         <p className="mt-2 text-sm font-medium text-slate-500">

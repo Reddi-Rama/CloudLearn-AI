@@ -24,7 +24,7 @@ const notifications = [
     color: "text-green-600",
   },
   {
-    title: "Welcome to CloudLearn AI",
+    title: "Welcome to CloudLearn",
     icon: Bell,
     color: "text-purple-600",
   },

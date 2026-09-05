@@ -27,7 +27,7 @@ export default function EmptyCourses() {
         <p className="mt-5 leading-7 text-slate-600">
 
           You haven't enrolled in any courses yet.
-          Explore CloudLearn AI and start your first
+          Explore CloudLearn and start your first
           learning journey today.
 
         </p>

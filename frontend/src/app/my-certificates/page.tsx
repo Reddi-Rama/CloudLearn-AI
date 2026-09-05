@@ -22,12 +22,14 @@ import {
 export default function MyCertificatesPage() {
   const router = useRouter();
 
-  const [certificates, setCertificates] = useState<
-    Certificate[]
-  >([]);
+  const [certificates, setCertificates] =
+    useState<Certificate[]>([]);
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [loading, setLoading] =
+    useState(true);
+
+  const [error, setError] =
+    useState("");
 
   /* ============================================================
      LOAD CERTIFICATES
@@ -64,7 +66,7 @@ export default function MyCertificatesPage() {
 
 
   /* ============================================================
-     DOWNLOAD CERTIFICATE
+     DOWNLOAD
   ============================================================ */
 
   async function handleDownload(
@@ -94,12 +96,15 @@ export default function MyCertificatesPage() {
     return (
       <main className="min-h-screen bg-[#f7faff]">
 
-        {/* Back Button */}
         <div className="px-6 pt-6">
-          <BackButton />
+          <BackButton
+            href="/"
+            label="Back to Home"
+          />
         </div>
 
         <div className="flex min-h-[70vh] items-center justify-center px-6">
+
           <div className="text-center">
 
             <Loader2
@@ -112,6 +117,7 @@ export default function MyCertificatesPage() {
             </p>
 
           </div>
+
         </div>
 
       </main>
@@ -129,16 +135,19 @@ export default function MyCertificatesPage() {
       <div className="mx-auto max-w-7xl">
 
         {/* ======================================================
-            BACK BUTTON
+            BACK TO HOME
         ====================================================== */}
 
         <div className="mb-10">
-          <BackButton />
+          <BackButton
+            href="/"
+            label="Back to Home"
+          />
         </div>
 
 
         {/* ======================================================
-            PAGE HEADER
+            HEADER
         ====================================================== */}
 
         <div className="mb-10">
@@ -172,7 +181,8 @@ export default function MyCertificatesPage() {
               </h1>
 
               <p className="mt-1 text-slate-600">
-                View and download the certificates you have earned.
+                View and download the certificates you
+                have earned.
               </p>
 
             </div>
@@ -246,8 +256,9 @@ export default function MyCertificatesPage() {
               </h2>
 
               <p className="mx-auto mt-3 max-w-lg text-slate-600">
-                Complete your courses and assessments to earn
-                certificates. Your certificates will appear here.
+                Complete your courses and assessments to
+                earn certificates. Your certificates will
+                appear here.
               </p>
 
             </div>
@@ -255,27 +266,29 @@ export default function MyCertificatesPage() {
 
 
         {/* ======================================================
-            CERTIFICATE LIST
+            CERTIFICATES
         ====================================================== */}
 
         {certificates.length > 0 && (
           <>
 
-            {/* Count */}
             <div className="mb-6">
 
               <p className="text-sm font-semibold text-slate-500">
+
                 {certificates.length}{" "}
+
                 {certificates.length === 1
                   ? "Certificate"
                   : "Certificates"}{" "}
+
                 Earned
+
               </p>
 
             </div>
 
 
-            {/* Cards */}
             <div
               className="
                 grid
@@ -285,134 +298,133 @@ export default function MyCertificatesPage() {
               "
             >
 
-              {certificates.map((certificate) => (
+              {certificates.map(
+                (certificate) => (
 
-                <div
-                  key={certificate.certificateId}
-                  className="
-                    overflow-hidden
-                    rounded-[32px]
-                    border
-                    border-slate-200
-                    bg-white
-                    shadow-xl
-                    transition
-                    duration-300
-                    hover:-translate-y-1
-                    hover:shadow-2xl
-                  "
-                >
-
-                  {/* Certificate Banner */}
                   <div
+                    key={certificate.certificateId}
                     className="
-                      flex
-                      h-48
-                      items-center
-                      justify-center
-                      bg-gradient-to-br
-                      from-sky-500
-                      via-blue-600
-                      to-indigo-700
+                      overflow-hidden
+                      rounded-[32px]
+                      border
+                      border-slate-200
+                      bg-white
+                      shadow-xl
+                      transition
+                      duration-300
+                      hover:-translate-y-1
+                      hover:shadow-2xl
                     "
                   >
-                    <Award
-                      size={80}
-                      className="text-white"
-                    />
-                  </div>
+
+                    {/* Certificate Banner */}
+
+                    <div
+                      className="
+                        flex
+                        h-48
+                        items-center
+                        justify-center
+                        bg-gradient-to-br
+                        from-sky-500
+                        via-blue-600
+                        to-indigo-700
+                      "
+                    >
+                      <Award
+                        size={80}
+                        className="text-white"
+                      />
+                    </div>
 
 
-                  {/* Certificate Details */}
-                  <div className="p-7">
+                    {/* Details */}
 
-                    <h2 className="text-xl font-bold text-slate-900">
-                      {certificate.courseTitle}
-                    </h2>
+                    <div className="p-7">
 
+                      <h2 className="text-xl font-bold text-slate-900">
+                        {certificate.courseTitle}
+                      </h2>
 
-                    <div className="mt-5 space-y-3 text-sm">
+                      <div className="mt-5 space-y-3 text-sm">
 
-                      {/* Certificate ID */}
-                      <div className="flex items-start gap-3 text-slate-600">
+                        <div className="flex items-start gap-3 text-slate-600">
 
-                        <FileText
-                          size={18}
-                          className="mt-0.5 shrink-0"
-                        />
+                          <FileText
+                            size={18}
+                            className="mt-0.5 shrink-0"
+                          />
 
-                        <div className="min-w-0">
+                          <div className="min-w-0">
 
-                          <span>
-                            Certificate ID:
-                          </span>
+                            <span>
+                              Certificate ID:
+                            </span>
 
-                          <span className="ml-1 break-all font-semibold text-slate-900">
-                            {certificate.certificateId}
-                          </span>
+                            <span className="ml-1 break-all font-semibold text-slate-900">
+                              {certificate.certificateId}
+                            </span>
 
+                          </div>
+
+                        </div>
+
+                        <div className="text-slate-500">
+                          Issued on{" "}
+
+                          {new Date(
+                            certificate.issuedAt
+                          ).toLocaleDateString("en-IN")}
                         </div>
 
                       </div>
 
 
-                      {/* Issue Date */}
-                      <div className="text-slate-500">
+                      {/* Download */}
 
-                        Issued on{" "}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleDownload(
+                            certificate.certificateId
+                          )
+                        }
+                        className="
+                          mt-7
+                          flex
+                          w-full
+                          items-center
+                          justify-center
+                          gap-3
+                          rounded-2xl
+                          bg-gradient-to-r
+                          from-sky-500
+                          to-indigo-600
+                          px-5
+                          py-4
+                          font-semibold
+                          text-white
+                          shadow-lg
+                          transition-all
+                          duration-300
+                          hover:scale-[1.02]
+                          hover:shadow-xl
+                          active:scale-[0.99]
+                        "
+                      >
 
-                        {new Date(
-                          certificate.issuedAt
-                        ).toLocaleDateString("en-IN")}
+                        <Download size={20} />
 
-                      </div>
+                        Download Certificate
+
+                      </button>
 
                     </div>
 
-
-                    {/* Download */}
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleDownload(
-                          certificate.certificateId
-                        )
-                      }
-                      className="
-                        mt-7
-                        flex
-                        w-full
-                        items-center
-                        justify-center
-                        gap-3
-                        rounded-2xl
-                        bg-gradient-to-r
-                        from-sky-500
-                        to-indigo-600
-                        px-5
-                        py-4
-                        font-semibold
-                        text-white
-                        shadow-lg
-                        transition-all
-                        duration-300
-                        hover:scale-[1.02]
-                        hover:shadow-xl
-                        active:scale-[0.99]
-                      "
-                    >
-
-                      <Download size={20} />
-
-                      Download Certificate
-
-                    </button>
-
                   </div>
 
-                </div>
-
-              ))}
+                )
+              )}
 
             </div>
 

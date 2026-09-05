@@ -20,7 +20,7 @@ export default function Vision() {
           </h2>
 
           <p className="mt-6 text-lg leading-8 text-slate-600">
-            We envision CloudLearn AI becoming the most trusted learning
+            We envision CloudLearn becoming the most trusted learning
             ecosystem where students build practical skills, earn industry
             certificates, and launch successful technology careers.
           </p>

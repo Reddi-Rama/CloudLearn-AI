@@ -82,10 +82,10 @@ Always use parentheses with print().
 
     {
       title: "Printing Different Types",
-      code: `print("CloudLearn AI")
+      code: `print("CloudLearn")
 print(1500)
 print(4.8)`,
-      output: `CloudLearn AI
+      output: `CloudLearn
 1500
 4.8`,
     },

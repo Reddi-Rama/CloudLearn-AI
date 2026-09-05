@@ -10,26 +10,50 @@ import BackButton from "@/components/layout/BackButton";
 
 export default function DomainsPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] =
+    useState("All");
 
   return (
     <main className="domains-page min-h-screen overflow-hidden">
 
+      {/* ======================================================
+          BACK TO HOME
+      ====================================================== */}
+
       <div className="px-6 pt-6">
-        <BackButton />
+        <BackButton
+          href="/"
+          label="Back to Home"
+        />
       </div>
 
+      {/* ======================================================
+          HERO
+      ====================================================== */}
+
       <DomainHero />
+
+      {/* ======================================================
+          SEARCH
+      ====================================================== */}
 
       <DomainSearch
         query={searchQuery}
         onQueryChange={setSearchQuery}
       />
 
+      {/* ======================================================
+          FILTER
+      ====================================================== */}
+
       <DomainFilter
         selected={selectedCategory}
         onSelect={setSelectedCategory}
       />
+
+      {/* ======================================================
+          DOMAIN GRID
+      ====================================================== */}
 
       <DomainGrid
         query={searchQuery}

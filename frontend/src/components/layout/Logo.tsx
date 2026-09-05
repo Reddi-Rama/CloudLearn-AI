@@ -18,7 +18,7 @@ export default function Logo() {
 
       <div className="hidden sm:block">
         <h1 className="text-xl font-black tracking-tight text-slate-900 lg:text-2xl">
-          CloudLearn AI
+          CloudLearn
         </h1>
 
         <p className="text-xs font-medium text-slate-500 lg:text-sm">

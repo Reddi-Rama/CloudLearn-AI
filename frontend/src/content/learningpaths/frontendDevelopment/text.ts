@@ -1119,7 +1119,7 @@ const frontendDevelopmentPath: LearningPathContent = {
 
       project: "Enterprise Frontend Capstone",
 
-      achievement: "CloudLearn AI Certified Frontend Engineer & Architect",
+      achievement: "CloudLearn Certified Frontend Engineer & Architect",
     },
   ],
 
@@ -1190,7 +1190,7 @@ const frontendDevelopmentPath: LearningPathContent = {
 
   certificationGuidance: {
     description: [
-      "CloudLearn AI provides achievement credentials throughout the learning path so students can demonstrate their progress.",
+      "CloudLearn provides achievement credentials throughout the learning path so students can demonstrate their progress.",
 
       "External certifications can be recommended according to the learner's target role, technology stack, and specialization.",
 
@@ -1357,7 +1357,7 @@ const frontendDevelopmentPath: LearningPathContent = {
     "Frontend DevOps",
     "AI-Powered Frontend Engineer",
     "Frontend System Designer",
-    "CloudLearn AI Certified Frontend Engineer & Architect",
+    "CloudLearn Certified Frontend Engineer & Architect",
   ],
 
   /* ============================================================

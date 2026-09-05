@@ -6,12 +6,12 @@ const faqs = [
   {
     question: "Do I need prior programming experience?",
     answer:
-      "No. CloudLearn AI starts from the basics and gradually progresses to advanced topics.",
+      "No. CloudLearn starts from the basics and gradually progresses to advanced topics.",
   },
   {
     question: "Are there video lectures?",
     answer:
-      "No. CloudLearn AI provides interactive lessons, diagrams, quizzes, coding exercises and notes instead of video lectures.",
+      "No. CloudLearn provides interactive lessons, diagrams, quizzes, coding exercises and notes instead of video lectures.",
   },
   {
     question: "Can I learn at my own pace?",
@@ -35,7 +35,7 @@ export default function FAQ() {
           </h2>
 
           <p className="mt-4 text-slate-600">
-            Everything you need to know about CloudLearn AI.
+            Everything you need to know about CloudLearn.
           </p>
         </div>
 

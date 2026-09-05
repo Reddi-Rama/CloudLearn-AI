@@ -1041,7 +1041,7 @@ const cloudComputingPath: LearningPathContent = {
         "Enterprise Cloud Capstone",
 
       achievement:
-        "CloudLearn AI Certified Cloud Engineer & Architect",
+        "CloudLearn Certified Cloud Engineer & Architect",
     },
   ],
 
@@ -1112,7 +1112,7 @@ const cloudComputingPath: LearningPathContent = {
 
   certificationGuidance: {
     description: [
-      "CloudLearn AI provides achievement credentials throughout the learning path so students can demonstrate their progress.",
+      "CloudLearn provides achievement credentials throughout the learning path so students can demonstrate their progress.",
 
       "External certifications can be recommended according to the learner's target role, cloud platform, and specialization.",
 
@@ -1285,7 +1285,7 @@ const cloudComputingPath: LearningPathContent = {
     "Platform Engineering",
     "Cloud Governance Engineering",
     "Hybrid & Multi-Cloud Engineering",
-    "CloudLearn AI Certified Cloud Engineer & Architect",
+    "CloudLearn Certified Cloud Engineer & Architect",
   ],
 
   /* ============================================================

@@ -32,7 +32,7 @@ export default function StudentProfileMenu() {
 
           <p className="text-xs text-slate-500">
 
-            CloudLearn AI
+            CloudLearn
 
           </p>
 

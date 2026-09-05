@@ -1,60 +1,59 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
-import { useEffect, useState } from "react";
+import {
+  Moon,
+  Sun,
+} from "lucide-react";
+
+import { useTheme } from "@/components/theme/ThemeProvider";
 
 export default function ThemeToggle() {
-  const [mounted, setMounted] = useState(false);
-  const [dark, setDark] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-
-    const savedTheme = localStorage.getItem("theme");
-
-    if (savedTheme === "dark") {
-      document.documentElement.classList.add("dark");
-      setDark(true);
-    } else {
-      document.documentElement.classList.remove("dark");
-      setDark(false);
-    }
-  }, []);
-
-  function toggleTheme() {
-    if (dark) {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-      setDark(false);
-    } else {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-      setDark(true);
-    }
-  }
-
-  if (!mounted) {
-    return (
-      <div className="h-11 w-11 rounded-2xl border border-slate-200 bg-white" />
-    );
-  }
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <button
+      type="button"
       onClick={toggleTheme}
-      aria-label="Toggle Theme"
-      className="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:scale-105 hover:border-sky-500 hover:bg-sky-50 dark:border-slate-700 dark:bg-slate-900"
+      aria-label={
+        theme === "light"
+          ? "Switch to dark mode"
+          : "Switch to light mode"
+      }
+      title={
+        theme === "light"
+          ? "Dark mode"
+          : "Light mode"
+      }
+      className="
+        flex
+        h-11
+        w-11
+        items-center
+        justify-center
+        rounded-xl
+        border
+        border-slate-200
+        bg-white
+        text-slate-700
+        shadow-sm
+        transition-all
+        duration-300
+        hover:-translate-y-0.5
+        hover:border-sky-300
+        hover:bg-sky-50
+        hover:text-sky-600
+        dark:border-slate-700
+        dark:bg-slate-900
+        dark:text-slate-200
+        dark:hover:border-sky-500
+        dark:hover:bg-slate-800
+        dark:hover:text-sky-400
+      "
     >
-      {dark ? (
-        <Sun
-          size={20}
-          className="text-yellow-500"
-        />
+      {theme === "light" ? (
+        <Moon size={19} />
       ) : (
-        <Moon
-          size={20}
-          className="text-slate-700"
-        />
+        <Sun size={19} />
       )}
     </button>
   );

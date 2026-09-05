@@ -5,7 +5,7 @@ interface CertificateHeaderProps {
 }
 
 export default function CertificateHeader({
-  title = "CloudLearn AI Certificates",
+  title = "CloudLearn Certificates",
 }: CertificateHeaderProps) {
   return (
     <div className="text-center mb-12">
@@ -15,7 +15,7 @@ export default function CertificateHeader({
       </h1>
 
       <p className="mt-4 text-lg text-slate-600">
-        Verify and manage certificates issued by CloudLearn AI.
+        Verify and manage certificates issued by CloudLearn .
       </p>
 
     </div>

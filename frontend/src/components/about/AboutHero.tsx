@@ -12,7 +12,7 @@ export default function AboutHero() {
         <div>
 
           <span className="rounded-full bg-sky-100 px-5 py-2 text-sm font-semibold text-sky-700">
-            About CloudLearn AI
+            About CloudLearn
           </span>
 
           <h1 className="mt-8 text-5xl font-black leading-tight text-slate-900 lg:text-6xl">
@@ -21,7 +21,7 @@ export default function AboutHero() {
           </h1>
 
           <p className="mt-8 text-lg leading-8 text-slate-600">
-            CloudLearn AI is a modern learning platform helping engineering
+            CloudLearn is a modern learning platform helping engineering
             students master programming, cloud computing, AI, data science,
             cybersecurity, and emerging technologies through structured,
             practical learning.

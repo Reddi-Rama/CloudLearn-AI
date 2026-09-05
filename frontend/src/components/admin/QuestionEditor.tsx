@@ -15,7 +15,7 @@ export default function QuestionEditor() {
           </h2>
 
           <p className="mt-2 text-slate-500">
-            Create and manage assessment questions for CloudLearn AI.
+            Create and manage assessment questions for CloudLearn.
           </p>
 
         </div>

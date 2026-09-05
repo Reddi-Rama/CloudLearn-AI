@@ -25,7 +25,7 @@ export default function Footer() {
                 hover:text-sky-700
               "
             >
-              CloudLearn AI
+              CloudLearn
             </Link>
 
             <p
@@ -181,7 +181,7 @@ export default function Footer() {
         <div className="mt-12 border-t border-slate-200 pt-8">
 
           <p className="text-center text-sm text-slate-500">
-            © 2026 CloudLearn AI. All rights reserved.
+            © 2026 CloudLearn. All rights reserved.
           </p>
 
         </div>

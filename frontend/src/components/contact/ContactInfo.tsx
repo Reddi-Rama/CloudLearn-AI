@@ -2,7 +2,6 @@
 
 import {
   Mail,
-  Phone,
   MapPin,
   Clock,
 } from "lucide-react";
@@ -30,24 +29,7 @@ export default function ContactInfo() {
                 Email
               </h4>
               <p className="text-slate-600">
-                support@cloudlearnai.com
-              </p>
-            </div>
-
-          </div>
-
-          <div className="flex items-center gap-5">
-
-            <div className="rounded-2xl bg-sky-100 p-4">
-              <Phone className="text-sky-600" size={24} />
-            </div>
-
-            <div>
-              <h4 className="font-semibold">
-                Phone
-              </h4>
-              <p className="text-slate-600">
-                +91 98765 43210
+                cloudlearnacademy@gmail.com
               </p>
             </div>
 

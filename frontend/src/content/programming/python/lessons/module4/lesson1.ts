@@ -17,7 +17,7 @@ In Python, strings can be enclosed within either single quotes (' ') or double q
 
 Example:
 
-application_name = "CloudLearn AI"
+application_name = "CloudLearn"
 
 server_region = 'Asia-South'
 
@@ -141,11 +141,11 @@ IMPORTANT: Mastering strings is essential because text processing is a fundament
     {
       title: "Example 1: Creating and Displaying a String",
 
-      code: `application_name = "CloudLearn AI"
+      code: `application_name = "CloudLearn"
 
 print(application_name)`,
 
-      output: `CloudLearn AI`,
+      output: `CloudLearn`,
     },
 
     {

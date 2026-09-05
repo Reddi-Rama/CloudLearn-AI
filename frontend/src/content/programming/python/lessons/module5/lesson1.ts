@@ -66,13 +66,13 @@ Some commonly used built-in functions include:
 
 Example:
 
-print("Welcome to CloudLearn AI")
+print("Welcome to CloudLearn")
 
 print(len("Python"))
 
 Output:
 
-Welcome to CloudLearn AI
+Welcome to CloudLearn
 
 6
 
@@ -87,13 +87,13 @@ These are called **user-defined functions**.
 Example:
 
 def display_welcome():
-    print("Welcome to CloudLearn AI")
+    print("Welcome to CloudLearn")
 
 display_welcome()
 
 Output:
 
-Welcome to CloudLearn AI
+Welcome to CloudLearn
 
 Here,
 
@@ -191,11 +191,11 @@ IMPORTANT: Functions are one of the most fundamental concepts in programming. Ma
     {
       title: "Example 1: Using Built-in Functions",
 
-      code: `print("Welcome to CloudLearn AI")
+      code: `print("Welcome to CloudLearn")
 
 print(len("Python"))`,
 
-      output: `Welcome to CloudLearn AI
+      output: `Welcome to CloudLearn
 6`,
     },
 
@@ -203,11 +203,11 @@ print(len("Python"))`,
       title: "Example 2: Creating Your First Function",
 
       code: `def display_welcome():
-    print("Welcome to CloudLearn AI")
+    print("Welcome to CloudLearn")
 
 display_welcome()`,
 
-      output: `Welcome to CloudLearn AI`,
+      output: `Welcome to CloudLearn`,
     },
 
     {

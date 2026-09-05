@@ -134,7 +134,7 @@ Applications use formatting to display system information, reports, and dashboar
 
 Example:
 
-application = "CloudLearn AI"
+application = "CloudLearn"
 
 active_users = 15420
 
@@ -151,7 +151,7 @@ print(f"Uptime: {uptime:.2f}%")
 
 ## Output
 
-Application: CloudLearn AI
+Application: CloudLearn
 
 Active Users: 15,420
 
@@ -241,7 +241,7 @@ print(f"Total Amount: ₹{price * quantity}")`,
     {
       title: "Real-World Dashboard Example",
 
-      code: `application = "CloudLearn AI"
+      code: `application = "CloudLearn"
 
 active_users = 15420
 
@@ -251,7 +251,7 @@ print(f"Application: {application}")
 print(f"Active Users: {active_users:,}")
 print(f"Uptime: {uptime:.2f}%")`,
 
-      output: `Application: CloudLearn AI
+      output: `Application: CloudLearn
 Active Users: 15,420
 Uptime: 99.98%`,
     },

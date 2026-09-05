@@ -1520,7 +1520,7 @@ const backendDevelopmentPath: LearningPathContent = {
         "Enterprise Backend Capstone",
 
       achievement:
-        "CloudLearn AI Certified Backend Engineer & Architect",
+        "CloudLearn Certified Backend Engineer & Architect",
     },
   ],
 
@@ -1591,7 +1591,7 @@ const backendDevelopmentPath: LearningPathContent = {
 
   certificationGuidance: {
     description: [
-      "CloudLearn AI provides achievement credentials throughout the learning path so students can demonstrate their progress.",
+      "CloudLearn provides achievement credentials throughout the learning path so students can demonstrate their progress.",
 
       "External certifications can be recommended according to the learner's target backend role, programming ecosystem, cloud platform, and specialization.",
 
@@ -1766,7 +1766,7 @@ const backendDevelopmentPath: LearningPathContent = {
     "Backend Security Engineering",
     "Distributed Systems Engineering",
     "Backend System Design",
-    "CloudLearn AI Certified Backend Engineer & Architect",
+    "CloudLearn Certified Backend Engineer & Architect",
   ],
 
   /* ============================================================

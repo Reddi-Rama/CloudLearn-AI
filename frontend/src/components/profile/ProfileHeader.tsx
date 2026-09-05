@@ -25,7 +25,7 @@ export default function ProfileHeader() {
 
         <p className="mt-4 text-slate-600">
 
-          Manage your CloudLearn AI profile and learning journey.
+          Manage your CloudLearn profile and learning journey.
 
         </p>
 

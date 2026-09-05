@@ -6,7 +6,7 @@ export const STORAGE_KEYS = {
   NOTIFICATIONS: "cloudlearn_notifications",
 };
 
-export const APP_NAME = "CloudLearn AI";
+export const APP_NAME = "CloudLearn";
 
 export const APP_VERSION = "1.0.0";
 

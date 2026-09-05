@@ -86,7 +86,7 @@ export default function ComingSoonPage() {
           "
         >
           <span className="h-2 w-2 rounded-full bg-sky-500 animate-pulse" />
-          CloudLearn AI
+          CloudLearn
         </div>
 
         <h1

@@ -25,8 +25,7 @@
 
   --muted: #64748b;
 
-  --shadow:
-    0 12px 40px rgba(15, 23, 42, 0.07);
+  --shadow: 0 12px 40px rgba(15, 23, 42, 0.07);
 
   --radius: 22px;
 }
@@ -70,7 +69,6 @@ html {
 
 /* ============================================================
    BODY
-   Main global website background
 ============================================================ */
 
 body {
@@ -86,29 +84,29 @@ body {
 
   background:
     radial-gradient(
-      circle at 8% 8%,
-      rgba(186, 230, 253, 0.42),
-      transparent 26%
+      800px 600px at 8% 8%,
+      rgba(186, 230, 253, 0.32),
+      transparent 70%
     ),
     radial-gradient(
-      circle at 92% 15%,
-      rgba(207, 250, 254, 0.36),
-      transparent 28%
+      750px 550px at 92% 18%,
+      rgba(207, 250, 254, 0.25),
+      transparent 70%
     ),
     radial-gradient(
-      circle at 78% 72%,
-      rgba(224, 231, 255, 0.26),
-      transparent 30%
+      800px 600px at 78% 72%,
+      rgba(224, 231, 255, 0.18),
+      transparent 70%
     ),
     radial-gradient(
-      circle at 22% 88%,
-      rgba(219, 234, 254, 0.22),
-      transparent 28%
+      750px 550px at 18% 88%,
+      rgba(219, 234, 254, 0.15),
+      transparent 70%
     ),
     linear-gradient(
       135deg,
       #f8fbff 0%,
-      #f4f9ff 45%,
+      #f4f9ff 48%,
       #f8fbff 100%
     );
 
@@ -123,14 +121,14 @@ body {
 .dark body {
   background:
     radial-gradient(
-      circle at 10% 10%,
+      700px 500px at 10% 10%,
       rgba(14, 116, 144, 0.10),
-      transparent 25%
+      transparent 70%
     ),
     radial-gradient(
-      circle at 90% 20%,
+      700px 500px at 90% 20%,
       rgba(37, 99, 235, 0.08),
-      transparent 28%
+      transparent 70%
     ),
     linear-gradient(
       135deg,
@@ -142,7 +140,7 @@ body {
 
 
 /* ============================================================
-   SUBTLE GLOBAL ATMOSPHERE
+   SUBTLE ATMOSPHERE
 ============================================================ */
 
 body::before {
@@ -156,7 +154,7 @@ body::before {
 
   z-index: -1;
 
-  opacity: 0.55;
+  opacity: 0.45;
 
   background:
     linear-gradient(
@@ -169,13 +167,12 @@ body::before {
 
   background-size: 180% 180%;
 
-  animation:
-    ambientMove 18s ease-in-out infinite alternate;
+  animation: ambientMove 18s ease-in-out infinite alternate;
 }
 
 
 /* ============================================================
-   VERY SUBTLE GRID TEXTURE
+   SUBTLE GRID
 ============================================================ */
 
 body::after {
@@ -189,16 +186,16 @@ body::after {
 
   z-index: -2;
 
-  opacity: 0.18;
+  opacity: 0.13;
 
   background-image:
     linear-gradient(
-      rgba(148, 163, 184, 0.035) 1px,
+      rgba(148, 163, 184, 0.03) 1px,
       transparent 1px
     ),
     linear-gradient(
       90deg,
-      rgba(148, 163, 184, 0.035) 1px,
+      rgba(148, 163, 184, 0.03) 1px,
       transparent 1px
     );
 
@@ -249,7 +246,7 @@ body::after {
 
 
 /* ============================================================
-   SECTIONS
+   COMMON SECTIONS
 ============================================================ */
 
 .section {
@@ -282,6 +279,24 @@ body::after {
 
   box-shadow:
     0 12px 35px rgba(15, 23, 42, 0.07);
+}
+
+
+/* ============================================================
+   PREMIUM SURFACE
+============================================================ */
+
+.surface {
+  background: rgba(255, 255, 255, 0.78);
+
+  backdrop-filter: blur(18px);
+
+  -webkit-backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255, 255, 255, 0.72);
+
+  box-shadow:
+    0 12px 40px rgba(15, 23, 42, 0.06);
 }
 
 
@@ -408,24 +423,24 @@ body::after {
 
   background:
     radial-gradient(
-      circle at 10% 10%,
-      rgba(186, 230, 253, 0.38),
-      transparent 28%
+      750px 550px at 10% 10%,
+      rgba(186, 230, 253, 0.30),
+      transparent 70%
     ),
     radial-gradient(
-      circle at 90% 20%,
-      rgba(207, 250, 254, 0.30),
-      transparent 30%
+      750px 550px at 90% 20%,
+      rgba(207, 250, 254, 0.24),
+      transparent 70%
     ),
     radial-gradient(
-      circle at 70% 85%,
-      rgba(224, 231, 255, 0.22),
-      transparent 30%
+      750px 550px at 70% 85%,
+      rgba(224, 231, 255, 0.18),
+      transparent 70%
     ),
     linear-gradient(
       135deg,
       #f8fbff 0%,
-      #f3f8ff 50%,
+      #f4f9ff 50%,
       #f8fbff 100%
     );
 }
@@ -437,7 +452,7 @@ body::after {
 
 @keyframes float {
   0% {
-    transform: translateY(0px);
+    transform: translateY(0);
   }
 
   50% {
@@ -445,7 +460,7 @@ body::after {
   }
 
   100% {
-    transform: translateY(0px);
+    transform: translateY(0);
   }
 }
 
@@ -481,28 +496,141 @@ body::after {
 
 
 /* ============================================================
-   PREMIUM SURFACE
+   HOME PAGE
+   ONE SINGLE CANVAS
 ============================================================ */
 
-.surface {
+.home-page {
+  position: relative;
+
+  min-height: 100vh;
+
   background:
-    rgba(255, 255, 255, 0.78);
+    radial-gradient(
+      800px 600px at 8% 8%,
+      rgba(186, 230, 253, 0.30),
+      transparent 70%
+    ),
+    radial-gradient(
+      750px 550px at 92% 18%,
+      rgba(207, 250, 254, 0.24),
+      transparent 70%
+    ),
+    radial-gradient(
+      800px 600px at 78% 58%,
+      rgba(224, 231, 255, 0.18),
+      transparent 70%
+    ),
+    radial-gradient(
+      750px 550px at 18% 88%,
+      rgba(219, 234, 254, 0.15),
+      transparent 70%
+    ),
+    linear-gradient(
+      135deg,
+      #f8fbff 0%,
+      #f4f9ff 48%,
+      #f8fbff 100%
+    );
 
-  backdrop-filter: blur(18px);
+  background-attachment: fixed;
+}
 
-  -webkit-backdrop-filter: blur(18px);
 
-  border:
-    1px solid rgba(255, 255, 255, 0.72);
+/* ============================================================
+   HOME — REMOVE SECTION BACKGROUNDS
+============================================================ */
 
-  box-shadow:
-    0 12px 40px rgba(15, 23, 42, 0.06);
+/*
+   This is the critical fix.
+
+   Full-width sections must NOT be allowed to paint
+   their own backgrounds.
+*/
+
+.home-page section {
+  background-color: transparent !important;
+
+  background-image: none !important;
+
+  background: transparent !important;
+}
+
+
+/*
+   Also remove backgrounds from direct wrappers.
+*/
+
+.home-page > div,
+.home-page > article,
+.home-page > main {
+  background-color: transparent !important;
+
+  background-image: none !important;
+}
+
+
+/* ============================================================
+   HOME — REMOVE FULL-WIDTH SEPARATORS
+============================================================ */
+
+.home-page section {
+  border-top-color: transparent !important;
+
+  border-bottom-color: transparent !important;
+}
+
+
+/* ============================================================
+   HOME — WHITE CARDS ONLY
+============================================================ */
+
+/*
+   IMPORTANT:
+   Do NOT restore .bg-white on sections.
+   Restore it only on div/article card elements.
+*/
+
+.home-page div.bg-white,
+.home-page article.bg-white,
+.home-page a.bg-white {
+  background-color: #ffffff !important;
+
+  background-image: none !important;
+}
+
+
+/* ============================================================
+   HOME — GLASS CARDS
+============================================================ */
+
+.home-page .glass-card {
+  background: rgba(255, 255, 255, 0.76) !important;
+}
+
+
+/* ============================================================
+   HOME — PREMIUM SURFACES
+============================================================ */
+
+.home-page .surface {
+  background: rgba(255, 255, 255, 0.78) !important;
+}
+
+
+/* ============================================================
+   HOME — INPUTS
+============================================================ */
+
+.home-page input,
+.home-page textarea,
+.home-page select {
+  background-color: #ffffff;
 }
 
 
 /* ============================================================
    LEARNING PATHS
-   One continuous background
 ============================================================ */
 
 .learning-paths-page {
@@ -512,19 +640,19 @@ body::after {
 
   background:
     radial-gradient(
-      circle at 12% 12%,
-      rgba(186, 230, 253, 0.30),
-      transparent 28%
+      800px 600px at 10% 10%,
+      rgba(186, 230, 253, 0.28),
+      transparent 70%
     ),
     radial-gradient(
-      circle at 88% 28%,
+      750px 550px at 90% 25%,
       rgba(207, 250, 254, 0.22),
-      transparent 30%
+      transparent 70%
     ),
     radial-gradient(
-      circle at 50% 90%,
+      800px 600px at 50% 90%,
       rgba(224, 231, 255, 0.18),
-      transparent 34%
+      transparent 70%
     ),
     linear-gradient(
       135deg,
@@ -537,28 +665,26 @@ body::after {
 }
 
 
-/*
-   Remove backgrounds from the major sections
-   so the page remains one continuous canvas.
-*/
+/* Remove full-width section backgrounds */
 
-.learning-paths-page > * {
+.learning-paths-page section {
   background-color: transparent !important;
+
+  background-image: none !important;
 }
 
 
-/*
-   Remove background images from top-level sections.
-*/
+/* Preserve actual cards */
 
-.learning-paths-page > * {
-  background-image: none;
+.learning-paths-page div.bg-white,
+.learning-paths-page article.bg-white,
+.learning-paths-page a.bg-white {
+  background-color: #ffffff !important;
 }
 
 
 /* ============================================================
    DOMAINS
-   One continuous background
 ============================================================ */
 
 .domains-page {
@@ -568,19 +694,19 @@ body::after {
 
   background:
     radial-gradient(
-      circle at 12% 12%,
-      rgba(186, 230, 253, 0.30),
-      transparent 28%
+      800px 600px at 10% 10%,
+      rgba(186, 230, 253, 0.28),
+      transparent 70%
     ),
     radial-gradient(
-      circle at 88% 25%,
+      750px 550px at 90% 25%,
       rgba(207, 250, 254, 0.22),
-      transparent 30%
+      transparent 70%
     ),
     radial-gradient(
-      circle at 50% 85%,
+      800px 600px at 50% 85%,
       rgba(224, 231, 255, 0.18),
-      transparent 34%
+      transparent 70%
     ),
     linear-gradient(
       135deg,
@@ -593,22 +719,26 @@ body::after {
 }
 
 
-/*
-   Remove section backgrounds.
-*/
+/* Remove full-width section backgrounds */
 
-.domains-page > * {
+.domains-page section {
   background-color: transparent !important;
+
+  background-image: none !important;
 }
 
-.domains-page > * {
-  background-image: none;
+
+/* Preserve actual cards */
+
+.domains-page div.bg-white,
+.domains-page article.bg-white,
+.domains-page a.bg-white {
+  background-color: #ffffff !important;
 }
 
 
 /* ============================================================
    ABOUT
-   One continuous background
 ============================================================ */
 
 .about-page {
@@ -618,24 +748,24 @@ body::after {
 
   background:
     radial-gradient(
-      circle at 10% 8%,
-      rgba(186, 230, 253, 0.32),
-      transparent 28%
+      800px 600px at 10% 8%,
+      rgba(186, 230, 253, 0.28),
+      transparent 70%
     ),
     radial-gradient(
-      circle at 90% 22%,
-      rgba(207, 250, 254, 0.25),
-      transparent 30%
+      750px 550px at 90% 22%,
+      rgba(207, 250, 254, 0.22),
+      transparent 70%
     ),
     radial-gradient(
-      circle at 72% 58%,
-      rgba(224, 231, 255, 0.20),
-      transparent 32%
+      800px 600px at 72% 58%,
+      rgba(224, 231, 255, 0.18),
+      transparent 70%
     ),
     radial-gradient(
-      circle at 25% 90%,
-      rgba(219, 234, 254, 0.18),
-      transparent 30%
+      750px 550px at 25% 90%,
+      rgba(219, 234, 254, 0.15),
+      transparent 70%
     ),
     linear-gradient(
       135deg,
@@ -648,50 +778,125 @@ body::after {
 }
 
 
-/*
-   IMPORTANT:
-   Every direct About-page component gets a transparent
-   background. This removes the horizontal bands between
-   AboutHero, Mission, Vision, Stats, WhyChooseUs, Journey
-   and CTA.
-*/
+/* Remove full-width section backgrounds */
 
-.about-page > * {
+.about-page section {
   background-color: transparent !important;
 
   background-image: none !important;
 }
 
 
-/*
-   Also handle common wrapper elements directly inside
-   About page components.
-*/
+/* Remove direct wrapper backgrounds */
 
-.about-page > * > .bg-white,
-.about-page > * > .bg-slate-50,
-.about-page > * > .bg-slate-100,
-.about-page > * > .bg-gray-50,
-.about-page > * > .bg-gray-100 {
+.about-page > div {
   background-color: transparent !important;
 
   background-image: none !important;
 }
 
 
-/*
-   Remove full-width separator lines that can visually
-   create another horizontal division.
-*/
+/* Preserve actual white cards */
 
-.about-page > * {
-  border-top-color: transparent;
+.about-page div.bg-white,
+.about-page article.bg-white,
+.about-page a.bg-white {
+  background-color: #ffffff !important;
+}
+
+
+/* Preserve glass surfaces */
+
+.about-page .glass-card {
+  background: rgba(255, 255, 255, 0.76) !important;
+}
+
+.about-page .surface {
+  background: rgba(255, 255, 255, 0.78) !important;
 }
 
 
 /* ============================================================
-   GLOBAL CONTENT SURFACE
-   Useful for pages that don't have their own page class
+   CONTACT
+============================================================ */
+
+.contact-page {
+  position: relative;
+
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      800px 600px at 10% 8%,
+      rgba(186, 230, 253, 0.28),
+      transparent 70%
+    ),
+    radial-gradient(
+      750px 550px at 90% 22%,
+      rgba(207, 250, 254, 0.22),
+      transparent 70%
+    ),
+    radial-gradient(
+      800px 600px at 75% 60%,
+      rgba(224, 231, 255, 0.18),
+      transparent 70%
+    ),
+    radial-gradient(
+      750px 550px at 20% 90%,
+      rgba(219, 234, 254, 0.15),
+      transparent 70%
+    ),
+    linear-gradient(
+      135deg,
+      #f8fbff 0%,
+      #f4f9ff 48%,
+      #f8fbff 100%
+    );
+
+  background-attachment: fixed;
+}
+
+
+/* Remove section backgrounds */
+
+.contact-page section {
+  background-color: transparent !important;
+
+  background-image: none !important;
+}
+
+
+/* Remove page-level wrappers */
+
+.contact-page > div {
+  background-color: transparent !important;
+
+  background-image: none !important;
+}
+
+
+/* Preserve actual cards */
+
+.contact-page div.bg-white,
+.contact-page article.bg-white,
+.contact-page a.bg-white {
+  background-color: #ffffff !important;
+}
+
+
+/* Preserve glass cards */
+
+.contact-page .glass-card {
+  background: rgba(255, 255, 255, 0.76) !important;
+}
+
+.contact-page .surface {
+  background: rgba(255, 255, 255, 0.78) !important;
+}
+
+
+/* ============================================================
+   PAGE SURFACE
 ============================================================ */
 
 .page-surface {
@@ -699,14 +904,14 @@ body::after {
 
   background:
     radial-gradient(
-      circle at 12% 10%,
-      rgba(186, 230, 253, 0.26),
-      transparent 28%
+      800px 600px at 12% 10%,
+      rgba(186, 230, 253, 0.25),
+      transparent 70%
     ),
     radial-gradient(
-      circle at 88% 25%,
+      750px 550px at 88% 25%,
       rgba(207, 250, 254, 0.20),
-      transparent 30%
+      transparent 70%
     ),
     linear-gradient(
       135deg,
@@ -724,6 +929,7 @@ body::after {
 ============================================================ */
 
 @media (max-width: 768px) {
+
   .section {
     padding: 70px 0;
   }
@@ -735,7 +941,16 @@ body::after {
   body::after {
     background-size: 38px 38px;
 
-    opacity: 0.12;
+    opacity: 0.10;
+  }
+
+  .home-page,
+  .learning-paths-page,
+  .domains-page,
+  .about-page,
+  .contact-page,
+  .page-surface {
+    background-attachment: scroll;
   }
 }
 
@@ -745,6 +960,7 @@ body::after {
 ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
+
   html {
     scroll-behavior: auto;
   }
@@ -760,38 +976,267 @@ body::after {
   }
 }
 /* ============================================================
-   CONTACT PAGE
-   SINGLE CONTINUOUS BACKGROUND
+   CLOUDLEARN GLOBAL THEME
 ============================================================ */
 
-.contact-page {
+/* Smooth theme transition */
+html,
+body,
+body * {
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+
+/* ============================================================
+   DARK PAGE BACKGROUND
+============================================================ */
+
+html.dark body {
+  background:
+    radial-gradient(
+      800px 600px at 8% 8%,
+      rgba(14, 116, 144, 0.12),
+      transparent 70%
+    ),
+    radial-gradient(
+      750px 550px at 92% 18%,
+      rgba(37, 99, 235, 0.10),
+      transparent 70%
+    ),
+    linear-gradient(
+      135deg,
+      #020617 0%,
+      #030b1d 50%,
+      #020617 100%
+    );
+
+  color: #f8fafc;
+}
+
+
+/* ============================================================
+   MAIN LIGHT PAGES → DARK
+============================================================ */
+
+html.dark .home-page,
+html.dark .domains-page,
+html.dark .learning-paths-page,
+html.dark .about-page,
+html.dark .contact-page,
+html.dark .page-surface {
+  background:
+    radial-gradient(
+      800px 600px at 10% 10%,
+      rgba(14, 116, 144, 0.10),
+      transparent 70%
+    ),
+    radial-gradient(
+      750px 550px at 90% 25%,
+      rgba(37, 99, 235, 0.08),
+      transparent 70%
+    ),
+    linear-gradient(
+      135deg,
+      #020617 0%,
+      #030b1d 50%,
+      #020617 100%
+    ) !important;
+}
+
+
+/* ============================================================
+   DARK TEXT
+============================================================ */
+
+html.dark .text-slate-900 {
+  color: #f8fafc !important;
+}
+
+html.dark .text-slate-800 {
+  color: #e2e8f0 !important;
+}
+
+html.dark .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+
+html.dark .text-slate-600 {
+  color: #94a3b8 !important;
+}
+
+html.dark .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+
+/* ============================================================
+   DARK SURFACES
+============================================================ */
+
+html.dark .bg-white {
+  background-color: #0f172a !important;
+}
+
+html.dark .bg-slate-50 {
+  background-color: #0b1220 !important;
+}
+
+html.dark .bg-slate-100 {
+  background-color: #111827 !important;
+}
+
+
+/* ============================================================
+   DARK BORDERS
+============================================================ */
+
+html.dark .border-slate-200 {
+  border-color: #26354d !important;
+}
+
+html.dark .border-slate-300 {
+  border-color: #334155 !important;
+}
+
+
+/* ============================================================
+   DARK GLASS CARD
+============================================================ */
+
+html.dark .glass-card {
+  background: rgba(15, 23, 42, 0.78) !important;
+
+  border-color: rgba(71, 85, 105, 0.45) !important;
+
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+
+/* ============================================================
+   DARK PREMIUM SURFACE
+============================================================ */
+
+html.dark .surface {
+  background: rgba(15, 23, 42, 0.82) !important;
+
+  border-color: rgba(71, 85, 105, 0.45) !important;
+}
+
+
+/* ============================================================
+   DARK INPUTS
+============================================================ */
+
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: #0f172a !important;
+
+  color: #f8fafc !important;
+
+  border-color: #334155 !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #64748b !important;
+}
+
+
+/* ============================================================
+   DARK BUTTONS
+============================================================ */
+
+html.dark .btn-secondary {
+  background: #0f172a;
+
+  border-color: #334155;
+
+  color: #e2e8f0;
+}
+
+html.dark .btn-secondary:hover {
+  background: #1e293b;
+}
+
+
+/* ============================================================
+   DARK LINKS
+============================================================ */
+
+html.dark a {
+  border-color: inherit;
+}
+
+
+/* ============================================================
+   DARK SCROLLBAR
+============================================================ */
+
+html.dark ::-webkit-scrollbar-track {
+  background: #020617;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background:
+    linear-gradient(
+      180deg,
+      #0ea5e9,
+      #2563eb
+    );
+}
+
+
+/* ============================================================
+   THEME FLASH PREVENTION
+============================================================ */
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+/* ============================================================
+   AUTH / LOGIN PAGE
+   LIGHT + DARK THEME
+============================================================ */
+
+/*
+   Keep the login page independent from the main website
+   section backgrounds.
+*/
+
+.auth-page {
   min-height: 100vh;
 
   background:
     radial-gradient(
-      circle at 10% 8%,
-      rgba(186, 230, 253, 0.30),
-      transparent 28%
+      700px 520px at 8% 12%,
+      rgba(186, 230, 253, 0.35),
+      transparent 70%
     ),
     radial-gradient(
-      circle at 90% 20%,
-      rgba(207, 250, 254, 0.24),
-      transparent 30%
+      650px 500px at 92% 22%,
+      rgba(207, 250, 254, 0.28),
+      transparent 70%
     ),
     radial-gradient(
-      circle at 75% 60%,
-      rgba(224, 231, 255, 0.20),
-      transparent 32%
-    ),
-    radial-gradient(
-      circle at 20% 90%,
-      rgba(219, 234, 254, 0.18),
-      transparent 30%
+      700px 550px at 52% 80%,
+      rgba(224, 231, 255, 0.18),
+      transparent 70%
     ),
     linear-gradient(
       135deg,
       #f8fbff 0%,
-      #f4f9ff 48%,
+      #f4f9ff 50%,
       #f8fbff 100%
     );
 
@@ -800,38 +1245,829 @@ body::after {
 
 
 /* ============================================================
-   MAKE CONTACT SECTIONS USE THE SAME CANVAS
+   DARK AUTH PAGE BACKGROUND
 ============================================================ */
 
-.contact-page > * {
-  background-color: transparent !important;
-  background-image: none !important;
-}
+html.dark .auth-page {
+  background:
+    radial-gradient(
+      700px 520px at 8% 12%,
+      rgba(14, 116, 144, 0.14),
+      transparent 70%
+    ),
+    radial-gradient(
+      650px 500px at 92% 22%,
+      rgba(37, 99, 235, 0.13),
+      transparent 70%
+    ),
+    radial-gradient(
+      700px 550px at 52% 80%,
+      rgba(79, 70, 229, 0.10),
+      transparent 70%
+    ),
+    linear-gradient(
+      135deg,
+      #020617 0%,
+      #07111f 50%,
+      #020617 100%
+    );
 
-
-/* The middle form/info wrapper is also transparent */
-.contact-page > div {
-  background-color: transparent !important;
-  background-image: none !important;
+  background-attachment: fixed;
 }
 
 
 /* ============================================================
-   PRESERVE ACTUAL WHITE CARDS
+   REMOVE LIGHT SECTION BACKGROUNDS
 ============================================================ */
 
-.contact-page .bg-white {
-  background-color: #ffffff !important;
+html.dark .auth-page section,
+html.dark .auth-page > div,
+html.dark .auth-page > div > div {
+  background-color: transparent;
 }
 
 
-/* Preserve glass surfaces */
-.contact-page .glass-card {
-  background: rgba(255, 255, 255, 0.76) !important;
+/* ============================================================
+   AUTH CARD
+============================================================ */
+
+html.dark .auth-page .bg-white {
+  background-color: #0f172a !important;
+}
+
+html.dark .auth-page .bg-white\/95 {
+  background-color: rgba(15, 23, 42, 0.95) !important;
+}
+
+html.dark .auth-page .bg-white\/90 {
+  background-color: rgba(15, 23, 42, 0.90) !important;
+}
+
+html.dark .auth-page .bg-white\/80 {
+  background-color: rgba(15, 23, 42, 0.80) !important;
 }
 
 
-/* Preserve premium surfaces */
-.contact-page .surface {
-  background: rgba(255, 255, 255, 0.78) !important;
+/* ============================================================
+   AUTH CARD BORDER + SHADOW
+============================================================ */
+
+html.dark .auth-page [class*="rounded-"] {
+  border-color: #26354d;
+}
+
+html.dark .auth-page .shadow-xl,
+html.dark .auth-page .shadow-2xl,
+html.dark .auth-page .shadow-lg {
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+
+/* ============================================================
+   HEADINGS
+============================================================ */
+
+html.dark .auth-page h1,
+html.dark .auth-page h2,
+html.dark .auth-page h3 {
+  color: #f8fafc !important;
+}
+
+
+/* ============================================================
+   NORMAL TEXT
+============================================================ */
+
+html.dark .auth-page p {
+  color: #94a3b8 !important;
+}
+
+
+/* ============================================================
+   COMMON SLATE TEXT
+============================================================ */
+
+html.dark .auth-page .text-slate-900,
+html.dark .auth-page .text-slate-800 {
+  color: #f8fafc !important;
+}
+
+html.dark .auth-page .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+
+html.dark .auth-page .text-slate-600 {
+  color: #94a3b8 !important;
+}
+
+html.dark .auth-page .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+html.dark .auth-page .text-slate-400 {
+  color: #64748b !important;
+}
+
+
+/* ============================================================
+   LABELS
+============================================================ */
+
+html.dark .auth-page label {
+  color: #cbd5e1 !important;
+}
+
+
+/* ============================================================
+   INPUTS
+============================================================ */
+
+html.dark .auth-page input,
+html.dark .auth-page textarea,
+html.dark .auth-page select {
+  background-color: #020617 !important;
+
+  color: #f8fafc !important;
+
+  border-color: #334155 !important;
+}
+
+
+/* Input placeholder */
+
+html.dark .auth-page input::placeholder,
+html.dark .auth-page textarea::placeholder {
+  color: #64748b !important;
+}
+
+
+/* Input focus */
+
+html.dark .auth-page input:focus,
+html.dark .auth-page textarea:focus,
+html.dark .auth-page select:focus {
+  border-color: #0ea5e9 !important;
+
+  box-shadow:
+    0 0 0 3px rgba(14, 165, 233, 0.15);
+}
+
+
+/* ============================================================
+   CHECKBOXES
+============================================================ */
+
+html.dark .auth-page input[type="checkbox"] {
+  accent-color: #0ea5e9;
+}
+
+
+/* ============================================================
+   AUTH LINKS
+============================================================ */
+
+html.dark .auth-page a {
+  color: #38bdf8;
+}
+
+html.dark .auth-page a:hover {
+  color: #7dd3fc;
+}
+
+
+/* ============================================================
+   SOCIAL LOGIN BUTTONS
+============================================================ */
+
+html.dark .auth-page button {
+  border-color: #334155;
+}
+
+
+/* White / light social buttons become dark */
+
+html.dark .auth-page button.bg-white,
+html.dark .auth-page a.bg-white {
+  background-color: #111827 !important;
+
+  color: #e2e8f0 !important;
+}
+
+
+/* ============================================================
+   AUTH BUTTONS
+============================================================ */
+
+html.dark .auth-page .bg-sky-600,
+html.dark .auth-page .bg-blue-600 {
+  color: #ffffff !important;
+}
+
+
+/* ============================================================
+   DIVIDERS
+============================================================ */
+
+html.dark .auth-page hr,
+html.dark .auth-page .border-slate-200 {
+  border-color: #334155 !important;
+}
+
+
+/* ============================================================
+   ICON BACKGROUNDS
+============================================================ */
+
+html.dark .auth-page .bg-sky-50 {
+  background-color: #082f49 !important;
+}
+
+html.dark .auth-page .bg-blue-50 {
+  background-color: #172554 !important;
+}
+
+html.dark .auth-page .bg-indigo-50 {
+  background-color: #1e1b4b !important;
+}
+
+
+/* ============================================================
+   ICON COLORS
+============================================================ */
+
+html.dark .auth-page .text-sky-600,
+html.dark .auth-page .text-sky-500 {
+  color: #38bdf8 !important;
+}
+
+html.dark .auth-page .text-blue-600 {
+  color: #60a5fa !important;
+}
+
+html.dark .auth-page .text-indigo-600 {
+  color: #818cf8 !important;
+}
+
+
+/* ============================================================
+   HERO SIDE
+============================================================ */
+
+html.dark .auth-page h1 span {
+  color: inherit;
+}
+
+
+/* Hero supporting text */
+
+html.dark .auth-page .text-gray-500,
+html.dark .auth-page .text-gray-600 {
+  color: #94a3b8 !important;
+}
+
+
+/* ============================================================
+   AUTH LOGO
+============================================================ */
+
+html.dark .auth-page img {
+  opacity: 0.98;
+}
+
+
+/* ============================================================
+   ERROR / SUCCESS
+============================================================ */
+
+html.dark .auth-page .bg-red-50 {
+  background-color: #450a0a !important;
+}
+
+html.dark .auth-page .text-red-600 {
+  color: #fca5a5 !important;
+}
+
+html.dark .auth-page .border-red-200 {
+  border-color: #7f1d1d !important;
+}
+
+html.dark .auth-page .bg-green-50 {
+  background-color: #052e16 !important;
+}
+
+html.dark .auth-page .text-green-600 {
+  color: #86efac !important;
+}
+
+
+/* ============================================================
+   DARK AUTH CARD - PREMIUM LOOK
+============================================================ */
+
+html.dark .auth-page
+  div[class*="rounded-[32px]"],
+html.dark .auth-page
+  div[class*="rounded-3xl"] {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(15, 23, 42, 0.96),
+      rgba(15, 23, 42, 0.88)
+    ) !important;
+
+  border-color: rgba(71, 85, 105, 0.55) !important;
+
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+
+/* ============================================================
+   DARK AUTH PAGE - BUTTON HOVER
+============================================================ */
+
+html.dark .auth-page button:hover {
+  border-color: #475569;
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 768px) {
+  .auth-page {
+    background-attachment: scroll;
+  }
+}
+/* ============================================================
+   DOMAIN DETAIL PAGE
+   /domains/[domain]
+============================================================ */
+
+.domain-detail-page {
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      800px 600px at 8% 8%,
+      rgba(186, 230, 253, 0.28),
+      transparent 70%
+    ),
+    radial-gradient(
+      750px 550px at 92% 20%,
+      rgba(207, 250, 254, 0.22),
+      transparent 70%
+    ),
+    radial-gradient(
+      800px 600px at 55% 80%,
+      rgba(224, 231, 255, 0.16),
+      transparent 70%
+    ),
+    linear-gradient(
+      135deg,
+      #f8fbff 0%,
+      #f4f9ff 50%,
+      #f8fbff 100%
+    );
+
+  background-attachment: fixed;
+}
+
+
+/* ============================================================
+   DARK DOMAIN DETAIL
+============================================================ */
+
+html.dark .domain-detail-page {
+  background:
+    radial-gradient(
+      800px 600px at 8% 8%,
+      rgba(14, 116, 144, 0.10),
+      transparent 70%
+    ),
+    radial-gradient(
+      750px 550px at 92% 20%,
+      rgba(37, 99, 235, 0.09),
+      transparent 70%
+    ),
+    radial-gradient(
+      800px 600px at 55% 80%,
+      rgba(79, 70, 229, 0.07),
+      transparent 70%
+    ),
+    linear-gradient(
+      135deg,
+      #020617 0%,
+      #050b18 50%,
+      #020617 100%
+    );
+
+  background-attachment: fixed;
+}
+
+
+/* ============================================================
+   REMOVE OLD LIGHT BACKGROUNDS INSIDE DETAIL PAGE
+============================================================ */
+
+.domain-detail-page section,
+.domain-detail-page > div {
+  background-image: none;
+}
+
+
+/* Remove old full-width light backgrounds */
+
+html.dark .domain-detail-page .bg-slate-50,
+html.dark .domain-detail-page .bg-slate-100,
+html.dark .domain-detail-page .bg-gray-50,
+html.dark .domain-detail-page .bg-gray-100,
+html.dark .domain-detail-page .bg-white {
+  background-image: none;
+}
+
+
+/* ============================================================
+   DOMAIN DETAIL TEXT
+============================================================ */
+
+html.dark .domain-detail-page .text-slate-900 {
+  color: #f8fafc !important;
+}
+
+html.dark .domain-detail-page .text-slate-800 {
+  color: #e2e8f0 !important;
+}
+
+html.dark .domain-detail-page .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+
+html.dark .domain-detail-page .text-slate-600 {
+  color: #94a3b8 !important;
+}
+
+html.dark .domain-detail-page .text-slate-500 {
+  color: #64748b !important;
+}
+
+
+/* ============================================================
+   DOMAIN DETAIL CARDS
+============================================================ */
+
+.domain-detail-page article,
+.domain-detail-page .domain-card {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+
+html.dark .domain-detail-page article,
+html.dark .domain-detail-page .domain-card {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(15, 23, 42, 0.96),
+      rgba(15, 23, 42, 0.88)
+    ) !important;
+
+  border-color: #26354d !important;
+
+  box-shadow:
+    0 16px 45px rgba(0, 0, 0, 0.28);
+}
+
+
+/* Card hover */
+
+html.dark .domain-detail-page article:hover,
+html.dark .domain-detail-page .domain-card:hover {
+  border-color: rgba(14, 165, 233, 0.55) !important;
+
+  box-shadow:
+    0 22px 55px rgba(0, 0, 0, 0.38),
+    0 0 30px rgba(14, 165, 233, 0.06);
+}
+
+
+/* ============================================================
+   DOMAIN DETAIL NUMBER CIRCLES
+============================================================ */
+
+html.dark .domain-detail-page [class*="bg-sky-50"],
+html.dark .domain-detail-page [class*="bg-blue-50"] {
+  background-color: #082f49 !important;
+}
+
+html.dark .domain-detail-page .text-sky-600,
+html.dark .domain-detail-page .text-blue-600 {
+  color: #38bdf8 !important;
+}
+
+
+/* ============================================================
+   DOMAIN DETAIL LINKS
+============================================================ */
+
+html.dark .domain-detail-page a {
+  color: #38bdf8;
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 768px) {
+  .domain-detail-page {
+    background-attachment: scroll;
+  }
+}
+/* ============================================================
+   DOMAIN DETAIL PAGES
+   Final dark/light background fix
+============================================================ */
+
+.domain-detail-page {
+  min-height: 100vh;
+  color: var(--foreground);
+}
+
+
+/* LIGHT */
+
+.domain-detail-page {
+  background:
+    radial-gradient(
+      700px 500px at 8% 10%,
+      rgba(186, 230, 253, 0.22),
+      transparent 70%
+    ),
+    radial-gradient(
+      650px 500px at 92% 20%,
+      rgba(207, 250, 254, 0.18),
+      transparent 70%
+    ),
+    linear-gradient(
+      135deg,
+      #f8fbff 0%,
+      #f4f9ff 50%,
+      #f8fbff 100%
+    ) !important;
+}
+
+
+/* DARK */
+
+html.dark .domain-detail-page {
+  background:
+    radial-gradient(
+      700px 500px at 8% 10%,
+      rgba(14, 116, 144, 0.10),
+      transparent 70%
+    ),
+    radial-gradient(
+      650px 500px at 92% 20%,
+      rgba(37, 99, 235, 0.08),
+      transparent 70%
+    ),
+    radial-gradient(
+      700px 500px at 60% 80%,
+      rgba(79, 70, 229, 0.06),
+      transparent 70%
+    ),
+    linear-gradient(
+      135deg,
+      #020617 0%,
+      #050b18 50%,
+      #020617 100%
+    ) !important;
+
+  color: #f8fafc;
+}
+
+
+/* ============================================================
+   REMOVE OLD LIGHT PAGE BACKGROUND
+============================================================ */
+
+.domain-detail-page > div {
+  background-color: transparent !important;
+}
+
+
+/* ============================================================
+   DARK DOMAIN CONTENT
+============================================================ */
+
+html.dark .domain-detail-page .text-slate-900 {
+  color: #f8fafc !important;
+}
+
+html.dark .domain-detail-page .text-slate-800 {
+  color: #e2e8f0 !important;
+}
+
+html.dark .domain-detail-page .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+
+html.dark .domain-detail-page .text-slate-600 {
+  color: #94a3b8 !important;
+}
+
+html.dark .domain-detail-page .text-slate-500 {
+  color: #64748b !important;
+}
+
+
+/* ============================================================
+   DARK DOMAIN CARDS
+============================================================ */
+
+html.dark .domain-detail-page article,
+html.dark .domain-detail-page .domain-card {
+  background:
+    linear-gradient(
+      145deg,
+      #111827,
+      #0f172a
+    ) !important;
+
+  border-color: #26354d !important;
+
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.30);
+}
+
+
+/* ============================================================
+   DARK DOMAIN CARD HOVER
+============================================================ */
+
+html.dark .domain-detail-page article:hover,
+html.dark .domain-detail-page .domain-card:hover {
+  border-color: rgba(14, 165, 233, 0.50) !important;
+
+  box-shadow:
+    0 22px 55px rgba(0, 0, 0, 0.38),
+    0 0 28px rgba(14, 165, 233, 0.06);
+}
+
+
+/* ============================================================
+   DARK BADGES / NUMBER CIRCLES
+============================================================ */
+
+html.dark .domain-detail-page .bg-sky-50,
+html.dark .domain-detail-page .bg-blue-50 {
+  background-color: #082f49 !important;
+}
+
+html.dark .domain-detail-page .text-sky-600,
+html.dark .domain-detail-page .text-blue-600 {
+  color: #38bdf8 !important;
+}
+
+
+/* ============================================================
+   DARK LINKS
+============================================================ */
+
+html.dark .domain-detail-page a {
+  color: #38bdf8;
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 768px) {
+  .domain-detail-page {
+    background-attachment: scroll;
+  }
+}
+/* ============================================================
+   CLOUDLEARN GLOBAL HORIZONTAL LAYOUT FIX
+============================================================ */
+
+/*
+   Prevent the whole website from becoming horizontally
+   offset or scrollable.
+*/
+
+html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+
+/*
+   Keep the Next.js root itself inside the viewport.
+*/
+
+body > * {
+  width: 100%;
+  max-width: 100%;
+}
+
+
+/* ============================================================
+   GLOBAL BACK NAVIGATION
+============================================================ */
+
+.cloudlearn-back-nav {
+  position: fixed !important;
+
+  top: 92px !important;
+
+  left: 16px !important;
+
+  right: auto !important;
+
+  width: max-content !important;
+
+  max-width: calc(100vw - 32px) !important;
+
+  height: auto !important;
+
+  margin: 0 !important;
+
+  padding: 0 !important;
+
+  z-index: 99999 !important;
+
+  display: block !important;
+
+  overflow: visible !important;
+
+  transform: none !important;
+
+  inset-inline-start: 16px !important;
+
+  inset-inline-end: auto !important;
+}
+
+
+/* ============================================================
+   AUTH BACK NAVIGATION
+============================================================ */
+
+.cloudlearn-back-nav-auth {
+  top: 18px !important;
+
+  left: 18px !important;
+
+  inset-inline-start: 18px !important;
+}
+
+
+/* ============================================================
+   NEVER LET THE BACK BUTTON ITSELF BE CLIPPED
+============================================================ */
+
+.cloudlearn-back-nav *,
+.cloudlearn-back-nav a {
+  max-width: none !important;
+
+  overflow: visible !important;
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 768px) {
+  .cloudlearn-back-nav {
+    top: 84px !important;
+
+    left: 12px !important;
+
+    inset-inline-start: 12px !important;
+
+    max-width: calc(100vw - 24px) !important;
+  }
+
+  .cloudlearn-back-nav-auth {
+    top: 12px !important;
+
+    left: 12px !important;
+
+    inset-inline-start: 12px !important;
+  }
 }
