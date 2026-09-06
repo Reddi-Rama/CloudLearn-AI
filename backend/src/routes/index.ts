@@ -1,7 +1,10 @@
-import { Router } from "express";
+﻿import { Router } from "express";
+
 import authRoutes from "../modules/auth/auth.routes";
 import userRoutes from "../modules/user/user.routes";
 import certificateRoutes from "../modules/certificate/certificate.routes";
+import paymentRoutes from "../modules/payment/payment.routes";
+
 const router = Router();
 
 router.get("/", (_, res) => {
@@ -14,4 +17,6 @@ router.get("/", (_, res) => {
 router.use("/auth", authRoutes);
 router.use("/users", userRoutes);
 router.use("/certificate", certificateRoutes);
+router.use("/payment", paymentRoutes);
+
 export default router;
