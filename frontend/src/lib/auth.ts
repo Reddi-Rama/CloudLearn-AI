@@ -1,4 +1,4 @@
-export function isAuthenticated() {
+﻿export function isAuthenticated() {
   if (typeof window === "undefined") {
     return false;
   }
@@ -17,7 +17,18 @@ export function login(data: any) {
 
   const accessToken = data?.accessToken;
   const refreshToken = data?.refreshToken;
-  const user = data?.user;
+
+  const user =
+    data?.user ??
+    (data?.email || data?.fullName
+      ? {
+          id: data.id,
+          fullName: data.fullName,
+          email: data.email,
+          avatar: data.avatar,
+          role: data.role,
+        }
+      : null);
 
   if (accessToken) {
     localStorage.setItem(
@@ -68,5 +79,13 @@ export function getUser() {
     "cloudlearn-user"
   );
 
-  return user ? JSON.parse(user) : null;
+  if (!user) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(user);
+  } catch {
+    return null;
+  }
 }

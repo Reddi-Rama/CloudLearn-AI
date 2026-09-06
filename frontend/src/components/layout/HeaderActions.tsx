@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   Award,
@@ -7,9 +7,55 @@ import {
   UserCircle2,
 } from "lucide-react";
 
+import { useEffect, useRef, useState } from "react";
+
 import ThemeToggle from "./ThemeToggle";
+import { getUser, logout } from "@/lib/auth";
+
+type UserData = {
+  fullName?: string;
+  email?: string;
+};
 
 export default function HeaderActions() {
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [user, setUser] = useState<UserData | null>(null);
+
+  const profileRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const storedUser = getUser();
+
+    if (storedUser) {
+      setUser(storedUser);
+    }
+  }, []);
+
+  useEffect(() => {
+    function handleOutsideClick(event: MouseEvent) {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(
+          event.target as Node
+        )
+      ) {
+        setProfileOpen(false);
+      }
+    }
+
+    document.addEventListener(
+      "mousedown",
+      handleOutsideClick
+    );
+
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        handleOutsideClick
+      );
+    };
+  }, []);
+
   function handleCertificatesClick() {
     const token = localStorage.getItem(
       "cloudlearn-access-token"
@@ -20,6 +66,13 @@ export default function HeaderActions() {
     } else {
       window.location.href = "/login";
     }
+  }
+
+  function handleLogout() {
+    logout();
+    setUser(null);
+    setProfileOpen(false);
+    window.location.href = "/login";
   }
 
   return (
@@ -96,15 +149,82 @@ export default function HeaderActions() {
 
       <ThemeToggle />
 
-      <button
-        type="button"
-        aria-label="Profile"
+      <div
+        ref={profileRef}
+        className="relative"
       >
-        <UserCircle2
-          size={36}
-          className="text-sky-600"
-        />
-      </button>
+        <button
+          type="button"
+          onClick={() =>
+            setProfileOpen((previous) => !previous)
+          }
+          aria-label="Profile"
+          aria-expanded={profileOpen}
+          className="
+          rounded-full
+          transition
+          hover:scale-105
+          "
+        >
+          <UserCircle2
+            size={36}
+            className="text-sky-600"
+          />
+        </button>
+
+        {profileOpen && (
+          <div
+            className="
+            absolute
+            right-0
+            top-12
+            z-50
+            w-72
+            overflow-hidden
+            rounded-2xl
+            border
+            border-slate-200
+            bg-white
+            shadow-2xl
+            "
+          >
+            <div className="border-b border-slate-200 px-5 py-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                Signed in as
+              </p>
+
+              <p className="mt-1 truncate text-lg font-bold text-slate-900">
+                {user?.fullName || "User"}
+              </p>
+
+              <p className="mt-1 truncate text-sm text-slate-600">
+                {user?.email || "No email available"}
+              </p>
+            </div>
+
+            <div className="p-3">
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="
+                w-full
+                rounded-xl
+                px-4
+                py-3
+                text-left
+                text-sm
+                font-semibold
+                text-red-600
+                transition
+                hover:bg-red-50
+                "
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
 
     </div>
   );
