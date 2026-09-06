@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const protectedRoutes = [
@@ -7,29 +7,18 @@ const protectedRoutes = [
   "/notifications",
   "/settings",
   "/certificates",
-  "/payment",
 ];
 
-export function middleware(
-  request: NextRequest,
-) {
-  const token =
-    request.cookies.get("token");
+export function middleware(request: NextRequest) {
+  const token = request.cookies.get("token");
 
-  const isProtected =
-    protectedRoutes.some((route) =>
-      request.nextUrl.pathname.startsWith(route)
-    );
+  const isProtected = protectedRoutes.some((route) =>
+    request.nextUrl.pathname.startsWith(route)
+  );
 
-  if (
-    isProtected &&
-    !token
-  ) {
+  if (isProtected && !token) {
     return NextResponse.redirect(
-      new URL(
-        "/login",
-        request.url,
-      ),
+      new URL("/login", request.url)
     );
   }
 
@@ -43,6 +32,5 @@ export const config = {
     "/notifications/:path*",
     "/settings/:path*",
     "/certificates/:path*",
-    "/payment/:path*",
   ],
 };

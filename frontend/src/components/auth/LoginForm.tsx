@@ -1,8 +1,8 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import AuthInput from "./AuthInput";
 import PasswordInput from "./PasswordInput";
@@ -18,6 +18,7 @@ import { login } from "@/lib/auth";
 
 export default function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,6 +26,8 @@ export default function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  const redirectTo = searchParams.get("redirect") || "/";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,8 +47,8 @@ export default function LoginForm() {
 
       setSuccess("Login successful!");
 
-      // Go directly to the Home page
-      router.replace("/");
+      // Return to the page the user originally wanted
+      router.replace(redirectTo);
     } catch (error) {
       setError(
         error instanceof Error
@@ -115,4 +118,4 @@ export default function LoginForm() {
       </p>
     </form>
   );
-} 
+}

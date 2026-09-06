@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { modules as pythonModules } from "@/content/programming/python/lessons/module";
@@ -109,44 +109,146 @@ export default async function CoursePage({
             examples, and real-world applications.
           </p>
 
+          {/* LOCKED COURSE PAYMENT AREA */}
+
           <div
             className="
               mt-10
-              flex
-              gap-4
+              rounded-3xl
+              border
+              border-sky-100
+              bg-sky-50
+              p-8
             "
           >
 
-            <Link
-              href={`/lesson/${course}/module1/about`}
+            <div
               className="
+                flex
+                items-center
+                gap-3
+              "
+            >
+              <div
+                className="
+                  flex
+                  h-12
+                  w-12
+                  items-center
+                  justify-center
+                  rounded-2xl
+                  bg-white
+                  text-2xl
+                  shadow-sm
+                "
+              >
+                🔒
+              </div>
+
+              <div>
+                <p
+                  className="
+                    text-sm
+                    font-semibold
+                    uppercase
+                    tracking-wide
+                    text-sky-600
+                  "
+                >
+                  Course Locked
+                </p>
+
+                <h2
+                  className="
+                    mt-1
+                    text-2xl
+                    font-bold
+                    text-slate-900
+                  "
+                >
+                  Unlock {courseName}
+                </h2>
+              </div>
+            </div>
+
+            <div
+              className="
+                mt-6
+                flex
+                flex-wrap
+                items-center
+                gap-4
+              "
+            >
+              <span
+                className="
+                  text-lg
+                  font-medium
+                  text-slate-400
+                  line-through
+                "
+              >
+                ₹99
+              </span>
+
+              <span
+                className="
+                  text-4xl
+                  font-bold
+                  text-slate-900
+                "
+              >
+                ₹49
+              </span>
+
+              <span
+                className="
+                  rounded-full
+                  bg-green-100
+                  px-4
+                  py-2
+                  text-sm
+                  font-bold
+                  text-green-700
+                "
+              >
+                50% OFF
+              </span>
+            </div>
+
+            <p
+              className="
+                mt-4
+                max-w-2xl
+                text-sm
+                leading-6
+                text-slate-600
+              "
+            >
+              Unlock this complete course to access all
+              modules, lessons, practical examples, and
+              learning content.
+            </p>
+
+            <Link
+              href={`/payment/checkout?course=${encodeURIComponent(course)}`}
+              className="
+                mt-6
+                inline-flex
+                items-center
+                justify-center
                 rounded-2xl
                 bg-sky-600
                 px-8
                 py-4
                 font-semibold
                 text-white
+                shadow-sm
                 transition
                 hover:bg-sky-700
               "
             >
-              Start Learning
-            </Link>
-
-            <Link
-              href={`/exam/${course}`}
-              className="
-                rounded-2xl
-                border
-                border-slate-300
-                px-8
-                py-4
-                font-semibold
-                transition
-                hover:bg-slate-100
-              "
-            >
-              Final Exam
+              Unlock Course →
             </Link>
 
           </div>
@@ -161,15 +263,52 @@ export default async function CoursePage({
           "
         >
 
-          <h2
+          <div
             className="
-              text-3xl
-              font-bold
-              text-slate-900
+              flex
+              flex-wrap
+              items-end
+              justify-between
+              gap-4
             "
           >
-            Course Modules
-          </h2>
+
+            <div>
+              <h2
+                className="
+                  text-3xl
+                  font-bold
+                  text-slate-900
+                "
+              >
+                Course Modules
+              </h2>
+
+              <p
+                className="
+                  mt-2
+                  text-slate-600
+                "
+              >
+                Unlock the course to access these modules.
+              </p>
+            </div>
+
+            <span
+              className="
+                rounded-full
+                bg-slate-100
+                px-4
+                py-2
+                text-sm
+                font-medium
+                text-slate-600
+              "
+            >
+              🔒 Locked
+            </span>
+
+          </div>
 
           <div
             className="
@@ -186,9 +325,8 @@ export default async function CoursePage({
                 .filter(Boolean)
                 .map((module, index) => (
 
-                  <Link
+                  <div
                     key={`${module.id}-${index}`}
-                    href={`/lesson/${course}/${module.id}/about`}
                     className="
                       flex
                       min-h-[310px]
@@ -199,9 +337,6 @@ export default async function CoursePage({
                       bg-white
                       p-8
                       shadow-sm
-                      transition
-                      hover:-translate-y-1
-                      hover:shadow-xl
                     "
                   >
 
@@ -210,18 +345,32 @@ export default async function CoursePage({
                     <div
                       className="
                         flex
-                        h-12
-                        w-12
-                        shrink-0
                         items-center
-                        justify-center
-                        rounded-2xl
-                        bg-sky-100
-                        font-bold
-                        text-sky-600
+                        justify-between
                       "
                     >
-                      {index + 1}
+
+                      <div
+                        className="
+                          flex
+                          h-12
+                          w-12
+                          shrink-0
+                          items-center
+                          justify-center
+                          rounded-2xl
+                          bg-slate-100
+                          font-bold
+                          text-slate-500
+                        "
+                      >
+                        {index + 1}
+                      </div>
+
+                      <span className="text-xl">
+                        🔒
+                      </span>
+
                     </div>
 
                     {/* TITLE */}
@@ -285,15 +434,15 @@ export default async function CoursePage({
                       <span
                         className="
                           font-semibold
-                          text-sky-600
+                          text-slate-400
                         "
                       >
-                        Start Module →
+                        Locked 🔒
                       </span>
 
                     </div>
 
-                  </Link>
+                  </div>
 
                 ))
             }
