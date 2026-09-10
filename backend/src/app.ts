@@ -1,10 +1,11 @@
-import express from "express";
+﻿import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import routes from "./routes";
+
 const app = express();
 
 /**
@@ -22,7 +23,10 @@ app.use(compression());
  */
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: [
+      "http://localhost:3000",
+      "http://10.240.152.175:3000",
+    ],
     credentials: true,
   })
 );

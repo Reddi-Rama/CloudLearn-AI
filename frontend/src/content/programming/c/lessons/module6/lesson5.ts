@@ -1,121 +1,226 @@
-const lesson4 = {
-  id: "lesson4",
 
-  title: "Null Character '\\0'",
+
+
+
+const lesson5 = {
+  id: "lesson5",
+
+  title: "Reading and Displaying Strings",
 
   content: `
 
-# Lesson 4: Null Character '\\0'
+# Lesson 5: Reading and Displaying Strings
 
 ---
 
 ## Introduction
 
-When working with strings in C, one character has a special purpose: the **null character**.
+A string is useful only when a program can **accept text from the user and display it when required**.
 
-It is written as:
+In C, strings can be read and displayed using functions such as:
 
-'\\0'
+scanf()
 
-The null character marks the **end of a string**.
+printf()
 
-For example:
-
-char name[] = "Hello";
-
-is stored conceptually as:
-
-Index:    0    1    2    3    4    5
-
-          ┌────┬────┬────┬────┬────┬────┐
-          │ H  │ e  │ l  │ l  │ o  │\\0  │
-          └────┴────┴────┴────┴────┴────┘
-
-The '\\0' tells C that the string ends after o.
+For basic string input, %s is commonly used with scanf().
 
 ---
 
-# 1. Why the Null Character Is Needed
+# 1. Reading a String Using scanf()
 
-C does not store the length of a string separately.
+Example:
 
-Instead, string-processing functions continue reading characters until they encounter:
+\`\`\`c
+#include <stdio.h>
 
-'\\0'
+int main(void)
+{
+    char name[20];
 
-For example:
+    printf("Enter your name: ");
 
-char word[] = "Hello";
+    scanf("%19s", name);
 
-The string is:
+    printf("Name: %s\\n", name);
 
-H → e → l → l → o → '\\0'
+    return 0;
+}
+\`\`\`
 
-When '\\0' is reached, the string has ended.
+If the user enters:
+
+Ravi
+
+the output is:
+
+\`\`\`text
+Name: Ravi
+\`\`\`
 
 ---
 
-# 2. Null Character and Array Size
+# 2. Why & Is Not Used With %s
 
-The null character occupies one position in the character array.
+For an integer:
+
+scanf("%d", &number);
+
+For a string:
+
+scanf("%19s", name);
+
+The array name already represents the address of its first element in this context, so we do not write:
+
+&name
+
+---
+
+# 3. Reading a Single Word
+
+scanf() with %s reads a sequence of characters until whitespace is encountered.
+
+For example, if the input is:
+
+Ravi
+
+it reads:
+
+Ravi
+
+But if the input is:
+
+Ravi Kumar
+
+only the first word is read.
+
+The remaining text is left in the input stream.
+
+---
+
+# 4. Why %s Does Not Read Spaces
+
+Suppose:
+
+char name[30];
+
+scanf("%29s", name);
+
+and the user enters:
+
+Ravi Kumar
+
+scanf() with %s stops when it encounters the space.
+
+So it reads:
+
+Ravi
+
+For complete lines containing spaces, fgets() is a better choice. We will study it in Lesson 6.
+
+---
+
+# 5. Displaying a String With printf()
+
+The %s format specifier displays a string.
+
+\`\`\`c
+#include <stdio.h>
+
+int main(void)
+{
+    char name[] = "Ravi";
+
+    printf("Name: %s\\n", name);
+
+    return 0;
+}
+\`\`\`
+
+Output:
+
+\`\`\`text
+Name: Ravi
+\`\`\`
+
+---
+
+# 6. Reading and Displaying a String
+
+\`\`\`c
+#include <stdio.h>
+
+int main(void)
+{
+    char city[30];
+
+    printf("Enter city: ");
+
+    scanf("%29s", city);
+
+    printf("You entered: %s\\n", city);
+
+    return 0;
+}
+\`\`\`
+
+Example:
+
+\`\`\`text
+Enter city: Delhi
+You entered: Delhi
+\`\`\`
+
+---
+
+# 7. Why a Field Width Is Useful
+
+It is better to limit how many characters scanf() reads.
 
 For:
 
-char word[6] = "Hello";
+char name[20];
 
-the five visible characters require five positions:
+we can use:
 
-H e l l o
+scanf("%19s", name);
 
-and one additional position is required for:
+The 19 leaves one position for the terminating '\\0'.
 
-\\0
-
-Therefore:
-
-5 characters + 1 null character = 6 positions
+This helps prevent writing beyond the array's capacity.
 
 ---
 
-# 3. Automatically Added by the Compiler
+# 8. Reading Several Strings
 
-When a string literal is used:
-
-char word[] = "Hello";
-
-the compiler automatically adds the terminating null character.
-
-It is equivalent in effect to:
+A program can have multiple string variables.
 
 \`\`\`c
-char word[] = {'H', 'e', 'l', 'l', 'o', '\\0'};
+#include <stdio.h>
+
+int main(void)
+{
+    char firstName[20];
+    char city[30];
+
+    printf("Enter first name: ");
+    scanf("%19s", firstName);
+
+    printf("Enter city: ");
+    scanf("%29s", city);
+
+    printf("\\nFirst Name: %s\\n", firstName);
+    printf("City: %s\\n", city);
+
+    return 0;
+}
 \`\`\`
 
 ---
 
-# 4. String vs Character Array
+# 9. Displaying Individual Characters
 
-Consider:
-
-\`\`\`c
-char a[5] = {'H', 'e', 'l', 'l', 'o'};
-\`\`\`
-
-This is an array of characters, but it does not have space for a terminating null character.
-
-Now consider:
-
-\`\`\`c
-char b[6] = {'H', 'e', 'l', 'l', 'o', '\\0'};
-\`\`\`
-
-This can represent the string "Hello".
-
----
-
-# 5. Detecting the End of a String
-
-We can use the null character while traversing a string.
+Although %s displays the entire string, %c can display individual characters.
 
 \`\`\`c
 #include <stdio.h>
@@ -124,10 +229,9 @@ int main(void)
 {
     char word[] = "Hello";
 
-    for (int i = 0; word[i] != '\\0'; i++)
-    {
-        printf("%c\\n", word[i]);
-    }
+    printf("%c\\n", word[0]);
+    printf("%c\\n", word[1]);
+    printf("%c\\n", word[2]);
 
     return 0;
 }
@@ -139,78 +243,13 @@ Output:
 H
 e
 l
-l
-o
-\`\`\`
-
-The loop stops when it reaches '\\0'.
-
----
-
-# 6. Null Character Is Not the Same as '0'
-
-These are different:
-
-'\\0'
-
-and:
-
-'0'
-
-'\\0' is the **null character**.
-
-'0' is the character representing the digit zero.
-
-They should not be confused.
-
----
-
-# 7. Null Character and %s
-
-When we write:
-
-printf("%s", word);
-
-printf() expects word to be a properly terminated string.
-
-It reads characters until:
-
-'\\0'
-
-is encountered.
-
----
-
-# 8. Example
-
-\`\`\`c
-#include <stdio.h>
-
-int main(void)
-{
-    char name[] = "Ravi";
-
-    printf("%s\\n", name);
-
-    return 0;
-}
-\`\`\`
-
-The stored sequence is:
-
-R → a → v → i → \\0
-
-Output:
-
-\`\`\`text
-Ravi
 \`\`\`
 
 ---
 
-# 9. Manually Adding the Null Character
+# 10. Reading a String Character by Character
 
-We can create a string character by character:
+A string can also be filled one character at a time.
 
 \`\`\`c
 #include <stdio.h>
@@ -219,11 +258,11 @@ int main(void)
 {
     char word[6];
 
-    word[0] = 'H';
-    word[1] = 'e';
-    word[2] = 'l';
-    word[3] = 'l';
-    word[4] = 'o';
+    for (int i = 0; i < 5; i++)
+    {
+        scanf(" %c", &word[i]);
+    }
+
     word[5] = '\\0';
 
     printf("%s\\n", word);
@@ -232,167 +271,188 @@ int main(void)
 }
 \`\`\`
 
-Now word represents:
+If the characters entered are:
+
+H e l l o
+
+the resulting string is:
 
 Hello
 
 ---
 
-# 10. Empty String
-
-An empty string contains no visible characters, but it still has a null character.
-
-\`\`\`c
-char name[] = "";
-\`\`\`
-
-Conceptually:
-
-┌────┐
-│ \\0 │
-└────┘
-
-Its string length is zero.
-
----
-
-# 11. Changing the Null Character
-
-Consider:
-
-char word[] = "Hello";
-
-If we write:
-
-word[2] = '\\0';
-
-the string now ends at index 2.
-
-The array contains:
-
-H e \\0 l o \\0
-
-When printed as a string:
-
-printf("%s", word);
-
-only:
-
-He
-
-is considered the string.
-
-This demonstrates why the null character is important.
-
----
-
-# 12. String Length and '\\0'
-
-Suppose:
-
-char word[] = "Hello";
-
-The visible characters are:
-
-H e l l o
-
-So the string length is:
-
-5
-
-The '\\0' is used to mark the end, but it is **not counted as part of the string's length**.
-
----
-
-# 13. Practical Example
+# 11. Example — Student Name
 
 \`\`\`c
 #include <stdio.h>
 
 int main(void)
 {
-    char message[] = "C Programming";
+    char name[30];
 
-    for (int i = 0; message[i] != '\\0'; i++)
-    {
-        printf("%c", message[i]);
-    }
+    printf("Enter student name: ");
 
-    printf("\\n");
+    scanf("%29s", name);
+
+    printf("\\nStudent Name: %s\\n", name);
 
     return 0;
 }
 \`\`\`
 
-Output:
+Example:
 
 \`\`\`text
-C Programming
+Enter student name: Rahul
+
+Student Name: Rahul
 \`\`\`
 
 ---
 
-# 14. Important Points
+# 12. Example — Product Name
 
-'\\0'
+\`\`\`c
+#include <stdio.h>
 
-↓
+int main(void)
+{
+    char product[40];
 
-Null character
+    printf("Enter product name: ");
 
-↓
+    scanf("%39s", product);
 
-Marks the end of a C string
+    printf("Product: %s\\n", product);
 
-↓
-
-Automatically added to string literals
-
-↓
-
-Not counted as a visible character
-
-↓
-
-String functions use it to detect the end
+    return 0;
+}
+\`\`\`
 
 ---
 
-# 15. Common Mistake
+# 13. Difference Between %c and %s
 
-A common beginner mistake is forgetting that the array needs **one extra position** for '\\0'.
+## %c
 
-For:
+Used for one character:
 
-"Hello"
+char ch = 'A';
 
-there are:
+printf("%c", ch);
 
-5 visible characters
+Output:
 
-+
+A
 
-1 null character
+## %s
 
-=
+Used for a string:
 
-6 array positions
+char word[] = "Apple";
+
+printf("%s", word);
+
+Output:
+
+Apple
+
+---
+
+# 14. Important Input Limitation
+
+This:
+
+scanf("%19s", name);
+
+is suitable for a **single word**.
+
+It is not suitable when the input should contain spaces, such as:
+
+Rahul Kumar
+
+For complete lines, use:
+
+fgets()
+
+which we will study next.
+
+---
+
+# 15. Practical Example
+
+\`\`\`c
+#include <stdio.h>
+
+int main(void)
+{
+    char name[30];
+    char course[30];
+
+    printf("Enter your name: ");
+    scanf("%29s", name);
+
+    printf("Enter course: ");
+    scanf("%29s", course);
+
+    printf("\\n--- Student Details ---\\n");
+    printf("Name: %s\\n", name);
+    printf("Course: %s\\n", course);
+
+    return 0;
+}
+\`\`\`
+
+Example output:
+
+\`\`\`text
+Enter your name: Rahul
+Enter course: C
+
+--- Student Details ---
+Name: Rahul
+Course: C
+\`\`\`
+
+---
+
+# Common Beginner Mistakes
+
+## Mistake 1 — Writing & With the String
+
+Avoid:
+
+scanf("%19s", &name);
+
+Use:
+
+scanf("%19s", name);
+
+## Mistake 2 — Forgetting the Array Size
+
+Avoid declaring an array that is too small for the required input.
+
+Remember that one position is required for '\\0'.
+
+## Mistake 3 — Expecting %s to Read Spaces
+
+scanf("%29s", name);
+
+reads one word, not a complete line.
 
 ---
 
 # Lesson Summary
 
-The null character is one of the fundamental concepts of strings in C.
+For basic single-word string input:
 
-Example:
+scanf("%19s", name);
 
-char name[] = "Hello";
+For displaying a string:
 
-is stored as:
+printf("%s", name);
 
-H e l l o \\0
-
-The '\\0' tells C where the string ends.
+%s reads until whitespace when used with scanf(), so it is not suitable for complete sentences or names containing spaces. fgets() is better for that purpose.
 
 ---
 
@@ -406,9 +466,9 @@ The '\\0' tells C where the string ends.
 
 ✓ Lesson 4 — Null Character '\\0'
 
-→ Lesson 5 — Reading and Displaying Strings
+✓ Lesson 5 — Reading and Displaying Strings
 
-  Lesson 6 — String Input Using fgets()
+→ Lesson 6 — String Input Using fgets()
 
   Lesson 7 — String Length
 
@@ -428,11 +488,11 @@ The '\\0' tells C where the string ends.
 
   Lesson 15 — Mini Project — Student Name and Grade Manager
 
-**Lesson 4 Complete**
+**Lesson 5 Complete**
 
-Next: **Lesson 5 — Reading and Displaying Strings**
+Next: **Lesson 6 — String Input Using fgets()**
 
 `,
 };
 
-export default lesson4;
+export default lesson5;

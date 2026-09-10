@@ -1,7 +1,9 @@
-export const API = {
+﻿export const API = {
   BASE_URL:
     process.env.NEXT_PUBLIC_API_URL ||
-    "http://localhost:5000/api/v1",
+    (typeof window !== "undefined"
+      ? `http://${window.location.hostname}:5000/api/v1`
+      : "http://localhost:5000/api/v1"),
 
   ENDPOINTS: {
     LOGIN: "/auth/login",

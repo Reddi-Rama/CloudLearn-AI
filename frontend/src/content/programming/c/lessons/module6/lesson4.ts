@@ -1,248 +1,125 @@
-const lesson3 = {
-  id: "lesson3",
 
-  title: "String Declaration and Initialization",
+
+
+
+const lesson4 = {
+  id: "lesson4",
+
+  title: "Null Character '\\0'",
 
   content: `
 
-# Lesson 3: String Declaration and Initialization
+# Lesson 4: Null Character '\\0'
 
 ---
 
 ## Introduction
 
-Before using a string, we need to create storage for it.
+When working with strings in C, one character has a special purpose: the **null character**.
 
-In C, strings are declared using **character arrays**.
+It is written as:
 
-The basic form is:
+'\\0'
 
-char string_name[size];
+The null character marks the **end of a string**.
 
-The string can then be initialized with characters or a string literal.
+For example:
 
----
+char name[] = "Hello";
 
-# 1. Basic String Declaration
+is stored conceptually as:
 
-char name[20];
+Index:    0    1    2    3    4    5
 
-This creates a character array named name with space for 20 characters.
+          ┌────┬────┬────┬────┬────┬────┐
+          │ H  │ e  │ l  │ l  │ o  │\\0  │
+          └────┴────┴────┴────┴────┴────┘
 
-It can be used to store a string of appropriate length, including its terminating '\\0'.
-
----
-
-# 2. Declaration and Initialization Together
-
-A string can be declared and initialized in one statement:
-
-char name[5] = "Ravi";
-
-The actual storage is:
-
-R   a   v   i   \\0
-
-The array requires five positions:
-
-4 characters + 1 null character = 5
+The '\\0' tells C that the string ends after o.
 
 ---
 
-# 3. Omitting the Size
+# 1. Why the Null Character Is Needed
 
-The array size can be omitted when a string literal is used for initialization.
+C does not store the length of a string separately.
 
-char name[] = "Ravi";
+Instead, string-processing functions continue reading characters until they encounter:
 
-The compiler determines the required size automatically.
+'\\0'
 
-The required size is:
+For example:
 
-4 characters + 1 null character = 5
-
----
-
-# 4. Another Example
-
-char language[] = "C Programming";
-
-The compiler calculates the size needed for all the characters plus '\\0'.
-
-This is often convenient when the string content is already known.
-
----
-
-# 5. Initializing With Individual Characters
-
-A string can also be initialized character by character.
-
-\`\`\`c
-char word[6] = {'H', 'e', 'l', 'l', 'o', '\\0'};
-\`\`\`
-
-This is equivalent to:
-
-\`\`\`c
 char word[] = "Hello";
-\`\`\`
 
-The string literal form is generally easier to read.
+The string is:
 
----
+H → e → l → l → o → '\\0'
 
-# 6. Important Difference Between Quotes
-
-A single character uses single quotes:
-
-char ch = 'A';
-
-A string uses double quotes:
-
-char word[] = "A";
-
-Therefore:
-
-'A' → Character
-
-"A" → String
-
-The first stores one character.
-
-The second stores the character A followed by the null character.
+When '\\0' is reached, the string has ended.
 
 ---
 
-# 7. String With Spaces
+# 2. Null Character and Array Size
 
-Spaces can be included inside a string literal.
+The null character occupies one position in the character array.
 
-\`\`\`c
-char message[] = "Welcome to C";
-\`\`\`
+For:
 
-The string contains:
+char word[6] = "Hello";
 
-Welcome to C
+the five visible characters require five positions:
 
-The space between the words is also part of the string.
+H e l l o
 
----
-
-# 8. String Size and Null Character
-
-Suppose:
-
-char city[6] = "Delhi";
-
-Delhi contains five visible characters:
-
-D e l h i
-
-The sixth position is needed for:
+and one additional position is required for:
 
 \\0
 
 Therefore:
 
-Visible characters = 5
-
-Null character = 1
-
-Total = 6
+5 characters + 1 null character = 6 positions
 
 ---
 
-# 9. Larger Character Array
+# 3. Automatically Added by the Compiler
 
-We can provide more storage than the current string requires.
+When a string literal is used:
+
+char word[] = "Hello";
+
+the compiler automatically adds the terminating null character.
+
+It is equivalent in effect to:
 
 \`\`\`c
-char name[30] = "Ravi";
+char word[] = {'H', 'e', 'l', 'l', 'o', '\\0'};
 \`\`\`
-
-The string is still:
-
-Ravi
-
-The larger array simply provides additional storage capacity.
 
 ---
 
-# 10. Initializing an Empty String
+# 4. String vs Character Array
 
-A character array can be initialized to an empty string:
+Consider:
 
 \`\`\`c
-char name[20] = "";
+char a[5] = {'H', 'e', 'l', 'l', 'o'};
 \`\`\`
 
-This creates a string whose first character is the null character.
+This is an array of characters, but it does not have space for a terminating null character.
 
-Conceptually:
-
-\\0
-
-The array has storage for additional characters.
-
----
-
-# 11. String Declaration Without Initialization
-
-We can declare a character array without immediately assigning a string:
+Now consider:
 
 \`\`\`c
-char name[30];
+char b[6] = {'H', 'e', 'l', 'l', 'o', '\\0'};
 \`\`\`
 
-Later, the program can place characters into the array, for example by reading input.
+This can represent the string "Hello".
 
 ---
 
-# 12. Multiple Strings
+# 5. Detecting the End of a String
 
-A program can contain several string variables:
-
-\`\`\`c
-char firstName[20];
-char lastName[20];
-char city[30];
-char message[100];
-\`\`\`
-
-Each array stores a separate string.
-
----
-
-# 13. Example Program
-
-\`\`\`c
-#include <stdio.h>
-
-int main(void)
-{
-    char name[] = "Rahul";
-    char city[] = "Hyderabad";
-
-    printf("Name: %s\\n", name);
-    printf("City: %s\\n", city);
-
-    return 0;
-}
-\`\`\`
-
-Output:
-
-\`\`\`text
-Name: Rahul
-City: Hyderabad
-\`\`\`
-
----
-
-# 14. Modifying an Initialized String
-
-When a string is stored in a character array, individual characters can be modified.
+We can use the null character while traversing a string.
 
 \`\`\`c
 #include <stdio.h>
@@ -251,9 +128,10 @@ int main(void)
 {
     char word[] = "Hello";
 
-    word[0] = 'Y';
-
-    printf("%s\\n", word);
+    for (int i = 0; word[i] != '\\0'; i++)
+    {
+        printf("%c\\n", word[i]);
+    }
 
     return 0;
 }
@@ -262,48 +140,263 @@ int main(void)
 Output:
 
 \`\`\`text
-Yello
+H
+e
+l
+l
+o
 \`\`\`
 
-The character at index 0 was changed.
+The loop stops when it reaches '\\0'.
 
 ---
 
-# 15. Important Rules
+# 6. Null Character Is Not the Same as '0'
 
-Remember:
+These are different:
 
-1. Strings are stored in char arrays.
+'\\0'
 
-2. A string must have room for '\\0'.
+and:
 
-3. String literals use double quotes.
+'0'
 
-4. Individual characters use single quotes.
+'\\0' is the **null character**.
 
-5. The size can be specified explicitly.
+'0' is the character representing the digit zero.
 
-6. The compiler can determine the size when [] is omitted during initialization.
+They should not be confused.
+
+---
+
+# 7. Null Character and %s
+
+When we write:
+
+printf("%s", word);
+
+printf() expects word to be a properly terminated string.
+
+It reads characters until:
+
+'\\0'
+
+is encountered.
+
+---
+
+# 8. Example
+
+\`\`\`c
+#include <stdio.h>
+
+int main(void)
+{
+    char name[] = "Ravi";
+
+    printf("%s\\n", name);
+
+    return 0;
+}
+\`\`\`
+
+The stored sequence is:
+
+R → a → v → i → \\0
+
+Output:
+
+\`\`\`text
+Ravi
+\`\`\`
+
+---
+
+# 9. Manually Adding the Null Character
+
+We can create a string character by character:
+
+\`\`\`c
+#include <stdio.h>
+
+int main(void)
+{
+    char word[6];
+
+    word[0] = 'H';
+    word[1] = 'e';
+    word[2] = 'l';
+    word[3] = 'l';
+    word[4] = 'o';
+    word[5] = '\\0';
+
+    printf("%s\\n", word);
+
+    return 0;
+}
+\`\`\`
+
+Now word represents:
+
+Hello
+
+---
+
+# 10. Empty String
+
+An empty string contains no visible characters, but it still has a null character.
+
+\`\`\`c
+char name[] = "";
+\`\`\`
+
+Conceptually:
+
+┌────┐
+│ \\0 │
+└────┘
+
+Its string length is zero.
+
+---
+
+# 11. Changing the Null Character
+
+Consider:
+
+char word[] = "Hello";
+
+If we write:
+
+word[2] = '\\0';
+
+the string now ends at index 2.
+
+The array contains:
+
+H e \\0 l o \\0
+
+When printed as a string:
+
+printf("%s", word);
+
+only:
+
+He
+
+is considered the string.
+
+This demonstrates why the null character is important.
+
+---
+
+# 12. String Length and '\\0'
+
+Suppose:
+
+char word[] = "Hello";
+
+The visible characters are:
+
+H e l l o
+
+So the string length is:
+
+5
+
+The '\\0' is used to mark the end, but it is **not counted as part of the string's length**.
+
+---
+
+# 13. Practical Example
+
+\`\`\`c
+#include <stdio.h>
+
+int main(void)
+{
+    char message[] = "C Programming";
+
+    for (int i = 0; message[i] != '\\0'; i++)
+    {
+        printf("%c", message[i]);
+    }
+
+    printf("\\n");
+
+    return 0;
+}
+\`\`\`
+
+Output:
+
+\`\`\`text
+C Programming
+\`\`\`
+
+---
+
+# 14. Important Points
+
+'\\0'
+
+↓
+
+Null character
+
+↓
+
+Marks the end of a C string
+
+↓
+
+Automatically added to string literals
+
+↓
+
+Not counted as a visible character
+
+↓
+
+String functions use it to detect the end
+
+---
+
+# 15. Common Mistake
+
+A common beginner mistake is forgetting that the array needs **one extra position** for '\\0'.
+
+For:
+
+"Hello"
+
+there are:
+
+5 visible characters
+
++
+
+1 null character
+
+=
+
+6 array positions
 
 ---
 
 # Lesson Summary
 
-The general declaration is:
+The null character is one of the fundamental concepts of strings in C.
 
-char name[size];
+Example:
 
-Initialization can be done as:
+char name[] = "Hello";
 
-char name[5] = "Ravi";
+is stored as:
 
-or:
+H e l l o \\0
 
-char name[] = "Ravi";
-
-A string literal automatically includes the terminating null character.
-
-Understanding declaration and initialization is essential before performing operations such as reading, copying, comparing, and concatenating strings.
+The '\\0' tells C where the string ends.
 
 ---
 
@@ -315,9 +408,9 @@ Understanding declaration and initialization is essential before performing oper
 
 ✓ Lesson 3 — String Declaration and Initialization
 
-→ Lesson 4 — Null Character '\\0'
+✓ Lesson 4 — Null Character '\\0'
 
-  Lesson 5 — Reading and Displaying Strings
+→ Lesson 5 — Reading and Displaying Strings
 
   Lesson 6 — String Input Using fgets()
 
@@ -339,11 +432,11 @@ Understanding declaration and initialization is essential before performing oper
 
   Lesson 15 — Mini Project — Student Name and Grade Manager
 
-**Lesson 3 Complete**
+**Lesson 4 Complete**
 
-Next: **Lesson 4 — Null Character '\\0'**
+Next: **Lesson 5 — Reading and Displaying Strings**
 
 `,
 };
 
-export default lesson3;
+export default lesson4;
