@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import LessonAccessGuard from "@/components/courses/LessonAccessGuard";
 
@@ -262,16 +262,15 @@ function CodeBlock({
 
 function isFlowArrow(text: string) {
   return [
-    "â†“",
-    "â†‘",
-    "â†’",
-    "â†",
-    "â†”",
-    "âž¡",
-    "â¬‡",
-    "â¬†",
-    "âŸ¶",
-    "âŸ·",
+    "\u2193",
+    "\u2191",
+    "\u2192",
+    "\u2194",
+    "\u27A1",
+    "\u2B07",
+    "\u2B06",
+    "\u27F6",
+    "\u27F7",
   ].includes(text.trim());
 }
 
@@ -975,11 +974,11 @@ function renderContent(content: string) {
 
        byte
 
-       â†“
+       "\u2192"
 
        short
 
-       â†“
+       "\u2192"
 
        int
 
@@ -1015,8 +1014,7 @@ function renderContent(content: string) {
       trimmed.length <= 80 &&
       !isIndented(rawLine) &&
       !isNormalHeading(trimmed) &&
-      !trimmed.startsWith("- ") &&
-      !trimmed.startsWith("â€¢ ") &&
+      !trimmed.startsWith("\u2022 ") &&
       !trimmed.includes(";") &&
       !trimmed.includes("{") &&
       !trimmed.includes("}");
@@ -1168,7 +1166,7 @@ function renderContent(content: string) {
        BULLETS
     ===================================================== */
 
-    if (text.startsWith("- ") || text.startsWith("â€¢ ")) {
+    if (text.startsWith("- ") || text.startsWith("\u2022 ")) {
       elements.push(
         <div
           key={`bullet-${index}`}
@@ -1483,7 +1481,7 @@ export default async function LessonPage({
         >
 
           <Link
-            href={`/courses/${courseId}`}
+            href="/course-complete"
             className="
               inline-flex
               items-center
@@ -1500,7 +1498,7 @@ export default async function LessonPage({
               hover:bg-sky-700
             "
           >
-            â† Back to {courseName}
+            &rarr;
           </Link>
 
         </div>
@@ -1683,7 +1681,7 @@ export default async function LessonPage({
                               group-open:rotate-180
                             "
                           >
-                            â–²
+                            &#x25BE;
                           </span>
 
                         </summary>
@@ -2049,7 +2047,7 @@ export default async function LessonPage({
                         hover:bg-slate-700
                       "
                     >
-                      â† Previous Lesson
+                      &larr;
                     </Link>
 
                   ) : (
@@ -2077,7 +2075,7 @@ export default async function LessonPage({
                         hover:bg-green-700
                       "
                     >
-                      Next Lesson â†’
+                      Next Lesson &rarr;
                     </Link>
 
                   ) : nextModule ? (
@@ -2096,13 +2094,13 @@ export default async function LessonPage({
                         hover:bg-blue-700
                       "
                     >
-                      Next Module â†’
+                      Next Module &rarr;
                     </Link>
 
                   ) : (
 
                     <Link
-                      href={`/courses/${courseId}`}
+                      href="/course-complete"
                       className="
                         rounded-2xl
                         bg-sky-600
@@ -2115,7 +2113,7 @@ export default async function LessonPage({
                         hover:bg-sky-700
                       "
                     >
-                      Complete Course â†’
+                      Complete Course &rarr;
                     </Link>
 
                   )}
@@ -2136,3 +2134,4 @@ export default async function LessonPage({
     </LessonAccessGuard>
   );
 }
+
