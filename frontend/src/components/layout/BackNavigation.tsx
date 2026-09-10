@@ -88,7 +88,7 @@ export default function BackNavigation() {
    * ============================================================
    */
 
-  if (pathname === "/coming-soon") {
+  if (pathname === "/coming-soon" || pathname === "/my-certificates") {
     return null;
   }
 
@@ -98,7 +98,7 @@ export default function BackNavigation() {
    * LEARNING PATH DETAIL PAGES
    *
    * These already have:
-   * ← Back to Learning Paths
+   * â† Back to Learning Paths
    * ============================================================
    */
 

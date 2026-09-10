@@ -94,7 +94,7 @@ export default function MyCertificatesPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-[#f7faff]">
+      <main className="min-h-screen bg-slate-50 dark:bg-slate-950">
 
         <div className="px-6 pt-6">
           <BackButton
@@ -108,11 +108,11 @@ export default function MyCertificatesPage() {
           <div className="text-center">
 
             <Loader2
-              className="mx-auto animate-spin text-sky-600"
+              className="mx-auto animate-spin text-sky-600 dark:text-sky-400"
               size={40}
             />
 
-            <p className="mt-4 text-sm font-medium text-slate-600">
+            <p className="mt-4 text-sm font-medium text-slate-600 dark:text-slate-300">
               Loading your certificates...
             </p>
 
@@ -130,7 +130,7 @@ export default function MyCertificatesPage() {
   ============================================================ */
 
   return (
-    <main className="min-h-screen bg-[#f7faff] px-6 pb-20 pt-6">
+    <main className="min-h-screen bg-slate-50 dark:bg-slate-950 px-6 pb-20 pt-6">
 
       <div className="mx-auto max-w-7xl">
 
@@ -176,11 +176,11 @@ export default function MyCertificatesPage() {
 
             <div>
 
-              <h1 className="text-4xl font-black text-slate-900">
+              <h1 className="text-4xl font-black text-slate-900 dark:text-white">
                 My Certificates
               </h1>
 
-              <p className="mt-1 text-slate-600">
+              <p className="mt-1 text-slate-600 dark:text-slate-300">
                 View and download the certificates you
                 have earned.
               </p>
@@ -202,12 +202,12 @@ export default function MyCertificatesPage() {
               mb-8
               rounded-2xl
               border
-              border-red-200
-              bg-red-50
+              border-red-200 dark:border-red-800
+              bg-red-50 dark:bg-red-950/40
               p-4
               text-sm
               font-medium
-              text-red-600
+              text-red-600 dark:text-red-400
             "
           >
             {error}
@@ -225,8 +225,8 @@ export default function MyCertificatesPage() {
               className="
                 rounded-[32px]
                 border
-                border-slate-200
-                bg-white
+                border-slate-200 dark:border-slate-700
+                bg-white dark:bg-slate-900
                 p-12
                 text-center
                 shadow-xl
@@ -242,20 +242,20 @@ export default function MyCertificatesPage() {
                   items-center
                   justify-center
                   rounded-full
-                  bg-sky-50
+                  bg-sky-50 dark:bg-sky-950/40
                 "
               >
                 <Award
                   size={40}
-                  className="text-sky-600"
+                  className="text-sky-600 dark:text-sky-400"
                 />
               </div>
 
-              <h2 className="mt-6 text-2xl font-bold text-slate-900">
+              <h2 className="mt-6 text-2xl font-bold text-slate-900 dark:text-white">
                 No Certificates Yet
               </h2>
 
-              <p className="mx-auto mt-3 max-w-lg text-slate-600">
+              <p className="mx-auto mt-3 max-w-lg text-slate-600 dark:text-slate-300">
                 Complete your courses and assessments to
                 earn certificates. Your certificates will
                 appear here.
@@ -307,8 +307,8 @@ export default function MyCertificatesPage() {
                       overflow-hidden
                       rounded-[32px]
                       border
-                      border-slate-200
-                      bg-white
+                      border-slate-200 dark:border-slate-700
+                      bg-white dark:bg-slate-900
                       shadow-xl
                       transition
                       duration-300
@@ -342,13 +342,13 @@ export default function MyCertificatesPage() {
 
                     <div className="p-7">
 
-                      <h2 className="text-xl font-bold text-slate-900">
+                      <h2 className="text-xl font-bold text-slate-900 dark:text-white">
                         {certificate.courseTitle}
                       </h2>
 
                       <div className="mt-5 space-y-3 text-sm">
 
-                        <div className="flex items-start gap-3 text-slate-600">
+                        <div className="flex items-start gap-3 text-slate-600 dark:text-slate-300">
 
                           <FileText
                             size={18}
@@ -361,7 +361,7 @@ export default function MyCertificatesPage() {
                               Certificate ID:
                             </span>
 
-                            <span className="ml-1 break-all font-semibold text-slate-900">
+                            <span className="ml-1 break-all font-semibold text-slate-900 dark:text-white">
                               {certificate.certificateId}
                             </span>
 

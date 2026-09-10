@@ -2071,3 +2071,56 @@ body > * {
     inset-inline-start: 12px !important;
   }
 }
+/* ============================================================
+   PROGRAMMING DOMAIN PAGE
+   Dedicated light/dark theme
+============================================================ */
+
+.programming-domain-page {
+  min-height: 100vh;
+  background: #f8fbff !important;
+  color: #0f172a;
+}
+
+html.dark .programming-domain-page {
+  background: #020617 !important;
+  color: #f8fafc !important;
+}
+
+html.dark .programming-domain-page h1 {
+  color: #f8fafc !important;
+}
+
+html.dark .programming-domain-page a {
+  border-color: #334155;
+}
+
+html.dark .programming-domain-page a.bg-white {
+  background: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+
+html.dark .programming-domain-page .bg-white {
+  background: #0f172a !important;
+}
+
+html.dark .programming-domain-page .border-slate-200 {
+  border-color: #334155 !important;
+}
+
+html.dark .programming-domain-page .text-slate-900 {
+  color: #f8fafc !important;
+}
+
+html.dark .programming-domain-page .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+html.dark .programming-domain-page .text-sky-600 {
+  color: #38bdf8 !important;
+}
+
+html.dark .programming-domain-page .bg-sky-100 {
+  background-color: #082f49 !important;
+}
+
