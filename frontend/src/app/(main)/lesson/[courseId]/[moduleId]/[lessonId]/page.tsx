@@ -1481,7 +1481,7 @@ export default async function LessonPage({
         >
 
           <Link
-            href="/course-complete"
+            href={`/course-complete?course=${courseId}`}
             className="
               inline-flex
               items-center
@@ -2100,7 +2100,7 @@ export default async function LessonPage({
                   ) : (
 
                     <Link
-                      href="/course-complete"
+                      href={`/course-complete?course=${courseId}`}
                       className="
                         rounded-2xl
                         bg-sky-600

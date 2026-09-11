@@ -10,7 +10,7 @@ export { default as ContinueButton } from "./ContinueButton";
 export { default as ExplanationCard } from "./ExplanationCard";
 export { default as MCQOption } from "./MCQOption";
 export { default as NavigationButtons } from "./NavigationButtons";
-export { default as OutputQuestion } from "./temp";
+export { default as OutputQuestion } from "./Outputquestion";
 
 export { default as PassBadge } from "./PassBadge";
 export { default as ProgressBar } from "./ProgressBar";

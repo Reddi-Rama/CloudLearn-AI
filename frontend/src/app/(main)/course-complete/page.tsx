@@ -1,9 +1,17 @@
-import CoursesCompleted from "@/components/courses/CourseCompleted";
+import CourseCompleted from "@/components/courses/CourseCompleted";
 
-export default function CourseCompletePage() {
+interface Props {
+  searchParams: Promise<{
+    course?: string;
+  }>;
+}
+
+export default async function CourseCompletePage({ searchParams }: Props) {
+  const { course } = await searchParams;
+
   return (
-    <main className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
-      <CoursesCompleted />
+    <main className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
+      <CourseCompleted courseId={course} />
     </main>
   );
 }

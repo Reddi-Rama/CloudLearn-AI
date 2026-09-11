@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useMemo, useState } from "react";
 
@@ -382,8 +382,6 @@ export default function PythonExam() {
   const currentQuestion = questions[currentQuestionIndex];
 
   const goNext = () => {
-    if (selectedAnswers[currentQuestion.id] === undefined) return;
-
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((previous) => previous + 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -533,21 +531,12 @@ export default function PythonExam() {
                           key={question.id}
                           type="button"
                           onClick={() => {
+                            setCurrentQuestionIndex(index);
 
-                            if (
-                              index <= currentQuestionIndex ||
-                              answered
-                            ) {
-
-                              setCurrentQuestionIndex(index);
-
-                              window.scrollTo({
-                                top: 0,
-                                behavior: "smooth",
-                              });
-
-                            }
-
+                            window.scrollTo({
+                              top: 0,
+                              behavior: "smooth",
+                            });
                           }}
                           className={`h-9 rounded-md border text-xs font-bold transition ${
                             active
@@ -798,9 +787,7 @@ print(outer())`
                       <button
                         type="button"
                         onClick={goNext}
-                        disabled={
-                          selectedAnswers[currentQuestion.id] === undefined
-                        }
+
                         className="rounded-md bg-blue-600 px-6 py-2.5 text-sm font-bold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
                       >
                         {currentQuestionIndex === questions.length - 1
@@ -1111,3 +1098,5 @@ print(outer())`
     </div>
   );
 }
+
+
