@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+﻿import { Request, Response } from "express";
 import { AuthRequest } from "../../middleware/auth.middleware";
 
 import {
@@ -9,6 +9,13 @@ import {
   logoutUser,
 } from "./auth.service";
 
+import {
+  createAndSendVerificationOtp,
+  verifyEmailOtp,
+} from "./email-verification.service";
+
+import { findUserByEmail } from "../user/user.repository";
+
 export async function register(
   req: Request,
   res: Response
@@ -16,16 +23,39 @@ export async function register(
   try {
     const { fullName, email, password } = req.body;
 
+    if (
+      typeof fullName !== "string" ||
+      typeof email !== "string" ||
+      typeof password !== "string" ||
+      !fullName.trim() ||
+      !email.trim() ||
+      !password
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Full name, email and password are required",
+      });
+    }
+
     const user = await registerUser(
-      fullName,
-      email,
+      fullName.trim(),
+      email.trim().toLowerCase(),
       password
     );
 
+    const otpData =
+      await createAndSendVerificationOtp(user.id);
+
     return res.status(201).json({
       success: true,
-      message: "User registered successfully",
-      data: user,
+      message:
+        "Registration successful. Verification OTP sent to your email.",
+      data: {
+        user,
+        expiresInMinutes:
+          otpData.expiresInMinutes,
+      },
     });
   } catch (error) {
     return res.status(400).json({
@@ -34,6 +64,116 @@ export async function register(
         error instanceof Error
           ? error.message
           : "Registration failed",
+    });
+  }
+}
+
+export async function verifyEmail(
+  req: Request,
+  res: Response
+) {
+  try {
+    const { email, otp } = req.body;
+
+    if (
+      typeof email !== "string" ||
+      typeof otp !== "string"
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and OTP are required",
+      });
+    }
+
+    const user =
+      await findUserByEmail(
+        email.trim().toLowerCase()
+      );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const result =
+      await verifyEmailOtp(
+        user.id,
+        otp.trim()
+      );
+
+    return res.status(200).json({
+      success: true,
+      message: result.message,
+      data: {
+        verified: true,
+      },
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "Email verification failed",
+    });
+  }
+}
+
+export async function resendOtp(
+  req: Request,
+  res: Response
+) {
+  try {
+    const { email } = req.body;
+
+    if (typeof email !== "string" || !email.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is required",
+      });
+    }
+
+    const user =
+      await findUserByEmail(
+        email.trim().toLowerCase()
+      );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is already verified",
+      });
+    }
+
+    const result =
+      await createAndSendVerificationOtp(
+        user.id
+      );
+
+    return res.status(200).json({
+      success: true,
+      message: "A new verification OTP has been sent",
+      data: {
+        expiresInMinutes:
+          result.expiresInMinutes,
+      },
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "Failed to resend OTP",
     });
   }
 }

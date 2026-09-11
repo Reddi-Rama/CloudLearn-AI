@@ -1,4 +1,4 @@
-import { Router } from "express";
+﻿import { Router } from "express";
 
 import {
   login,
@@ -6,17 +6,38 @@ import {
   me,
   refresh,
   register,
+  verifyEmail,
+  resendOtp,
 } from "./auth.controller";
 
 import { authenticate } from "../../middleware/auth.middleware";
 
 const router = Router();
 
-router.post("/register", register);
+router.post(
+  "/register",
+  register
+);
 
-router.post("/login", login);
+router.post(
+  "/verify-email",
+  verifyEmail
+);
 
-router.post("/refresh", refresh);
+router.post(
+  "/resend-otp",
+  resendOtp
+);
+
+router.post(
+  "/login",
+  login
+);
+
+router.post(
+  "/refresh",
+  refresh
+);
 
 router.post(
   "/logout",
