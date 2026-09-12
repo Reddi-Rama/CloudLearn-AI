@@ -1,48 +1,40 @@
-"use client";
+﻿"use client";
 
-interface Props{
-    current:number;
-    total:number;
+interface Props {
+  current?: number;
+  total?: number;
 }
 
 export default function QuizProgress({
-    current,
-    total
-}:Props){
+  current = 1,
+  total = 20,
+}: Props) {
+  const safeTotal = Math.max(total, 1);
+  const safeCurrent = Math.min(
+    Math.max(current, 0),
+    safeTotal
+  );
 
-    const percent=(current/total)*100;
+  const percent = (safeCurrent / safeTotal) * 100;
 
-    return(
+  return (
+    <div className="mb-8 rounded-3xl bg-white p-6 shadow-lg">
+      <div className="mb-3 flex justify-between">
+        <span className="font-semibold">
+          Question {safeCurrent} of {safeTotal}
+        </span>
 
-        <div className="mb-8 rounded-3xl bg-white p-6 shadow-lg">
+        <span>
+          {Math.round(percent)}%
+        </span>
+      </div>
 
-            <div className="flex justify-between mb-3">
-
-                <span className="font-semibold">
-
-                    Question {current} of {total}
-
-                </span>
-
-                <span>
-
-                    {Math.round(percent)}%
-
-                </span>
-
-            </div>
-
-            <div className="h-4 rounded-full bg-slate-200 overflow-hidden">
-
-                <div
-                style={{width:`${percent}%`}}
-                className="h-full rounded-full bg-gradient-to-r from-violet-500 to-blue-600"
-                />
-
-            </div>
-
-        </div>
-
-    );
-
+      <div className="h-4 overflow-hidden rounded-full bg-slate-200">
+        <div
+          style={{ width: `${percent}%` }}
+          className="h-full rounded-full bg-gradient-to-r from-violet-500 to-blue-600"
+        />
+      </div>
+    </div>
+  );
 }

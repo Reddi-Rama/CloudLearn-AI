@@ -1,11 +1,11 @@
-export { default as AnimatedClouds } from "./AnimatedClouds";
+﻿export { default as AnimatedClouds } from "./AnimatedClouds";
 export { default as Avatar } from "./Avatar";
 export { default as Badge } from "./Badge";
 export { default as Breadcrumb } from "./BreadCrumb";
 export { default as CertificateCard } from "./CertificateCard";
 export { default as CloudBackground } from "./CloudBackground";
 export { default as CloudShape } from "./CloudShape";
-export { default as ComingSoon } from "./ComingSoon";
+export { default as ComingSoon } from "./CommingSoon";
 export { default as CourseCard } from "./CourseCard";
 export { default as DomainCard } from "./DomainCard";
 export { default as EmptyState } from "./EmptyState";

@@ -18,6 +18,9 @@
 
     ASSESSMENTS: "/assessments",
 
+    // Final course exams
+    EXAM: "/exam",
+
     // IMPORTANT:
     // Backend route is /certificate (singular)
     CERTIFICATES: "/certificate",

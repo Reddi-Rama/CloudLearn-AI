@@ -1,7 +1,19 @@
-import { API, apiGet } from "@/lib/api";
+﻿import { API, apiGet } from "@/lib/api";
+
+export interface Certificate {
+  id?: string;
+  certificateId: string;
+  userId?: string;
+  courseSlug?: string;
+  courseTitle: string;
+  filePath?: string;
+  paymentStatus?: boolean;
+  issuedAt: string;
+  createdAt?: string;
+}
 
 export const certificateService = {
-  async getCertificates() {
+  async getCertificates(): Promise<Certificate[]> {
     if (typeof window === "undefined") {
       return [];
     }
@@ -17,7 +29,7 @@ export const certificateService = {
     const response = await apiGet<{
       success: boolean;
       message: string;
-      data: any[];
+      data: Certificate[];
     }>(
       `${API.BASE_URL}${API.ENDPOINTS.CERTIFICATES}`,
       token
@@ -28,7 +40,7 @@ export const certificateService = {
 
   async downloadCertificate(
     certificateId: string
-  ) {
+  ): Promise<void> {
     const token = localStorage.getItem(
       "cloudlearn-access-token"
     );
@@ -59,7 +71,6 @@ export const certificateService = {
     const link = document.createElement("a");
 
     link.href = url;
-
     link.download = `${certificateId}.pdf`;
 
     document.body.appendChild(link);

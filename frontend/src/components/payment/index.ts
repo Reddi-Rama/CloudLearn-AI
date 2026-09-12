@@ -1,4 +1,6 @@
-export { default as BillingHeader } from "./BillingHeader";
+﻿export { default as BillingHeader } from "./BillingHeader";
+export { default as PaymentHeader } from "./BillingHeader";
+
 export { default as CurrentPlan } from "./CurrentPlan";
 export { default as PricingCard } from "./PricingCard";
 export { default as PricingGrid } from "./PricingGrid";

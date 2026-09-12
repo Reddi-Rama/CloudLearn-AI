@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import React, { useMemo, useState } from "react";
+import { API, apiPost } from "@/lib/api";
 
 type Question = {
   id: number;
@@ -10,6 +11,23 @@ type Question = {
   explanation: string;
 };
 
+type BackendExamResult = {
+  attemptId: string;
+  courseSlug: string;
+  courseTitle: string;
+  score: number;
+  total: number;
+  percentage: number;
+  passingPercentage: number;
+  passed: boolean;
+  submittedAt: string;
+};
+
+/*
+ * IMPORTANT:
+ * Keep these questions synchronized with the seeded backend exam.
+ * The backend remains authoritative for grading.
+ */
 const questions: Question[] = [
   {
     id: 1,
@@ -335,7 +353,7 @@ const questions: Question[] = [
     answer: 1,
     explanation:
       "nonlocal allows inner() to modify x from the enclosing outer() scope, changing it from 10 to 15."
-  },
+  }
 ];
 
 const PASS_MARK = 18;
@@ -347,19 +365,47 @@ export default function PythonExam() {
   const [submitted, setSubmitted] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
-  const score = useMemo(() => {
+  const [backendResult, setBackendResult] =
+    useState<BackendExamResult | null>(null);
+
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  /*
+   * These local calculations are kept only for UI compatibility.
+   * The official score/pass status comes from backendResult.
+   */
+  const localScore = useMemo(() => {
     return questions.reduce((total, question) => {
-      return total + (selectedAnswers[question.id] === question.answer ? 1 : 0);
+      return (
+        total +
+        (selectedAnswers[question.id] === question.answer ? 1 : 0)
+      );
     }, 0);
   }, [selectedAnswers]);
 
-  const percentage = Math.round((score / questions.length) * 100);
-  const passed = score >= PASS_MARK;
+  const score = backendResult?.score ?? localScore;
+  const percentage =
+    backendResult?.percentage ??
+    Math.round((score / questions.length) * 100);
+
+  const passed =
+    backendResult?.passed ??
+    percentage >= 70;
+
+  const requiredPercentage =
+    backendResult?.passingPercentage ?? 70;
+
+  const requiredScore =
+    Math.ceil((questions.length * requiredPercentage) / 100);
 
   const answeredCount = Object.keys(selectedAnswers).length;
 
-  const selectAnswer = (questionId: number, optionIndex: number) => {
-    if (submitted) return;
+  const selectAnswer = (
+    questionId: number,
+    optionIndex: number
+  ) => {
+    if (submitted || submitting) return;
 
     setSelectedAnswers((previous) => ({
       ...previous,
@@ -367,16 +413,79 @@ export default function PythonExam() {
     }));
   };
 
-  const submitExam = () => {
-    setSubmitted(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const submitExam = async () => {
+    if (submitting) return;
+
+    setSubmitError(null);
+
+    const token =
+      typeof window !== "undefined"
+        ? localStorage.getItem("cloudlearn-access-token")
+        : null;
+
+    if (!token) {
+      setSubmitError(
+        "Your session has expired. Please log in again before submitting the assessment."
+      );
+      return;
+    }
+
+    const answers = questions.map((question) => ({
+      questionId: question.id,
+      answer:
+        selectedAnswers[question.id] !== undefined
+          ? selectedAnswers[question.id]
+          : -1
+    }));
+
+    setSubmitting(true);
+
+    try {
+      const response = await apiPost<{
+        success: boolean;
+        message: string;
+        data: BackendExamResult;
+      }>(
+        `${API.BASE_URL}${API.ENDPOINTS.EXAM}/python-development/submit`,
+        { answers },
+        token
+      );
+
+      if (!response.success || !response.data) {
+        throw new Error(
+          response.message || "Unable to submit assessment."
+        );
+      }
+
+      setBackendResult(response.data);
+      setSubmitted(true);
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "Unable to submit assessment. Please try again."
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const retakeExam = () => {
     setSelectedAnswers({});
     setSubmitted(false);
     setCurrentQuestionIndex(0);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    setBackendResult(null);
+    setSubmitError(null);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
   };
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -384,16 +493,24 @@ export default function PythonExam() {
   const goNext = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((previous) => previous + 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
     } else {
-      submitExam();
+      void submitExam();
     }
   };
 
   const goPrevious = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex((previous) => previous - 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
     }
   };
 
@@ -403,18 +520,11 @@ export default function PythonExam() {
 
   return (
     <div className="min-h-screen bg-slate-50 px-4 pb-12 pt-28 dark:bg-slate-950">
-
       <div className="mx-auto max-w-7xl">
 
         {!submitted ? (
           <>
-
-            {/* ================================================= */}
-            {/* EXAM TOP BAR                                     */}
-            {/* ================================================= */}
-
             <div className="mb-5 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-
               <div className="flex flex-col gap-4 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
 
                 <div>
@@ -437,6 +547,7 @@ export default function PythonExam() {
                     <p className="text-xs text-slate-500 dark:text-slate-400">
                       Questions
                     </p>
+
                     <p className="font-bold text-slate-900 dark:text-white">
                       {questions.length}
                     </p>
@@ -446,64 +557,49 @@ export default function PythonExam() {
                     <p className="text-xs text-slate-500 dark:text-slate-400">
                       Passing
                     </p>
+
                     <p className="font-bold text-blue-600 dark:text-blue-400">
                       70%
                     </p>
                   </div>
 
                 </div>
-
               </div>
 
-              {/* Progress */}
-
               <div className="border-t border-slate-100 px-6 py-3 dark:border-slate-800">
-
                 <div className="flex items-center justify-between text-xs font-semibold">
 
                   <span className="text-slate-500 dark:text-slate-400">
-                    Question {currentQuestionIndex + 1} of {questions.length}
+                    Question {currentQuestionIndex + 1} of{" "}
+                    {questions.length}
                   </span>
 
                   <span className="text-blue-600 dark:text-blue-400">
                     {Math.round(
-                      ((currentQuestionIndex + 1) / questions.length) * 100
-                    )}%
+                      ((currentQuestionIndex + 1) /
+                        questions.length) *
+                        100
+                    )}
+                    %
                   </span>
 
                 </div>
 
                 <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
-
                   <div
                     className="h-full rounded-full bg-blue-600 transition-all duration-300"
                     style={{
-                      width: `${((currentQuestionIndex + 1) / questions.length) * 100}%`,
+                      width: `${((currentQuestionIndex + 1) / questions.length) * 100}%`
                     }}
                   />
-
                 </div>
-
               </div>
-
             </div>
-
-
-            {/* ================================================= */}
-            {/* CISCO STYLE EXAM AREA                            */}
-            {/* ================================================= */}
 
             <div className="grid gap-5 lg:grid-cols-[220px_minmax(0,1fr)]">
 
-
-              {/* ================================================= */}
-              {/* LEFT QUESTION NAVIGATION                         */}
-              {/* ================================================= */}
-
               <aside className="h-fit rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-
                 <div className="border-b border-slate-200 px-5 py-4 dark:border-slate-800">
-
                   <p className="text-sm font-bold text-slate-900 dark:text-white">
                     Exam Questions
                   </p>
@@ -511,50 +607,46 @@ export default function PythonExam() {
                   <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                     {answeredCount} answered
                   </p>
-
                 </div>
 
                 <div className="p-4">
-
                   <div className="grid grid-cols-5 gap-2">
-
-                    {questions.map((question, index) => {
-
+                    {questions.map((item, index) => {
                       const answered =
-                        selectedAnswers[question.id] !== undefined;
+                        selectedAnswers[item.id] !== undefined;
 
                       const active =
-                        index === currentQuestionIndex;
+                        currentQuestionIndex === index;
 
                       return (
                         <button
-                          key={question.id}
+                          key={item.id}
                           type="button"
                           onClick={() => {
+                            if (submitting) return;
+
                             setCurrentQuestionIndex(index);
 
                             window.scrollTo({
                               top: 0,
-                              behavior: "smooth",
+                              behavior: "smooth"
                             });
                           }}
-                          className={`h-9 rounded-md border text-xs font-bold transition ${
+                          className={`relative flex h-9 items-center justify-center rounded-md text-xs font-bold transition ${
                             active
-                              ? "border-blue-600 bg-blue-600 text-white"
+                              ? "bg-blue-600 text-white"
                               : answered
-                                ? "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-300"
-                                : "border-slate-200 bg-slate-50 text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400"
+                                ? "bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300"
+                                : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
                           }`}
                         >
                           {index + 1}
                         </button>
                       );
-
                     })}
-
                   </div>
 
-                  <div className="mt-5 border-t border-slate-200 pt-4 dark:border-slate-800">
+                  <div className="mt-5 border-t border-slate-100 pt-4 dark:border-slate-800">
 
                     <div className="flex items-center gap-2 text-xs text-slate-500">
                       <span className="h-3 w-3 rounded-sm bg-blue-600" />
@@ -572,21 +664,11 @@ export default function PythonExam() {
                     </div>
 
                   </div>
-
                 </div>
-
               </aside>
 
-
-              {/* ================================================= */}
-              {/* QUESTION PANEL                                    */}
-              {/* ================================================= */}
-
               <main>
-
                 <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-
-                  {/* Question heading */}
 
                   <div className="border-b border-slate-200 bg-slate-50 px-6 py-5 dark:border-slate-800 dark:bg-slate-800/50">
 
@@ -599,31 +681,27 @@ export default function PythonExam() {
                         </span>
 
                         <div>
-
                           <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
                             Question
                           </p>
 
                           <p className="font-bold text-slate-900 dark:text-white">
-                            {currentQuestionIndex + 1} of {questions.length}
+                            {currentQuestionIndex + 1} of{" "}
+                            {questions.length}
                           </p>
-
                         </div>
 
                       </div>
 
-                      {selectedAnswers[currentQuestion.id] !== undefined && (
+                      {selectedAnswers[currentQuestion.id] !==
+                        undefined && (
                         <span className="rounded-md bg-green-50 px-3 py-1.5 text-xs font-bold text-green-700 dark:bg-green-950/40 dark:text-green-300">
                           Answer Saved
                         </span>
                       )}
 
                     </div>
-
                   </div>
-
-
-                  {/* Question content */}
 
                   <div className="px-6 py-7 sm:px-8 sm:py-9">
 
@@ -631,20 +709,18 @@ export default function PythonExam() {
                       {currentQuestion.question}
                     </h2>
 
-
-                    {/* ================================================= */}
-                    {/* PYTHON CODE PANEL FOR CODE QUESTIONS             */}
-                    {/* ================================================= */}
-
-                    {(
-                      currentQuestion.question.includes("following code") ||
-                      currentQuestion.question.includes("What is printed") ||
-                      currentQuestion.question.includes("What is the output")
-                    ) && (
+                    {(currentQuestion.question.includes(
+                      "following code"
+                    ) ||
+                      currentQuestion.question.includes(
+                        "What is printed"
+                      ) ||
+                      currentQuestion.question.includes(
+                        "What is the output"
+                      )) && (
                       <div className="mt-6 overflow-hidden rounded-lg border border-slate-700 bg-slate-900">
 
                         <div className="flex items-center gap-2 border-b border-slate-700 bg-slate-800 px-4 py-2">
-
                           <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
                           <span className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
                           <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
@@ -652,7 +728,6 @@ export default function PythonExam() {
                           <span className="ml-2 text-xs font-semibold text-slate-400">
                             Python
                           </span>
-
                         </div>
 
                         <pre className="overflow-x-auto p-5 text-sm leading-7 text-slate-200">
@@ -708,115 +783,116 @@ print(outer())`
                       </div>
                     )}
 
-
-                    {/* ANSWERS */}
-
                     <div className="mt-8 space-y-3">
 
                       <p className="mb-3 text-sm font-bold text-slate-700 dark:text-slate-300">
                         Select one answer:
                       </p>
 
-                      {currentQuestion.options.map((option, optionIndex) => {
+                      {currentQuestion.options.map(
+                        (option, optionIndex) => {
+                          const selected =
+                            selectedAnswers[currentQuestion.id] ===
+                            optionIndex;
 
-                        const selected =
-                          selectedAnswers[currentQuestion.id] === optionIndex;
-
-                        return (
-                          <button
-                            key={optionIndex}
-                            type="button"
-                            onClick={() =>
-                              selectAnswer(
-                                currentQuestion.id,
-                                optionIndex
-                              )
-                            }
-                            className={`flex w-full items-center gap-4 rounded-lg border p-4 text-left transition ${
-                              selected
-                                ? "border-blue-600 bg-blue-50 dark:border-blue-500 dark:bg-blue-950/30"
-                                : "border-slate-200 bg-white hover:border-blue-400 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-blue-600 dark:hover:bg-slate-800"
-                            }`}
-                          >
-
-                            <span
-                              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-sm font-bold ${
+                          return (
+                            <button
+                              key={optionIndex}
+                              type="button"
+                              onClick={() =>
+                                selectAnswer(
+                                  currentQuestion.id,
+                                  optionIndex
+                                )
+                              }
+                              disabled={submitting}
+                              className={`flex w-full items-center gap-4 rounded-lg border p-4 text-left transition ${
                                 selected
-                                  ? "border-blue-600 bg-blue-600 text-white"
-                                  : "border-slate-300 bg-white text-slate-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                                  ? "border-blue-600 bg-blue-50 dark:border-blue-500 dark:bg-blue-950/30"
+                                  : "border-slate-200 bg-white hover:border-blue-400 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-blue-600 dark:hover:bg-slate-800"
                               }`}
                             >
-                              {getOptionLetter(optionIndex)}
-                            </span>
 
-                            <span className="whitespace-pre-line text-sm font-medium leading-6 text-slate-800 dark:text-slate-200">
-                              {option}
-                            </span>
-
-                            {selected && (
-                              <span className="ml-auto text-lg font-bold text-blue-600">
-                                {"\u2713"}
+                              <span
+                                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-sm font-bold ${
+                                  selected
+                                    ? "border-blue-600 bg-blue-600 text-white"
+                                    : "border-slate-300 bg-white text-slate-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                                }`}
+                              >
+                                {getOptionLetter(optionIndex)}
                               </span>
-                            )}
 
-                          </button>
-                        );
+                              <span className="whitespace-pre-line text-sm font-medium leading-6 text-slate-800 dark:text-slate-200">
+                                {option}
+                              </span>
 
-                      })}
+                              {selected && (
+                                <span className="ml-auto text-lg font-bold text-blue-600">
+                                  {"\u2713"}
+                                </span>
+                              )}
+
+                            </button>
+                          );
+                        }
+                      )}
 
                     </div>
 
-
-                    {/* NAVIGATION */}
+                    {submitError && (
+                      <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 dark:border-red-900 dark:bg-red-950/30 dark:text-red-300">
+                        {submitError}
+                      </div>
+                    )}
 
                     <div className="mt-9 flex items-center justify-between border-t border-slate-200 pt-6 dark:border-slate-800">
 
                       <button
                         type="button"
                         onClick={goPrevious}
-                        disabled={currentQuestionIndex === 0}
+                        disabled={
+                          currentQuestionIndex === 0 || submitting
+                        }
                         className="rounded-md border border-slate-300 bg-white px-5 py-2.5 text-sm font-bold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
                       >
                         {"\u2190"} Previous
                       </button>
 
                       <p className="hidden text-xs text-slate-400 sm:block">
-                        Question {currentQuestionIndex + 1} of {questions.length}
+                        Question {currentQuestionIndex + 1} of{" "}
+                        {questions.length}
                       </p>
 
                       <button
                         type="button"
                         onClick={goNext}
-
+                        disabled={submitting}
                         className="rounded-md bg-blue-600 px-6 py-2.5 text-sm font-bold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
                       >
-                        {currentQuestionIndex === questions.length - 1
-                          ? "Submit Assessment"
-                          : "Save & Next"}
-                        <span className="ml-2">
-                          {"\u2192"}
-                        </span>
+                        {submitting
+                          ? "Submitting..."
+                          : currentQuestionIndex ===
+                              questions.length - 1
+                            ? "Submit Assessment"
+                            : "Save & Next"}
+
+                        {!submitting && (
+                          <span className="ml-2">
+                            {"\u2192"}
+                          </span>
+                        )}
                       </button>
 
                     </div>
 
                   </div>
-
                 </section>
-
               </main>
-
             </div>
-
           </>
         ) : (
-
-          /* ===================================================== */
-          /* RESULT PAGE                                          */
-          /* ===================================================== */
-
           <>
-
             <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl dark:border-slate-800 dark:bg-slate-900">
 
               <div
@@ -859,8 +935,6 @@ print(outer())`
                   Python Development Course Completion Assessment
                 </p>
 
-                {/* SCORE */}
-
                 <div className="mx-auto mt-8 flex h-44 w-44 flex-col items-center justify-center rounded-full border-8 border-white bg-white shadow-lg dark:border-slate-800 dark:bg-slate-950">
 
                   <span
@@ -885,13 +959,9 @@ print(outer())`
 
               </div>
 
-
-              {/* RESULT STATS */}
-
               <div className="grid border-t border-slate-200 sm:grid-cols-3 dark:border-slate-800">
 
                 <div className="border-b p-6 text-center sm:border-b-0 sm:border-r dark:border-slate-800">
-
                   <p className="text-3xl font-black text-green-600">
                     {score}
                   </p>
@@ -899,11 +969,9 @@ print(outer())`
                   <p className="mt-1 text-sm font-semibold text-slate-500">
                     Correct
                   </p>
-
                 </div>
 
                 <div className="border-b p-6 text-center sm:border-b-0 sm:border-r dark:border-slate-800">
-
                   <p className="text-3xl font-black text-red-600">
                     {questions.length - score}
                   </p>
@@ -911,27 +979,20 @@ print(outer())`
                   <p className="mt-1 text-sm font-semibold text-slate-500">
                     Incorrect
                   </p>
-
                 </div>
 
                 <div className="p-6 text-center">
-
                   <p className="text-3xl font-black text-blue-600">
-                    {PASS_MARK}
+                    {requiredScore}
                   </p>
 
                   <p className="mt-1 text-sm font-semibold text-slate-500">
                     Required
                   </p>
-
                 </div>
 
               </div>
-
             </section>
-
-
-            {/* RESULT ACTIONS */}
 
             <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
 
@@ -941,7 +1002,7 @@ print(outer())`
                   document
                     .getElementById("answer-review")
                     ?.scrollIntoView({
-                      behavior: "smooth",
+                      behavior: "smooth"
                     })
                 }
                 className="rounded-md bg-blue-600 px-7 py-3 font-bold text-white hover:bg-blue-700"
@@ -949,23 +1010,28 @@ print(outer())`
                 Review Answers
               </button>
 
-              <button
-                type="button"
-                onClick={retakeExam}
-                className="rounded-md border border-slate-300 bg-white px-7 py-3 font-bold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
-              >
-                Retake Exam
-              </button>
+              {passed ? (
+                <a
+                  href="/my-certificates"
+                  className="rounded-md bg-green-600 px-7 py-3 font-bold text-white hover:bg-green-700"
+                >
+                  View Certificate
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  onClick={retakeExam}
+                  className="rounded-md border border-slate-300 bg-white px-7 py-3 font-bold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                >
+                  Retake Exam
+                </button>
+              )}
 
             </div>
-
-
-            {/* ANSWER REVIEW */}
 
             <section id="answer-review" className="mt-10">
 
               <div className="mb-5">
-
                 <p className="text-xs font-bold uppercase tracking-widest text-blue-600">
                   Detailed Review
                 </p>
@@ -973,13 +1039,11 @@ print(outer())`
                 <h2 className="mt-1 text-2xl font-bold text-slate-900 dark:text-white">
                   Answer Review
                 </h2>
-
               </div>
 
               <div className="space-y-4">
 
                 {questions.map((question, questionIndex) => {
-
                   const userAnswer =
                     selectedAnswers[question.id];
 
@@ -1080,23 +1144,16 @@ print(outer())`
                         </div>
 
                       </div>
-
                     </article>
                   );
-
                 })}
 
               </div>
-
             </section>
-
           </>
         )}
 
       </div>
-
     </div>
   );
 }
-
-

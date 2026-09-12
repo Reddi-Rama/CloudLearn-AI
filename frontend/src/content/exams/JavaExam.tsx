@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useMemo, useState } from "react";
 
@@ -10,6 +10,8 @@ type Question = {
   explanation: string;
   code?: string;
 };
+
+const getLetter = (index: number) => String.fromCharCode(65 + index);
 
 const questions: Question[] = [
   {

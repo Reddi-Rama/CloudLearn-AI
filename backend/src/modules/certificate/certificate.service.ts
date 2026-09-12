@@ -1,38 +1,84 @@
-import { certificateRepository } from "./certificate.repository";
-import { generateCertificate as generateCertificatePdf } from "../../generators/certificate.generator";
-import { generateCertificateId } from "../../utils/certificateId";
-import { prisma } from "../../lib/prisma";
+﻿import { PrismaClient } from "@prisma/client";
+import { generateCertificate } from "../../generators/certificate.generator";
+
+const prisma = new PrismaClient();
 
 export const certificateService = {
-  /**
-   * Generate a certificate for a completed course
-   */
   async generate(
     userId: string,
     courseSlug: string,
-    courseTitle: string
+    courseTitle?: string
   ) {
-    if (!courseSlug || !courseTitle) {
+    if (!userId) {
+      throw new Error("User authentication required");
+    }
+
+    if (!courseSlug) {
+      throw new Error("Course slug is required");
+    }
+
+    /*
+     * SECURITY:
+     * A certificate can only be generated when the student
+     * has a passed final exam attempt for this course.
+     */
+    const passedAttempt =
+      await prisma.examAttempt.findFirst({
+        where: {
+          userId,
+          passed: true,
+          exam: {
+            course: {
+              slug: courseSlug,
+            },
+          },
+        },
+        orderBy: {
+          submittedAt: "desc",
+        },
+        include: {
+          exam: {
+            include: {
+              course: true,
+            },
+          },
+        },
+      });
+
+    if (!passedAttempt) {
       throw new Error(
-        "Course slug and course title are required"
+        "Certificate unavailable. You must pass the final exam with the required score first."
       );
     }
 
-    // Check whether the user already has this certificate
-    const existing =
-      await certificateRepository.findUserCertificate(
-        userId,
-        courseSlug
-      );
+    const resolvedCourseTitle =
+      passedAttempt.exam.course.title ||
+      courseTitle ||
+      courseSlug;
 
-    if (existing) {
-      return existing;
+    /*
+     * Do not create duplicate certificates for the same
+     * student and course.
+     */
+    const existingCertificate =
+      await prisma.certificate.findFirst({
+        where: {
+          userId,
+          courseSlug,
+        },
+      });
+
+    if (existingCertificate) {
+      return existingCertificate;
     }
 
-    // Get user information
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
+      },
+      select: {
+        id: true,
+        fullName: true,
       },
     });
 
@@ -40,46 +86,71 @@ export const certificateService = {
       throw new Error("User not found");
     }
 
-    // Generate unique certificate ID
     const certificateId =
-      generateCertificateId(courseSlug);
+      await this.createUniqueCertificateId();
 
-    // Generate certificate PDF
-    const filePath = await generateCertificatePdf({
+    const issueDate = new Date();
+
+    /*
+     * The existing generator expects a string date.
+     */
+    const issueDateText =
+      issueDate.toLocaleDateString("en-IN");
+
+    const filePath = await generateCertificate({
       studentName: user.fullName,
-      courseTitle,
+      courseTitle: resolvedCourseTitle,
       certificateId,
-      issueDate: new Date().toLocaleDateString("en-IN"),
+      issueDate: issueDateText,
     });
 
-    // Store certificate in database
-    const certificate =
-      await certificateRepository.create({
+    return prisma.certificate.create({
+      data: {
         certificateId,
         userId,
         courseSlug,
-        courseTitle,
+        courseTitle: resolvedCourseTitle,
         filePath,
-      });
-
-    return certificate;
+        paymentStatus: true,
+        issuedAt: issueDate,
+      },
+    });
   },
 
-  /**
-   * Get all certificates belonging to one user
-   */
+  async createUniqueCertificateId(): Promise<string> {
+    for (let attempt = 0; attempt < 10; attempt++) {
+      const certificateId =
+        `CL-${Date.now().toString(36).toUpperCase()}-` +
+        Math.random()
+          .toString(36)
+          .slice(2, 8)
+          .toUpperCase();
+
+      const existing =
+        await prisma.certificate.findUnique({
+          where: {
+            certificateId,
+          },
+        });
+
+      if (!existing) {
+        return certificateId;
+      }
+    }
+
+    throw new Error(
+      "Unable to generate a unique certificate ID"
+    );
+  },
+
   async getUserCertificates(userId: string) {
-    return certificateRepository.findUserCertificates(
-      userId
-    );
-  },
-
-  /**
-   * Find certificate by certificate ID
-   */
-  async findByCertificateId(certificateId: string) {
-    return certificateRepository.findByCertificateId(
-      certificateId
-    );
+    return prisma.certificate.findMany({
+      where: {
+        userId,
+      },
+      orderBy: {
+        issuedAt: "desc",
+      },
+    });
   },
 };

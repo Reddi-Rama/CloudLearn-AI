@@ -1,41 +1,34 @@
-"use client";
+﻿import { ReactNode } from "react";
+import clsx from "clsx";
 
-import Image from "next/image";
-import { User } from "lucide-react";
-
-interface AvatarProps {
-  src?: string;
-  alt?: string;
-  size?: number;
+interface Props {
+  children: ReactNode;
+  className?: string;
+  color?: "blue" | "green" | "red" | "yellow" | "slate";
 }
 
-export default function Avatar({
-  src,
-  alt = "Avatar",
-  size = 64,
-}: AvatarProps) {
+export default function Badge({
+  children,
+  className,
+  color = "blue",
+}: Props) {
+  const colorClasses = {
+    blue: "bg-blue-100 text-blue-600",
+    green: "bg-green-100 text-green-600",
+    red: "bg-red-100 text-red-600",
+    yellow: "bg-yellow-100 text-yellow-700",
+    slate: "bg-slate-100 text-slate-600",
+  };
+
   return (
-    <div
-      className="flex items-center justify-center overflow-hidden rounded-full border-4 border-white bg-sky-100 shadow-lg"
-      style={{
-        width: size,
-        height: size,
-      }}
-    >
-      {src ? (
-        <Image
-          src={src}
-          alt={alt}
-          width={size}
-          height={size}
-          className="h-full w-full object-cover"
-        />
-      ) : (
-        <User
-          size={size * 0.5}
-          className="text-sky-600"
-        />
+    <span
+      className={clsx(
+        "inline-flex rounded-full px-4 py-1 text-sm font-medium",
+        colorClasses[color],
+        className
       )}
-    </div>
+    >
+      {children}
+    </span>
   );
 }
