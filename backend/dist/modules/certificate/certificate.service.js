@@ -12,11 +12,6 @@ exports.certificateService = {
         if (!courseSlug) {
             throw new Error("Course slug is required");
         }
-        /*
-         * SECURITY:
-         * A certificate can only be generated when the student
-         * has a passed final exam attempt for this course.
-         */
         const passedAttempt = await prisma.examAttempt.findFirst({
             where: {
                 userId,
@@ -44,10 +39,6 @@ exports.certificateService = {
         const resolvedCourseTitle = passedAttempt.exam.course.title ||
             courseTitle ||
             courseSlug;
-        /*
-         * Do not create duplicate certificates for the same
-         * student and course.
-         */
         const existingCertificate = await prisma.certificate.findFirst({
             where: {
                 userId,
@@ -71,9 +62,6 @@ exports.certificateService = {
         }
         const certificateId = await this.createUniqueCertificateId();
         const issueDate = new Date();
-        /*
-         * The existing generator expects a string date.
-         */
         const issueDateText = issueDate.toLocaleDateString("en-IN");
         const filePath = await (0, certificate_generator_1.generateCertificate)({
             studentName: user.fullName,
@@ -95,7 +83,9 @@ exports.certificateService = {
     },
     async createUniqueCertificateId() {
         for (let attempt = 0; attempt < 10; attempt++) {
-            const certificateId = `CL-${Date.now().toString(36).toUpperCase()}-` +
+            const certificateId = `CL-${Date.now()
+                .toString(36)
+                .toUpperCase()}-` +
                 Math.random()
                     .toString(36)
                     .slice(2, 8)
@@ -120,6 +110,35 @@ exports.certificateService = {
                 issuedAt: "desc",
             },
         });
+    },
+    async verifyCertificate(certificateId) {
+        const certificate = await prisma.certificate.findUnique({
+            where: {
+                certificateId,
+            },
+            select: {
+                certificateId: true,
+                courseSlug: true,
+                courseTitle: true,
+                issuedAt: true,
+                user: {
+                    select: {
+                        fullName: true,
+                    },
+                },
+            },
+        });
+        if (!certificate) {
+            return null;
+        }
+        return {
+            valid: true,
+            certificateId: certificate.certificateId,
+            studentName: certificate.user.fullName,
+            courseSlug: certificate.courseSlug,
+            courseTitle: certificate.courseTitle,
+            issuedAt: certificate.issuedAt,
+        };
     },
 };
 //# sourceMappingURL=certificate.service.js.map

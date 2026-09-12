@@ -7,10 +7,11 @@ exports.generateCertificate = generateCertificate;
 const pdf_lib_1 = require("pdf-lib");
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const qrcode_1 = __importDefault(require("qrcode"));
 function centerText(page, text, font, size, y, color, pageWidth) {
-    const textWidth = font.widthOfTextAtSize(text, size);
+    const width = font.widthOfTextAtSize(text, size);
     page.drawText(text, {
-        x: (pageWidth - textWidth) / 2,
+        x: (pageWidth - width) / 2,
         y,
         size,
         font,
@@ -20,30 +21,33 @@ function centerText(page, text, font, size, y, color, pageWidth) {
 async function generateCertificate(data) {
     const pdfDoc = await pdf_lib_1.PDFDocument.create();
     /*
-     * A4 Landscape
+     * A4 landscape
      */
     const page = pdfDoc.addPage([
         842,
         595,
     ]);
     const { width, height } = page.getSize();
+    /*
+     * Fonts
+     */
     const regular = await pdfDoc.embedFont(pdf_lib_1.StandardFonts.Helvetica);
     const bold = await pdfDoc.embedFont(pdf_lib_1.StandardFonts.HelveticaBold);
     /*
-     * Professional CloudLearn palette.
+     * CloudLearn palette
      */
-    const navy = (0, pdf_lib_1.rgb)(0.035, 0.075, 0.16);
-    const blue = (0, pdf_lib_1.rgb)(0.08, 0.28, 0.72);
-    const cyan = (0, pdf_lib_1.rgb)(0.05, 0.68, 0.85);
-    const gold = (0, pdf_lib_1.rgb)(0.82, 0.58, 0.12);
-    const darkText = (0, pdf_lib_1.rgb)(0.12, 0.15, 0.22);
-    const muted = (0, pdf_lib_1.rgb)(0.38, 0.42, 0.50);
-    const soft = (0, pdf_lib_1.rgb)(0.96, 0.975, 0.995);
+    const navy = (0, pdf_lib_1.rgb)(0.025, 0.06, 0.14);
+    const blue = (0, pdf_lib_1.rgb)(0.07, 0.29, 0.75);
+    const cyan = (0, pdf_lib_1.rgb)(0.03, 0.68, 0.86);
+    const gold = (0, pdf_lib_1.rgb)(0.84, 0.59, 0.12);
+    const darkText = (0, pdf_lib_1.rgb)(0.10, 0.13, 0.20);
+    const muted = (0, pdf_lib_1.rgb)(0.38, 0.43, 0.52);
+    const softBlue = (0, pdf_lib_1.rgb)(0.95, 0.97, 0.995);
     const white = (0, pdf_lib_1.rgb)(1, 1, 1);
     /*
-     * =========================================================
+     * ==========================================================
      * BACKGROUND
-     * =========================================================
+     * ==========================================================
      */
     page.drawRectangle({
         x: 0,
@@ -53,17 +57,17 @@ async function generateCertificate(data) {
         color: white,
     });
     /*
-     * Top premium band.
+     * Top navy band
      */
     page.drawRectangle({
         x: 0,
-        y: height - 95,
+        y: height - 92,
         width,
-        height: 95,
+        height: 92,
         color: navy,
     });
     /*
-     * Bottom premium band.
+     * Bottom navy accent
      */
     page.drawRectangle({
         x: 0,
@@ -73,232 +77,292 @@ async function generateCertificate(data) {
         color: navy,
     });
     /*
-     * Main soft content panel.
+     * Outer premium frame
      */
     page.drawRectangle({
-        x: 38,
-        y: 32,
-        width: width - 76,
-        height: height - 64,
+        x: 30,
+        y: 28,
+        width: width - 60,
+        height: height - 56,
         borderWidth: 1,
-        borderColor: (0, pdf_lib_1.rgb)(0.82, 0.85, 0.90),
-        color: white,
+        borderColor: (0, pdf_lib_1.rgb)(0.78, 0.82, 0.89),
     });
     /*
-     * Inner accent frame.
+     * Inner blue frame
      */
     page.drawRectangle({
-        x: 50,
+        x: 48,
         y: 44,
-        width: width - 100,
+        width: width - 96,
         height: height - 88,
         borderWidth: 2,
         borderColor: blue,
     });
     /*
-     * =========================================================
-     * BRAND
-     * =========================================================
+     * ==========================================================
+     * BRAND LOGO
+     * ==========================================================
      */
+    const logoPath = path_1.default.join(process.cwd(), "assets", "certificates", "cloudlearn-logo.png");
+    if (!fs_1.default.existsSync(logoPath)) {
+        throw new Error("CloudLearn logo not found at " +
+            logoPath);
+    }
+    const logoBytes = fs_1.default.readFileSync(logoPath);
+    const logoImage = logoPath.toLowerCase().endsWith(".png")
+        ? await pdfDoc.embedPng(logoBytes)
+        : await pdfDoc.embedJpg(logoBytes);
+    const logoScale = Math.min(175 / logoImage.width, 70 / logoImage.height);
+    const logoWidth = logoImage.width * logoScale;
+    const logoHeight = logoImage.height * logoScale;
+    page.drawImage(logoImage, {
+        x: 72,
+        y: height - 78,
+        width: logoWidth,
+        height: logoHeight,
+    });
     /*
-     * CL monogram.
+     * Tagline
      */
-    page.drawCircle({
-        x: 82,
-        y: height - 47,
-        size: 26,
-        color: blue,
-    });
-    centerText(page, "CL", bold, 12, height - 52, white, 164);
-    page.drawText("CLOUDLEARN", {
-        x: 116,
-        y: height - 54,
-        size: 18,
-        font: bold,
-        color: white,
-    });
-    page.drawText("LEARN  |  BUILD  |  GROW", {
-        x: 116,
-        y: height - 72,
-        size: 8,
+    page.drawText("LEARN  •  BUILD  •  GROW", {
+        x: 250,
+        y: height - 52,
+        size: 9,
         font: regular,
-        color: (0, pdf_lib_1.rgb)(0.72, 0.82, 0.96),
+        color: (0, pdf_lib_1.rgb)(0.74, 0.84, 0.98),
     });
     /*
-     * Certificate badge.
+     * Top right certified seal
      */
     page.drawCircle({
-        x: width - 83,
-        y: height - 48,
-        size: 26,
+        x: width - 80,
+        y: height - 46,
+        size: 27,
         color: gold,
     });
     page.drawCircle({
-        x: width - 83,
-        y: height - 48,
-        size: 19,
+        x: width - 80,
+        y: height - 46,
+        size: 20,
         borderWidth: 1.5,
         borderColor: white,
     });
-    centerText(page, "CERTIFIED", bold, 6, height - 50, white, width - 166);
+    centerText(page, "CERTIFIED", bold, 5.5, height - 48, white, width - 160);
     /*
-     * =========================================================
-     * MAIN TITLE
-     * =========================================================
+     * ==========================================================
+     * TITLE
+     * ==========================================================
      */
-    centerText(page, "CERTIFICATE", bold, 31, 445, navy, width);
-    centerText(page, "OF COMPLETION", regular, 15, 419, blue, width);
-    /*
-     * Accent divider.
-     */
+    centerText(page, "CERTIFICATE", bold, 32, 438, navy, width);
+    centerText(page, "OF COMPLETION", regular, 16, 411, blue, width);
     page.drawLine({
         start: {
             x: 270,
-            y: 399,
+            y: 393,
         },
         end: {
             x: 572,
-            y: 399,
+            y: 393,
         },
         thickness: 1.5,
         color: gold,
     });
     page.drawCircle({
-        x: 421,
-        y: 399,
+        x: width / 2,
+        y: 393,
         size: 4,
         color: gold,
     });
     /*
-     * =========================================================
+     * ==========================================================
      * RECIPIENT
-     * =========================================================
+     * ==========================================================
      */
-    centerText(page, "This certificate is proudly presented to", regular, 12, 364, muted, width);
-    centerText(page, data.studentName, bold, 30, 318, navy, width);
-    /*
-     * Name underline.
-     */
-    const nameWidth = bold.widthOfTextAtSize(data.studentName, 30);
+    centerText(page, "This certificate is proudly presented to", regular, 12, 360, muted, width);
+    const studentSize = data.studentName.length > 24
+        ? 24
+        : 30;
+    centerText(page, data.studentName, bold, studentSize, 314, navy, width);
+    const studentWidth = bold.widthOfTextAtSize(data.studentName, studentSize);
     page.drawLine({
         start: {
-            x: (width - nameWidth) / 2,
-            y: 306,
+            x: (width - studentWidth) / 2 -
+                8,
+            y: 302,
         },
         end: {
-            x: (width + nameWidth) / 2,
-            y: 306,
+            x: (width + studentWidth) / 2 +
+                8,
+            y: 302,
         },
         thickness: 1,
-        color: (0, pdf_lib_1.rgb)(0.75, 0.78, 0.85),
+        color: gold,
     });
+    centerText(page, "has successfully completed the comprehensive learning path and final assessment for", regular, 10.5, 267, muted, width);
     /*
-     * Completion statement.
+     * ==========================================================
+     * COURSE TITLE
+     * ==========================================================
      */
-    centerText(page, "has successfully completed the", regular, 12, 272, muted, width);
-    /*
-     * Course title.
-     */
-    const courseSize = data.courseTitle.length > 34
-        ? 20
+    const courseSize = data.courseTitle.length > 32
+        ? 19
         : 25;
-    centerText(page, data.courseTitle, bold, courseSize, 228, blue, width);
+    centerText(page, data.courseTitle, bold, courseSize, 224, blue, width);
     /*
-     * =========================================================
+     * ==========================================================
      * COMPLETION BADGE
-     * =========================================================
+     * ==========================================================
      */
     page.drawRectangle({
-        x: 310,
-        y: 171,
-        width: 222,
-        height: 32,
-        color: soft,
+        x: 303,
+        y: 169,
+        width: 236,
+        height: 31,
+        color: softBlue,
         borderWidth: 1,
-        borderColor: (0, pdf_lib_1.rgb)(0.82, 0.86, 0.93),
+        borderColor: (0, pdf_lib_1.rgb)(0.78, 0.84, 0.93),
     });
-    centerText(page, "FINAL ASSESSMENT COMPLETED", bold, 8, 183, navy, width);
+    centerText(page, "FINAL ASSESSMENT COMPLETED", bold, 8, 181, navy, width);
     /*
-     * =========================================================
-     * FOOTER DETAILS
-     * =========================================================
+     * ==========================================================
+     * SIGNATURE
+     * ==========================================================
      */
+    const signaturePath = path_1.default.join(process.cwd(), "assets", "certificates", "sekhar-signature.png");
+    if (!fs_1.default.existsSync(signaturePath)) {
+        throw new Error("Sekhar signature not found at " +
+            signaturePath);
+    }
+    const signatureBytes = fs_1.default.readFileSync(signaturePath);
+    const signatureImage = await pdfDoc.embedPng(signatureBytes);
+    const signatureScale = Math.min(130 / signatureImage.width, 42 / signatureImage.height);
+    const signatureWidth = signatureImage.width *
+        signatureScale;
+    const signatureHeight = signatureImage.height *
+        signatureScale;
+    page.drawImage(signatureImage, {
+        x: 344,
+        y: 111,
+        width: signatureWidth,
+        height: signatureHeight,
+    });
     page.drawLine({
         start: {
-            x: 72,
-            y: 126,
+            x: 325,
+            y: 105,
         },
         end: {
-            x: 770,
-            y: 126,
+            x: 517,
+            y: 105,
         },
         thickness: 0.8,
-        color: (0, pdf_lib_1.rgb)(0.84, 0.86, 0.90),
+        color: (0, pdf_lib_1.rgb)(0.70, 0.74, 0.82),
     });
+    centerText(page, "Sekhar.M", bold, 10, 88, navy, width);
+    centerText(page, "Founder & CEO", regular, 7.5, 75, muted, width);
     /*
-     * Issue date.
+     * ==========================================================
+     * DATE
+     * ==========================================================
      */
     page.drawText("ISSUED ON", {
-        x: 78,
+        x: 72,
         y: 105,
         size: 7,
         font: bold,
         color: muted,
     });
     page.drawText(data.issueDate, {
-        x: 78,
-        y: 88,
+        x: 72,
+        y: 89,
         size: 11,
         font: bold,
         color: darkText,
     });
     /*
-     * Certificate ID.
+     * ==========================================================
+     * QR CODE
+     * ==========================================================
+     */
+    const verificationBase = process.env.CERTIFICATE_VERIFY_BASE_URL ||
+        "http://localhost:3000/verify-certificate";
+    const verificationUrl = `${verificationBase}?certificateId=${encodeURIComponent(data.certificateId)}`;
+    const qrDataUrl = await qrcode_1.default.toDataURL(verificationUrl, {
+        errorCorrectionLevel: "H",
+        margin: 1,
+        width: 400,
+    });
+    const qrBase64 = qrDataUrl.replace(/^data:image\/png;base64,/, "");
+    const qrBytes = Buffer.from(qrBase64, "base64");
+    const qrImage = await pdfDoc.embedPng(qrBytes);
+    page.drawRectangle({
+        x: 675,
+        y: 60,
+        width: 82,
+        height: 82,
+        color: white,
+        borderWidth: 1,
+        borderColor: (0, pdf_lib_1.rgb)(0.75, 0.80, 0.88),
+    });
+    page.drawImage(qrImage, {
+        x: 684,
+        y: 69,
+        width: 64,
+        height: 64,
+    });
+    centerText(page, "SCAN TO VERIFY", bold, 6.5, 49, navy, 740);
+    /*
+     * ==========================================================
+     * CERTIFICATE ID
+     * ==========================================================
      */
     page.drawText("CERTIFICATE ID", {
-        x: 612,
+        x: 530,
         y: 105,
         size: 7,
         font: bold,
         color: muted,
     });
     page.drawText(data.certificateId, {
-        x: 612,
-        y: 88,
-        size: 10,
+        x: 530,
+        y: 89,
+        size: 9,
         font: bold,
         color: darkText,
     });
     /*
-     * Footer brand.
-     */
-    centerText(page, "CloudLearn Academy", bold, 10, 57, navy, width);
-    centerText(page, "Learn. Build. Grow.", regular, 7, 45, muted, width);
-    /*
-     * Decorative side dots.
+     * ==========================================================
+     * DECORATIVE SIDE ELEMENTS
+     * ==========================================================
      */
     for (let i = 0; i < 5; i++) {
+        const dotColor = i === 2
+            ? gold
+            : cyan;
         page.drawCircle({
-            x: 67,
-            y: 210 + i * 16,
+            x: 65,
+            y: 205 + i * 15,
             size: i === 2 ? 4 : 2,
-            color: i === 2
-                ? gold
-                : cyan,
+            color: dotColor,
         });
         page.drawCircle({
-            x: width - 67,
-            y: 210 + i * 16,
+            x: width - 65,
+            y: 205 + i * 15,
             size: i === 2 ? 4 : 2,
-            color: i === 2
-                ? gold
-                : cyan,
+            color: dotColor,
         });
     }
     /*
-     * =========================================================
-     * WRITE PDF
-     * =========================================================
+     * ==========================================================
+     * FOOTER
+     * ==========================================================
+     */
+    centerText(page, "CloudLearn", bold, 11, 45, navy, width);
+    centerText(page, "www.cloudlearn.com  •  LEARN • BUILD • GROW", regular, 6.5, 31, muted, width);
+    /*
+     * ==========================================================
+     * WRITE FILE
+     * ==========================================================
      */
     const pdfBytes = await pdfDoc.save();
     const storageDirectory = path_1.default.join(process.cwd(), "storage", "certificates");

@@ -155,7 +155,7 @@ export default function Footer() {
               </Link>
 
               <Link
-                href="/coming-soon"
+                href="/verify-certificate"
                 className="text-slate-600 transition hover:text-sky-600"
               >
                 Verify Certificate

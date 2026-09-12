@@ -17,11 +17,6 @@ export const certificateService = {
       throw new Error("Course slug is required");
     }
 
-    /*
-     * SECURITY:
-     * A certificate can only be generated when the student
-     * has a passed final exam attempt for this course.
-     */
     const passedAttempt =
       await prisma.examAttempt.findFirst({
         where: {
@@ -56,10 +51,6 @@ export const certificateService = {
       courseTitle ||
       courseSlug;
 
-    /*
-     * Do not create duplicate certificates for the same
-     * student and course.
-     */
     const existingCertificate =
       await prisma.certificate.findFirst({
         where: {
@@ -72,15 +63,16 @@ export const certificateService = {
       return existingCertificate;
     }
 
-    const user = await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-      select: {
-        id: true,
-        fullName: true,
-      },
-    });
+    const user =
+      await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+        select: {
+          id: true,
+          fullName: true,
+        },
+      });
 
     if (!user) {
       throw new Error("User not found");
@@ -91,18 +83,18 @@ export const certificateService = {
 
     const issueDate = new Date();
 
-    /*
-     * The existing generator expects a string date.
-     */
     const issueDateText =
-      issueDate.toLocaleDateString("en-IN");
+      issueDate.toLocaleDateString(
+        "en-IN"
+      );
 
-    const filePath = await generateCertificate({
-      studentName: user.fullName,
-      courseTitle: resolvedCourseTitle,
-      certificateId,
-      issueDate: issueDateText,
-    });
+    const filePath =
+      await generateCertificate({
+        studentName: user.fullName,
+        courseTitle: resolvedCourseTitle,
+        certificateId,
+        issueDate: issueDateText,
+      });
 
     return prisma.certificate.create({
       data: {
@@ -118,9 +110,15 @@ export const certificateService = {
   },
 
   async createUniqueCertificateId(): Promise<string> {
-    for (let attempt = 0; attempt < 10; attempt++) {
+    for (
+      let attempt = 0;
+      attempt < 10;
+      attempt++
+    ) {
       const certificateId =
-        `CL-${Date.now().toString(36).toUpperCase()}-` +
+        `CL-${Date.now()
+          .toString(36)
+          .toUpperCase()}-` +
         Math.random()
           .toString(36)
           .slice(2, 8)
@@ -143,7 +141,9 @@ export const certificateService = {
     );
   },
 
-  async getUserCertificates(userId: string) {
+  async getUserCertificates(
+    userId: string
+  ) {
     return prisma.certificate.findMany({
       where: {
         userId,
@@ -152,5 +152,45 @@ export const certificateService = {
         issuedAt: "desc",
       },
     });
+  },
+
+  async verifyCertificate(
+    certificateId: string
+  ) {
+    const certificate =
+      await prisma.certificate.findUnique({
+        where: {
+          certificateId,
+        },
+        select: {
+          certificateId: true,
+          courseSlug: true,
+          courseTitle: true,
+          issuedAt: true,
+          user: {
+            select: {
+              fullName: true,
+            },
+          },
+        },
+      });
+
+    if (!certificate) {
+      return null;
+    }
+
+    return {
+      valid: true,
+      certificateId:
+        certificate.certificateId,
+      studentName:
+        certificate.user.fullName,
+      courseSlug:
+        certificate.courseSlug,
+      courseTitle:
+        certificate.courseTitle,
+      issuedAt:
+        certificate.issuedAt,
+    };
   },
 };

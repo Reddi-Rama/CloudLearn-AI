@@ -5,12 +5,6 @@ import { certificateService } from "./certificate.service";
 
 const prisma = new PrismaClient();
 
-/**
- * POST /api/v1/certificate/generate
- *
- * A certificate can only be generated when the authenticated
- * user has passed the final exam for the requested course.
- */
 export async function generateCertificate(
   req: AuthRequest,
   res: Response
@@ -58,17 +52,16 @@ export async function generateCertificate(
         ? error.message
         : "Unable to generate certificate";
 
-    let status = 400;
-
-    if (message.includes("Authentication")) {
-      status = 401;
-    } else if (
-      message.includes("Certificate unavailable")
-    ) {
-      status = 403;
-    } else if (message.includes("User not found")) {
-      status = 404;
-    }
+    const status =
+      message.includes("Authentication")
+        ? 401
+        : message.includes(
+            "Certificate unavailable"
+          )
+          ? 403
+          : message.includes("User not found")
+            ? 404
+            : 400;
 
     return res.status(status).json({
       success: false,
@@ -77,11 +70,6 @@ export async function generateCertificate(
   }
 }
 
-/**
- * GET /api/v1/certificate
- *
- * Get certificates belonging to the logged-in user.
- */
 export async function getMyCertificates(
   req: AuthRequest,
   res: Response
@@ -103,7 +91,8 @@ export async function getMyCertificates(
 
     return res.status(200).json({
       success: true,
-      message: "Certificates fetched successfully",
+      message:
+        "Certificates fetched successfully",
       data: certificates,
     });
   } catch (error) {
@@ -120,13 +109,59 @@ export async function getMyCertificates(
 }
 
 /**
- * GET /api/v1/certificate/download/:certificateId
+ * Public certificate verification.
  *
- * Download a certificate PDF.
- *
- * This route remains public because certificate verification
- * can be performed using the certificate ID.
+ * GET /api/v1/certificate/verify/:certificateId
  */
+export async function verifyCertificate(
+  req: Request,
+  res: Response
+) {
+  try {
+    const certificateId = String(
+      req.params.certificateId || ""
+    ).trim();
+
+    if (!certificateId) {
+      return res.status(400).json({
+        success: false,
+        message: "Certificate ID is required",
+      });
+    }
+
+    const certificate =
+      await certificateService.verifyCertificate(
+        certificateId
+      );
+
+    if (!certificate) {
+      return res.status(404).json({
+        success: false,
+        message: "Certificate not found",
+        data: {
+          valid: false,
+        },
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Certificate verified successfully",
+      data: certificate,
+    });
+  } catch (error) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Unable to verify certificate";
+
+    return res.status(400).json({
+      success: false,
+      message,
+    });
+  }
+}
+
 export async function downloadCertificate(
   req: Request,
   res: Response
@@ -161,10 +196,14 @@ export async function downloadCertificate(
       certificate.filePath,
       `${certificate.certificateId}.pdf`,
       (error) => {
-        if (error && !res.headersSent) {
+        if (
+          error &&
+          !res.headersSent
+        ) {
           return res.status(404).json({
             success: false,
-            message: "Certificate file not found",
+            message:
+              "Certificate file not found",
           });
         }
 
