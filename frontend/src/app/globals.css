@@ -2124,3 +2124,190 @@ html.dark .programming-domain-page .bg-sky-100 {
   background-color: #082f49 !important;
 }
 
+
+/* ============================================================
+   CLOUDLEARN EXAMS DARK MODE
+   UI ONLY — backend/certificate logic untouched
+============================================================ */
+
+html.dark .exam-result-page {
+  background-color: #08111f !important;
+  color: #e5e7eb !important;
+}
+
+/* Cards */
+html.dark .exam-result-page .bg-white {
+  background-color: #0f172a !important;
+}
+
+html.dark .exam-result-page .bg-slate-50 {
+  background-color: #111827 !important;
+}
+
+html.dark .exam-result-page .bg-slate-100 {
+  background-color: #1e293b !important;
+}
+
+html.dark .exam-result-page .bg-slate-800 {
+  background-color: #1e293b !important;
+}
+
+html.dark .exam-result-page .bg-slate-900 {
+  background-color: #0f172a !important;
+}
+
+/* Text */
+html.dark .exam-result-page .text-slate-900 {
+  color: #f8fafc !important;
+}
+
+html.dark .exam-result-page .text-slate-800 {
+  color: #e2e8f0 !important;
+}
+
+html.dark .exam-result-page .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+
+html.dark .exam-result-page .text-slate-600 {
+  color: #cbd5e1 !important;
+}
+
+html.dark .exam-result-page .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+html.dark .exam-result-page .text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+/* Failed result — amber instead of red */
+html.dark .exam-result-page .bg-red-50 {
+  background-color: #211a0b !important;
+}
+
+html.dark .exam-result-page .bg-red-100 {
+  background-color: #33240b !important;
+}
+
+html.dark .exam-result-page .bg-red-600 {
+  background-color: #d97706 !important;
+}
+
+html.dark .exam-result-page .text-red-700 {
+  color: #fbbf24 !important;
+}
+
+html.dark .exam-result-page .text-red-600 {
+  color: #f59e0b !important;
+}
+
+html.dark .exam-result-page .border-red-200,
+html.dark .exam-result-page .border-red-800 {
+  border-color: #92400e !important;
+}
+
+/* Passed result */
+html.dark .exam-result-page .bg-green-50 {
+  background-color: #082017 !important;
+}
+
+html.dark .exam-result-page .bg-green-100 {
+  background-color: #0b3020 !important;
+}
+
+html.dark .exam-result-page .bg-green-600 {
+  background-color: #16a34a !important;
+}
+
+html.dark .exam-result-page .text-green-700 {
+  color: #86efac !important;
+}
+
+html.dark .exam-result-page .text-green-600 {
+  color: #4ade80 !important;
+}
+
+html.dark .exam-result-page .border-green-200,
+html.dark .exam-result-page .border-green-800 {
+  border-color: #166534 !important;
+}
+
+/* Blue information areas */
+html.dark .exam-result-page .bg-blue-50 {
+  background-color: #0b1d35 !important;
+}
+
+html.dark .exam-result-page .bg-blue-100 {
+  background-color: #11294a !important;
+}
+
+html.dark .exam-result-page .text-blue-700 {
+  color: #93c5fd !important;
+}
+
+html.dark .exam-result-page .text-blue-600 {
+  color: #60a5fa !important;
+}
+
+html.dark .exam-result-page .border-blue-200 {
+  border-color: #1d4ed8 !important;
+}
+
+/* Borders */
+html.dark .exam-result-page .border-slate-200 {
+  border-color: #334155 !important;
+}
+
+html.dark .exam-result-page .border-slate-300 {
+  border-color: #475569 !important;
+}
+
+html.dark .exam-result-page .border-slate-700,
+html.dark .exam-result-page .border-slate-800 {
+  border-color: #334155 !important;
+}
+
+/* Code */
+html.dark .exam-result-page .bg-slate-950 {
+  background-color: #020617 !important;
+}
+
+html.dark .exam-result-page pre {
+  background-color: #020617 !important;
+  color: #e2e8f0 !important;
+}
+
+html.dark .exam-result-page code {
+  color: #e2e8f0 !important;
+}
+
+/* Buttons */
+html.dark .exam-result-page button.bg-blue-600 {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+html.dark .exam-result-page button.bg-white {
+  background-color: #0f172a !important;
+  color: #e2e8f0 !important;
+  border-color: #475569 !important;
+}
+
+/* Certificate button — presentation only.
+   Existing href/backend connection remains unchanged. */
+html.dark .exam-result-page a.bg-green-600 {
+  background-color: #16a34a !important;
+  color: #ffffff !important;
+}
+
+/* Review cards */
+html.dark .exam-result-page article {
+  background-color: #0f172a !important;
+  border-color: #334155 !important;
+}
+
+html.dark .exam-result-page article .bg-slate-50 {
+  background-color: #111827 !important;
+}
+

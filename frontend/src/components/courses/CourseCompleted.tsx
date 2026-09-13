@@ -14,6 +14,8 @@ export default function CourseCompleted({
       ? "/exam/cpp-development"
       : courseId === "java-development"
       ? "/exam/java-development"
+      : courseId === "c-development"
+      ? "/exam/c-development"
       : "/exam/python-development";
 
   const courseName =
@@ -21,6 +23,8 @@ export default function CourseCompleted({
       ? "C++ Development"
       : courseId === "java-development"
       ? "Java Development"
+      : courseId === "c-development"
+      ? "C Development"
       : "Python Development";
 
   return (
@@ -67,4 +71,3 @@ export default function CourseCompleted({
     </div>
   );
 }
-

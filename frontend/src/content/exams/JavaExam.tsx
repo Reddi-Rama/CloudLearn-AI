@@ -716,7 +716,7 @@ export default function JavaExam() {
   if (submitted) {
     return (
       <main className="min-h-screen bg-slate-50 px-4 pt-28 pb-10 dark:bg-slate-950">
-        <div className="mx-auto max-w-5xl">
+        <div className="mx-auto max-w-5xl exam-result-page">
           <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900">
             <div className="text-center">
               <p className="text-sm font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400">
@@ -978,4 +978,6 @@ export default function JavaExam() {
     </main>
   );
 }
+
+
 

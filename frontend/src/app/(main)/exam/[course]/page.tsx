@@ -2,6 +2,7 @@
 import PythonExam from "@/content/exams/PythonExam";
 import CppExam from "@/content/exams/CppExam";
 import JavaExam from "@/content/exams/JavaExam";
+import CExam from "@/content/exams/Cexam";
 
 interface Props {
   params: Promise<{ course: string }>;
@@ -20,6 +21,10 @@ export default async function ExamPage({ params }: Props) {
 
   if (course === "java-development") {
     return <JavaExam />;
+  }
+
+  if (course === "c-development") {
+    return <CExam />;
   }
 
   notFound();

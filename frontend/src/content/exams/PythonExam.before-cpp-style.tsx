@@ -519,124 +519,219 @@ export default function PythonExam() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 pb-12 pt-28 dark:bg-slate-950 exam-result-page">
+    <div className="min-h-screen bg-slate-50 px-4 pb-12 pt-28 dark:bg-slate-950">
       <div className="mx-auto max-w-7xl">
 
         {!submitted ? (
           <>
-            <div className="mb-6">
-              <p className="text-sm font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400">
-                Python Development
-              </p>
+            <div className="mb-5 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+              <div className="flex flex-col gap-4 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
 
-              <h1 className="mt-1 text-3xl font-bold text-slate-900 dark:text-white">
-                Final Assessment
-              </h1>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                    CloudLearn Assessment
+                  </p>
 
-              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-                25 questions | Passing score: 18/25 | No time limit
-              </p>
+                  <h1 className="mt-1 text-2xl font-bold text-slate-900 dark:text-white">
+                    Python Development
+                  </h1>
+
+                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                    Course Completion Assessment
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3">
+
+                  <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-center dark:border-slate-700 dark:bg-slate-800">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      Questions
+                    </p>
+
+                    <p className="font-bold text-slate-900 dark:text-white">
+                      {questions.length}
+                    </p>
+                  </div>
+
+                  <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-center dark:border-slate-700 dark:bg-slate-800">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      Passing
+                    </p>
+
+                    <p className="font-bold text-blue-600 dark:text-blue-400">
+                      70%
+                    </p>
+                  </div>
+
+                </div>
+              </div>
+
+              <div className="border-t border-slate-100 px-6 py-3 dark:border-slate-800">
+                <div className="flex items-center justify-between text-xs font-semibold">
+
+                  <span className="text-slate-500 dark:text-slate-400">
+                    Question {currentQuestionIndex + 1} of{" "}
+                    {questions.length}
+                  </span>
+
+                  <span className="text-blue-600 dark:text-blue-400">
+                    {Math.round(
+                      ((currentQuestionIndex + 1) /
+                        questions.length) *
+                        100
+                    )}
+                    %
+                  </span>
+
+                </div>
+
+                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+                  <div
+                    className="h-full rounded-full bg-blue-600 transition-all duration-300"
+                    style={{
+                      width: `${((currentQuestionIndex + 1) / questions.length) * 100}%`
+                    }}
+                  />
+                </div>
+              </div>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+            <div className="grid gap-5 lg:grid-cols-[220px_minmax(0,1fr)]">
 
-              <aside className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 lg:sticky lg:top-6">
-
-                <h2 className="font-bold text-slate-900 dark:text-white">
-                  Questions
-                </h2>
-
-                <div className="mt-4 grid grid-cols-5 gap-2">
-
-                  {questions.map((question, index) => {
-
-                    const answered =
-                      selectedAnswers[question.id] !== undefined;
-
-                    const active =
-                      index === currentQuestionIndex;
-
-                    return (
-                      <button
-                        key={question.id}
-                        type="button"
-                        onClick={() => {
-                          if (submitting) return;
-
-                          setCurrentQuestionIndex(index);
-
-                          window.scrollTo({
-                            top: 0,
-                            behavior: "smooth"
-                          });
-                        }}
-                        disabled={submitting}
-                        className={`h-9 rounded-lg text-xs font-bold transition ${
-                          active
-                            ? "bg-blue-600 text-white"
-                            : answered
-                              ? "bg-blue-100 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300"
-                              : "bg-slate-50 text-slate-500 hover:bg-slate-100 dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-slate-800"
-                        }`}
-                      >
-                        {question.id}
-                      </button>
-                    );
-                  })}
-
-                </div>
-
-                <div className="mt-5 space-y-2 text-xs text-slate-500 dark:text-slate-400">
-
-                  <p>
-                    <span className="mr-2 inline-block h-2.5 w-2.5 rounded-full bg-emerald-500" />
-                    Answered
+              <aside className="h-fit rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                <div className="border-b border-slate-200 px-5 py-4 dark:border-slate-800">
+                  <p className="text-sm font-bold text-slate-900 dark:text-white">
+                    Exam Questions
                   </p>
 
-                  <p>
-                    <span className="mr-2 inline-block h-2.5 w-2.5 rounded-full bg-slate-300 dark:bg-slate-600" />
-                    Not answered
+                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                    {answeredCount} answered
                   </p>
-
                 </div>
 
+                <div className="p-4">
+                  <div className="grid grid-cols-5 gap-2">
+                    {questions.map((item, index) => {
+                      const answered =
+                        selectedAnswers[item.id] !== undefined;
+
+                      const active =
+                        currentQuestionIndex === index;
+
+                      return (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => {
+                            if (submitting) return;
+
+                            setCurrentQuestionIndex(index);
+
+                            window.scrollTo({
+                              top: 0,
+                              behavior: "smooth"
+                            });
+                          }}
+                          className={`relative flex h-9 items-center justify-center rounded-md text-xs font-bold transition ${
+                            active
+                              ? "bg-blue-600 text-white"
+                              : answered
+                                ? "bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300"
+                                : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+                          }`}
+                        >
+                          {index + 1}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="mt-5 border-t border-slate-100 pt-4 dark:border-slate-800">
+
+                    <div className="flex items-center gap-2 text-xs text-slate-500">
+                      <span className="h-3 w-3 rounded-sm bg-blue-600" />
+                      Current
+                    </div>
+
+                    <div className="mt-2 flex items-center gap-2 text-xs text-slate-500">
+                      <span className="h-3 w-3 rounded-sm bg-blue-100 dark:bg-blue-950/50" />
+                      Answered
+                    </div>
+
+                    <div className="mt-2 flex items-center gap-2 text-xs text-slate-500">
+                      <span className="h-3 w-3 rounded-sm bg-slate-100 dark:bg-slate-800" />
+                      Not answered
+                    </div>
+
+                  </div>
+                </div>
               </aside>
 
-              <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 md:p-8">
+              <main>
+                <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
 
-                <div className="flex items-center justify-between gap-4">
+                  <div className="border-b border-slate-200 bg-slate-50 px-6 py-5 dark:border-slate-800 dark:bg-slate-800/50">
 
-                  <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">
-                    Question {currentQuestionIndex + 1} of {questions.length}
-                  </span>
+                    <div className="flex items-center justify-between">
 
-                  <span className="text-sm text-slate-500 dark:text-slate-400">
-                    {answeredCount}/{questions.length} answered
-                  </span>
+                      <div className="flex items-center gap-3">
 
-                </div>
-
-                <div className="mt-8">
-
-                  <h2 className="text-xl font-bold leading-8 text-slate-900 dark:text-white">
-                    {currentQuestion.question}
-                  </h2>
-
-                  {(
-                    currentQuestion.question.includes("following code") ||
-                    currentQuestion.question.includes("What is printed") ||
-                    currentQuestion.question.includes("What is the output")
-                  ) && (
-                    <div className="mt-6 overflow-hidden rounded-xl border border-slate-700 bg-slate-950">
-
-                      <div className="border-b border-slate-700 bg-slate-900 px-4 py-2">
-                        <span className="text-xs font-semibold text-slate-400">
-                          Python
+                        <span className="flex h-10 w-10 items-center justify-center rounded-md bg-blue-600 text-sm font-bold text-white">
+                          {currentQuestionIndex + 1}
                         </span>
+
+                        <div>
+                          <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                            Question
+                          </p>
+
+                          <p className="font-bold text-slate-900 dark:text-white">
+                            {currentQuestionIndex + 1} of{" "}
+                            {questions.length}
+                          </p>
+                        </div>
+
                       </div>
 
-                      <pre className="overflow-x-auto p-5 text-sm leading-7 text-slate-200">
-                        <code>
+                      {selectedAnswers[currentQuestion.id] !==
+                        undefined && (
+                        <span className="rounded-md bg-green-50 px-3 py-1.5 text-xs font-bold text-green-700 dark:bg-green-950/40 dark:text-green-300">
+                          Answer Saved
+                        </span>
+                      )}
+
+                    </div>
+                  </div>
+
+                  <div className="px-6 py-7 sm:px-8 sm:py-9">
+
+                    <h2 className="whitespace-pre-line text-xl font-bold leading-8 text-slate-900 dark:text-white">
+                      {currentQuestion.question}
+                    </h2>
+
+                    {(currentQuestion.question.includes(
+                      "following code"
+                    ) ||
+                      currentQuestion.question.includes(
+                        "What is printed"
+                      ) ||
+                      currentQuestion.question.includes(
+                        "What is the output"
+                      )) && (
+                      <div className="mt-6 overflow-hidden rounded-lg border border-slate-700 bg-slate-900">
+
+                        <div className="flex items-center gap-2 border-b border-slate-700 bg-slate-800 px-4 py-2">
+                          <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
+                          <span className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
+                          <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
+
+                          <span className="ml-2 text-xs font-semibold text-slate-400">
+                            Python
+                          </span>
+                        </div>
+
+                        <pre className="overflow-x-auto p-5 text-sm leading-7 text-slate-200">
+                          <code>
 {currentQuestion.id === 1
   ? `a = [1, 2, 3]
 b = a
@@ -682,110 +777,121 @@ print(list(y))`
 
 print(outer())`
           : "Python code for this question"}
-                        </code>
-                      </pre>
+                          </code>
+                        </pre>
 
-                    </div>
-                  )}
+                      </div>
+                    )}
 
-                  <div className="mt-6 space-y-3">
+                    <div className="mt-8 space-y-3">
 
-                    <p className="mb-3 text-sm font-bold text-slate-700 dark:text-slate-300">
-                      Select one answer:
-                    </p>
+                      <p className="mb-3 text-sm font-bold text-slate-700 dark:text-slate-300">
+                        Select one answer:
+                      </p>
 
-                    {currentQuestion.options.map(
-                      (option, optionIndex) => {
+                      {currentQuestion.options.map(
+                        (option, optionIndex) => {
+                          const selected =
+                            selectedAnswers[currentQuestion.id] ===
+                            optionIndex;
 
-                        const selected =
-                          selectedAnswers[currentQuestion.id] === optionIndex;
-
-                        return (
-                          <button
-                            key={optionIndex}
-                            type="button"
-                            onClick={() =>
-                              selectAnswer(
-                                currentQuestion.id,
-                                optionIndex
-                              )
-                            }
-                            disabled={submitting}
-                            className={`flex w-full items-center gap-4 rounded-lg border p-4 text-left transition ${
-                              selected
-                                ? "border-blue-600 bg-transparent dark:border-blue-500 dark:bg-transparent"
-                                : "border-slate-200 bg-white hover:border-blue-400 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-blue-600 dark:hover:bg-slate-800"
-                            }`}
-                          >
-
-                            <span
-                              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-sm font-bold ${
+                          return (
+                            <button
+                              key={optionIndex}
+                              type="button"
+                              onClick={() =>
+                                selectAnswer(
+                                  currentQuestion.id,
+                                  optionIndex
+                                )
+                              }
+                              disabled={submitting}
+                              className={`flex w-full items-center gap-4 rounded-lg border p-4 text-left transition ${
                                 selected
-                                  ? "border-blue-600 bg-blue-600 text-white"
-                                  : "border-slate-200 bg-slate-50 text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400"
+                                  ? "border-blue-600 bg-blue-50 dark:border-blue-500 dark:bg-blue-950/30"
+                                  : "border-slate-200 bg-white hover:border-blue-400 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-blue-600 dark:hover:bg-slate-800"
                               }`}
                             >
-                              {getOptionLetter(optionIndex)}
-                            </span>
 
-                            <span className="whitespace-pre-line text-sm font-medium leading-6 text-slate-800 dark:text-slate-200">
-                              {option}
-                            </span>
+                              <span
+                                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-sm font-bold ${
+                                  selected
+                                    ? "border-blue-600 bg-blue-600 text-white"
+                                    : "border-slate-300 bg-white text-slate-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                                }`}
+                              >
+                                {getOptionLetter(optionIndex)}
+                              </span>
 
-                          </button>
-                        );
-                      }
+                              <span className="whitespace-pre-line text-sm font-medium leading-6 text-slate-800 dark:text-slate-200">
+                                {option}
+                              </span>
+
+                              {selected && (
+                                <span className="ml-auto text-lg font-bold text-blue-600">
+                                  {"\u2713"}
+                                </span>
+                              )}
+
+                            </button>
+                          );
+                        }
+                      )}
+
+                    </div>
+
+                    {submitError && (
+                      <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 dark:border-red-900 dark:bg-red-950/30 dark:text-red-300">
+                        {submitError}
+                      </div>
                     )}
+
+                    <div className="mt-9 flex items-center justify-between border-t border-slate-200 pt-6 dark:border-slate-800">
+
+                      <button
+                        type="button"
+                        onClick={goPrevious}
+                        disabled={
+                          currentQuestionIndex === 0 || submitting
+                        }
+                        className="rounded-md border border-slate-300 bg-white px-5 py-2.5 text-sm font-bold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+                      >
+                        {"\u2190"} Previous
+                      </button>
+
+                      <p className="hidden text-xs text-slate-400 sm:block">
+                        Question {currentQuestionIndex + 1} of{" "}
+                        {questions.length}
+                      </p>
+
+                      <button
+                        type="button"
+                        onClick={goNext}
+                        disabled={submitting}
+                        className="rounded-md bg-blue-600 px-6 py-2.5 text-sm font-bold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        {submitting
+                          ? "Submitting..."
+                          : currentQuestionIndex ===
+                              questions.length - 1
+                            ? "Submit Assessment"
+                            : "Save & Next"}
+
+                        {!submitting && (
+                          <span className="ml-2">
+                            {"\u2192"}
+                          </span>
+                        )}
+                      </button>
+
+                    </div>
 
                   </div>
-
-                  {submitError && (
-                    <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 dark:border-red-900 dark:bg-red-950/30 dark:text-red-300">
-                      {submitError}
-                    </div>
-                  )}
-
-                </div>
-
-                <div className="mt-8 flex items-center justify-between border-t border-slate-200 pt-6 dark:border-slate-800">
-
-                  <button
-                    type="button"
-                    onClick={goPrevious}
-                    disabled={
-                      currentQuestionIndex === 0 ||
-                      submitting
-                    }
-                    className="rounded-md border border-slate-300 bg-white px-5 py-2.5 text-sm font-bold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
-                  >
-                    Previous
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={goNext}
-                    disabled={submitting}
-                    className="rounded-md bg-blue-600 px-6 py-2.5 text-sm font-bold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
-                  >
-                    {submitting
-                      ? "Submitting..."
-                      : currentQuestionIndex === questions.length - 1
-                        ? "Submit Assessment"
-                        : "Save & Next"}
-
-                    {!submitting && (
-                      <span className="ml-2">
-                        {"\u2192"}
-                      </span>
-                    )}
-                  </button>
-
-                </div>
-
-              </section>
-
+                </section>
+              </main>
             </div>
-          </>        ) : (
+          </>
+        ) : (
           <>
             <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl dark:border-slate-800 dark:bg-slate-900">
 
@@ -804,7 +910,7 @@ print(outer())`
                       : "bg-red-600"
                   }`}
                 >
-                  {passed ? "\u2713" : "×"}
+                  {passed ? "\u2713" : "\u2715"}
                 </div>
 
                 <p
@@ -967,7 +1073,7 @@ print(outer())`
                                 : "bg-red-600"
                             }`}
                           >
-                            {isCorrect ? "\u2713" : "×"}
+                            {isCorrect ? "\u2713" : "\u2715"}
                           </span>
 
                           <span className="font-bold text-slate-900 dark:text-white">
@@ -1051,6 +1157,3 @@ print(outer())`
     </div>
   );
 }
-
-
-
