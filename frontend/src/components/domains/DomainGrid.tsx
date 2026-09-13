@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import {
@@ -23,6 +23,7 @@ function normalize(value: string) {
 
 const availableDomains = new Set([
   "programming",
+  "aiml",
 ]);
 
 const domainKeywords: Record<string, string[]> = {
@@ -382,7 +383,7 @@ export default function DomainGrid({
             <div className="text-center">
 
               <div className="text-5xl">
-                🔍
+                ðŸ”
               </div>
 
               <h2 className="mt-5 text-2xl font-bold text-slate-900">

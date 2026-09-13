@@ -1,0 +1,660 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import {
+  ArrowLeft,
+  ArrowRight,
+  BookOpen,
+  Dumbbell,
+  FolderKanban,
+} from "lucide-react";
+
+import {
+  getAIMLModule,
+  loadAIMLContent,
+  AIML_MODULES,
+} from "@/content/aiml/aimlRegistry";
+
+interface Props {
+  params: Promise<{
+    moduleId: string;
+    lessonId: string;
+  }>;
+}
+
+const moduleInfo: Record<
+  string,
+  {
+    title: string;
+    description: string;
+  }
+> = {
+  module1: {
+    title: "AI Foundations",
+    description:
+      "Understand artificial intelligence, intelligent systems, AI history, capabilities, applications, and AI problem-solving approaches.",
+  },
+
+  module2: {
+    title: "AI & Machine Learning Foundations",
+    description:
+      "Build foundational understanding of AI and machine-learning concepts through structured theory and practical examples.",
+  },
+
+  module3: {
+    title: "Python & AI Computing",
+    description:
+      "Build the Python programming and numerical computing skills required for AI development.",
+  },
+
+  module4: {
+    title: "Mathematical Foundations for AI",
+    description:
+      "Build mathematical intuition using functions, vectors, matrices, probability, statistics, distance, loss, and optimization.",
+  },
+
+  module5: {
+    title: "Data & Model Fundamentals",
+    description:
+      "Learn data, features, labels, preparation, models, training, predictions, evaluation, and machine-learning workflows.",
+  },
+
+  module6: {
+    title: "AI Project Lifecycle",
+    description:
+      "Learn how AI projects are planned, developed, evaluated, deployed, monitored, and continuously improved.",
+  },
+};
+
+export default async function AIMLLessonPage({
+  params,
+}: Props) {
+
+  const {
+    moduleId,
+    lessonId,
+  } = await params;
+
+  const module = getAIMLModule(moduleId);
+
+  if (!module) {
+    notFound();
+  }
+
+  const info =
+    moduleInfo[moduleId] ?? {
+      title: module.title,
+      description: module.description,
+    };
+
+  const isAbout =
+    lessonId === "about";
+
+  const isPractice =
+    lessonId === "practice";
+
+  const isProject =
+    lessonId === "project";
+
+  let content: {
+    title: string;
+    content: string;
+  } | null = null;
+
+  if (!isAbout) {
+    try {
+      content =
+        await loadAIMLContent(
+          moduleId,
+          lessonId
+        );
+    } catch {
+      content = null;
+    }
+
+    if (!content) {
+      notFound();
+    }
+  }
+
+  const currentIndex =
+    module.lessons.findIndex(
+      (lesson) =>
+        lesson.id === lessonId
+    );
+
+  let previousHref: string | null = null;
+  let nextHref: string | null = null;
+
+  if (isAbout) {
+
+    if (module.lessons.length > 0) {
+      nextHref =
+        module.lessons[0].href;
+    }
+
+  } else if (currentIndex >= 0) {
+
+    previousHref =
+      currentIndex > 0
+        ? module.lessons[
+            currentIndex - 1
+          ].href
+        : `/lesson/aiml/${moduleId}/about`;
+
+    nextHref =
+      currentIndex <
+      module.lessons.length - 1
+        ? module.lessons[
+            currentIndex + 1
+          ].href
+        : `/lesson/aiml/${moduleId}/practice`;
+
+  } else if (isPractice) {
+
+    if (module.lessons.length > 0) {
+      previousHref =
+        module.lessons[
+          module.lessons.length - 1
+        ].href;
+    }
+
+    nextHref =
+      `/lesson/aiml/${moduleId}/project`;
+
+  } else if (isProject) {
+
+    previousHref =
+      `/lesson/aiml/${moduleId}/practice`;
+
+    const index =
+      AIML_MODULES.findIndex(
+        (item) =>
+          item.id === moduleId
+      );
+
+    const nextModule =
+      AIML_MODULES[index + 1];
+
+    nextHref = nextModule
+      ? `/lesson/aiml/${nextModule.id}/about`
+      : `/domains/aiml`;
+  }
+
+  return (
+    <main
+      className="
+        min-h-screen
+        bg-[#f8fbff]
+        text-slate-900
+        dark:bg-[#020617]
+        dark:text-slate-100
+      "
+    >
+
+      {/* TOP */}
+
+      <div className="mx-auto max-w-[1500px] px-6 py-6">
+
+        <Link
+          href="/courses/aiml"
+          className="
+            inline-flex
+            items-center
+            gap-2
+            rounded-xl
+            border
+            border-slate-200
+            bg-white
+            px-4
+            py-2.5
+            text-sm
+            font-semibold
+            text-slate-600
+            hover:border-sky-500
+            hover:text-sky-500
+            dark:border-slate-800
+            dark:bg-slate-900
+            dark:text-slate-300
+          "
+        >
+          <ArrowLeft size={17} />
+          AI/ML Course
+        </Link>
+
+      </div>
+
+      {/* LAYOUT */}
+
+      <div
+        className="
+          mx-auto
+          grid
+          max-w-[1500px]
+          gap-8
+          px-6
+          pb-12
+          lg:grid-cols-[310px_minmax(0,1fr)]
+        "
+      >
+
+        {/* SIDEBAR */}
+
+        <aside
+          className="
+            h-fit
+            rounded-3xl
+            border
+            border-slate-200
+            bg-white
+            p-5
+            shadow-sm
+            dark:border-slate-800
+            dark:bg-slate-900
+          "
+        >
+
+          <p
+            className="
+              text-xs
+              font-black
+              uppercase
+              tracking-[0.15em]
+              text-sky-500
+            "
+          >
+            Module{" "}
+            {String(module.number).padStart(
+              2,
+              "0"
+            )}
+          </p>
+
+          <h2
+            className="
+              mt-2
+              text-lg
+              font-black
+              text-slate-900
+              dark:text-white
+            "
+          >
+            {info.title}
+          </h2>
+
+          <nav className="mt-6 space-y-1">
+
+            <Link
+              href={`/lesson/aiml/${moduleId}/about`}
+              className={`
+                flex
+                items-center
+                gap-3
+                rounded-xl
+                px-3
+                py-2.5
+                text-sm
+                font-semibold
+                ${
+                  isAbout
+                    ? "bg-sky-50 text-sky-600 dark:bg-sky-950 dark:text-sky-300"
+                    : "text-slate-600 dark:text-slate-400"
+                }
+              `}
+            >
+              <BookOpen size={17} />
+              Module Overview
+            </Link>
+
+            {module.lessons.map(
+              (lesson) => (
+
+                <Link
+                  key={lesson.id}
+                  href={lesson.href}
+                  className={`
+                    flex
+                    items-center
+                    gap-3
+                    rounded-xl
+                    px-3
+                    py-2.5
+                    text-sm
+                    ${
+                      lesson.id === lessonId
+                        ? "bg-sky-50 font-bold text-sky-600 dark:bg-sky-950 dark:text-sky-300"
+                        : "text-slate-600 dark:text-slate-400"
+                    }
+                  `}
+                >
+
+                  <span
+                    className="
+                      flex
+                      h-7
+                      w-7
+                      items-center
+                      justify-center
+                      rounded-lg
+                      bg-slate-100
+                      text-xs
+                      font-bold
+                      dark:bg-slate-800
+                    "
+                  >
+                    {lesson.number}
+                  </span>
+
+                  <span>
+                    {lesson.title}
+                  </span>
+
+                </Link>
+
+              )
+            )}
+
+            <Link
+              href={`/lesson/aiml/${moduleId}/practice`}
+              className="
+                mt-2
+                flex
+                items-center
+                gap-3
+                rounded-xl
+                px-3
+                py-2.5
+                text-sm
+                font-semibold
+                text-slate-600
+                dark:text-slate-400
+              "
+            >
+              <Dumbbell size={17} />
+              Practice
+            </Link>
+
+            <Link
+              href={`/lesson/aiml/${moduleId}/project`}
+              className="
+                flex
+                items-center
+                gap-3
+                rounded-xl
+                px-3
+                py-2.5
+                text-sm
+                font-semibold
+                text-slate-600
+                dark:text-slate-400
+              "
+            >
+              <FolderKanban size={17} />
+              Project
+            </Link>
+
+          </nav>
+
+        </aside>
+
+        {/* CONTENT */}
+
+        <section>
+
+          <article
+            className="
+              overflow-hidden
+              rounded-[32px]
+              border
+              border-slate-200
+              bg-white
+              shadow-sm
+              dark:border-slate-800
+              dark:bg-slate-900
+            "
+          >
+
+            <header
+              className="
+                border-b
+                border-slate-200
+                bg-gradient-to-br
+                from-sky-50
+                to-white
+                px-8
+                py-9
+                dark:border-slate-800
+                dark:from-slate-900
+                dark:to-slate-950
+              "
+            >
+
+              <p
+                className="
+                  text-xs
+                  font-black
+                  uppercase
+                  tracking-[0.15em]
+                  text-sky-500
+                "
+              >
+                Artificial Intelligence & Machine Learning
+              </p>
+
+              <h1
+                className="
+                  mt-4
+                  text-3xl
+                  font-black
+                  text-slate-900
+                  dark:text-white
+                  md:text-4xl
+                "
+              >
+                {isAbout
+                  ? info.title
+                  : content?.title}
+              </h1>
+
+              <p
+                className="
+                  mt-3
+                  text-sm
+                  text-slate-500
+                  dark:text-slate-400
+                "
+              >
+                {info.description}
+              </p>
+
+            </header>
+
+            {isAbout ? (
+
+              <div className="px-8 py-10">
+
+                <h2
+                  className="
+                    text-2xl
+                    font-black
+                    text-slate-900
+                    dark:text-white
+                  "
+                >
+                  Module Overview
+                </h2>
+
+                <p
+                  className="
+                    mt-4
+                    max-w-4xl
+                    text-[17px]
+                    leading-8
+                    text-slate-600
+                    dark:text-slate-300
+                  "
+                >
+                  {info.description}
+                </p>
+
+                <div className="mt-10">
+
+                  <h3 className="text-xl font-bold">
+                    Lessons in this module
+                  </h3>
+
+                  <div className="mt-5 grid gap-3">
+
+                    {module.lessons.map(
+                      (lesson) => (
+
+                        <Link
+                          key={lesson.id}
+                          href={lesson.href}
+                          className="
+                            flex
+                            items-center
+                            justify-between
+                            rounded-2xl
+                            border
+                            border-slate-200
+                            bg-slate-50
+                            px-5
+                            py-4
+                            transition
+                            hover:border-sky-400
+                            hover:bg-sky-50
+                            dark:border-slate-800
+                            dark:bg-slate-950
+                            dark:hover:border-sky-700
+                          "
+                        >
+
+                          <span className="flex items-center gap-4">
+
+                            <span
+                              className="
+                                flex
+                                h-9
+                                w-9
+                                items-center
+                                justify-center
+                                rounded-xl
+                                bg-sky-100
+                                text-sm
+                                font-black
+                                text-sky-600
+                                dark:bg-sky-950
+                                dark:text-sky-300
+                              "
+                            >
+                              {lesson.number}
+                            </span>
+
+                            <span className="font-semibold">
+                              {lesson.title}
+                            </span>
+
+                          </span>
+
+                          <ArrowRight size={18} />
+
+                        </Link>
+
+                      )
+                    )}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            ) : (
+
+              <div
+                className="
+                  whitespace-pre-wrap
+                  px-8
+                  py-10
+                  text-[17px]
+                  leading-8
+                  text-slate-700
+                  dark:text-slate-300
+                "
+              >
+                {content?.content}
+              </div>
+
+            )}
+
+          </article>
+
+          {/* NAVIGATION */}
+
+          <div
+            className="
+              mt-7
+              flex
+              items-center
+              justify-between
+              gap-4
+            "
+          >
+
+            {previousHref ? (
+              <Link
+                href={previousHref}
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  rounded-2xl
+                  border
+                  border-slate-200
+                  bg-white
+                  px-6
+                  py-3
+                  font-bold
+                  text-slate-700
+                  dark:border-slate-800
+                  dark:bg-slate-900
+                  dark:text-slate-300
+                "
+              >
+                <ArrowLeft size={18} />
+                Previous
+              </Link>
+            ) : (
+              <span />
+            )}
+
+            {nextHref && (
+              <Link
+                href={nextHref}
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  rounded-2xl
+                  bg-sky-600
+                  px-6
+                  py-3
+                  font-bold
+                  text-white
+                  hover:bg-sky-500
+                "
+              >
+                Next
+                <ArrowRight size={18} />
+              </Link>
+            )}
+
+          </div>
+
+        </section>
+
+      </div>
+
+    </main>
+  );
+}
