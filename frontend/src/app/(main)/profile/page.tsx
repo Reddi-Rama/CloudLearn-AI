@@ -11,7 +11,7 @@
   LearningHistory,
   ProfileStats,
   SocialLinks,
-} from "@/components/profile/Index";
+} from "@/components/profile/index";
 
 export default function ProfilePage() {
   return (
@@ -88,3 +88,4 @@ export default function ProfilePage() {
     </main>
   );
 }
+

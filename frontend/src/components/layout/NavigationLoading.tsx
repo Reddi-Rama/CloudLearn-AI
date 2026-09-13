@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
@@ -21,6 +21,23 @@ export default function NavigationLoading() {
 
       if (!link) return;
 
+      // Ignore download links.
+      // This prevents temporary certificate-download anchors
+      // from triggering the navigation loading overlay.
+      if (link.hasAttribute("download")) {
+        return;
+      }
+
+      // Ignore browser-generated blob/data links.
+      const href = link.getAttribute("href");
+
+      if (
+        href?.startsWith("blob:") ||
+        href?.startsWith("data:")
+      ) {
+        return;
+      }
+
       // Ignore special browser actions
       if (
         event.ctrlKey ||
@@ -40,8 +57,6 @@ export default function NavigationLoading() {
       }
 
       // Ignore empty/hash links
-      const href = link.getAttribute("href");
-
       if (!href || href.startsWith("#")) {
         return;
       }
