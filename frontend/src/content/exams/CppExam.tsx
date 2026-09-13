@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useMemo, useState } from "react";
+import { API, apiPost } from "@/lib/api";
 
 type Question = {
   id: number;
@@ -9,6 +10,18 @@ type Question = {
   answer: number;
   explanation: string;
   code?: string;
+};
+
+type BackendExamResult = {
+  attemptId: string;
+  courseSlug: string;
+  courseTitle: string;
+  score: number;
+  total: number;
+  percentage: number;
+  passingPercentage: number;
+  passed: boolean;
+  submittedAt: string;
 };
 
 const questions: Question[] = [
@@ -495,24 +508,39 @@ const getLetter = (index: number) =>
 
 export default function CppExam() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
+  const [selectedAnswers, setSelectedAnswers] =
+    useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
+
+  const [backendResult, setBackendResult] =
+    useState<BackendExamResult | null>(null);
+
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const currentQuestion = questions[currentQuestionIndex];
 
-  const score = useMemo(() => {
+  const localScore = useMemo(() => {
     return questions.reduce(
       (total, question) =>
-        total + (selectedAnswers[question.id] === question.answer ? 1 : 0),
+        total +
+        (selectedAnswers[question.id] === question.answer ? 1 : 0),
       0
     );
   }, [selectedAnswers]);
 
-  const percentage = Math.round((score / questions.length) * 100);
-  const passed = score >= 18;
+  const score = backendResult?.score ?? localScore;
+
+  const percentage =
+    backendResult?.percentage ??
+    Math.round((score / questions.length) * 100);
+
+  const passed =
+    backendResult?.passed ??
+    percentage >= 70;
 
   const selectAnswer = (optionIndex: number) => {
-    if (submitted) return;
+    if (submitted || submitting) return;
 
     setSelectedAnswers((previous) => ({
       ...previous,
@@ -521,7 +549,7 @@ export default function CppExam() {
   };
 
   const goToQuestion = (index: number) => {
-    if (submitted) return;
+    if (submitted || submitting) return;
 
     setCurrentQuestionIndex(index);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -532,15 +560,79 @@ export default function CppExam() {
       setCurrentQuestionIndex((previous) => previous + 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
-      setSubmitted(true);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      void submitExam();
     }
   };
+  const submitExam = async () => {
+    if (submitting) return;
+
+    setSubmitError(null);
+
+    const token =
+      typeof window !== "undefined"
+        ? localStorage.getItem("cloudlearn-access-token")
+        : null;
+
+    if (!token) {
+      setSubmitError(
+        "Your session has expired. Please log in again before submitting the assessment."
+      );
+      return;
+    }
+
+    const answers = questions.map((question) => ({
+      questionId: question.id,
+      answer:
+        selectedAnswers[question.id] !== undefined
+          ? selectedAnswers[question.id]
+          : -1,
+    }));
+
+    setSubmitting(true);
+
+    try {
+      const response = await apiPost<{
+        success: boolean;
+        message: string;
+        data: BackendExamResult;
+      }>(
+        `${API.BASE_URL}${API.ENDPOINTS.EXAM}/cpp-development/submit`,
+        { answers },
+        token
+      );
+
+      if (!response.success || !response.data) {
+        throw new Error(
+          response.message || "Unable to submit assessment."
+        );
+      }
+
+      setBackendResult(response.data);
+      setSubmitted(true);
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "Unable to submit assessment. Please try again."
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+
 
   const retakeExam = () => {
     setCurrentQuestionIndex(0);
     setSelectedAnswers({});
     setSubmitted(false);
+    setBackendResult(null);
+    setSubmitError(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -648,13 +740,22 @@ export default function CppExam() {
             </div>
 
             <div className="mt-8 flex justify-center">
-              <button
-                type="button"
-                onClick={retakeExam}
-                className="rounded-xl bg-slate-900 px-6 py-3 text-sm font-bold text-white transition hover:bg-slate-700 dark:bg-white dark:text-slate-900"
-              >
-                Retake Exam
-              </button>
+              {passed ? (
+                <a
+                  href="/my-certificates"
+                  className="rounded-xl bg-green-600 px-6 py-3 text-sm font-bold text-white transition hover:bg-green-700"
+                >
+                  View Certificate
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  onClick={retakeExam}
+                  className="rounded-xl bg-slate-900 px-6 py-3 text-sm font-bold text-white transition hover:bg-slate-700 dark:bg-white dark:text-slate-900"
+                >
+                  Retake Exam
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -753,6 +854,7 @@ export default function CppExam() {
                       key={option}
                       type="button"
                       onClick={() => selectAnswer(index)}
+                      disabled={submitting}
                       className={`flex w-full items-start gap-4 rounded-xl border p-4 text-left transition ${
                         selected
                           ? "border-slate-900 bg-slate-100 dark:border-white dark:bg-slate-800"
@@ -777,6 +879,12 @@ export default function CppExam() {
                 })}
               </div>
             </div>
+            {submitError && (
+              <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 dark:border-red-900 dark:bg-red-950/30 dark:text-red-300">
+                {submitError}
+              </div>
+            )}
+
 
             <div className="mt-8 flex items-center justify-between border-t border-slate-200 pt-6 dark:border-slate-800">
               <button
@@ -786,7 +894,7 @@ export default function CppExam() {
                     Math.max(0, previous - 1)
                   )
                 }
-                disabled={currentQuestionIndex === 0}
+                disabled={currentQuestionIndex === 0 || submitting}
                 className="rounded-xl border border-slate-300 px-5 py-3 text-sm font-bold text-slate-700 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:text-slate-200"
               >
                 Previous
@@ -795,12 +903,17 @@ export default function CppExam() {
               <button
                 type="button"
                 onClick={goNext}
+                disabled={submitting}
                 className="rounded-xl bg-slate-900 px-6 py-3 text-sm font-bold text-white dark:bg-white dark:text-slate-900"
               >
-                {currentQuestionIndex === questions.length - 1
-                  ? "Submit Assessment"
-                  : "Save & Next"}
-                <span className="ml-2">{"\u2192"}</span>
+                {submitting
+                  ? "Submitting..."
+                  : currentQuestionIndex === questions.length - 1
+                    ? "Submit Assessment"
+                    : "Save & Next"}
+                {!submitting && (
+                  <span className="ml-2">{"\u2192"}</span>
+                )}
               </button>
             </div>
           </section>

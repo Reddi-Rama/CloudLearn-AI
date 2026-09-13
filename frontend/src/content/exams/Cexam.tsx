@@ -1,5 +1,7 @@
 ﻿"use client";
+
 import { useMemo, useState } from "react";
+import { API, apiPost } from "@/lib/api";
 
 interface Question {
   id: number;
@@ -9,6 +11,18 @@ interface Question {
   answer: number;
   explanation: string;
 }
+
+type BackendExamResult = {
+  attemptId: string;
+  courseSlug: string;
+  courseTitle: string;
+  score: number;
+  total: number;
+  percentage: number;
+  passingPercentage: number;
+  passed: boolean;
+  submittedAt: string;
+};
 
 const questions: Question[] = [
   {
@@ -91,7 +105,8 @@ printf("%d\\n", counter());`,
   },
   {
     id: 6,
-    question: "Which declaration defines a pointer to a function that accepts two int arguments and returns int?",
+    question:
+      "Which declaration defines a pointer to a function that accepts two int arguments and returns int?",
     options: [
       "int *fp(int, int);",
       "int (*fp)(int, int);",
@@ -221,7 +236,8 @@ printf("%d", f(3));`,
   },
   {
     id: 15,
-    question: "Which condition is essential when passing a character to the ctype functions such as isalpha?",
+    question:
+      "Which condition is essential when passing a character to the ctype functions such as isalpha?",
     options: [
       "It must always be a signed char",
       "It must be EOF or representable as unsigned char",
@@ -247,7 +263,8 @@ printf("%d", f(3));`,
   },
   {
     id: 17,
-    question: "What is printed on a typical implementation where unsigned char promotes to int?",
+    question:
+      "What is printed on a typical implementation where unsigned char promotes to int?",
     code: `unsigned char a = 250;
 unsigned char b = 10;
 
@@ -269,7 +286,8 @@ printf("%zu", sizeof(s));`,
   },
   {
     id: 19,
-    question: "Which statement correctly distinguishes memcpy from memmove?",
+    question:
+      "Which statement correctly distinguishes memcpy from memmove?",
     options: [
       "memcpy is defined for overlapping regions",
       "memmove is defined for overlapping regions",
@@ -369,27 +387,43 @@ const PASS_MARK = 18;
 
 export default function CExam() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
+  const [selectedAnswers, setSelectedAnswers] =
+    useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
+
+  const [backendResult, setBackendResult] =
+    useState<BackendExamResult | null>(null);
+
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const currentQuestion = questions[currentQuestionIndex];
 
-  const score = useMemo(
+  const localScore = useMemo(
     () =>
       questions.reduce(
         (total, question) =>
-          total + (selectedAnswers[question.id] === question.answer ? 1 : 0),
+          total +
+          (selectedAnswers[question.id] === question.answer ? 1 : 0),
         0
       ),
     [selectedAnswers]
   );
 
-  const percentage = Math.round((score / questions.length) * 100);
-  const passed = score >= PASS_MARK;
+  const score = backendResult?.score ?? localScore;
+
+  const percentage =
+    backendResult?.percentage ??
+    Math.round((score / questions.length) * 100);
+
+  const passed =
+    backendResult?.passed ??
+    percentage >= 70;
+
   const answeredCount = Object.keys(selectedAnswers).length;
 
   const selectAnswer = (optionIndex: number) => {
-    if (submitted) return;
+    if (submitted || submitting) return;
 
     setSelectedAnswers((previous) => ({
       ...previous,
@@ -398,28 +432,100 @@ export default function CExam() {
   };
 
   const goToQuestion = (index: number) => {
-    if (submitted) return;
+    if (submitted || submitting) return;
 
     setCurrentQuestionIndex(index);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const submitExam = async () => {
+    if (submitting) return;
+
+    setSubmitError(null);
+
+    const token =
+      typeof window !== "undefined"
+        ? localStorage.getItem("cloudlearn-access-token")
+        : null;
+
+    if (!token) {
+      setSubmitError(
+        "Your session has expired. Please log in again before submitting the assessment."
+      );
+      return;
+    }
+
+    const answers = questions.map((question) => ({
+      questionId: question.id,
+      answer:
+        selectedAnswers[question.id] !== undefined
+          ? selectedAnswers[question.id]
+          : -1,
+    }));
+
+    setSubmitting(true);
+
+    try {
+      const response = await apiPost<{
+        success: boolean;
+        message: string;
+        data: BackendExamResult;
+      }>(
+        `${API.BASE_URL}${API.ENDPOINTS.EXAM}/c-development/submit`,
+        { answers },
+        token
+      );
+
+      if (!response.success || !response.data) {
+        throw new Error(
+          response.message || "Unable to submit assessment."
+        );
+      }
+
+      setBackendResult(response.data);
+      setSubmitted(true);
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "Unable to submit assessment. Please try again."
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const goNext = () => {
     if (selectedAnswers[currentQuestion.id] === undefined) return;
+    if (submitting) return;
 
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((previous) => previous + 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     } else {
-      setSubmitted(true);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      void submitExam();
     }
   };
 
   const goPrevious = () => {
+    if (submitting) return;
+
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex((previous) => previous - 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     }
   };
 
@@ -427,7 +533,13 @@ export default function CExam() {
     setCurrentQuestionIndex(0);
     setSelectedAnswers({});
     setSubmitted(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    setBackendResult(null);
+    setSubmitError(null);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   const getOptionLetter = (index: number) =>
@@ -450,7 +562,7 @@ export default function CExam() {
                   passed ? "bg-green-600" : "bg-red-600"
                 }`}
               >
-                {passed ? "âœ“" : "×"}
+                {passed ? "✓" : "×"}
               </div>
 
               <p
@@ -464,7 +576,9 @@ export default function CExam() {
               </p>
 
               <h1 className="mt-2 text-3xl font-bold text-slate-900 dark:text-white sm:text-4xl">
-                {passed ? "Congratulations!" : "Keep Learning and Try Again"}
+                {passed
+                  ? "Congratulations!"
+                  : "Keep Learning and Try Again"}
               </h1>
 
               <p className="mt-2 text-slate-500 dark:text-slate-400">
@@ -479,6 +593,7 @@ export default function CExam() {
                 >
                   {percentage}%
                 </span>
+
                 <span className="mt-1 text-xs font-bold uppercase tracking-wider text-slate-400">
                   Score
                 </span>
@@ -491,8 +606,12 @@ export default function CExam() {
 
             <div className="grid border-t border-slate-200 sm:grid-cols-3 dark:border-slate-800">
               <div className="border-b p-6 text-center sm:border-b-0 sm:border-r dark:border-slate-800">
-                <p className="text-3xl font-black text-green-600">{score}</p>
-                <p className="mt-1 text-sm font-semibold text-slate-500">Correct</p>
+                <p className="text-3xl font-black text-green-600">
+                  {score}
+                </p>
+                <p className="mt-1 text-sm font-semibold text-slate-500">
+                  Correct
+                </p>
               </div>
 
               <div className="border-b p-6 text-center sm:border-b-0 sm:border-r dark:border-slate-800">
@@ -505,7 +624,9 @@ export default function CExam() {
               </div>
 
               <div className="p-6 text-center">
-                <p className="text-3xl font-black text-blue-600">{PASS_MARK}</p>
+                <p className="text-3xl font-black text-blue-600">
+                  {backendResult?.passingPercentage ?? PASS_MARK * 100 / questions.length}%
+                </p>
                 <p className="mt-1 text-sm font-semibold text-slate-500">
                   Required
                 </p>
@@ -525,13 +646,22 @@ export default function CExam() {
                 Review Answers
               </button>
 
-              <button
-                type="button"
-                onClick={retakeExam}
-                className="rounded-md border border-slate-300 bg-white px-7 py-3 font-bold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
-              >
-                Retake Exam
-              </button>
+              {passed ? (
+                <a
+                  href="/my-certificates"
+                  className="rounded-md bg-green-600 px-7 py-3 font-bold text-white hover:bg-green-700"
+                >
+                  View Certificate
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  onClick={retakeExam}
+                  className="rounded-md border border-slate-300 bg-white px-7 py-3 font-bold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                >
+                  Retake Exam
+                </button>
+              )}
             </div>
           </div>
 
@@ -540,6 +670,7 @@ export default function CExam() {
               <p className="text-xs font-bold uppercase tracking-widest text-blue-600">
                 Detailed Review
               </p>
+
               <h2 className="mt-1 text-2xl font-bold text-slate-900 dark:text-white">
                 Answer Review
               </h2>
@@ -568,7 +699,7 @@ export default function CExam() {
                             isCorrect ? "bg-green-600" : "bg-red-600"
                           }`}
                         >
-                          {isCorrect ? "âœ“" : "×"}
+                          {isCorrect ? "✓" : "×"}
                         </span>
 
                         <span className="font-bold text-slate-900 dark:text-white">
@@ -601,8 +732,9 @@ export default function CExam() {
                           <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
                             Your Answer
                           </p>
+
                           <p className="mt-2 whitespace-pre-line text-sm font-semibold text-slate-800 dark:text-slate-200">
-                            {userAnswer !== undefined
+                            {userAnswer !== undefined && userAnswer >= 0
                               ? `${getOptionLetter(userAnswer)}. ${question.options[userAnswer]}`
                               : "Not answered"}
                           </p>
@@ -612,6 +744,7 @@ export default function CExam() {
                           <p className="text-xs font-bold uppercase tracking-wider text-green-600">
                             Correct Answer
                           </p>
+
                           <p className="mt-2 whitespace-pre-line text-sm font-semibold text-slate-800 dark:text-slate-200">
                             {getOptionLetter(question.answer)}.{" "}
                             {question.options[question.answer]}
@@ -623,6 +756,7 @@ export default function CExam() {
                         <p className="text-xs font-bold uppercase tracking-wider text-blue-600">
                           Explanation
                         </p>
+
                         <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">
                           {question.explanation}
                         </p>
@@ -663,7 +797,8 @@ export default function CExam() {
 
             <div className="mt-4 grid grid-cols-5 gap-2">
               {questions.map((question, index) => {
-                const answered = selectedAnswers[question.id] !== undefined;
+                const answered =
+                  selectedAnswers[question.id] !== undefined;
                 const active = index === currentQuestionIndex;
 
                 return (
@@ -671,6 +806,7 @@ export default function CExam() {
                     key={question.id}
                     type="button"
                     onClick={() => goToQuestion(index)}
+                    disabled={submitting}
                     className={`h-9 rounded-lg border text-xs font-bold transition ${
                       active
                         ? "border-blue-600 bg-blue-600 text-white"
@@ -690,10 +826,12 @@ export default function CExam() {
                 <span className="mr-2 inline-block h-2.5 w-2.5 rounded-sm bg-blue-600" />
                 Current
               </p>
+
               <p>
                 <span className="mr-2 inline-block h-2.5 w-2.5 rounded-sm bg-blue-100 dark:bg-blue-950/50" />
                 Answered
               </p>
+
               <p>
                 <span className="mr-2 inline-block h-2.5 w-2.5 rounded-sm bg-slate-100 dark:bg-slate-800" />
                 Not answered
@@ -713,6 +851,7 @@ export default function CExam() {
                     <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
                       Question
                     </p>
+
                     <p className="font-bold text-slate-900 dark:text-white">
                       {currentQuestionIndex + 1} of {questions.length}
                     </p>
@@ -758,6 +897,7 @@ export default function CExam() {
                       key={optionIndex}
                       type="button"
                       onClick={() => selectAnswer(optionIndex)}
+                      disabled={submitting}
                       className={`flex w-full items-center gap-4 rounded-lg border p-4 text-left transition ${
                         selected
                           ? "border-blue-600 bg-transparent dark:border-blue-500 dark:bg-transparent"
@@ -782,11 +922,17 @@ export default function CExam() {
                 })}
               </div>
 
+              {submitError && (
+                <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 dark:border-red-900 dark:bg-red-950/30 dark:text-red-300">
+                  {submitError}
+                </div>
+              )}
+
               <div className="mt-9 flex items-center justify-between border-t border-slate-200 pt-6 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={goPrevious}
-                  disabled={currentQuestionIndex === 0}
+                  disabled={currentQuestionIndex === 0 || submitting}
                   className="rounded-md border border-slate-300 bg-white px-5 py-2.5 text-sm font-bold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
                 >
                   Previous
@@ -795,13 +941,21 @@ export default function CExam() {
                 <button
                   type="button"
                   onClick={goNext}
-                  disabled={selectedAnswers[currentQuestion.id] === undefined}
+                  disabled={
+                    selectedAnswers[currentQuestion.id] === undefined ||
+                    submitting
+                  }
                   className="rounded-md bg-blue-600 px-6 py-2.5 text-sm font-bold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
                 >
-                  {currentQuestionIndex === questions.length - 1
-                    ? "Submit Assessment"
-                    : "Save & Next"}
-                  <span className="ml-2">{"\u2192"}</span>
+                  {submitting
+                    ? "Submitting..."
+                    : currentQuestionIndex === questions.length - 1
+                      ? "Submit Assessment"
+                      : "Save & Next"}
+
+                  {!submitting && (
+                    <span className="ml-2">{"\u2192"}</span>
+                  )}
                 </button>
               </div>
             </div>
@@ -811,6 +965,3 @@ export default function CExam() {
     </main>
   );
 }
-
-
-
