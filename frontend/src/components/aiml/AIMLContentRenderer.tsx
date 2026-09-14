@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Check,
   ChevronRight,
@@ -498,7 +498,12 @@ function parseBlocks(raw: string): Block[] {
     }
 
     /* FLOW */
-    if (looksLikeFlow([line, lines[i + 1] || ""])) {
+    if (
+  line.includes("→") ||
+  line.includes("->") ||
+  line.includes("⇒") ||
+  line.includes("↓")
+) {
       const flowLines: string[] = [];
 
       while (
@@ -841,6 +846,44 @@ export default function AIMLContentRenderer({
     [raw]
   );
 
+  /*
+   * Render content progressively instead of mounting hundreds
+   * of React elements in one browser task.
+   *
+   * This keeps large AIML lessons responsive while preserving
+   * the complete lesson content.
+   */
+  const BATCH_SIZE = 24;
+
+  const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
+
+  useEffect(() => {
+    setVisibleCount(Math.min(BATCH_SIZE, blocks.length));
+  }, [blocks]);
+
+  useEffect(() => {
+    if (visibleCount >= blocks.length) {
+      return;
+    }
+
+    let cancelled = false;
+
+    const scheduleNextBatch = () => {
+      if (cancelled) return;
+
+      setVisibleCount((current) =>
+        Math.min(current + BATCH_SIZE, blocks.length)
+      );
+    };
+
+    const frame = window.requestAnimationFrame(scheduleNextBatch);
+
+    return () => {
+      cancelled = true;
+      window.cancelAnimationFrame(frame);
+    };
+  }, [visibleCount, blocks.length]);
+
   if (!raw.trim()) {
     return (
       <div className="rounded-2xl border border-zinc-200 bg-white p-8 dark:border-zinc-800 dark:bg-zinc-950">
@@ -851,12 +894,12 @@ export default function AIMLContentRenderer({
     );
   }
 
+  const visibleBlocks = blocks.slice(0, visibleCount);
+
   return (
     <article className="w-full pb-20">
-
-      {blocks.map((block, index) => {
+      {visibleBlocks.map((block, index) => {
         switch (block.type) {
-
           case "heading":
             if (block.level === 1) {
               return (
@@ -1032,6 +1075,14 @@ export default function AIMLContentRenderer({
             return null;
         }
       })}
+
+      {visibleCount < blocks.length && (
+        <div className="mt-8 flex items-center justify-center">
+          <div className="rounded-full border border-zinc-200 bg-white px-4 py-2 text-xs font-semibold text-zinc-500 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">
+            Loading more lesson content...
+          </div>
+        </div>
+      )}
     </article>
   );
 }

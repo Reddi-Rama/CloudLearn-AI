@@ -1,7 +1,7 @@
-"use client";
+﻿"use client";
 
 import NotificationCard from "./NotificationCard";
-import { notifications } from "./NotificationData";
+import { notifications } from "./notificationData";
 
 export default function NotificationList() {
   return (
