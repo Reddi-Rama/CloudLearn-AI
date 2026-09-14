@@ -1,4 +1,4 @@
-﻿import {
+import {
   ProfileHeader,
   ProfileBanner,
   UserCard,
@@ -11,7 +11,7 @@
   LearningHistory,
   ProfileStats,
   SocialLinks,
-} from "@/components/profile/index";
+} from "@/components/profile/Index";
 
 export default function ProfilePage() {
   return (

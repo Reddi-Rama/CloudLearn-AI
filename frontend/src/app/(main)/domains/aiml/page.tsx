@@ -1,397 +1,131 @@
-﻿import Link from "next/link";
-import {
-  ArrowRight,
-  Brain,
-  BookOpen,
-  Layers3,
-} from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Brain, Cpu, Network, Sparkles } from "lucide-react";
+import BackButton from "@/components/layout/BackButton";
 
-const modules = [
+const courses = [
   {
-    number: 1,
+    number: "01",
     title: "AI Foundations",
     description:
-      "Understand artificial intelligence, intelligent systems, AI history, capabilities, applications, and problem-solving approaches.",
+      "Understand artificial intelligence, intelligent systems, AI history, problem solving, agents, and real-world applications.",
+    icon: Brain,
+    href: "/courses/aiml/ai-foundations",
   },
   {
-    number: 2,
-    title: "AI & Machine Learning Foundations",
+    number: "02",
+    title: "Machine Learning",
     description:
-      "Build foundational understanding of AI and machine-learning concepts through structured lessons and practical learning.",
+      "Learn how machines discover patterns from data through supervised learning, unsupervised learning, preprocessing, evaluation, and real-world ML workflows.",
+    icon: Cpu,
+    href: "/courses/aiml/machine-learning",
   },
   {
-    number: 3,
-    title: "Python & AI Computing",
+    number: "03",
+    title: "Deep Learning",
     description:
-      "Learn Python, NumPy, Pandas, Matplotlib, and the computing workflow required for AI development.",
+      "Build strong foundations in neural networks, optimization, computer vision, sequence models, and modern deep learning systems.",
+    icon: Network,
+    href: "/courses/aiml/deep-learning",
   },
   {
-    number: 4,
-    title: "Mathematical Foundations for AI",
+    number: "04",
+    title: "Generative AI",
     description:
-      "Build mathematical intuition using functions, vectors, matrices, probability, statistics, distance, loss, and optimization.",
-  },
-  {
-    number: 5,
-    title: "Data & Model Fundamentals",
-    description:
-      "Learn features, labels, datasets, preparation, training, evaluation, models, predictions, and complete machine-learning workflows.",
-  },
-  {
-    number: 6,
-    title: "AI Project Lifecycle",
-    description:
-      "Learn how AI projects are defined, developed, evaluated, deployed, monitored, and continuously improved.",
+      "Explore generative models, large language models, prompting, embeddings, multimodal systems, and modern AI applications.",
+    icon: Sparkles,
+    href: "/courses/aiml/generative-ai",
   },
 ];
 
 export default function AIMLDomainPage() {
   return (
-    <main
-      className="
-        min-h-screen
-        bg-[#020617]
-        text-white
-      "
-    >
+    <main className="min-h-screen bg-[#020617] text-white">
+      <div className="mx-auto max-w-7xl px-5 pb-20 pt-6 sm:px-6">
 
-      {/* =====================================================
-          HERO
-      ===================================================== */}
+        <div className="mb-10">
+          <BackButton href="/domains" label="Back to Domains" />
+        </div>
 
-      <section className="mx-auto max-w-[1500px] px-6 py-10">
+        <section className="relative overflow-hidden rounded-[36px] border border-slate-800 bg-[#0f172a] px-8 py-14 shadow-2xl md:px-12 md:py-16">
 
-        <div
-          className="
-            relative
-            overflow-hidden
-            rounded-[36px]
-            border
-            border-slate-800
-            bg-gradient-to-br
-            from-slate-900
-            via-[#0b1328]
-            to-[#111c38]
-            px-8
-            py-16
-            shadow-2xl
-            md:px-14
-            md:py-20
-          "
-        >
-
-          <div
-            className="
-              absolute
-              -right-32
-              -top-32
-              h-96
-              w-96
-              rounded-full
-              bg-sky-500/10
-              blur-3xl
-            "
-          />
-
-          <div className="relative max-w-5xl">
-
-            <div
-              className="
-                inline-flex
-                items-center
-                gap-2
-                rounded-full
-                border
-                border-sky-400/30
-                bg-sky-500/10
-                px-5
-                py-2.5
-                text-sm
-                font-bold
-                text-sky-400
-              "
-            >
-              <Brain size={18} />
+          <div className="relative">
+            <div className="inline-flex items-center rounded-full border border-sky-800 bg-sky-950/40 px-4 py-2 text-sm font-semibold text-sky-400">
               Learning Domain
             </div>
 
-            <h1
-              className="
-                mt-7
-                text-4xl
-                font-black
-                tracking-tight
-                md:text-6xl
-              "
-            >
+            <h1 className="mt-6 max-w-3xl text-4xl font-black tracking-tight md:text-6xl">
               Artificial Intelligence &
               <span className="block text-sky-400">
                 Machine Learning
               </span>
             </h1>
 
-            <p
-              className="
-                mt-6
-                max-w-4xl
-                text-lg
-                leading-8
-                text-slate-300
-                md:text-xl
-              "
-            >
-              Build a strong AI and machine-learning foundation
-              through structured lessons, mathematical intuition,
-              Python implementation, data, models, projects,
-              deployment, and real-world AI workflows.
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-400">
+              Choose a structured course and build your AI
+              knowledge step by step, from foundational concepts
+              to modern intelligent systems.
+            </p>
+          </div>
+        </section>
+
+        <section className="mt-12">
+          <div className="mb-8">
+            <p className="text-sm font-bold uppercase tracking-[0.16em] text-sky-400">
+              AI & Machine Learning Courses
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-4">
+            <h2 className="mt-2 text-3xl font-black md:text-4xl">
+              Choose Your Course
+            </h2>
 
-              <div
-                className="
-                  inline-flex
-                  items-center
-                  gap-2
-                  rounded-full
-                  border
-                  border-slate-700
-                  bg-slate-800
-                  px-5
-                  py-3
-                  text-sm
-                  font-semibold
-                  text-slate-200
-                "
-              >
-                <Layers3 size={18} />
-                6 Modules
-              </div>
-
-              <div
-                className="
-                  inline-flex
-                  items-center
-                  gap-2
-                  rounded-full
-                  border
-                  border-slate-700
-                  bg-slate-800
-                  px-5
-                  py-3
-                  text-sm
-                  font-semibold
-                  text-slate-200
-                "
-              >
-                <BookOpen size={18} />
-                Structured Learning
-              </div>
-
-            </div>
-
+            <p className="mt-3 max-w-2xl text-slate-400">
+              Select a course to explore its modules, lessons,
+              practice work, projects, and assessments.
+            </p>
           </div>
-        </div>
-      </section>
 
-      {/* =====================================================
-          COURSE
-      ===================================================== */}
+          <div className="grid gap-5 md:grid-cols-2">
+            {courses.map((course) => {
+              const Icon = course.icon;
 
-      <section className="mx-auto max-w-[1500px] px-6 pb-24">
-
-        <div className="mb-10">
-
-          <p
-            className="
-              text-sm
-              font-black
-              uppercase
-              tracking-[0.16em]
-              text-sky-400
-            "
-          >
-            AI & Machine Learning Course
-          </p>
-
-          <h2
-            className="
-              mt-3
-              text-3xl
-              font-black
-              md:text-4xl
-            "
-          >
-            AI & Machine Learning Foundations
-          </h2>
-
-          <p
-            className="
-              mt-4
-              max-w-3xl
-              text-lg
-              leading-8
-              text-slate-400
-            "
-          >
-            Follow the six-module learning path from AI
-            fundamentals through complete AI project development.
-          </p>
-
-        </div>
-
-        {/* ===================================================
-            MODULES
-        =================================================== */}
-
-        <div
-          className="
-            grid
-            gap-7
-            md:grid-cols-2
-            xl:grid-cols-3
-          "
-        >
-
-          {modules.map((module) => (
-
-            <Link
-              key={module.number}
-              href={`/lesson/aiml/module${module.number}/about`}
-              className="
-                group
-                flex
-                min-h-[330px]
-                flex-col
-                rounded-[30px]
-                border
-                border-slate-800
-                bg-slate-900
-                p-8
-                transition-all
-                duration-300
-                hover:-translate-y-2
-                hover:border-sky-500/60
-                hover:shadow-2xl
-              "
-            >
-
-              <div className="flex items-center justify-between">
-
-                <div
-                  className="
-                    flex
-                    h-14
-                    w-14
-                    items-center
-                    justify-center
-                    rounded-2xl
-                    bg-sky-500/10
-                    text-lg
-                    font-black
-                    text-sky-400
-                  "
+              return (
+                <Link
+                  key={course.number}
+                  href={course.href}
+                  className="group rounded-3xl border border-slate-800 bg-[#0f172a] p-7 transition hover:-translate-y-1 hover:border-sky-700 hover:bg-[#111c31]"
                 >
-                  {String(module.number).padStart(2, "0")}
-                </div>
+                  <div className="flex items-start justify-between">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-sky-950/60 text-sky-400">
+                      <Icon size={22} />
+                    </div>
 
-                <ArrowRight
-                  size={21}
-                  className="
-                    text-slate-600
-                    transition
-                    group-hover:translate-x-1
-                    group-hover:text-sky-400
-                  "
-                />
+                    <span className="text-sm font-bold text-sky-400">
+                      {course.number}
+                    </span>
+                  </div>
 
-              </div>
+                  <h3 className="mt-7 text-2xl font-bold">
+                    {course.title}
+                  </h3>
 
-              <h3
-                className="
-                  mt-7
-                  text-2xl
-                  font-bold
-                  leading-tight
-                  text-white
-                "
-              >
-                {module.title}
-              </h3>
+                  <p className="mt-3 min-h-[84px] text-sm leading-7 text-slate-400">
+                    {course.description}
+                  </p>
 
-              <p
-                className="
-                  mt-4
-                  text-base
-                  leading-7
-                  text-slate-400
-                "
-              >
-                {module.description}
-              </p>
+                  <div className="mt-7 inline-flex items-center gap-2 rounded-xl bg-slate-800 px-4 py-2.5 text-sm font-semibold text-white transition group-hover:bg-sky-600">
+                    Explore Course
+                    <ArrowRight
+                      size={16}
+                      className="transition-transform group-hover:translate-x-1"
+                    />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
 
-              <div className="mt-auto pt-8">
-
-                <span
-                  className="
-                    inline-flex
-                    items-center
-                    gap-2
-                    rounded-xl
-                    bg-slate-800
-                    px-5
-                    py-3
-                    text-sm
-                    font-bold
-                    text-slate-300
-                    transition
-                    group-hover:bg-sky-600
-                    group-hover:text-white
-                  "
-                >
-                  Explore Module
-                  <ArrowRight size={17} />
-                </span>
-
-              </div>
-
-            </Link>
-
-          ))}
-
-        </div>
-
-        {/* ===================================================
-            COURSE BUTTON
-        =================================================== */}
-
-        <div className="mt-12">
-
-          <Link
-            href="/courses/aiml"
-            className="
-              inline-flex
-              items-center
-              gap-3
-              rounded-2xl
-              bg-sky-600
-              px-7
-              py-4
-              font-bold
-              text-white
-              shadow-lg
-              transition
-              hover:bg-sky-500
-            "
-          >
-            Open Complete Course
-            <ArrowRight size={19} />
-          </Link>
-
-        </div>
-
-      </section>
-
+      </div>
     </main>
   );
 }
