@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
+
 import MachineLearningSidebar from "@/components/aiml/MachineLearningSidebar";
 import AIMLContentRenderer from "@/components/aiml/AIMLContentRenderer";
 
@@ -17,6 +19,7 @@ import lesson12 from "@/content/aiml/machine-learning/lessons/module1/lesson12";
 import lesson13 from "@/content/aiml/machine-learning/lessons/module1/lesson13";
 import lesson14 from "@/content/aiml/machine-learning/lessons/module1/lesson14";
 import lesson15 from "@/content/aiml/machine-learning/lessons/module1/lesson15";
+
 import module1About from "@/content/aiml/machine-learning/lessons/module1/about";
 import module1Practice from "@/content/aiml/machine-learning/lessons/module1/practice";
 import module1Project from "@/content/aiml/machine-learning/lessons/module1/project";
@@ -29,6 +32,7 @@ interface Props {
 }
 
 const module1Content: Record<string, any> = {
+  about: module1About,
   lesson1,
   lesson2,
   lesson3,
@@ -44,10 +48,27 @@ const module1Content: Record<string, any> = {
   lesson13,
   lesson14,
   lesson15,
-  about: module1About,
   practice: module1Practice,
   project: module1Project,
 };
+
+const lessonTitles = [
+  ["lesson1", "What Is Machine Learning?"],
+  ["lesson2", "Why Machine Learning?"],
+  ["lesson3", "Types of Machine Learning"],
+  ["lesson4", "Supervised vs Unsupervised Learning"],
+  ["lesson5", "Classification vs Regression"],
+  ["lesson6", "Understanding ML Problems"],
+  ["lesson7", "Data, Samples, Features and Targets"],
+  ["lesson8", "Training, Validation and Test Data"],
+  ["lesson9", "Generalization"],
+  ["lesson10", "Overfitting and Underfitting"],
+  ["lesson11", "Model Complexity and Dataset Size"],
+  ["lesson12", "Python Environment for Machine Learning"],
+  ["lesson13", "NumPy, Pandas and Matplotlib for ML"],
+  ["lesson14", "Introduction to scikit-learn"],
+  ["lesson15", "Your First Machine Learning Model"],
+];
 
 export default async function MachineLearningLessonPage({
   params,
@@ -69,35 +90,142 @@ export default async function MachineLearningLessonPage({
       ? content.content
       : content;
 
+  const currentIndex = lessonTitles.findIndex(
+    ([id]) => id === lessonId
+  );
+
+  const previousLesson =
+    currentIndex > 0
+      ? lessonTitles[currentIndex - 1]
+      : null;
+
+  const nextLesson =
+    currentIndex >= 0 &&
+    currentIndex < lessonTitles.length - 1
+      ? lessonTitles[currentIndex + 1]
+      : null;
+
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
+    <main className="min-h-screen w-full bg-[#020617] pt-20 text-white">
 
-      <MachineLearningSidebar />
+      <div className="relative z-10 w-full">
 
-      <main className="min-h-[calc(100vh-140px)] px-4 pb-24 pt-6 lg:ml-[374px] lg:px-8 lg:pt-8">
-
-        <div className="mx-auto w-full max-w-[1180px]">
-
-          <div className="mb-6">
-            <a
-              href="/domains/aiml"
-              className="inline-flex items-center rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-700 shadow-sm transition hover:border-sky-300 hover:text-sky-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-sky-700 dark:hover:text-sky-400"
-            >
-              ← Back to Home
-            </a>
-          </div>
-
-          <section className="rounded-[28px] border border-zinc-200 bg-white px-7 py-9 shadow-sm dark:border-zinc-800 dark:bg-zinc-950 md:px-10 md:py-11">
-
-            <AIMLContentRenderer
-              content={lessonContent}
-            />
-
-          </section>
-
+        <div className="w-full px-5 py-6 sm:px-8 lg:px-10">
+          <Link
+            href="/courses/aiml/machine-learning"
+            className="
+              inline-flex
+              items-center
+              rounded-2xl
+              bg-sky-600
+              px-6
+              py-3
+              text-base
+              font-bold
+              text-white
+              shadow-lg
+              transition
+              hover:-translate-y-0.5
+              hover:bg-sky-700
+            "
+          >
+            ← Back to Course
+          </Link>
         </div>
 
-      </main>
-    </div>
+        <div className="grid w-full grid-cols-1 lg:grid-cols-[360px_minmax(0,1fr)]">
+
+          <MachineLearningSidebar />
+
+          <section className="min-w-0 w-full px-5 pb-16 sm:px-8 lg:col-start-2 lg:px-10">
+
+            <article
+              className="
+                w-full
+                rounded-3xl
+                border
+                border-slate-800
+                bg-slate-900/70
+                px-6
+                py-8
+                shadow-2xl
+                sm:px-10
+                sm:py-10
+                lg:px-12
+                lg:py-12
+              "
+            >
+
+              <AIMLContentRenderer
+                content={lessonContent}
+              />
+
+              <div className="mt-12 flex items-center justify-between gap-4 border-t border-slate-700 pt-8">
+
+                {previousLesson ? (
+                  <Link
+                    href={`/lesson/aiml/machine-learning/${moduleId}/${previousLesson[0]}`}
+                    className="
+                      rounded-2xl
+                      bg-slate-700
+                      px-6
+                      py-3
+                      text-sm
+                      font-bold
+                      text-white
+                      transition
+                      hover:bg-slate-600
+                    "
+                  >
+                    ← Previous Lesson
+                  </Link>
+                ) : (
+                  <div />
+                )}
+
+                {nextLesson ? (
+                  <Link
+                    href={`/lesson/aiml/machine-learning/${moduleId}/${nextLesson[0]}`}
+                    className="
+                      rounded-2xl
+                      bg-green-600
+                      px-6
+                      py-3
+                      text-sm
+                      font-bold
+                      text-white
+                      transition
+                      hover:bg-green-700
+                    "
+                  >
+                    Next Lesson →
+                  </Link>
+                ) : (
+                  <Link
+                    href="/courses/aiml/machine-learning"
+                    className="
+                      rounded-2xl
+                      bg-sky-600
+                      px-6
+                      py-3
+                      text-sm
+                      font-bold
+                      text-white
+                      transition
+                      hover:bg-sky-700
+                    "
+                  >
+                    Complete Module →
+                  </Link>
+                )}
+
+              </div>
+
+            </article>
+
+          </section>
+        </div>
+      </div>
+    </main>
   );
 }
