@@ -173,45 +173,20 @@ export default async function AIMLLessonPage({
         "
       />
 
-      {/* =====================================================
-          DESKTOP SIDEBAR
-      ===================================================== */}
+      {/* COURSE AREA */}
 
-      <AIMLSidebar
-        moduleId={moduleId}
-        lessonId={lessonId}
-      />
+      <div className="grid w-full min-w-0 grid-cols-1 lg:grid-cols-[360px_minmax(0,1fr)]">
 
-      {/* =====================================================
-          MAIN WORKSPACE
-      ===================================================== */}
+        <aside className="hidden lg:block">
+          <div className="sticky top-20 h-[calc(100vh-80px)] overflow-y-auto border-r border-slate-800 bg-slate-900/70 px-5 py-6 backdrop-blur-sm">
+            <AIMLSidebar
+              moduleId={moduleId}
+              lessonId={lessonId}
+            />
+          </div>
+        </aside>
 
-      <div
-        className="
-          relative
-          z-10
-          w-full
-          px-3
-          pb-10
-          pt-5
-          md:px-5
-          lg:pl-[374px]
-          lg:pr-5
-          xl:pl-[382px]
-          xl:pr-6
-        "
-      >
-
-        <section
-          className="
-            min-w-0
-            w-full
-          "
-        >
-
-          {/* =================================================
-              LESSON CARD
-          ================================================= */}
+        <section className="min-w-0 w-full px-5 pb-16 sm:px-8 lg:px-10">
 
           <article
             className="
@@ -356,7 +331,7 @@ export default async function AIMLLessonPage({
                   ? "Practice the concepts from this module using structured problems and applied examples."
                   : isProject
                   ? "Apply the concepts from this module through the associated AI project."
-                  : `Module ${module.number} · AI & Machine Learning`}
+                  : `Module ${module.number} Â· AI & Machine Learning`}
               </p>
 
             </header>
@@ -617,3 +592,5 @@ export default async function AIMLLessonPage({
     </main>
   );
 }
+
+
