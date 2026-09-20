@@ -23,50 +23,60 @@ import LessonSidebar from "./LessonSidebar";
 
 export default function LessonPage() {
   return (
-    <div className="grid gap-8 xl:grid-cols-[320px_1fr]">
+    <div className="w-full min-w-0">
+      <div className="grid w-full min-w-0 grid-cols-1 gap-8 xl:grid-cols-[320px_minmax(0,1fr)]">
 
-      <LessonSidebar />
+        {/* SIDEBAR */}
+        <aside className="min-w-0 xl:sticky xl:top-6 xl:self-start">
+          <div className="min-w-0 overflow-hidden">
+            <LessonSidebar />
+          </div>
+        </aside>
 
-      <div className="space-y-8">
+        {/* MAIN CONTENT */}
+        <main className="min-w-0 max-w-full overflow-x-hidden">
+          <div className="space-y-8">
 
-        <LessonHeader />
+            <LessonHeader />
 
-        <LessonObjectives />
+            <LessonObjectives />
 
-        <LessonProgress />
+            <LessonProgress />
 
-        <LessonContent />
+            <LessonContent />
 
-        <InfoBox />
+            <InfoBox />
 
-        <WarningBox />
+            <WarningBox />
 
-        <CodeBlock />
+            <CodeBlock />
 
-        <DiagramCard />
+            <DiagramCard />
 
-        <ExampleCard />
+            <ExampleCard />
 
-        <ExerciseCard />
+            <ExerciseCard />
 
-        <KeyPoints />
+            <KeyPoints />
 
-        <LessonResources />
+            <LessonResources />
 
-        <LessonNotes />
+            <LessonNotes />
 
-        <LessonFAQ />
+            <LessonFAQ />
 
-        <QuizSection />
+            <QuizSection />
 
-        <LessonSummary />
+            <LessonSummary />
 
-        <LessonCompletion />
+            <LessonCompletion />
 
-        <LessonNavigation />
+            <LessonNavigation />
+
+          </div>
+        </main>
 
       </div>
-
     </div>
   );
 }
