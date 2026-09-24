@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useMemo, useState } from "react";
+import { API, apiPost } from "@/lib/api";
 
 type Question = {
   id: number;
@@ -662,26 +663,86 @@ public class Test {
   }
 ];
 
+type BackendExamResult = {
+  attemptId: string;
+  courseSlug: string;
+  courseTitle: string;
+  score: number;
+  total: number;
+  percentage: number;
+  passingPercentage: number;
+  passed: boolean;
+  certificate: {
+    certificateId: string;
+    courseTitle: string;
+    issuedAt: string;
+  } | null;
+  submittedAt: string;
+};
+
 export default function JavaExam() {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
-  const [submitted, setSubmitted] = useState(false);
+  const [currentQuestionIndex, setCurrentQuestionIndex] =
+    useState(0);
 
-  const currentQuestion = questions[currentQuestionIndex];
+  const [selectedAnswers, setSelectedAnswers] =
+    useState<Record<number, number>>({});
 
-  const score = useMemo(() => {
+  const [submitted, setSubmitted] =
+    useState(false);
+
+  const [backendResult, setBackendResult] =
+    useState<BackendExamResult | null>(null);
+
+  const [submitting, setSubmitting] =
+    useState(false);
+
+  const [submitError, setSubmitError] =
+    useState<string | null>(null);
+
+  const currentQuestion =
+    questions[currentQuestionIndex];
+
+  /*
+   * Local score is retained only for the existing
+   * answer-review UI.
+   *
+   * Official score/pass status comes from backendResult
+   * after submission.
+   */
+  const localScore = useMemo(() => {
     return questions.reduce(
       (total, question) =>
-        total + (selectedAnswers[question.id] === question.answer ? 1 : 0),
+        total +
+        (selectedAnswers[question.id] === question.answer
+          ? 1
+          : 0),
       0
     );
   }, [selectedAnswers]);
 
-  const percentage = Math.round((score / questions.length) * 100);
-  const passed = score >= 18;
+  const score =
+    backendResult?.score ?? localScore;
+
+  const percentage =
+    backendResult?.percentage ??
+    Math.round(
+      (score / questions.length) * 100
+    );
+
+  const passed =
+    backendResult?.passed ??
+    percentage >= 70;
+
+  const requiredPercentage =
+    backendResult?.passingPercentage ?? 70;
+
+  const requiredScore =
+    Math.ceil(
+      (questions.length * requiredPercentage) / 100
+    );
 
   const selectAnswer = (optionIndex: number) => {
-    if (submitted) return;
+    if (submitted || submitting) return;
 
     setSelectedAnswers((previous) => ({
       ...previous,
@@ -690,19 +751,104 @@ export default function JavaExam() {
   };
 
   const goToQuestion = (index: number) => {
-    if (submitted) return;
+    if (submitted || submitting) return;
 
     setCurrentQuestionIndex(index);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const submitExam = async () => {
+    if (submitting) return;
+
+    setSubmitError(null);
+
+    const token =
+      typeof window !== "undefined"
+        ? localStorage.getItem(
+            "cloudlearn-access-token"
+          )
+        : null;
+
+    if (!token) {
+      setSubmitError(
+        "Your session has expired. Please log in again before submitting the assessment."
+      );
+      return;
+    }
+
+    const answers = questions.map((question) => ({
+      questionId: question.id,
+      answer:
+        selectedAnswers[question.id] !== undefined
+          ? selectedAnswers[question.id]
+          : -1,
+    }));
+
+    setSubmitting(true);
+
+    try {
+      const response = await apiPost<{
+        success: boolean;
+        message: string;
+        data: BackendExamResult;
+      }>(
+        `${API.BASE_URL}${API.ENDPOINTS.EXAM}/java-development/submit`,
+        { answers },
+        token
+      );
+
+      if (!response.success || !response.data) {
+        throw new Error(
+          response.message ||
+            "Unable to submit assessment."
+        );
+      }
+
+      /*
+       * A successful backend response means:
+       * - exam attempt created
+       * - backend score calculated
+       * - certificate generated when passed
+       */
+      setBackendResult(response.data);
+      setSubmitted(true);
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "Unable to submit assessment. Please try again."
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const goNext = () => {
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex((previous) => previous + 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    if (submitting) return;
+
+    if (
+      currentQuestionIndex <
+      questions.length - 1
+    ) {
+      setCurrentQuestionIndex(
+        (previous) => previous + 1
+      );
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     } else {
-      setSubmitted(true);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      void submitExam();
     }
   };
 
@@ -710,8 +856,18 @@ export default function JavaExam() {
     setCurrentQuestionIndex(0);
     setSelectedAnswers({});
     setSubmitted(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    setBackendResult(null);
+    setSubmitError(null);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
+
+  const getOptionLetter = (index: number) =>
+    String.fromCharCode(65 + index);
+
 
   if (submitted) {
     return (
@@ -817,13 +973,22 @@ export default function JavaExam() {
             </div>
 
             <div className="mt-8 flex justify-center">
-              <button
-                type="button"
-                onClick={retakeExam}
-                className="rounded-xl bg-slate-900 px-6 py-3 text-sm font-bold text-white transition hover:bg-slate-700 dark:bg-white dark:text-slate-900"
-              >
-                Retake Exam
-              </button>
+              {passed ? (
+                <a
+                  href="/my-certificates"
+                  className="rounded-xl bg-green-600 px-7 py-3 font-bold text-white hover:bg-green-700"
+                >
+                  View Certificate
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  onClick={retakeExam}
+                  className="rounded-xl bg-slate-900 px-6 py-3 text-sm font-bold text-white transition hover:bg-slate-700 dark:bg-white dark:text-slate-900"
+                >
+                  Retake Exam
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -834,6 +999,11 @@ export default function JavaExam() {
   return (
     <main className="min-h-screen bg-slate-50 px-4 pb-12 pt-28 dark:bg-slate-950">
       <div className="mx-auto max-w-7xl">
+        {submitError && (
+          <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-400">
+            {submitError}
+          </div>
+        )}
         <div className="mb-6">
           <p className="text-sm font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400">
             Java Development
@@ -966,9 +1136,11 @@ export default function JavaExam() {
                 onClick={goNext}
                 className="rounded-md bg-blue-600 px-6 py-2.5 text-sm font-bold text-white transition hover:bg-blue-700"
               >
-                {currentQuestionIndex === questions.length - 1
-                  ? "Submit Assessment"
-                  : "Save & Next"}
+                {submitting
+                  ? "Submitting..."
+                  : currentQuestionIndex === questions.length - 1
+                    ? "Submit Assessment"
+                    : "Save & Next"}
                 <span className="ml-2">{"\u2192"}</span>
               </button>
             </div>

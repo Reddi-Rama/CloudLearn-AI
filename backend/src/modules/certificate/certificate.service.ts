@@ -1,7 +1,12 @@
 ﻿import { PrismaClient } from "@prisma/client";
+import fs from "fs";
 import { generateCertificate } from "../../generators/certificate.generator";
 
 const prisma = new PrismaClient();
+
+function certificateFileExists(filePath: string) {
+  return Boolean(filePath) && fs.existsSync(filePath);
+}
 
 export const certificateService = {
   async generate(
@@ -51,18 +56,6 @@ export const certificateService = {
       courseTitle ||
       courseSlug;
 
-    const existingCertificate =
-      await prisma.certificate.findFirst({
-        where: {
-          userId,
-          courseSlug,
-        },
-      });
-
-    if (existingCertificate) {
-      return existingCertificate;
-    }
-
     const user =
       await prisma.user.findUnique({
         where: {
@@ -78,15 +71,70 @@ export const certificateService = {
       throw new Error("User not found");
     }
 
+    const existingCertificate =
+      await prisma.certificate.findFirst({
+        where: {
+          userId,
+          courseSlug,
+        },
+      });
+
+    /*
+     * Existing certificate + existing PDF:
+     * nothing to regenerate.
+     */
+    if (
+      existingCertificate &&
+      certificateFileExists(
+        existingCertificate.filePath
+      )
+    ) {
+      return existingCertificate;
+    }
+
+    /*
+     * Existing certificate record but missing PDF:
+     * regenerate the PDF using the SAME certificate ID
+     * and update the stored file path.
+     */
+    if (existingCertificate) {
+      const issueDateText =
+        new Date(
+          existingCertificate.issuedAt
+        ).toLocaleDateString("en-IN");
+
+      const filePath =
+        await generateCertificate({
+          studentName: user.fullName,
+          courseTitle:
+            existingCertificate.courseTitle ||
+            resolvedCourseTitle,
+          certificateId:
+            existingCertificate.certificateId,
+          issueDate: issueDateText,
+        });
+
+      return prisma.certificate.update({
+        where: {
+          id: existingCertificate.id,
+        },
+        data: {
+          filePath,
+        },
+      });
+    }
+
+    /*
+     * No certificate record:
+     * create a completely new certificate.
+     */
     const certificateId =
       await this.createUniqueCertificateId();
 
     const issueDate = new Date();
 
     const issueDateText =
-      issueDate.toLocaleDateString(
-        "en-IN"
-      );
+      issueDate.toLocaleDateString("en-IN");
 
     const filePath =
       await generateCertificate({
