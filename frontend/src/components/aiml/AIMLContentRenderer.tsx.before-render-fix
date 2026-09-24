@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React from "react";
 import AIMLInputOutput from "./AIMLInputOutput";
@@ -25,10 +25,7 @@ function decodeEntities(value: string): string {
 }
 
 function cleanLine(value: string): string {
-  return decodeEntities(value)
-    .replace(/\u00a0/g, " ")
-    .replace(/\\`/g, "`")
-    .trim();
+  return decodeEntities(value).replace(/\u00a0/g, " ").trim();
 }
 
 function normalizeMath(value: string): string {
@@ -42,11 +39,10 @@ function normalizeMath(value: string): string {
     .replace(/\\bar\{y\}/g, "ȳ")
     .replace(/\\sum/g, "Σ")
     .replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, "$1/$2")
-    .replace(/\^\{2\}/g, "²")
-    .replace(/\^\{3\}/g, "³")
     .replace(/\^2/g, "²")
     .replace(/\^3/g, "³")
-    .replace(/_\{([^}]*)\}/g, "_$1")
+    .replace(/\^\{2\}/g, "²")
+    .replace(/\^\{3\}/g, "³")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -55,17 +51,17 @@ function looksMathematical(value: string): boolean {
   const text = normalizeMath(value);
   if (!text) return false;
 
-  const hasEquation = /(^|[^<>!])=(?!=)/.test(text);
-  const hasMathOperators = /[+\-*/^²³√Σ×]/.test(text);
-  const hasMathNames = /\b(?:TP|TN|FP|FN|MAE|MSE|RMSE|R²|F1|MCC|AUC|accuracy|precision|recall|variance|mean|error|loss|probability)\b/i.test(text);
-  const hasMathVariables = /(?:ŷ|ȳ|\b(?:x|y|z|n|m|k)\b)/.test(text);
-
-  return (hasEquation && hasMathOperators) || (hasMathNames && hasMathOperators) || (hasMathVariables && hasEquation);
+  return (
+    /[=Σ√∑∫]/.test(text) ||
+    /\b(?:TP|TN|FP|FN|MAE|MSE|RMSE|R²|F1|MCC|AUC)\b/.test(text) ||
+    /[ŷyᵢx̄]/.test(text) ||
+    /\b(?:precision|recall|accuracy|variance|mean|error)\b/i.test(text) && /[+\-*/]/.test(text)
+  );
 }
 
 function isFormulaOperatorLine(value: string): boolean {
   const text = cleanLine(value);
-  return text === "=" || text === "≥" || text === "≤" || text === "\\ge" || text === "\\le";
+  return text === "=" || text === "≈" || text === "≠";
 }
 
 function isFormulaLabel(value: string): boolean {
@@ -76,14 +72,7 @@ function isFormulaLabel(value: string): boolean {
 function buildFormula(lines: string[], index: number): { data: FormulaData; end: number } | null {
   const current = cleanLine(lines[index]);
 
-  // Never parse Markdown headings, numbered questions, or question text as formulas.
-  if (
-    !current ||
-    current.startsWith("-") ||
-    /^#{1,6}\s+/.test(current) ||
-    /^\d+\.\s+/.test(current) ||
-    /^what\b/i.test(current)
-  ) {
+  if (!current || current.startsWith("-") || /^\d+\.\s+/.test(current)) {
     return null;
   }
 
@@ -103,17 +92,6 @@ function buildFormula(lines: string[], index: number): { data: FormulaData; end:
     if (j >= lines.length) return null;
 
     const label = cleanLine(lines[j]);
-
-    // A Formula section must be followed by an actual mathematical label,
-    // not another Markdown heading or a question.
-    if (
-      /^#{1,6}\s+/.test(label) ||
-      /^what\b/i.test(label) ||
-      (!isFormulaLabel(label) && !looksMathematical(label))
-    ) {
-      return null;
-    }
-
     j++;
 
     while (j < lines.length && !cleanLine(lines[j])) j++;
@@ -246,11 +224,7 @@ function buildFormula(lines: string[], index: number): { data: FormulaData; end:
   // Single-line equation:
   // Accuracy = (TP + TN) / (...)
   // ----------------------------------------------------------
-  if (
-    looksMathematical(current) &&
-    /(^|[^<>!])=(?!=)/.test(current) &&
-    !/^(?:if|elif|for|while|with|return)\b/i.test(current)
-  ) {
+  if (looksMathematical(current) && /[=]/.test(current)) {
     const expression = normalizeMath(current);
     const match = expression.match(/^([^=]+)=\s*(.+)$/);
 
@@ -373,40 +347,16 @@ function QuestionAnswerCard({ question, answer }: { question: string[]; answer: 
 }
 
 function FlowChart({ items }: { items: string[] }) {
-  const cleanItems = items.filter(Boolean);
-  const vertical = cleanItems.filter((x) => x !== "→").length >= 5;
-
   return (
-    <div className="my-8 w-full min-w-0 overflow-hidden rounded-2xl border border-sky-500/20 bg-slate-950/40 p-4 sm:p-6">
-      <div className={vertical ? "mx-auto flex max-w-3xl flex-col items-center" : "mx-auto flex w-full flex-wrap items-center justify-center gap-3 sm:gap-4"}>
-        {cleanItems.map((item, index) => {
-          if (item === "→") {
-            return (
-              <div key={`arrow-${index}`} className={vertical ? "flex h-9 items-center justify-center text-2xl font-bold text-sky-400" : "shrink-0 px-1 text-2xl font-bold text-sky-400"}>
-                {vertical ? "↓" : "→"}
-              </div>
-            );
-          }
-
-          const isGroup = item.startsWith("[[") && item.endsWith("]]" );
-          const groupItems = isGroup ? item.slice(2, -2).split("|").map((x) => x.trim()).filter(Boolean) : [];
-
-          return (
-            <div key={`node-${index}`} className={vertical ? "w-full max-w-2xl rounded-2xl border border-sky-500/30 bg-slate-900 px-5 py-4 text-center shadow-lg shadow-sky-950/10" : "min-h-[58px] min-w-[150px] max-w-[230px] rounded-2xl border border-sky-500/30 bg-slate-900 px-5 py-4 text-center shadow-lg shadow-sky-950/10"}>
-              {isGroup ? (
-                <div className="flex flex-wrap items-center justify-center gap-2">
-                  {groupItems.map((groupItem) => (
-                    <span key={groupItem} className="rounded-xl border border-cyan-400/20 bg-cyan-400/10 px-3 py-2 text-sm font-semibold text-cyan-200 sm:text-base">
-                      {groupItem}
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <span className="text-sm font-semibold leading-6 text-slate-100 sm:text-base">{renderMarkdownInline(item)}</span>
-              )}
-            </div>
-          );
-        })}
+    <div className="my-8 w-full min-w-0 overflow-x-auto">
+      <div className="mx-auto flex w-max min-w-full items-center justify-center gap-3 px-2 py-2 sm:gap-4">
+        {items.map((item, index) => item === "→" ? (
+          <div key={index} className="shrink-0 px-1 text-2xl font-bold text-sky-400">→</div>
+        ) : (
+          <div key={index} className="flex min-h-[52px] w-[150px] shrink-0 items-center justify-center rounded-2xl border border-sky-500/30 bg-slate-900 px-4 py-3 text-center text-sm font-semibold text-slate-100 shadow-lg sm:text-base">
+            {item}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -414,214 +364,39 @@ function FlowChart({ items }: { items: string[] }) {
 
 function splitInlineFlow(text: string): string[] | null {
   const value = cleanLine(text);
-  if (
-    !value ||
-    value.length > 180 ||
-    value.includes("|") ||
-    value.includes(";") ||
-    value.startsWith("-") ||
-    value.startsWith("#")
-  ) {
-    return null;
-  }
-
-  if (!/(?:→|⇒|⇢|➜|➝|->|=>)/.test(value)) return null;
-
-  const parts = value
-    .split(/\s*(?:→|⇒|⇢|➜|➝|->|=>)\s*/)
-    .map((x) => x.trim())
-    .filter(Boolean);
-
+  if (!value || value.length > 180 || value.includes("|") || value.includes(";") || value.startsWith("-") || value.startsWith("#")) return null;
+  if (!/(?:→|⇒|->|⟶|⟹)/.test(value)) return null;
+  const parts = value.split(/\s*(?:→|⇒|->|⟶|⟹)\s*/).map((x) => x.trim()).filter(Boolean);
   if (parts.length < 2 || parts.some((x) => x.length > 70)) return null;
-
   const result: string[] = [];
-  parts.forEach((part, index) => {
-    if (index) result.push("→");
-    result.push(part);
-  });
-
+  parts.forEach((part, index) => { if (index) result.push("→"); result.push(part); });
   return result;
 }
 
 function isStandaloneArrow(text: string): boolean {
-  return /^(?:→|↓|↑|←|⇒|⇢|➜|➝|->|=>)$/.test(cleanLine(text));
-}
-
-function looksLikeTerminal(line: string): boolean {
-  const text = cleanLine(line);
-  return (
-    /^(?:python|python3|py)\s+-m\s+(?:venv|pip)\b/i.test(text) ||
-    /^(?:pip|pip3)\s+(?:install|uninstall|show|freeze|list)\b/i.test(text) ||
-    /^(?:npm|npx|node|yarn|pnpm)\s+/.test(text) ||
-    /^(?:git|cd|mkdir|rmdir|dir|ls|pwd|echo|curl)\s+/.test(text) ||
-    /^\.venv[\\/]Scripts[\\/]activate(?:\.bat|\.ps1)?$/i.test(text) ||
-    /^source\s+.*activate$/.test(text) ||
-    /^(?:conda|virtualenv)\s+/.test(text)
-  );
-}
-
-function looksLikeFormulaAssignment(line: string): boolean {
-  const text = cleanLine(line);
-  const match = text.match(/^[A-Za-z_][A-Za-z0-9_]*\s*=\s*(.+)$/);
-  if (!match) return false;
-
-  const rhs = match[1];
-
-  // Python multiplication/exponentiation such as x ** 2 is code, not a formula.
-  if (/\*\*/.test(rhs)) return false;
-
-  // Function calls, indexing, lists, dictionaries and statements indicate code.
-  if (/[\[\]{};]/.test(rhs) || /\b[A-Za-z_]\w*\s*\(/.test(rhs)) return false;
-
-  // A caret or mathematical variable/expression is a strong formula signal.
-  return /\^/.test(rhs) || /(?:ŷ|ȳ|\by_hat\b|\by\b|\bx\b|\bz\b)/.test(rhs) && /[+\-*/]/.test(rhs);
+  return ["↓", "↑", "→", "←", "↔", "⇒", "➡", "⬇", "⬆", "⟶", "⟹", "⟷", "⇢", "⇠"].includes(cleanLine(text));
 }
 
 function looksLikeCode(line: string): boolean {
   const text = cleanLine(line);
-  if (!text || looksLikeTerminal(text) || looksLikeFormulaAssignment(text)) return false;
-
+  if (!text) return false;
   return (
     /^from\s+\S+\s+import\s+/.test(text) ||
     /^import\s+/.test(text) ||
     /^(?:def|class)\s+\w+/.test(text) ||
     /^(?:if|elif|for|while|with|try|except|finally)\b.*:/.test(text) ||
     /^print\s*\(/.test(text) ||
-    /^[A-Za-z_][A-Za-z0-9_]*\s*\*\*\s*(?:\d+(?:\.\d+)?|[A-Za-z_][A-Za-z0-9_]*)$/.test(text) ||
     /^return\b/.test(text) ||
     /^raise\b/.test(text) ||
-    /^#include\s*[<"]/ .test(text) ||
+    /^#include\s*[<"]/.test(text) ||
     /^(?:int|float|double|char|bool|boolean|string|String|long|short)\s+\w+\s*(?:=|;)/.test(text) ||
     /^cout\s*<</.test(text) ||
     /^cin\s*>>/.test(text) ||
     /^(?:printf|scanf)\s*\(/.test(text) ||
     /^System\.out\./.test(text) ||
     /^\w+(?:\.\w+)*\s*\([^)]*\)\s*;?$/.test(text) ||
-    /^\w+\s*=\s*(?:[\w.]+\s*\([^)]*\)|[\[\]{}`"']|\w+\s*(?:\*\*|%|\/\/)\s*\w+)/.test(text)
+    /^\w+\s*=\s*.+/.test(text)
   );
-}
-
-function isExplicitCodeHeading(text: string): boolean {
-  // Python is NOT automatically a code heading.
-  // Some lessons use Python as one stage of a conceptual workflow.
-  return /^(?:Python Example|Python Code):?$/i.test(cleanLine(text));
-}
-
-function isConceptualProcessNode(text: string): boolean {
-  const value = cleanLine(text);
-  if (!value || value.length > 90) return false;
-
-  const known = /^(?:Data|Python|Python Code|Explanation|Numerical Computation|Data Processing|Mathematical Computation|Mathematical computation|Visualization|AI\s*\/\s*ML Algorithm|AI\s*\/\s*ML|Evaluation|Application|Observe|Observe Again|Interpret|Decide|Act|Sense|Perceive|Reason|Plan|Execute|Learn|Feedback|Information Processing|Reasoning(?: \/ Computation)?|Decision|Action|Processing|Environment|Agent|State|Update|Prediction|Output|Analysis|Jupyter Notebook|AI Data Workflow|AI Development Workflow|Training|Testing|Model|Deployment|Monitoring|Dependencies|Installation)$/i;
-
-  if (known.test(value)) return true;
-
-  if (/^(?:NumPy|Pandas|Matplotlib)(?:\s+(?:NumPy|Pandas|Matplotlib)){1,2}$/i.test(value)) return true;
-
-  return false;
-}
-
-function isDiagramSyntaxLine(text: string): boolean {
-  const value = cleanLine(text);
-  if (!value) return true;
-
-  return (
-    /^[|│┌┐└┘├┤┬┴┼─━═╔╗╚╝╠╣╦╩╬]+$/.test(value) ||
-    /^[↓↑→←⇒⇢➜➝|│\-_=+*]+$/.test(value) ||
-    /[┌┐└┘├┤┬┴┼]/.test(value)
-  );
-}
-
-function normalizeDiagramNode(text: string): string | null {
-  const value = cleanLine(text);
-  if (!value || isDiagramSyntaxLine(value) || isHorizontalRule(value)) return null;
-
-  if (/^(?:NumPy|Pandas|Matplotlib)(?:\s+(?:NumPy|Pandas|Matplotlib)){1,2}$/i.test(value)) {
-    const names = value.match(/NumPy|Pandas|Matplotlib/gi) || [];
-    return `[[${Array.from(new Set(names)).join("|")}]]`;
-  }
-
-  return isConceptualProcessNode(value) ? value : null;
-}
-
-function tryBuildProcessFlow(lines: string[], index: number): { items: string[]; end: number } | null {
-  const first = cleanLine(lines[index]);
-  if (!isConceptualProcessNode(first)) return null;
-
-  const items: string[] = [];
-  let j = index;
-  let sawConnector = false;
-  let sawDiagramSyntax = false;
-  let emptyAfterNode = false;
-
-  while (j < lines.length && j < index + 16) {
-    const text = cleanLine(lines[j]);
-
-    if (!text) {
-      if (items.length) { emptyAfterNode = true; j++; continue; }
-      j++; continue;
-    }
-
-    if (isHorizontalRule(text)) { j++; continue; }
-
-    // Mixed connector lines such as "→ AI Data Workflow → ---" are diagram syntax,
-    // but the meaningful node in the middle should still be preserved.
-    if (/[↓↑→←⇒⇢➜➝]/.test(text) && !isStandaloneArrow(text)) {
-      const parts = text
-        .split(/\s*(?:→|↓|↑|←|⇒|⇢|➜|➝|->|=>)\s*/)
-        .map((part) => part.replace(/^-{3,}$/, "").trim())
-        .filter(Boolean);
-
-      let addedNode = false;
-      for (const part of parts) {
-        const node = normalizeDiagramNode(part);
-        if (node) {
-          items.push(node);
-          addedNode = true;
-        }
-      }
-
-      sawDiagramSyntax = true;
-      sawConnector = true;
-      if (addedNode) emptyAfterNode = false;
-      j++;
-      continue;
-    }
-
-    if (isDiagramSyntaxLine(text)) {
-      sawDiagramSyntax = true;
-      if (/[↓↑→←⇒⇢➜➝]/.test(text) || /\|/.test(text)) sawConnector = true;
-      j++;
-      continue;
-    }
-
-    const node = normalizeDiagramNode(text);
-    if (node) {
-      items.push(node);
-      emptyAfterNode = false;
-      j++;
-      continue;
-    }
-
-    if (/^#{1,6}\s+/.test(text) || looksLikeCode(text) || /^(?:For example|Summary|Quick Check|Practice|Common Mistakes|Experiment|Dataset|Extended Study)$/i.test(text)) break;
-    if (items.length && emptyAfterNode) break;
-    break;
-  }
-
-  if (items.length >= 3 && (sawConnector || sawDiagramSyntax)) return { items, end: j };
-  return null;
-}
-
-function isHorizontalRule(text: string): boolean {
-  return /^(?:-{3,}|_{3,}|\*{3,})$/.test(cleanLine(text));
-}
-
-function looksLikeCodeBlockStart(lines: string[], index: number): boolean {
-  const current = cleanLine(lines[index]);
-  if (!looksLikeCode(current)) return false;
-
-  // Avoid treating ordinary prose containing an assignment-like phrase as code.
-  if (/^[A-Za-z][A-Za-z ]{0,35}\s*=\s*[A-Za-z ]+$/.test(current)) return false;
-  return true;
 }
 
 function isMarkdownTableSeparator(line: string): boolean {
@@ -676,7 +451,7 @@ function sectionTone(title: string): Tone {
 
 function isSpecialLabel(text: string): boolean {
   const t = cleanLine(text).replace(/^#{1,6}\s+/, "");
-  return /^(?:Input|Expected Input|Output|Expected Output|Desired Output|Prediction|Process|How It Works|Steps|Model\s*\/\s*Process|Question|Answer|Code|Example|Key Takeaway|Common Mistakes|Summary|Quick Check|Experiment|Dataset|Extended Study|Explanation|Result|Mathematical Intuition|Real[- ]World Example)$/i.test(t);
+  return /^(?:Input|Expected Input|Output|Expected Output|Desired Output|Prediction|Process|How It Works|Steps|Model\s*\/\s*Process|Question|Answer|Python|Python Example|Python Code|Code|Code Example|Example|Key Takeaway|Common Mistakes|Summary|Quick Check|Experiment|Dataset|Extended Study|Explanation|Result|Mathematical Intuition|Real[- ]World Example)$/i.test(t);
 }
 
 function isBoundary(text: string): boolean {
@@ -876,15 +651,9 @@ function renderContent(content: string): React.ReactNode[] {
       continue;
     }
 
-    // Markdown horizontal rules are formatting syntax, not lesson content.
-    if (isHorizontalRule(text)) {
-      i++;
-      continue;
-    }
-
     // Fenced code.
     if (text.startsWith("```")) {
-      const language = text.slice(3).trim().replace(/^\+/, "");
+      const language = text.slice(3).trim();
       const code: string[] = [];
       i++;
       while (i < lines.length && !cleanLine(lines[i]).startsWith("```")) {
@@ -896,141 +665,40 @@ function renderContent(content: string): React.ReactNode[] {
       continue;
     }
 
-    // Terminal / shell commands are code-like, but should be shown as terminal commands.
-    if (looksLikeTerminal(text)) {
-      const terminal: string[] = [raw];
-      let j = i + 1;
-      while (j < lines.length) {
-        const t = cleanLine(lines[j]);
-        if (!t) break;
-        if (looksLikeTerminal(t)) {
-          terminal.push(lines[j]);
-          j++;
-          continue;
-        }
-        break;
-      }
-      elements.push(<CodeBlock key={`terminal-${i}`} lines={terminal} language="terminal" />);
-      i = j;
-      continue;
-    }
-
-    // Conceptual workflow detection comes before Input/Output and code detection.
-    // Labels such as Python, Output, Visualization and Analysis can be stages.
-    const processFlow = tryBuildProcessFlow(lines, i);
-    if (processFlow) {
-      elements.push(
-        <FlowChart
-          key={`process-flow-${i}`}
-          items={processFlow.items.flatMap((item, index) => index === processFlow.items.length - 1 ? [item] : [item, "→"])}
-        />,
-      );
-      i = processFlow.end;
-      continue;
-    }
-
-    // Input → Process → Output card.
-    //
-    // IMPORTANT:
-    // Do not create an Input/Output component merely because the word
-    // "Input" appears. Lessons also use Input/Output as conceptual
-    // workflow stages. A real I/O card requires an explicit Process
-    // section and an explicit Output section.
+    // Input → Process → Output card. Stop on a real section boundary OR
+    // a blank line after content, so ordinary lesson paragraphs are never swallowed.
     if (/^(?:Input|Expected Input)$/i.test(text)) {
-      let hasProcessSection = false;
-      let hasOutputSection = false;
-      let scan = i + 1;
+      const input: string[] = [];
+      const process: string[] = [];
+      const output: string[] = [];
+      let section: "input" | "process" | "output" = "input";
+      let j = i + 1;
+      let hadContent = false;
 
-      for (; scan < lines.length && scan < i + 40; scan++) {
-        const t = cleanLine(lines[scan]);
-
-        if (/^#{1,6}\s+/.test(t)) break;
-
-        if (/^(?:Process|How It Works|Steps|Model\s*\/\s*Process)$/i.test(t)) {
-          hasProcessSection = true;
-        }
-
-        if (/^(?:Output|Expected Output|Desired Output|Prediction)$/i.test(t)) {
-          hasOutputSection = true;
-          break;
-        }
-
-        // A new major conceptual section means this was not a structured I/O block.
-        if (
-          /^(?:Summary|Quick Check|Practice|Common Mistakes|Experiment|Dataset|Extended Study|Python|Code)$/i.test(t)
-        ) {
-          break;
-        }
-      }
-
-      if (hasProcessSection && hasOutputSection) {
-        const input: string[] = [];
-        const process: string[] = [];
-        const output: string[] = [];
-        let section: "input" | "process" | "output" = "input";
-        let j = i + 1;
-
-        for (; j < lines.length; j++) {
-          const t = cleanLine(lines[j]);
-
-          if (!t) {
-            if (section === "output" && output.length) break;
-            continue;
-          }
-
-          if (/^#{1,6}\s+/.test(t)) break;
-
-          if (/^(?:Process|How It Works|Steps|Model\s*\/\s*Process)$/i.test(t)) {
-            section = "process";
-            continue;
-          }
-
-          if (/^(?:Output|Expected Output|Desired Output|Prediction)$/i.test(t)) {
-            section = "output";
-            continue;
-          }
-
-          if (
-            /^(?:Summary|Quick Check|Practice|Common Mistakes|Experiment|Dataset|Extended Study|Python|Code)$/i.test(t)
-          ) {
-            break;
-          }
-
-          if (section === "input") input.push(t);
-          else if (section === "process") process.push(t);
-          else output.push(t);
-        }
-
-        if (input.length || process.length || output.length) {
-          elements.push(
-            <AIMLInputOutput
-              key={`io-${i}`}
-              input={input}
-              process={process}
-              output={output}
-            />,
-          );
-          i = j;
+      for (; j < lines.length; j++) {
+        const t = cleanLine(lines[j]);
+        if (!t) {
+          if (hadContent) break;
           continue;
         }
+        if (/^(?:Process|How It Works|Steps|Model\s*\/\s*Process)$/i.test(t)) { section = "process"; hadContent = false; continue; }
+        if (/^(?:Output|Expected Output|Desired Output|Prediction)$/i.test(t)) { section = "output"; hadContent = false; continue; }
+        if (/^#{1,6}\s+/.test(t) || /^(?:Example|Summary|Practice|Quick Check|Common Mistakes|Experiment|Dataset|Python|Code|Extended Study)$/i.test(t)) break;
+        hadContent = true;
+        if (section === "input") input.push(t); else if (section === "process") process.push(t); else output.push(t);
+      }
+
+      if (input.length || process.length || output.length) {
+        elements.push(<AIMLInputOutput key={`io-${i}`} input={input} process={process} output={output} />);
+        i = j;
+        continue;
       }
     }
 
     // Output-only block.
     if (/^(?:Output|Expected Output|Desired Output|Prediction)$/i.test(text)) {
-      let j = i + 1;
-      while (j < lines.length && !cleanLine(lines[j])) j++;
-      const next = j < lines.length ? cleanLine(lines[j]) : "";
-
-      // A conceptual workflow such as "Output → Visualization → Analysis"
-      // must remain a flow, not become an Output card.
-      if (isConceptualProcessNode(next)) {
-        // Let the process-flow parser handle it on the next iteration.
-        i++;
-        continue;
-      }
-
       const output: string[] = [];
+      let j = i + 1;
       for (; j < lines.length; j++) {
         const t = cleanLine(lines[j]);
         if (!t) break;
@@ -1074,80 +742,6 @@ function renderContent(content: string): React.ReactNode[] {
       continue;
     }
 
-    // Generic "Code" labels are sometimes used in conceptual lessons.
-    // If the next meaningful line starts a process, ignore the label completely.
-    if (/^(?:Code|Code Example):?$/i.test(text)) {
-      let j = i + 1;
-      while (j < lines.length && !cleanLine(lines[j])) j++;
-
-      if (j < lines.length && isConceptualProcessNode(cleanLine(lines[j]))) {
-        i++;
-        continue;
-      }
-    }
-
-    // Automatic code detection.
-    // This catches real Python/C++/Java-like code even when the lesson
-    // forgot to wrap it in Markdown fences.
-    if (looksLikeCodeBlockStart(lines, i)) {
-      const code: string[] = [];
-      let j = i;
-
-      while (j < lines.length) {
-        const rawCode = lines[j];
-        const t = cleanLine(rawCode);
-
-        if (!t) {
-          // Keep internal blank lines, but stop after a trailing blank line.
-          if (code.length) code.push("");
-          j++;
-          if (j < lines.length && !cleanLine(lines[j])) break;
-          continue;
-        }
-
-        if (
-          j !== i &&
-          (
-            /^#{1,6}\s+/.test(t) ||
-            isSpecialLabel(t) ||
-            isHorizontalRule(t)
-          )
-        ) {
-          break;
-        }
-
-        // Continue a code block when the line itself looks like code,
-        // is indented, or is a common Python continuation.
-        if (
-          looksLikeCode(t) ||
-          isIndented(rawCode) ||
-          /^[)}\]]/.test(t) ||
-          /^(?:else|elif|except|finally)\s*:/.test(t)
-        ) {
-          code.push(rawCode);
-          j++;
-          continue;
-        }
-
-        // A prose line ends an automatically detected code block.
-        break;
-      }
-
-      while (code.length && !cleanLine(code[code.length - 1])) code.pop();
-
-      if (code.length) {
-        elements.push(
-          <CodeBlock
-            key={`auto-code-${i}`}
-            lines={code}
-            language={/^(?:from|import|def|class|if|elif|for|while|print|return)\b/.test(text) ? "python" : "code"}
-          />,
-        );
-        i = j;
-        continue;
-      }
-    }
-
     // Formula. This is deliberately checked BEFORE ordinary paragraph rendering,
     // but only for positively identified mathematical patterns.
     const formula = buildFormula(lines, i);
@@ -1172,7 +766,7 @@ function renderContent(content: string): React.ReactNode[] {
       while (j < lines.length) {
         const t = cleanLine(lines[j]);
         if (!t) { j++; continue; }
-        if (isStandaloneArrow(t)) { flow.push("→"); j++; continue; }
+        if (isStandaloneArrow(t)) { flow.push(t === "⇒" || t === "⟹" ? "→" : t); j++; continue; }
         if (flow.length && t.length <= 80 && !looksLikeCode(t) && !isBoundary(t)) { flow.push(t); j++; continue; }
         break;
       }
@@ -1183,141 +777,19 @@ function renderContent(content: string): React.ReactNode[] {
       }
     }
 
-    // Explicit Python section: consume until the next major section.
-    // Generic "Code" is handled only when it is followed by actual code.
-    if (isExplicitCodeHeading(text)) {
+    // Explicit Python/Code section: consume until next major section.
+    if (/^(?:Python|Python Example|Python Code|Code|Code Example):?$/i.test(text)) {
+      elements.push(<SectionHeading key={`code-heading-${i}`} title={text.replace(/:$/, "")} />);
       const code: string[] = [];
       let j = i + 1;
-
       for (; j < lines.length; j++) {
         const t = cleanLine(lines[j]);
-        if (
-          /^#{1,6}\s+/.test(t) ||
-          /^(?:Input|Output|Process|Question|Answer|Summary|Practice|Quick Check|Common Mistakes|Experiment|Dataset|Extended Study)$/i.test(t)
-        ) {
-          break;
-        }
+        if (/^#{1,6}\s+/.test(t) || /^(?:Input|Output|Process|Question|Answer|Summary|Practice|Quick Check|Common Mistakes|Experiment|Dataset|Extended Study)$/i.test(t)) break;
         code.push(lines[j]);
       }
-
       while (code.length && !cleanLine(code[code.length - 1])) code.pop();
-
-      if (code.length) {
-        elements.push(
-          <SectionHeading
-            key={`code-heading-${i}`}
-            title={text.replace(/:$/, "")}
-          />,
-        );
-        elements.push(
-          <CodeBlock
-            key={`section-code-${i}`}
-            lines={code}
-            language="python"
-          />,
-        );
-      }
-
+      if (code.length) elements.push(<CodeBlock key={`section-code-${i}`} lines={code} language={/python/i.test(text) ? "python" : "code"} />);
       i = j;
-      continue;
-    }
-
-    // A plain "Python" label can mean either:
-    // 1) a conceptual workflow stage, or
-    // 2) a heading before actual Python source.
-    // Only treat it as code when the following content really looks like code.
-    if (/^Python:?$/i.test(text)) {
-      let j = i + 1;
-      while (j < lines.length && !cleanLine(lines[j])) j++;
-
-      if (j < lines.length && looksLikeCodeBlockStart(lines, j)) {
-        const code: string[] = [];
-        let k = j;
-
-        while (k < lines.length) {
-          const rawCode = lines[k];
-          const t = cleanLine(rawCode);
-
-          if (!t) {
-            if (code.length) code.push("");
-            k++;
-            if (k < lines.length && !cleanLine(lines[k])) break;
-            continue;
-          }
-
-          if (k !== j && (/^#{1,6}\s+/.test(t) || isSpecialLabel(t) || isHorizontalRule(t))) {
-            break;
-          }
-
-          if (looksLikeCode(t) || isIndented(rawCode) || /^[)}\]]/.test(t) || /^(?:else|elif|except|finally)\s*:/.test(t)) {
-            code.push(rawCode);
-            k++;
-            continue;
-          }
-
-          break;
-        }
-
-        while (code.length && !cleanLine(code[code.length - 1])) code.pop();
-
-        if (code.length) {
-          elements.push(<SectionHeading key={`python-heading-${i}`} title="Python" />);
-          elements.push(<CodeBlock key={`python-code-${i}`} lines={code} language="python" />);
-          i = k;
-          continue;
-        }
-      }
-    }
-
-    // Generic Code heading: only render it as code if the following content
-    // is actually programming syntax. Otherwise it is just a source label.
-    if (/^Code:?$/i.test(text)) {
-      let j = i + 1;
-      while (j < lines.length && !cleanLine(lines[j])) j++;
-
-      if (j < lines.length && looksLikeCodeBlockStart(lines, j)) {
-        const code: string[] = [];
-        let k = j;
-
-        while (k < lines.length) {
-          const rawCode = lines[k];
-          const t = cleanLine(rawCode);
-          if (!t) {
-            if (code.length) code.push("");
-            k++;
-            if (k < lines.length && !cleanLine(lines[k])) break;
-            continue;
-          }
-          if (k !== j && (/^#{1,6}\s+/.test(t) || isSpecialLabel(t) || isHorizontalRule(t))) break;
-          if (looksLikeCode(t) || isIndented(rawCode)) {
-            code.push(rawCode);
-            k++;
-            continue;
-          }
-          break;
-        }
-
-        while (code.length && !cleanLine(code[code.length - 1])) code.pop();
-
-        if (code.length) {
-          elements.push(
-            <SectionHeading key={`code-heading-${i}`} title="Code" />,
-          );
-          elements.push(
-            <CodeBlock key={`section-code-${i}`} lines={code} language="code" />,
-          );
-          i = k;
-          continue;
-        }
-      }
-
-      i++;
-      continue;
-    }
-
-    // Never display raw ASCII/box-drawing syntax from source content.
-    if (isDiagramSyntaxLine(text)) {
-      i++;
       continue;
     }
 

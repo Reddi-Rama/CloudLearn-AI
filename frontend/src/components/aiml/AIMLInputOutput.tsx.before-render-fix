@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React from "react";
 
@@ -97,7 +97,7 @@ function InputCard({ lines }: { lines: string[] }) {
         <div>
           <h3 className="text-2xl font-bold text-cyan-300">Input</h3>
           <p className="mt-1 text-sm text-slate-300">
-            Data provided to the system
+            Data provided to the machine learning system
           </p>
         </div>
       </div>
@@ -139,7 +139,7 @@ function ProcessCard({ lines }: { lines: string[] }) {
             Model / Process
           </h3>
           <p className="mt-1 text-sm text-slate-300">
-            How the system processes the input
+            How the model processes the input
           </p>
         </div>
       </div>
@@ -178,7 +178,7 @@ function OutputCard({ lines }: { lines: string[] }) {
         <div>
           <h3 className="text-2xl font-bold text-pink-300">Output</h3>
           <p className="mt-1 text-sm text-slate-300">
-            Result or action produced by the system
+            Prediction or result produced by the model
           </p>
         </div>
       </div>
@@ -225,4 +225,3 @@ export default function AIMLInputOutput({
     </section>
   );
 }
-

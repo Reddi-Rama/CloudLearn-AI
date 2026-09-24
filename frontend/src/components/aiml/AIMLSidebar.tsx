@@ -1,343 +1,317 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
-
-import {
-  BookOpen,
-  ChevronDown,
-  ChevronRight,
-  Dumbbell,
-  FolderKanban,
-} from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 import {
   AIML_MODULES,
 } from "@/content/aiml/aimlRegistry";
 
-interface Props {
-  moduleId: string;
-  lessonId: string;
-}
+export default function AIMLSidebar() {
+  const pathname = usePathname();
 
-export default function AIMLSidebar({
-  moduleId,
-  lessonId,
-}: Props) {
+  const moduleMatch = pathname.match(
+    /\/(module\d+)(?:\/|$)/
+  );
 
-  const [openModule, setOpenModule] =
-    useState(moduleId);
+  const currentModule =
+    moduleMatch?.[1] ?? "module1";
 
-  useEffect(() => {
-    setOpenModule(moduleId);
-  }, [moduleId]);
+  const [openModules, setOpenModules] =
+    useState<string[]>([
+      currentModule,
+    ]);
+
+  const toggleModule = (
+    moduleId: string
+  ) => {
+    setOpenModules((current) =>
+      current.includes(moduleId)
+        ? current.filter(
+            (id) => id !== moduleId
+          )
+        : [...current, moduleId]
+    );
+  };
 
   return (
-    <aside
-      className="
-        z-30
-        flex
-        h-[calc(100vh-172px)]
-        min-h-[560px]
-        w-full
-        flex-col
-        overflow-hidden
-        rounded-3xl
-        border
-        border-slate-200
-        bg-white
-        shadow-[0_12px_40px_rgba(15,23,42,0.08)]
+    <div className="w-full min-w-0">
 
-        dark:border-slate-800
-        dark:bg-[#0a1220]
-        dark:shadow-[0_18px_50px_rgba(0,0,0,0.35)]
-
-        lg:fixed
-        lg:left-4
-        lg:top-[156px]
-        lg:bottom-4
-        lg:w-[350px]
-      "
-    >
-
-      {/* =====================================================
-          HEADER
-      ===================================================== */}
+      {/* ======================================================
+          NAVIGATION CARD
+      ====================================================== */}
 
       <div
         className="
-          shrink-0
-          border-b
-          border-slate-200
-          bg-gradient-to-br
-          from-sky-50
-          via-white
-          to-white
-          px-5
-          py-5
-          dark:border-slate-800
-          dark:from-[#0d1a2d]
-          dark:via-[#0a1220]
-          dark:to-[#0a1220]
+          w-full
+          overflow-hidden
+          rounded-2xl
+          border
+          border-slate-800
+          bg-[#0b1224]
         "
       >
 
-        <p
+        {/* ====================================================
+            HEADER
+        ==================================================== */}
+
+        <div
           className="
-            text-[10px]
-            font-black
-            uppercase
-            tracking-[0.2em]
-            text-sky-500
+            border-b
+            border-slate-800
+            px-4
+            py-4
           "
         >
-          Course Navigation
-        </p>
 
-        <h2
+          <div
+            className="
+              mb-2
+              flex
+              items-center
+              gap-2
+              text-[10px]
+              font-bold
+              uppercase
+              tracking-[0.18em]
+              text-sky-400
+            "
+          >
+            <span className="h-2 w-2 rounded-full bg-emerald-400" />
+
+            Course Navigation
+          </div>
+
+          <div
+            className="
+              text-sm
+              font-bold
+              text-white
+            "
+          >
+            AI & Machine Learning
+          </div>
+
+          <div
+            className="
+              mt-1
+              text-xs
+              text-slate-500
+            "
+          >
+            Course roadmap
+          </div>
+
+        </div>
+
+        {/* ====================================================
+            NAVIGATION SCROLL
+        ==================================================== */}
+
+        <div
           className="
-            mt-2
-            text-lg
-            font-black
-            tracking-tight
-            text-slate-900
-            dark:text-white
+            max-h-[calc(100vh-10rem)]
+            overflow-y-auto
+            overscroll-contain
+            px-2
+            py-2
           "
+          style={{
+            scrollbarWidth: "thin",
+            scrollbarColor:
+              "#334155 transparent",
+          }}
         >
-          AI & Machine Learning
-        </h2>
 
-        <p
-          className="
-            mt-1
-            text-xs
-            leading-5
-            text-slate-500
-            dark:text-slate-400
-          "
-        >
-          Modules, lessons, practice & projects
-        </p>
+          {AIML_MODULES.map(
+            (
+              module: any,
+              moduleIndex: number
+            ) => {
 
-      </div>
+              const moduleId =
+                module?.id ??
+                module?.moduleId ??
+                `module${moduleIndex + 1}`;
 
-      {/* =====================================================
-          SCROLL AREA
-      ===================================================== */}
+              const isOpen =
+                openModules.includes(
+                  moduleId
+                );
 
-      <div
-        className="
-          min-h-0
-          flex-1
-          overflow-y-auto
-          px-3
-          py-3
-        "
-      >
+              const lessons =
+                module?.lessons ??
+                module?.items ??
+                module?.content ??
+                [];
 
-        <div className="space-y-2">
-
-          {AIML_MODULES.map((module) => {
-
-            const activeModule =
-              module.id === moduleId;
-
-            const expanded =
-              openModule === module.id;
-
-            return (
-              <div
-                key={module.id}
-                className="
-                  overflow-hidden
-                  rounded-2xl
-                  border
-                  border-slate-200
-                  dark:border-slate-800
-                "
-              >
-
-                {/* MODULE */}
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setOpenModule(
-                      expanded
-                        ? ""
-                        : module.id
-                    )
-                  }
-                  className={`
-                    flex
-                    w-full
-                    items-center
-                    gap-3
-                    px-3
-                    py-3
-                    text-left
-                    transition
-                    ${
-                      activeModule
-                        ? "bg-sky-50 dark:bg-sky-950/40"
-                        : "bg-white hover:bg-slate-50 dark:bg-[#0a1220] dark:hover:bg-slate-900"
-                    }
-                  `}
+              return (
+                <div
+                  key={moduleId}
+                  className="mb-2"
                 >
 
-                  <span
-                    className={`
-                      flex
-                      h-9
-                      w-9
-                      shrink-0
-                      items-center
-                      justify-center
-                      rounded-xl
-                      text-xs
-                      font-black
-                      ${
-                        activeModule
-                          ? "bg-sky-500 text-white"
-                          : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"
-                      }
-                    `}
-                  >
-                    {String(
-                      module.number
-                    ).padStart(2, "0")}
-                  </span>
+                  {/* =================================================
+                      MODULE HEADER
+                  ================================================= */}
 
-                  <span className="min-w-0 flex-1">
-
-                    <span
-                      className={`
-                        block
-                        text-[13px]
-                        font-extrabold
-                        leading-5
-                        ${
-                          activeModule
-                            ? "text-sky-600 dark:text-sky-300"
-                            : "text-slate-800 dark:text-slate-200"
-                        }
-                      `}
-                    >
-                      Module{" "}
-                      {String(
-                        module.number
-                      ).padStart(2, "0")}
-                    </span>
-
-                    <span
-                      className="
-                        block
-                        truncate
-                        text-[11px]
-                        leading-4
-                        text-slate-500
-                        dark:text-slate-400
-                      "
-                    >
-                      {module.title}
-                    </span>
-
-                    <span
-                      className="
-                        block
-                        text-[10px]
-                        font-medium
-                        text-slate-400
-                      "
-                    >
-                      {module.lessons.length} lessons
-                    </span>
-
-                  </span>
-
-                  {expanded ? (
-                    <ChevronDown
-                      size={17}
-                      className="shrink-0 text-sky-500"
-                    />
-                  ) : (
-                    <ChevronRight
-                      size={17}
-                      className="shrink-0 text-slate-400"
-                    />
-                  )}
-
-                </button>
-
-                {/* EXPANDED */}
-
-                {expanded && (
-
-                  <div
+                  <button
+                    type="button"
+                    onClick={() =>
+                      toggleModule(
+                        moduleId
+                      )
+                    }
                     className="
-                      border-t
-                      border-slate-200
-                      bg-slate-50
-                      p-2
-                      dark:border-slate-800
-                      dark:bg-[#070d17]
+                      flex
+                      w-full
+                      items-center
+                      gap-3
+                      rounded-xl
+                      border
+                      border-slate-800
+                      bg-slate-950/40
+                      p-3
+                      text-left
+                      transition
+                      hover:border-sky-500/30
+                      hover:bg-slate-900
                     "
                   >
 
-                    <Link
-                      href={`/lesson/aiml/${module.id}/about`}
-                      className={`
-                        mb-1
+                    <span
+                      className="
                         flex
+                        h-8
+                        w-8
+                        shrink-0
                         items-center
-                        gap-2.5
-                        rounded-xl
-                        px-3
-                        py-2
-                        text-[12px]
+                        justify-center
+                        rounded-lg
+                        bg-slate-800
+                        text-xs
                         font-bold
-                        transition
-                        ${
-                          activeModule &&
-                          lessonId === "about"
-                            ? "bg-sky-500 text-white"
-                            : "text-slate-600 hover:bg-white dark:text-slate-300 dark:hover:bg-slate-900"
-                        }
-                      `}
+                        text-slate-300
+                      "
                     >
-                      <BookOpen size={15} />
-                      Module Overview
-                    </Link>
+                      {String(
+                        moduleIndex + 1
+                      ).padStart(2, "0")}
+                    </span>
 
-                    {/* LESSONS */}
+                    <span className="min-w-0 flex-1">
 
-                    <div className="space-y-0.5">
+                      <span
+                        className="
+                          block
+                          text-[9px]
+                          font-bold
+                          uppercase
+                          tracking-[0.18em]
+                          text-slate-500
+                        "
+                      >
+                        Module {moduleIndex + 1}
+                      </span>
 
-                      {module.lessons.map(
-                        (lesson) => {
+                      <span
+                        className="
+                          mt-1
+                          block
+                          text-xs
+                          font-semibold
+                          leading-5
+                          text-slate-200
+                        "
+                      >
+                        {module?.title ??
+                          module?.name ??
+                          `Module ${
+                            moduleIndex + 1
+                          }`}
+                      </span>
 
-                          const active =
-                            activeModule &&
-                            lesson.id === lessonId;
+                    </span>
+
+                    <span
+                      className="
+                        flex
+                        h-6
+                        w-6
+                        shrink-0
+                        items-center
+                        justify-center
+                        rounded-lg
+                        border
+                        border-slate-700
+                        text-xs
+                        text-slate-400
+                      "
+                    >
+                      {isOpen
+                        ? "⌃"
+                        : "⌄"}
+                    </span>
+
+                  </button>
+
+                  {/* =================================================
+                      LESSONS
+                  ================================================= */}
+
+                  {isOpen && (
+
+                    <div className="mt-1 space-y-1 pl-1">
+
+                      {lessons.map(
+                        (
+                          lesson: any,
+                          lessonIndex: number
+                        ) => {
+
+                          const lessonId =
+                            lesson?.id ??
+                            lesson?.lessonId ??
+                            `lesson${
+                              lessonIndex + 1
+                            }`;
+
+                          const lessonTitle =
+                            lesson?.title ??
+                            lesson?.name ??
+                            lesson?.label ??
+                            lesson?.lessonTitle ??
+                            lesson?.heading ??
+                            `Lesson ${
+                              lessonIndex + 1
+                            }`;
+
+                          const href =
+                            `/lesson/aiml/${moduleId}/${lessonId}`;
+
+                          const isActive =
+                            pathname === href;
 
                           return (
                             <Link
-                              key={lesson.id}
-                              href={lesson.href}
+                              key={`${moduleId}-${lessonId}`}
+                              href={href}
                               className={`
                                 flex
+                                min-w-0
                                 items-center
-                                gap-2.5
-                                rounded-xl
-                                px-2.5
-                                py-1.5
-                                text-[11px]
-                                leading-4
+                                gap-2
+                                rounded-lg
+                                px-2
+                                py-2
+                                text-xs
                                 transition
                                 ${
-                                  active
-                                    ? "bg-emerald-500 font-bold text-white shadow-sm"
-                                    : "text-slate-600 hover:bg-white hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-white"
+                                  isActive
+                                    ? "bg-emerald-500 text-white"
+                                    : "text-slate-400 hover:bg-slate-900 hover:text-white"
                                 }
                               `}
                             >
@@ -350,22 +324,37 @@ export default function AIMLSidebar({
                                   shrink-0
                                   items-center
                                   justify-center
-                                  rounded-lg
-                                  text-[10px]
-                                  font-black
+                                  rounded-md
+                                  text-[9px]
+                                  font-bold
                                   ${
-                                    active
-                                      ? "bg-white/20"
-                                      : "bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                                    isActive
+                                      ? "bg-white/15 text-white"
+                                      : "bg-slate-800 text-slate-500"
                                   }
                                 `}
                               >
-                                {lesson.number}
+                                {String(
+                                  lessonIndex + 1
+                                ).padStart(2, "0")}
                               </span>
 
-                              <span className="min-w-0">
-                                {lesson.title}
+                              <span
+                                className="
+                                  min-w-0
+                                  flex-1
+                                  break-words
+                                  leading-4
+                                "
+                              >
+                                {lessonTitle}
                               </span>
+
+                              {isActive && (
+                                <span className="shrink-0">
+                                  →
+                                </span>
+                              )}
 
                             </Link>
                           );
@@ -374,95 +363,148 @@ export default function AIMLSidebar({
 
                     </div>
 
-                    {/* PRACTICE */}
+                  )}
 
-                    <Link
-                      href={`/lesson/aiml/${module.id}/practice`}
-                      className={`
-                        mt-1
-                        flex
-                        items-center
-                        gap-2.5
-                        rounded-xl
-                        px-3
-                        py-2
-                        text-[12px]
-                        font-bold
-                        transition
-                        ${
-                          activeModule &&
-                          lessonId === "practice"
-                            ? "bg-emerald-500 text-white"
-                            : "text-slate-600 hover:bg-white dark:text-slate-300 dark:hover:bg-slate-900"
-                        }
-                      `}
-                    >
-                      <Dumbbell size={15} />
-                      Practice
-                    </Link>
+                </div>
+              );
+            }
+          )}
 
-                    {/* PROJECT */}
+          {/* ====================================================
+              RESOURCES
+          ==================================================== */}
 
-                    <Link
-                      href={`/lesson/aiml/${module.id}/project`}
-                      className={`
-                        flex
-                        items-center
-                        gap-2.5
-                        rounded-xl
-                        px-3
-                        py-2
-                        text-[12px]
-                        font-bold
-                        transition
-                        ${
-                          activeModule &&
-                          lessonId === "project"
-                            ? "bg-emerald-500 text-white"
-                            : "text-slate-600 hover:bg-white dark:text-slate-300 dark:hover:bg-slate-900"
-                        }
-                      `}
-                    >
-                      <FolderKanban size={15} />
-                      Project
-                    </Link>
+          <div
+            className="
+              mt-4
+              border-t
+              border-slate-800
+              px-2
+              pb-4
+              pt-4
+            "
+          >
 
-                  </div>
-                )}
+            <div
+              className="
+                mb-3
+                text-[9px]
+                font-bold
+                uppercase
+                tracking-[0.18em]
+                text-slate-600
+              "
+            >
+              Module Resources
+            </div>
 
-              </div>
-            );
+            <Link
+              href={`/lesson/aiml/${currentModule}/about`}
+              className="
+                mb-1
+                flex
+                items-center
+                gap-3
+                rounded-lg
+                px-2
+                py-2
+                text-xs
+                text-slate-400
+                hover:bg-slate-900
+                hover:text-white
+              "
+            >
+              <span
+                className="
+                  flex
+                  h-6
+                  w-6
+                  items-center
+                  justify-center
+                  rounded-md
+                  bg-slate-800
+                  text-[10px]
+                "
+              >
+                i
+              </span>
 
-          })}
+              About This Module
+            </Link>
+
+            <Link
+              href={`/lesson/aiml/${currentModule}/practice`}
+              className="
+                mb-1
+                flex
+                items-center
+                gap-3
+                rounded-lg
+                px-2
+                py-2
+                text-xs
+                text-slate-400
+                hover:bg-slate-900
+                hover:text-white
+              "
+            >
+              <span
+                className="
+                  flex
+                  h-6
+                  w-6
+                  items-center
+                  justify-center
+                  rounded-md
+                  bg-slate-800
+                  text-[10px]
+                "
+              >
+                ✓
+              </span>
+
+              Module Practice
+            </Link>
+
+            <Link
+              href={`/lesson/aiml/${currentModule}/project`}
+              className="
+                flex
+                items-center
+                gap-3
+                rounded-lg
+                px-2
+                py-2
+                text-xs
+                text-slate-400
+                hover:bg-slate-900
+                hover:text-white
+              "
+            >
+              <span
+                className="
+                  flex
+                  h-6
+                  w-6
+                  items-center
+                  justify-center
+                  rounded-md
+                  bg-slate-800
+                  text-[10px]
+                "
+              >
+                ◆
+              </span>
+
+              Module Project
+            </Link>
+
+          </div>
 
         </div>
 
       </div>
 
-      {/* BOTTOM */}
-
-      <div
-        className="
-          shrink-0
-          border-t
-          border-slate-200
-          px-4
-          py-3
-          dark:border-slate-800
-        "
-      >
-        <p
-          className="
-            text-center
-            text-[10px]
-            font-semibold
-            text-slate-400
-          "
-        >
-          AI/ML Learning Path
-        </p>
-      </div>
-
-    </aside>
+    </div>
   );
 }
