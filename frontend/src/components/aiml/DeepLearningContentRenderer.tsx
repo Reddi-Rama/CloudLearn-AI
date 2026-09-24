@@ -1840,7 +1840,7 @@ export default function DeepLearningContentRenderer({
                   tone="emerald"
                 >
                   <ul className="space-y-3">
-                    {lesson.summary.map(
+                    {(Array.isArray(lesson.summary) ? lesson.summary : lesson.summary ? [lesson.summary] : []).map(
                       (item, index) => (
                         <li
                           key={index}
