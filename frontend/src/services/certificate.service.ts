@@ -1,4 +1,8 @@
-﻿import { API, apiGet } from "@/lib/api";
+import {
+  API,
+  apiDownload,
+  apiGet,
+} from "@/lib/api";
 
 export interface Certificate {
   id?: string;
@@ -41,6 +45,10 @@ export const certificateService = {
   async downloadCertificate(
     certificateId: string
   ): Promise<void> {
+    if (typeof window === "undefined") {
+      return;
+    }
+
     const token = localStorage.getItem(
       "cloudlearn-access-token"
     );
@@ -49,29 +57,20 @@ export const certificateService = {
       throw new Error("Please login first.");
     }
 
-    const response = await fetch(
+    const blob = await apiDownload(
       `${API.BASE_URL}${API.ENDPOINTS.CERTIFICATES}/download/${certificateId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      token
     );
 
-    if (!response.ok) {
-      throw new Error(
-        "Unable to download certificate."
-      );
-    }
+    const url =
+      window.URL.createObjectURL(blob);
 
-    const blob = await response.blob();
-
-    const url = window.URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
+    const link =
+      document.createElement("a");
 
     link.href = url;
-    link.download = `${certificateId}.pdf`;
+    link.download =
+      `${certificateId}.pdf`;
 
     document.body.appendChild(link);
 

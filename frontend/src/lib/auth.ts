@@ -3,11 +3,15 @@
     return false;
   }
 
-  const token = localStorage.getItem(
+  const accessToken = localStorage.getItem(
     "cloudlearn-access-token"
   );
 
-  return !!token;
+  const refreshToken = localStorage.getItem(
+    "cloudlearn-refresh-token"
+  );
+
+  return !!accessToken || !!refreshToken;
 }
 
 export function login(data: any) {
