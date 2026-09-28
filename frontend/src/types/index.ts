@@ -4,7 +4,6 @@ export * from "./common";
 export * from "./course";
 export * from "./domain";
 export * from "./lesson";
-export * from "./notification";
 export * from "./payment";
 export * from "./search";
 export * from "./settings";

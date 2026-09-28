@@ -9,7 +9,6 @@ import {
   ClipboardCheck,
   Award,
   Bookmark,
-  Bell,
   User,
   Settings,
   GraduationCap,
@@ -46,11 +45,7 @@ const links = [
     href: "/bookmarks",
     icon: Bookmark,
   },
-  {
-    title: "Notifications",
-    href: "/notifications",
-    icon: Bell,
-  },
+
   {
     title: "Profile",
     href: "/profile",

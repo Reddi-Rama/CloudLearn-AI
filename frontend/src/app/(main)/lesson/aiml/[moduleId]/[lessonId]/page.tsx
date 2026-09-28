@@ -92,7 +92,7 @@ export default async function AIMLLessonPage({
         <div className="mx-auto w-full max-w-[1800px]">
 
           <Link
-            href="/courses/aiml"
+            href="/courses/aiml/ai-foundations"
             className="
               inline-flex
               items-center

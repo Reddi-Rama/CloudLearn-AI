@@ -1,0 +1,416 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+
+import GenerativeAISidebar from "@/components/aiml/GenerativeAISidebar";
+import GenerativeAIContentRenderer from "@/components/aiml/GenerativeAIContentRenderer";
+
+// ============================================================
+// MODULE 1
+// ============================================================
+
+import module1Lesson1 from "@/content/aiml/generative-ai/lessons/module1/lesson1";
+import module1Lesson2 from "@/content/aiml/generative-ai/lessons/module1/lesson2";
+import module1Lesson3 from "@/content/aiml/generative-ai/lessons/module1/lesson3";
+import module1Lesson4 from "@/content/aiml/generative-ai/lessons/module1/lesson4";
+import module1Lesson5 from "@/content/aiml/generative-ai/lessons/module1/lesson5";
+import module1Lesson6 from "@/content/aiml/generative-ai/lessons/module1/lesson6";
+import module1Lesson7 from "@/content/aiml/generative-ai/lessons/module1/lesson7";
+import module1Lesson8 from "@/content/aiml/generative-ai/lessons/module1/lesson8";
+import module1Practice from "@/content/aiml/generative-ai/lessons/module1/practice";
+import module1Project from "@/content/aiml/generative-ai/lessons/module1/project";
+import module1About from "@/content/aiml/generative-ai/lessons/module1/about";
+
+// ============================================================
+// MODULE 2
+// ============================================================
+
+import module2Lesson1 from "@/content/aiml/generative-ai/lessons/module2/lesson1";
+import module2Lesson2 from "@/content/aiml/generative-ai/lessons/module2/lesson2";
+import module2Lesson3 from "@/content/aiml/generative-ai/lessons/module2/lesson3";
+import module2Lesson4 from "@/content/aiml/generative-ai/lessons/module2/lesson4";
+import module2Lesson5 from "@/content/aiml/generative-ai/lessons/module2/lesson5";
+import module2Lesson6 from "@/content/aiml/generative-ai/lessons/module2/lesson6";
+import module2Lesson7 from "@/content/aiml/generative-ai/lessons/module2/lesson7";
+import module2Lesson8 from "@/content/aiml/generative-ai/lessons/module2/lesson8";
+import module2Lesson9 from "@/content/aiml/generative-ai/lessons/module2/lesson9";
+import module2Lesson10 from "@/content/aiml/generative-ai/lessons/module2/lesson10";
+import module2Lesson11 from "@/content/aiml/generative-ai/lessons/module2/lesson11";
+import module2Lesson12 from "@/content/aiml/generative-ai/lessons/module2/lesson12";
+import module2Lesson13 from "@/content/aiml/generative-ai/lessons/module2/lesson13";
+import module2Lesson14 from "@/content/aiml/generative-ai/lessons/module2/lesson14";
+import module2Lesson15 from "@/content/aiml/generative-ai/lessons/module2/lesson15";
+import module2Practice from "@/content/aiml/generative-ai/lessons/module2/practice";
+import module2Project from "@/content/aiml/generative-ai/lessons/module2/project";
+import module2About from "@/content/aiml/generative-ai/lessons/module2/about";
+
+// ============================================================
+// TYPES
+// ============================================================
+
+type ContentItem = {
+  id: string;
+  title: string;
+  [key: string]: any;
+};
+
+type ModuleDefinition = {
+  id: string;
+  title: string;
+  lessons: ContentItem[];
+  about: ContentItem;
+  practice: ContentItem;
+  project: ContentItem;
+};
+
+// ============================================================
+// MODULE DATA
+// ============================================================
+
+const MODULES: ModuleDefinition[] = [
+  {
+    id: "module1",
+    title: "Generative AI Foundations",
+    lessons: [
+      module1Lesson1,
+      module1Lesson2,
+      module1Lesson3,
+      module1Lesson4,
+      module1Lesson5,
+      module1Lesson6,
+      module1Lesson7,
+      module1Lesson8
+    ],
+    about: module1About,
+    practice: module1Practice,
+    project: module1Project
+  },
+
+  {
+    id: "module2",
+    title: "Large Language Models",
+    lessons: [
+      module2Lesson1,
+      module2Lesson2,
+      module2Lesson3,
+      module2Lesson4,
+      module2Lesson5,
+      module2Lesson6,
+      module2Lesson7,
+      module2Lesson8,
+      module2Lesson9,
+      module2Lesson10,
+      module2Lesson11,
+      module2Lesson12,
+      module2Lesson13,
+      module2Lesson14,
+      module2Lesson15
+    ],
+    about: module2About,
+    practice: module2Practice,
+    project: module2Project
+  }
+];
+
+// ============================================================
+// SPECIAL CONTENT
+// ============================================================
+
+function getSpecialContent(
+  module: ModuleDefinition,
+  lessonId: string
+) {
+  if (lessonId === "about") {
+    return module.about;
+  }
+
+  if (lessonId === "practice") {
+    return module.practice;
+  }
+
+  if (lessonId === "project") {
+    return module.project;
+  }
+
+  return null;
+}
+
+// ============================================================
+// PAGE
+// ============================================================
+
+interface PageProps {
+  params: Promise<{
+    moduleId: string;
+    lessonId: string;
+  }>;
+}
+
+export default async function GenerativeAILessonPage({
+  params
+}: PageProps) {
+  const {
+    moduleId,
+    lessonId
+  } = await params;
+
+  const moduleIndex = MODULES.findIndex(
+    (item) => item.id === moduleId
+  );
+
+  if (moduleIndex === -1) {
+    notFound();
+  }
+
+  const module = MODULES[moduleIndex];
+
+  const specialContent = getSpecialContent(
+    module,
+    lessonId
+  );
+
+  const lesson = module.lessons.find(
+    (item) => item.id === lessonId
+  );
+
+  const content = specialContent || lesson;
+
+  if (!content) {
+    notFound();
+  }
+
+  // ==========================================================
+  // NAVIGATION
+  // ==========================================================
+
+  let previousHref: string | null = null;
+  let nextHref: string | null = null;
+
+  let previousLabel = "← Previous";
+  let nextLabel = "Next →";
+
+  // ----------------------------------------------------------
+  // ABOUT
+  // ----------------------------------------------------------
+
+  if (lessonId === "about") {
+    nextHref =
+      module.lessons.length > 0
+        ? `/lesson/aiml/generative-ai/${module.id}/${module.lessons[0].id}`
+        : `/lesson/aiml/generative-ai/${module.id}/practice`;
+
+    nextLabel = "Start Module →";
+  }
+
+  // ----------------------------------------------------------
+  // NORMAL LESSON
+  // ----------------------------------------------------------
+
+  else if (lesson) {
+    const lessonIndex = module.lessons.findIndex(
+      (item) => item.id === lesson.id
+    );
+
+    if (lessonIndex > 0) {
+      previousHref =
+        `/lesson/aiml/generative-ai/${module.id}/${module.lessons[lessonIndex - 1].id}`;
+
+      previousLabel = "← Previous Lesson";
+    } else {
+      previousHref =
+        `/lesson/aiml/generative-ai/${module.id}/about`;
+
+      previousLabel = "← Module About";
+    }
+
+    if (
+      lessonIndex <
+      module.lessons.length - 1
+    ) {
+      nextHref =
+        `/lesson/aiml/generative-ai/${module.id}/${module.lessons[lessonIndex + 1].id}`;
+
+      nextLabel = "Next Lesson →";
+    } else {
+      nextHref =
+        `/lesson/aiml/generative-ai/${module.id}/practice`;
+
+      nextLabel = "Go to Practice →";
+    }
+  }
+
+  // ----------------------------------------------------------
+  // PRACTICE
+  // ----------------------------------------------------------
+
+  else if (lessonId === "practice") {
+    const lastLesson =
+      module.lessons[
+        module.lessons.length - 1
+      ];
+
+    previousHref = lastLesson
+      ? `/lesson/aiml/generative-ai/${module.id}/${lastLesson.id}`
+      : `/lesson/aiml/generative-ai/${module.id}/about`;
+
+    previousLabel = "← Last Lesson";
+
+    nextHref =
+      `/lesson/aiml/generative-ai/${module.id}/project`;
+
+    nextLabel = "Module Project →";
+  }
+
+  // ----------------------------------------------------------
+  // PROJECT
+  // ----------------------------------------------------------
+
+  else if (lessonId === "project") {
+    previousHref =
+      `/lesson/aiml/generative-ai/${module.id}/practice`;
+
+    previousLabel = "← Practice";
+
+    const nextModule =
+      MODULES[moduleIndex + 1];
+
+    if (nextModule) {
+      nextHref =
+        `/lesson/aiml/generative-ai/${nextModule.id}/about`;
+
+      nextLabel = "Next Module →";
+    } else {
+      nextHref =
+        "/courses/aiml/generative-ai";
+
+      nextLabel = "Finish Course →";
+    }
+  }
+
+  return (
+    <main className="min-h-screen bg-[#020617] text-slate-100">
+      <div className="mx-auto max-w-[1800px] px-4 py-6 lg:px-6">
+        <div className="grid gap-6 lg:grid-cols-[300px_minmax(0,1fr)]">
+
+          {/* SIDEBAR */}
+
+          <aside className="min-w-0">
+            <GenerativeAISidebar />
+          </aside>
+
+          {/* MAIN CONTENT */}
+
+          <section className="min-w-0">
+
+            <article
+              className="
+                min-w-0
+                w-full
+                overflow-hidden
+                rounded-3xl
+                border
+                border-slate-800
+                bg-slate-900/70
+                shadow-2xl
+              "
+            >
+              <GenerativeAIContentRenderer
+                content={content}
+              />
+            </article>
+
+            {/* PREVIOUS / NEXT */}
+
+            <div
+              className="
+                mt-6
+                grid
+                grid-cols-1
+                gap-3
+                sm:grid-cols-2
+              "
+            >
+              {previousHref ? (
+                <Link
+                  href={previousHref}
+                  className="
+                    group
+                    rounded-2xl
+                    border
+                    border-slate-800
+                    bg-slate-900
+                    px-5
+                    py-4
+                    transition
+                    hover:border-cyan-500/30
+                    hover:bg-slate-800
+                  "
+                >
+                  <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-600 group-hover:text-cyan-500">
+                    Previous
+                  </div>
+
+                  <div className="mt-1 text-sm font-semibold text-slate-300 group-hover:text-white">
+                    {previousLabel}
+                  </div>
+                </Link>
+              ) : (
+                <div />
+              )}
+
+              {nextHref ? (
+                <Link
+                  href={nextHref}
+                  className="
+                    group
+                    rounded-2xl
+                    border
+                    border-cyan-500/20
+                    bg-cyan-500/5
+                    px-5
+                    py-4
+                    text-left
+                    transition
+                    hover:border-cyan-500/40
+                    hover:bg-cyan-500/10
+                    sm:text-right
+                  "
+                >
+                  <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-500">
+                    Continue
+                  </div>
+
+                  <div className="mt-1 text-sm font-semibold text-cyan-200 group-hover:text-cyan-100">
+                    {nextLabel}
+                  </div>
+                </Link>
+              ) : (
+                <div />
+              )}
+            </div>
+
+            {/* MODULE INFORMATION */}
+
+            <div className="mt-5 rounded-2xl border border-slate-800 bg-slate-950/70 px-5 py-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-600">
+                    Current Module
+                  </div>
+
+                  <div className="mt-1 text-sm font-semibold text-slate-300">
+                    Module {moduleIndex + 1} · {module.title}
+                  </div>
+                </div>
+
+                <div className="text-xs text-slate-500">
+                  {module.lessons.length} lessons
+                </div>
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </div>
+    </main>
+  );
+}

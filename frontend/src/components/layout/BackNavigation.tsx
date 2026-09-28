@@ -46,82 +46,18 @@ export default function BackNavigation() {
    * ============================================================
    */
 
-  if (pathname === "/login") {
-    return (
-      <div className="cloudlearn-back-nav cloudlearn-back-nav-auth">
-        <BackButton
-          href="/"
-          label="Back to Home"
-        />
-      </div>
-    );
-  }
-
-
   /*
    * ============================================================
-   * REGISTER
-   * ============================================================
-   */
-
-  if (
-    pathname === "/register" ||
-    pathname === "/forgot-password" ||
-    pathname === "/reset-password"
-  ) {
-    return (
-      <div className="cloudlearn-back-nav cloudlearn-back-nav-auth">
-        <BackButton
-          href="/login"
-          label="Back to Login"
-        />
-      </div>
-    );
-  }
-
-
-  /*
-   * ============================================================
-   * COMING SOON
+   * AIML LESSONS
    *
-   * It already has its own contextual button.
+   * AIML lesson pages provide their own course navigation.
+   * The global back navigation must stay out of these pages.
    * ============================================================
    */
 
-  if (pathname === "/coming-soon" || pathname === "/my-certificates") {
+  if (pathname.startsWith("/lesson/aiml/")) {
     return null;
   }
-
-
-  /*
-   * ============================================================
-   * LEARNING PATH DETAIL PAGES
-   *
-   * These already have:
-   * â† Back to Learning Paths
-   * ============================================================
-   */
-
-  if (
-    pathname.startsWith("/learning-paths/") &&
-    pathname !== "/learning-paths"
-  ) {
-    return null;
-  }
-
-
-  /*
-   * ============================================================
-   * DOMAIN DETAIL PAGES
-   *
-   * [domain]/page.tsx already has its own button.
-   * ============================================================
-   */
-
-  if (/^\/domains\/[^/]+$/.test(pathname)) {
-    return null;
-  }
-
 
   /*
    * ============================================================

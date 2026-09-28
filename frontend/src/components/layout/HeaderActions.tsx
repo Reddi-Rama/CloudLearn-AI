@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import {
   Award,
@@ -130,7 +130,6 @@ export default function HeaderActions() {
         p-2
         hover:bg-slate-100
         "
-        aria-label="Notifications"
       >
         <Bell size={22} />
 

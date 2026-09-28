@@ -11,7 +11,6 @@ import {
   ClipboardCheck,
   Award,
   Bookmark,
-  Bell,
   User,
   Settings,
   LogOut,
@@ -53,11 +52,7 @@ const menu = [
     href: "/bookmarks",
     icon: Bookmark,
   },
-  {
-    title: "Notifications",
-    href: "/notifications",
-    icon: Bell,
-  },
+
   {
     title: "Profile",
     href: "/profile",

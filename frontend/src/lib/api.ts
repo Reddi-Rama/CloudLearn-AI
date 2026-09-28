@@ -24,7 +24,6 @@ export const API = {
     CERTIFICATES: "/certificate",
 
     BOOKMARKS: "/bookmarks",
-    NOTIFICATIONS: "/notifications",
 
     PAYMENT: "/payment",
     SEARCH: "/search",

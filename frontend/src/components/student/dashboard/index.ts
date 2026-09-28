@@ -11,4 +11,3 @@ export { default as AssessmentCard } from "./AssessmentCard";
 export { default as RecommendedCourses } from "./RecommendedCourses";
 export { default as QuickActions } from "./QuickActions";
 export { default as LearningCalendar } from "./LearningCalendar";
-export { default as NotificationsPanel } from "./NotificationsPanel";

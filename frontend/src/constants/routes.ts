@@ -18,7 +18,6 @@ export const STUDENT_ROUTES = [
   "/assessments",
   "/certificates",
   "/bookmarks",
-  "/notifications",
   "/profile",
   "/settings",
   "/payment",

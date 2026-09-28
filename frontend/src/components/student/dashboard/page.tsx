@@ -11,7 +11,6 @@ import {
   UpcomingAssessments,
   RecommendedCourses,
   LearningCalendar,
-  NotificationsPanel,
   QuickActions,
 } from "./index";
 
@@ -37,7 +36,6 @@ export default function DashboardPage() {
 
         <div className="grid gap-8 lg:grid-cols-2">
           <LearningCalendar />
-          <NotificationsPanel />
         </div>
 
         <QuickActions />

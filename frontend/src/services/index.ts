@@ -4,7 +4,6 @@ export * from "./bookmark.service";
 export * from "./certificate.service";
 export * from "./course.service";
 export * from "./lesson.service";
-export * from "./notification.service";
 export * from "./payment.service";
 export * from "./profile.service";
 export * from "./search.service";

@@ -7,7 +7,6 @@ import {
   GraduationCap,
   Award,
  FileQuestion,
-  Bell,
   User,
   Settings,
   LogOut,
@@ -39,11 +38,7 @@ const menuItems = [
     icon: FileQuestion,
     href: "/exam",
   },
-  {
-    title: "Notifications",
-    icon: Bell,
-    href: "/notifications",
-  },
+
   {
     title: "Profile",
     icon: User,

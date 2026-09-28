@@ -3,7 +3,6 @@
 import Link from "next/link";
 import {
   User,
-  Bell,
   Shield,
   Moon,
   ChevronRight,
@@ -15,11 +14,7 @@ const settings = [
     icon: User,
     href: "/profile",
   },
-  {
-    title: "Notifications",
-    icon: Bell,
-    href: "/notifications",
-  },
+
   {
     title: "Privacy & Security",
     icon: Shield,

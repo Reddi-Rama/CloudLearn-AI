@@ -19,7 +19,6 @@ import {
   CertificateGrid,
   Achievements,
   ActivityTimeline,
-  NotificationPanel,
   ProfileCard,
   SettingsPanel,
 } from "@/components/dashboard";
@@ -92,7 +91,6 @@ export default function DashboardPage() {
 
               <ActivityTimeline />
 
-              <NotificationPanel />
 
               <ProfileCard />
 

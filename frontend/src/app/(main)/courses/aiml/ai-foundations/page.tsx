@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AIML_MODULES } from "@/content/aiml/aimlRegistry";
 
@@ -67,7 +67,7 @@ export default function AIFoundationsCoursePage() {
                 </p>
 
                 <Link
-                  href={`/lesson/aiml/${module.id}/about`}
+                  href={`/lesson/aiml/${module.id}/lesson1`}
                   className="mt-6 inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-sky-600 dark:bg-white dark:text-zinc-900 dark:hover:bg-sky-400"
                 >
                   Open Module
@@ -82,3 +82,5 @@ export default function AIFoundationsCoursePage() {
     </main>
   );
 }
+
+

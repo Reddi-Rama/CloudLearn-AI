@@ -5,7 +5,6 @@ export const STUDENT_NAVIGATION = [
   "Assessments",
   "Certificates",
   "Bookmarks",
-  "Notifications",
   "Profile",
   "Settings",
 ];

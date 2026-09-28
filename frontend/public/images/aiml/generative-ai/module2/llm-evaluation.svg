@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="-80 0 1760 900">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#020617"/>
+    <stop offset="55%" stop-color="#071225"/>
+    <stop offset="100%" stop-color="#0b1024"/>
+  </linearGradient>
+  <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#22d3ee"/>
+    <stop offset="100%" stop-color="#38bdf8"/>
+  </linearGradient>
+  <linearGradient id="violet" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#8b5cf6"/>
+    <stop offset="100%" stop-color="#c084fc"/>
+  </linearGradient>
+  <filter id="glow"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#22d3ee"/></marker>
+</defs>
+<rect width="1600" height="900" fill="url(#bg)"/>
+<circle cx="1450" cy="80" r="230" fill="#22d3ee" opacity=".035"/>
+<circle cx="120" cy="820" r="260" fill="#8b5cf6" opacity=".035"/>
+<text x="80" y="82" fill="#67e8f9" font-family="Inter,Arial,sans-serif" font-size="20" font-weight="700" letter-spacing="4">RELIABILITY LAYER</text>
+<text x="80" y="135" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="42" font-weight="800">LLM Failure Modes &amp; Evaluation</text>
+
+<rect x="70" y="360" width="240" height="160" rx="24" fill="#071827" stroke="#22d3ee" stroke-opacity=".45" stroke-width="2"/>
+<rect x="70" y="360" width="7" height="160" rx="4" fill="#22d3ee" opacity=".85"/>
+<text x="98" y="408" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="23" font-weight="750">Model output</text>
+<text x="98" y="442" fill="#94a3b8" font-family="Inter,Arial,sans-serif" font-size="16">Candidate answer</text>
+<rect x="380" y="220" width="240" height="120" rx="24" fill="#100c25" stroke="#8b5cf6" stroke-opacity=".45" stroke-width="2"/>
+<rect x="380" y="220" width="7" height="120" rx="4" fill="#8b5cf6" opacity=".85"/>
+<text x="408" y="268" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="23" font-weight="750">Factuality</text>
+<text x="408" y="302" fill="#94a3b8" font-family="Inter,Arial,sans-serif" font-size="16">Is it correct?</text>
+<rect x="380" y="380" width="240" height="120" rx="24" fill="#100c25" stroke="#8b5cf6" stroke-opacity=".45" stroke-width="2"/>
+<rect x="380" y="380" width="7" height="120" rx="4" fill="#8b5cf6" opacity=".85"/>
+<text x="408" y="428" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="23" font-weight="750">Relevance</text>
+<text x="408" y="462" fill="#94a3b8" font-family="Inter,Arial,sans-serif" font-size="16">Does it answer the task?</text>
+<rect x="380" y="540" width="240" height="120" rx="24" fill="#21170a" stroke="#f59e0b" stroke-opacity=".45" stroke-width="2"/>
+<rect x="380" y="540" width="7" height="120" rx="4" fill="#f59e0b" opacity=".85"/>
+<text x="408" y="588" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="23" font-weight="750">Robustness</text>
+<text x="408" y="622" fill="#94a3b8" font-family="Inter,Arial,sans-serif" font-size="16">Does it fail under variation?</text>
+<rect x="720" y="380" width="280" height="150" rx="24" fill="#21170a" stroke="#f59e0b" stroke-opacity=".45" stroke-width="2"/>
+<rect x="720" y="380" width="7" height="150" rx="4" fill="#f59e0b" opacity=".85"/>
+<text x="748" y="428" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="23" font-weight="750">Safety / alignment</text>
+<text x="748" y="462" fill="#94a3b8" font-family="Inter,Arial,sans-serif" font-size="16">Does it follow constraints?</text>
+<rect x="1080" y="380" width="420" height="150" rx="24" fill="#071f1b" stroke="#34d399" stroke-opacity=".45" stroke-width="2"/>
+<rect x="1080" y="380" width="7" height="150" rx="4" fill="#34d399" opacity=".85"/>
+<text x="1108" y="428" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="23" font-weight="750">Evaluation suite</text>
+<text x="1108" y="462" fill="#94a3b8" font-family="Inter,Arial,sans-serif" font-size="16">Benchmarks • test sets • human / automated checks</text>
+<text x="80" y="850" fill="#64748b" font-family="Inter,Arial,sans-serif" font-size="16">LLM evaluation should consider task performance, factuality, robustness, safety, and application-specific requirements.</text>
+</svg>

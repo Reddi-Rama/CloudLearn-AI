@@ -1,10 +1,9 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const protectedRoutes = [
   "/dashboard",
   "/profile",
-  "/notifications",
   "/settings",
   "/certificates",
 ];
@@ -29,7 +28,6 @@ export const config = {
   matcher: [
     "/dashboard/:path*",
     "/profile/:path*",
-    "/notifications/:path*",
     "/settings/:path*",
     "/certificates/:path*",
   ],

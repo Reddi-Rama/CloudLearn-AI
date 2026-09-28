@@ -1,0 +1,358 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+type LessonItem = {
+  id: string;
+  number: number;
+  title: string;
+};
+
+type ModuleItem = {
+  id: string;
+  number: number;
+  title: string;
+  shortTitle: string;
+  lessons: LessonItem[];
+};
+
+const modules: ModuleItem[] = [
+  {
+    id: "module1",
+    number: 1,
+    title: "Generative AI Foundations",
+    shortTitle: "GenAI Foundations",
+    lessons: [
+      { id: "lesson1", number: 1, title: "What Is Generative AI?" },
+      { id: "lesson2", number: 2, title: "Generative Models — How Machines Learn to Generate" },
+      { id: "lesson3", number: 3, title: "Generative AI Architecture & Model Families" },
+      { id: "lesson4", number: 4, title: "Generative AI Training, Data & Compute" },
+      { id: "lesson5", number: 5, title: "Generative AI Data Representation & Latent Spaces" },
+      { id: "lesson6", number: 6, title: "Generative AI Inference & Decoding" },
+      { id: "lesson7", number: 7, title: "Generative AI Evaluation, Reliability & Limitations" },
+      { id: "lesson8", number: 8, title: "Generative AI Ecosystem & Application Workflow" },
+    ],
+  },
+  {
+    id: "module2",
+    number: 2,
+    title: "Large Language Models",
+    shortTitle: "Large Language Models",
+    lessons: [
+      { id: "lesson1", number: 1, title: "What Are Large Language Models?" },
+      { id: "lesson2", number: 2, title: "Transformer Architecture & Attention" },
+      { id: "lesson3", number: 3, title: "Tokens, Vocabulary & Language Representation" },
+      { id: "lesson4", number: 4, title: "Embeddings, Positional Information & Hidden States" },
+      { id: "lesson5", number: 5, title: "Self-Attention in Depth" },
+      { id: "lesson6", number: 6, title: "Multi-Head Attention" },
+      { id: "lesson7", number: 7, title: "Transformer Feed-Forward Networks & Transformer Blocks" },
+      { id: "lesson8", number: 8, title: "Transformer Block Architecture & End-to-End Data Flow" },
+      { id: "lesson9", number: 9, title: "Transformer Encoder, Decoder & Encoder–Decoder Architectures" },
+      { id: "lesson10", number: 10, title: "Autoregressive Language Modeling & Next-Token Prediction" },
+      { id: "lesson11", number: 11, title: "Language Model Training Pipeline & Objectives" },
+      { id: "lesson12", number: 12, title: "Context Windows, Long-Context Modeling & KV Cache" },
+      { id: "lesson13", number: 13, title: "Pretraining, Fine-Tuning & Instruction Tuning" },
+      { id: "lesson14", number: 14, title: "Language Model Scaling, Parameters & Compute" },
+      { id: "lesson15", number: 15, title: "LLM Limitations, Failure Modes & Evaluation" },
+    ],
+  },
+];
+
+const utilityItems = [
+  { id: "about", label: "Module Overview", icon: "◈" },
+  { id: "practice", label: "Practice", icon: "⌁" },
+  { id: "project", label: "Project", icon: "◇" },
+];
+
+function getActiveModule(pathname: string): string {
+  const match = pathname.match(
+    /\/lesson\/aiml\/generative-ai\/(module1|module2)(?:\/|$)/
+  );
+
+  return match?.[1] ?? "module1";
+}
+
+function isCurrentLesson(
+  pathname: string,
+  moduleId: string,
+  lessonId: string
+) {
+  return pathname === `/lesson/aiml/generative-ai/${moduleId}/${lessonId}`;
+}
+
+function isCurrentUtility(
+  pathname: string,
+  moduleId: string,
+  itemId: string
+) {
+  return pathname === `/lesson/aiml/generative-ai/${moduleId}/${itemId}`;
+}
+
+export default function GenerativeAISidebar() {
+  const pathname = usePathname();
+  const activeModuleId = getActiveModule(pathname);
+
+  return (
+    <aside className="w-full min-w-0">
+      <nav
+        className="
+          overflow-hidden rounded-[24px]
+          border border-slate-800/90
+          bg-slate-950/90
+          shadow-[0_20px_70px_rgba(0,0,0,0.28)]
+          backdrop-blur-xl
+        "
+      >
+        {/* HEADER */}
+        <div className="relative overflow-hidden border-b border-slate-800/80 px-5 py-5">
+          <div className="pointer-events-none absolute -right-16 -top-16 h-36 w-36 rounded-full bg-cyan-500/10 blur-3xl" />
+          <div className="pointer-events-none absolute -left-16 bottom-0 h-28 w-28 rounded-full bg-violet-500/10 blur-3xl" />
+
+          <div className="relative">
+            <div className="flex items-center gap-3">
+              <div className="
+                flex h-10 w-10 items-center justify-center
+                rounded-xl border border-cyan-400/20
+                bg-cyan-400/10
+                text-sm font-black text-cyan-300
+                shadow-[0_0_25px_rgba(34,211,238,0.08)]
+              ">
+                AI
+              </div>
+
+              <div className="min-w-0">
+                <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-cyan-400">
+                  Generative AI
+                </div>
+                <div className="mt-1 truncate text-sm font-semibold text-white">
+                  LLM Engineering
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5 flex items-center justify-between">
+              <div>
+                <div className="text-[10px] uppercase tracking-[0.18em] text-slate-600">
+                  Learning path
+                </div>
+                <div className="mt-1 text-xs text-slate-400">
+                  Foundations → LLMs
+                </div>
+              </div>
+
+              <div className="
+                rounded-full border border-slate-800
+                bg-slate-900 px-3 py-1
+                text-[10px] font-bold text-slate-400
+              ">
+                23 LESSONS
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* MODULES */}
+        <div className="max-h-[calc(100vh-10rem)] overflow-y-auto overscroll-contain px-3 py-3 [scrollbar-width:thin]">
+          {modules.map((module) => {
+            const moduleActive = activeModuleId === module.id;
+
+            return (
+              <section key={module.id} className="mb-5 last:mb-0">
+                {/* MODULE HEADER */}
+                <div
+                  className={`
+                    mb-2 rounded-2xl border px-3.5 py-3
+                    transition-all duration-200
+                    ${
+                      moduleActive
+                        ? "border-cyan-500/20 bg-cyan-500/[0.045]"
+                        : "border-slate-800/70 bg-slate-900/40"
+                    }
+                  `}
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`
+                        flex h-8 w-8 shrink-0 items-center justify-center
+                        rounded-lg text-[10px] font-black
+                        ${
+                          moduleActive
+                            ? "bg-cyan-400 text-slate-950"
+                            : "bg-slate-800 text-slate-500"
+                        }
+                      `}
+                    >
+                      {String(module.number).padStart(2, "0")}
+                    </div>
+
+                    <div className="min-w-0">
+                      <div className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-600">
+                        Module {module.number}
+                      </div>
+                      <div
+                        className={`
+                          mt-0.5 truncate text-xs font-bold
+                          ${
+                            moduleActive
+                              ? "text-slate-100"
+                              : "text-slate-400"
+                          }
+                        `}
+                      >
+                        {module.shortTitle}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-3 h-1 overflow-hidden rounded-full bg-slate-800">
+                    <div
+                      className={`
+                        h-full rounded-full transition-all duration-500
+                        ${
+                          moduleActive
+                            ? "w-full bg-gradient-to-r from-cyan-400 to-violet-400"
+                            : "w-0"
+                        }
+                      `}
+                    />
+                  </div>
+                </div>
+
+                {/* LESSONS */}
+                <div className="space-y-1">
+                  {module.lessons.map((lesson) => {
+                    const active = isCurrentLesson(
+                      pathname,
+                      module.id,
+                      lesson.id
+                    );
+
+                    return (
+                      <Link
+                        key={`${module.id}-${lesson.id}`}
+                        href={`/lesson/aiml/generative-ai/${module.id}/${lesson.id}`}
+                        className={`
+                          group relative flex items-start gap-3
+                          rounded-xl border px-3 py-2.5
+                          transition-all duration-200
+                          ${
+                            active
+                              ? "border-cyan-400/20 bg-cyan-400/[0.07] shadow-[inset_3px_0_0_rgba(34,211,238,0.9)]"
+                              : "border-transparent hover:border-slate-800 hover:bg-slate-900/80"
+                          }
+                        `}
+                      >
+                        <span
+                          className={`
+                            mt-0.5 flex h-6 w-6 shrink-0 items-center
+                            justify-center rounded-md text-[9px] font-black
+                            transition-all
+                            ${
+                              active
+                                ? "bg-cyan-400 text-slate-950 shadow-[0_0_18px_rgba(34,211,238,0.18)]"
+                                : "bg-slate-900 text-slate-600 group-hover:bg-slate-800 group-hover:text-slate-300"
+                            }
+                          `}
+                        >
+                          {String(lesson.number).padStart(2, "0")}
+                        </span>
+
+                        <span
+                          className={`
+                            min-w-0 pt-0.5 text-[11px] leading-5
+                            transition-colors
+                            ${
+                              active
+                                ? "font-semibold text-cyan-200"
+                                : "text-slate-500 group-hover:text-slate-200"
+                            }
+                          `}
+                        >
+                          {lesson.title}
+                        </span>
+
+                        {active && (
+                          <span className="
+                            ml-auto mt-2 h-1.5 w-1.5 shrink-0
+                            rounded-full bg-cyan-300
+                            shadow-[0_0_10px_rgba(103,232,249,0.8)]
+                          " />
+                        )}
+                      </Link>
+                    );
+                  })}
+                </div>
+
+                {/* MODULE RESOURCES */}
+                <div className="mt-3 border-t border-slate-800/70 pt-2">
+                  {utilityItems.map((item) => {
+                    const active = isCurrentUtility(
+                      pathname,
+                      module.id,
+                      item.id
+                    );
+
+                    return (
+                      <Link
+                        key={`${module.id}-${item.id}`}
+                        href={`/lesson/aiml/generative-ai/${module.id}/${item.id}`}
+                        className={`
+                          group flex items-center gap-3 rounded-xl px-3 py-2
+                          text-[11px] transition-all duration-200
+                          ${
+                            active
+                              ? "bg-slate-900 text-cyan-300"
+                              : "text-slate-600 hover:bg-slate-900/70 hover:text-slate-300"
+                          }
+                        `}
+                      >
+                        <span
+                          className={`
+                            flex h-6 w-6 items-center justify-center
+                            rounded-md border text-[10px]
+                            ${
+                              active
+                                ? "border-cyan-500/20 bg-cyan-500/10 text-cyan-300"
+                                : "border-slate-800 bg-slate-950 text-slate-600 group-hover:text-slate-400"
+                            }
+                          `}
+                        >
+                          {item.icon}
+                        </span>
+
+                        <span>{item.label}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </section>
+            );
+          })}
+
+          {/* COURSE RETURN */}
+          <div className="mt-5 border-t border-slate-800/80 pt-4">
+            <Link
+              href="/courses/aiml/generative-ai"
+              className="
+                group flex items-center justify-between
+                rounded-xl border border-slate-800
+                bg-slate-900/60 px-4 py-3
+                text-xs font-semibold text-slate-400
+                transition-all duration-200
+                hover:border-cyan-500/20
+                hover:bg-cyan-500/[0.04]
+                hover:text-cyan-300
+              "
+            >
+              <span>Back to Generative AI</span>
+              <span className="transition-transform duration-200 group-hover:-translate-x-1">
+                ←
+              </span>
+            </Link>
+          </div>
+        </div>
+      </nav>
+    </aside>
+  );
+}

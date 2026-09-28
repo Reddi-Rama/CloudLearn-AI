@@ -47,20 +47,6 @@ export default function DashboardNavbar() {
 
         </div>
 
-        {/* Notification */}
-
-        <Link
-          href="/notifications"
-          className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 transition hover:bg-blue-100"
-        >
-
-          <Bell
-            size={22}
-            className="text-slate-700"
-          />
-
-        </Link>
-
         {/* Settings */}
 
         <Link

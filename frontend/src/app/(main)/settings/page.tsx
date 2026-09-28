@@ -1,7 +1,6 @@
 import {
   SettingsHeader,
   AccountSettings,
-  NotificationSettings,
   SecuritySettings,
   AppearanceSettings,
   PrivacySettings,
@@ -16,7 +15,6 @@ export default function SettingsPage() {
 
       <AccountSettings />
 
-      <NotificationSettings />
 
       <SecuritySettings />
 

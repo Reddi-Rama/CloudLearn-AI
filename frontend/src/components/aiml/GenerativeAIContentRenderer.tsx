@@ -1,850 +1,209 @@
-﻿"use client";
-
-import React from "react";
+"use client";
+import GenerativeAIVisualGallery from "./GenerativeAIVisualGallery";
+import { generativeAIVisualMap } from "@/content/aiml/generative-ai/generativeAIVisualMap";
+import React, { useState } from "react";
 
 type AnyObject = Record<string, any>;
 
-function asArray(value: any): any[] {
-  if (Array.isArray(value)) return value;
-  if (value === undefined || value === null || value === "") {
+function asArray<T = any>(
+  value: T | T[] | null | undefined | ""
+): T[] {
+  if (
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
     return [];
   }
-  return [value];
+
+  return Array.isArray(value) ? value : [value];
 }
 
-function text(value: any): string {
-  if (value === undefined || value === null) {
+function clean(value: any): string {
+  if (
+    value === null ||
+    value === undefined
+  ) {
     return "";
   }
 
   if (typeof value === "string") {
-    return value;
+    return value.trim();
   }
 
-  if (typeof value === "number" || typeof value === "boolean") {
+  if (
+    typeof value === "number" ||
+    typeof value === "boolean"
+  ) {
+    return String(value).trim();
+  }
+
+  try {
+    return JSON.stringify(value);
+  } catch {
     return String(value);
   }
-
-  return JSON.stringify(value);
 }
 
-function clean(value: any): string {
-  return text(value).trim();
-}
+function firstText(...values: any[]): string {
+  for (const value of values) {
+    const result = clean(value);
 
-function SectionHeading({
-  children,
-  level = 2
-}: {
-  children: React.ReactNode;
-  level?: 2 | 3;
-}) {
-  if (level === 3) {
-    return (
-      <h3 className="mt-8 mb-4 text-lg font-bold tracking-tight text-white">
-        {children}
-      </h3>
-    );
+    if (result) {
+      return result;
+    }
   }
 
-  return (
-    <h2 className="mb-5 text-xl font-bold tracking-tight text-white sm:text-2xl">
-      {children}
-    </h2>
-  );
+  return "";
 }
 
+function cx(
+  ...classes: Array<
+    string | false | null | undefined
+  >
+) {
+  return classes.filter(Boolean).join(" ");
+}
+
+/* -------------------------------------------------------------------------- */
+/* TEXT                                                                        */
+/* -------------------------------------------------------------------------- */
+
 function Paragraphs({
-  value
+  value,
 }: {
   value: any;
 }) {
-  const items = asArray(value);
+  const items = asArray(value).flatMap(
+    (item) => {
+      if (typeof item === "string") {
+        return [item];
+      }
 
-  if (!items.length) return null;
+      if (
+        item &&
+        typeof item === "object"
+      ) {
+        const text = firstText(
+          item.content,
+          item.text,
+          item.description,
+          item.explanation,
+          item.value
+        );
+
+        return text ? [text] : [];
+      }
+
+      const text = clean(item);
+
+      return text ? [text] : [];
+    }
+  );
+
+  if (!items.length) {
+    return null;
+  }
 
   return (
     <div className="space-y-4">
-      {items.map((item, index) => {
-        const value = clean(item);
-
-        if (!value) return null;
-
-        return (
-          <p
-            key={index}
-            className="
-              text-sm
-              leading-7
-              text-slate-300
-              sm:text-[15px]
-            "
-          >
-            {value}
-          </p>
-        );
-      })}
+      {items.map((item, index) => (
+        <p
+          key={index}
+          className="text-[15px] leading-8 text-slate-300 sm:text-base"
+        >
+          {item}
+        </p>
+      ))}
     </div>
   );
 }
 
 function BulletList({
   items,
-  ordered = false
 }: {
   items: any;
-  ordered?: boolean;
 }) {
-  const values = asArray(items).filter(
-    (item) => clean(item)
-  );
+  const values = asArray(items);
 
-  if (!values.length) return null;
-
-  const Tag = ordered ? "ol" : "ul";
-
-  return (
-    <Tag
-      className={`
-        space-y-3
-        ${ordered ? "list-decimal pl-6" : ""}
-      `}
-    >
-      {values.map((item, index) => (
-        <li
-          key={index}
-          className={`
-            text-sm
-            leading-7
-            text-slate-300
-            ${ordered ? "" : "flex items-start gap-3"}
-          `}
-        >
-          {!ordered && (
-            <span
-              className="
-                mt-3
-                h-1.5
-                w-1.5
-                shrink-0
-                rounded-full
-                bg-cyan-400
-              "
-            />
-          )}
-
-          <span>{clean(item)}</span>
-        </li>
-      ))}
-    </Tag>
-  );
-}
-
-function CodeBlock({
-  code,
-  language
-}: {
-  code: string;
-  language?: string;
-}) {
-  return (
-    <div className="my-6 overflow-hidden rounded-2xl border border-slate-800 bg-[#020617] shadow-lg">
-      <div className="flex items-center justify-between border-b border-slate-800 bg-slate-900/80 px-4 py-2">
-        <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
-          {language || "code"}
-        </span>
-
-        <span className="flex gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-full bg-slate-700" />
-          <span className="h-2.5 w-2.5 rounded-full bg-slate-700" />
-          <span className="h-2.5 w-2.5 rounded-full bg-slate-700" />
-        </span>
-      </div>
-
-      <pre className="overflow-x-auto p-5 text-[12px] leading-6 text-slate-300">
-        <code>{code}</code>
-      </pre>
-    </div>
-  );
-}
-
-function FormulaCard({
-  formula
-}: {
-  formula: any;
-}) {
-  const value = clean(formula);
-
-  if (!value) return null;
-
-  return (
-    <div className="my-6 overflow-hidden rounded-2xl border border-violet-500/20 bg-violet-500/5">
-      <div className="border-b border-violet-500/10 px-5 py-3">
-        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-violet-300">
-          Mathematical Formula
-        </span>
-      </div>
-
-      <div className="overflow-x-auto px-5 py-6">
-        <code className="whitespace-pre-wrap break-words font-mono text-sm leading-7 text-violet-100 sm:text-base">
-          {value}
-        </code>
-      </div>
-    </div>
-  );
-}
-
-function KeyTakeaway({
-  value,
-  index
-}: {
-  value: any;
-  index: number;
-}) {
-  return (
-    <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-5">
-      <div className="flex gap-4">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-400 text-xs font-black text-slate-950">
-          {String(index + 1).padStart(2, "0")}
-        </div>
-
-        <p className="text-sm leading-7 text-slate-200">
-          {clean(value)}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-function ComparisonTable({
-  table
-}: {
-  table: AnyObject;
-}) {
-  const headers = asArray(table?.headers);
-  const rows = asArray(table?.rows);
-
-  if (!headers.length && !rows.length) {
+  if (!values.length) {
     return null;
   }
 
   return (
-    <div className="my-7 overflow-hidden rounded-2xl border border-slate-800">
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[600px] border-collapse">
-          {headers.length > 0 && (
-            <thead>
-              <tr className="bg-slate-800/80">
-                {headers.map((header, index) => (
-                  <th
-                    key={index}
-                    className="
-                      border-b
-                      border-slate-700
-                      px-4
-                      py-3
-                      text-left
-                      text-xs
-                      font-bold
-                      uppercase
-                      tracking-wider
-                      text-slate-200
-                    "
-                  >
-                    {clean(header)}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-          )}
-
-          <tbody>
-            {rows.map((row, rowIndex) => {
-              const cells = Array.isArray(row)
-                ? row
-                : asArray(row);
-
-              return (
-                <tr
-                  key={rowIndex}
-                  className="border-b border-slate-800/70 last:border-0"
-                >
-                  {cells.map((cell, cellIndex) => (
-                    <td
-                      key={cellIndex}
-                      className="
-                        px-4
-                        py-3
-                        text-sm
-                        leading-6
-                        text-slate-300
-                      "
-                    >
-                      {clean(cell)}
-                    </td>
-                  ))}
-                </tr>
+    <ul className="space-y-3">
+      {values.map((item, index) => {
+        const value =
+          typeof item === "string"
+            ? item
+            : firstText(
+                item?.content,
+                item?.text,
+                item?.description,
+                item?.title,
+                item?.name
               );
-            })}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
 
-function ProcessFlow({
-  items
-}: {
-  items: any;
-}) {
-  const values = asArray(items).filter(
-    (item) => clean(item)
-  );
-
-  if (!values.length) return null;
-
-  return (
-    <div className="my-7 rounded-2xl border border-cyan-500/20 bg-slate-950/70 p-5 sm:p-6">
-      <div className="mb-5 text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-400">
-        Process Flow
-      </div>
-
-      <div className="space-y-3">
-        {values.map((item, index) => (
-          <React.Fragment key={index}>
-            <div
-              className="
-                rounded-xl
-                border
-                border-slate-800
-                bg-slate-900
-                px-4
-                py-3
-                text-sm
-                font-medium
-                leading-6
-                text-slate-200
-              "
-            >
-              {clean(item)}
-            </div>
-
-            {index < values.length - 1 && (
-              <div className="flex justify-center text-cyan-500">
-                ↓
-              </div>
-            )}
-          </React.Fragment>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function ClassificationTree({
-  tree
-}: {
-  tree: any;
-}) {
-  if (!tree) return null;
-
-  if (typeof tree === "string") {
-    return (
-      <div className="rounded-xl border border-slate-800 bg-slate-900 p-4 text-sm text-slate-300">
-        {tree}
-      </div>
-    );
-  }
-
-  const renderNode = (
-    node: any,
-    depth = 0
-  ): React.ReactNode => {
-    if (!node) return null;
-
-    if (typeof node === "string") {
-      return (
-        <div
-          className="rounded-xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm text-slate-300"
-          style={{
-            marginLeft: `${Math.min(depth, 5) * 18}px`
-          }}
-        >
-          {node}
-        </div>
-      );
-    }
-
-    const title =
-      node.title ||
-      node.name ||
-      node.label ||
-      node.heading ||
-      "";
-
-    const children =
-      node.children ||
-      node.items ||
-      node.branches ||
-      [];
-
-    return (
-      <div
-        className="space-y-3"
-        style={{
-          marginLeft: `${Math.min(depth, 5) * 18}px`
-        }}
-      >
-        {title && (
-          <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/5 px-4 py-3 text-sm font-semibold text-cyan-200">
-            {clean(title)}
-          </div>
-        )}
-
-        {asArray(children).map(
-          (child, index) => (
-            <React.Fragment key={index}>
-              {renderNode(child, depth + 1)}
-            </React.Fragment>
-          )
-        )}
-      </div>
-    );
-  };
-
-  return (
-    <div className="my-7 rounded-2xl border border-slate-800 bg-slate-950/70 p-5 sm:p-6">
-      <div className="mb-5 text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-400">
-        Classification
-      </div>
-
-      {renderNode(tree)}
-    </div>
-  );
-}
-
-function InputOutput({
-  item
-}: {
-  item: AnyObject;
-}) {
-  if (!item) return null;
-
-  const input =
-    item.input ??
-    item.inputExample ??
-    item.exampleInput;
-
-  const output =
-    item.output ??
-    item.outputExample ??
-    item.exampleOutput;
-
-  if (input === undefined && output === undefined) {
-    return null;
-  }
-
-  return (
-    <div className="my-7 grid gap-4 md:grid-cols-2">
-      {input !== undefined && (
-        <div className="overflow-hidden rounded-2xl border border-blue-500/20 bg-blue-500/5">
-          <div className="border-b border-blue-500/10 px-4 py-3 text-[10px] font-bold uppercase tracking-[0.18em] text-blue-300">
-            Input
-          </div>
-
-          <pre className="overflow-x-auto p-5 text-sm leading-6 text-slate-300">
-            {clean(input)}
-          </pre>
-        </div>
-      )}
-
-      {output !== undefined && (
-        <div className="overflow-hidden rounded-2xl border border-emerald-500/20 bg-emerald-500/5">
-          <div className="border-b border-emerald-500/10 px-4 py-3 text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-300">
-            Output
-          </div>
-
-          <pre className="overflow-x-auto p-5 text-sm leading-6 text-slate-300">
-            {clean(output)}
-          </pre>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function ReferenceLinks({
-  references
-}: {
-  references: any;
-}) {
-  const values = asArray(references);
-
-  if (!values.length) return null;
-
-  return (
-    <div className="my-8 rounded-2xl border border-slate-800 bg-slate-950/70 p-5 sm:p-6">
-      <div className="mb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
-        Visuals & References
-      </div>
-
-      <div className="space-y-3">
-        {values.map((reference, index) => {
-          if (typeof reference === "string") {
-            return (
-              <a
-                key={index}
-                href={reference}
-                target="_blank"
-                rel="noreferrer"
-                className="block rounded-xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm text-cyan-300 transition hover:border-cyan-500/30 hover:bg-slate-800"
-              >
-                {reference}
-              </a>
-            );
-          }
-
-          const href =
-            reference.url ||
-            reference.href ||
-            reference.link;
-
-          const title =
-            reference.title ||
-            reference.name ||
-            href ||
-            `Reference ${index + 1}`;
-
-          if (!href) {
-            return (
-              <div
-                key={index}
-                className="rounded-xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm text-slate-300"
-              >
-                {clean(title)}
-              </div>
-            );
-          }
-
-          return (
-            <a
-              key={index}
-              href={href}
-              target="_blank"
-              rel="noreferrer"
-              className="block rounded-xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm text-cyan-300 transition hover:border-cyan-500/30 hover:bg-slate-800"
-            >
-              {clean(title)}
-            </a>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function SectionRenderer({
-  section,
-  index
-}: {
-  section: AnyObject;
-  index: number;
-}) {
-  if (!section) return null;
-
-  const heading =
-    section.heading ||
-    section.title ||
-    section.name;
-
-  return (
-    <section
-      id={`section-${index + 1}`}
-      className="
-        scroll-mt-24
-        border-b
-        border-slate-800/70
-        pb-10
-        last:border-0
-      "
-    >
-      {heading && (
-        <SectionHeading>
-          {clean(heading)}
-        </SectionHeading>
-      )}
-
-      {section.subtitle && (
-        <p className="mb-5 text-sm font-medium text-cyan-300">
-          {clean(section.subtitle)}
-        </p>
-      )}
-
-      <Paragraphs value={section.content} />
-
-      {section.process && (
-        <ProcessFlow items={section.process} />
-      )}
-
-      {section.processFlow && (
-        <ProcessFlow
-          items={section.processFlow}
-        />
-      )}
-
-      {section.classificationTree && (
-        <ClassificationTree
-          tree={section.classificationTree}
-        />
-      )}
-
-      {section.formula && (
-        <FormulaCard
-          formula={section.formula}
-        />
-      )}
-
-      {section.formulas && (
-        <div className="space-y-4">
-          {asArray(section.formulas).map(
-            (formula, index) => (
-              <FormulaCard
-                key={index}
-                formula={
-                  typeof formula === "string"
-                    ? formula
-                    : formula.formula ||
-                      formula.expression ||
-                      formula
-                }
-              />
-            )
-          )}
-        </div>
-      )}
-
-      {section.table && (
-        <ComparisonTable
-          table={section.table}
-        />
-      )}
-
-      {section.comparisonTable && (
-        <ComparisonTable
-          table={section.comparisonTable}
-        />
-      )}
-
-      {section.comparisonTables && (
-        <div className="space-y-6">
-          {asArray(
-            section.comparisonTables
-          ).map((table, index) => (
-            <ComparisonTable
-              key={index}
-              table={table}
-            />
-          ))}
-        </div>
-      )}
-
-      {section.inputOutput && (
-        <InputOutput
-          item={section.inputOutput}
-        />
-      )}
-
-      {section.examples && (
-        <div className="mt-7 space-y-4">
-          <SectionHeading level={3}>
-            Examples
-          </SectionHeading>
-
-          {asArray(section.examples).map(
-            (example, index) => {
-              if (
-                typeof example === "string"
-              ) {
-                return (
-                  <div
-                    key={index}
-                    className="rounded-xl border border-slate-800 bg-slate-950/70 p-4 text-sm leading-7 text-slate-300"
-                  >
-                    {example}
-                  </div>
-                );
-              }
-
-              return (
-                <div
-                  key={index}
-                  className="rounded-xl border border-slate-800 bg-slate-950/70 p-5"
-                >
-                  {example.title && (
-                    <h4 className="mb-2 font-semibold text-white">
-                      {clean(example.title)}
-                    </h4>
-                  )}
-
-                  <Paragraphs
-                    value={
-                      example.content ||
-                      example.description ||
-                      example.explanation
-                    }
-                  />
-
-                  {example.code && (
-                    <CodeBlock
-                      code={clean(
-                        example.code
-                      )}
-                      language={
-                        example.language ||
-                        "text"
-                      }
-                    />
-                  )}
-                </div>
-              );
-            }
-          )}
-        </div>
-      )}
-
-      {section.code && (
-        <CodeBlock
-          code={clean(section.code)}
-          language={
-            section.language ||
-            "text"
-          }
-        />
-      )}
-
-      {section.contentAfterProcess && (
-        <div className="mt-6">
-          <Paragraphs
-            value={
-              section.contentAfterProcess
-            }
-          />
-        </div>
-      )}
-
-      {section.contentAfterFormula && (
-        <div className="mt-6">
-          <Paragraphs
-            value={
-              section.contentAfterFormula
-            }
-          />
-        </div>
-      )}
-
-      {section.points && (
-        <div className="mt-6">
-          <BulletList
-            items={section.points}
-          />
-        </div>
-      )}
-
-      {section.keyPoints && (
-        <div className="mt-6">
-          <BulletList
-            items={section.keyPoints}
-          />
-        </div>
-      )}
-    </section>
-  );
-}
-
-function LearningObjectives({
-  objectives
-}: {
-  objectives: any;
-}) {
-  const values = asArray(objectives);
-
-  if (!values.length) return null;
-
-  return (
-    <div className="mb-10 rounded-3xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/10 via-slate-950 to-slate-950 p-6 sm:p-8">
-      <div className="mb-5 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400 text-slate-950">
-          ✓
-        </div>
-
-        <div>
-          <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-400">
-            Learning Path
-          </div>
-
-          <h2 className="mt-1 text-lg font-bold text-white">
-            What you will learn
-          </h2>
-        </div>
-      </div>
-
-      <BulletList items={values} />
-    </div>
-  );
-}
-
-function CodeExamples({
-  examples
-}: {
-  examples: any;
-}) {
-  const values = asArray(examples);
-
-  if (!values.length) return null;
-
-  return (
-    <div className="space-y-7">
-      {values.map((example, index) => {
-        if (
-          typeof example === "string"
-        ) {
-          return (
-            <CodeBlock
-              key={index}
-              code={example}
-              language="python"
-            />
-          );
+        if (!value) {
+          return null;
         }
 
         return (
-          <div key={index}>
-            {example.title && (
-              <SectionHeading level={3}>
-                {clean(example.title)}
-              </SectionHeading>
-            )}
+          <li
+            key={index}
+            className="flex gap-3 text-sm leading-7 text-slate-300"
+          >
+            <span className="mt-[11px] h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-400" />
 
-            {example.description && (
-              <Paragraphs
-                value={
-                  example.description
-                }
-              />
-            )}
+            <span>{value}</span>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
 
-            <CodeBlock
-              code={clean(
-                example.code ||
-                example.content ||
-                example.example
-              )}
-              language={
-                example.language ||
-                "python"
-              }
-            />
+function OrderedList({
+  items,
+}: {
+  items: any;
+}) {
+  const values = asArray(items);
+
+  if (!values.length) {
+    return null;
+  }
+
+  return (
+    <div className="space-y-3">
+      {values.map((item, index) => {
+        const value =
+          typeof item === "string"
+            ? item
+            : firstText(
+                item?.content,
+                item?.text,
+                item?.description,
+                item?.title,
+                item?.name
+              );
+
+        if (!value) {
+          return null;
+        }
+
+        return (
+          <div
+            key={index}
+            className="flex gap-4"
+          >
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-cyan-500/20 bg-cyan-500/10 text-xs font-bold text-cyan-300">
+              {index + 1}
+            </div>
+
+            <p className="text-sm leading-7 text-slate-300">
+              {value}
+            </p>
           </div>
         );
       })}
@@ -852,198 +211,71 @@ function CodeExamples({
   );
 }
 
-function Exercises({
-  items,
-  title
-}: {
-  items: any;
-  title: string;
-}) {
-  const values = asArray(items);
+/* -------------------------------------------------------------------------- */
+/* SECTION TITLE                                                               */
+/* -------------------------------------------------------------------------- */
 
-  if (!values.length) return null;
+function SectionTitle({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow?: string;
+  title?: string;
+  description?: any;
+}) {
+  const cleanTitle = clean(title);
+  const cleanEyebrow = clean(eyebrow);
 
   return (
-    <div className="rounded-3xl border border-amber-500/20 bg-amber-500/5 p-6 sm:p-8">
-      <div className="mb-6">
-        <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400">
-          Practice
+    <div className="mb-7">
+      {cleanEyebrow && (
+        <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] text-cyan-400">
+          {cleanEyebrow}
         </div>
+      )}
 
-        <h2 className="mt-1 text-xl font-bold text-white">
-          {title}
+      {cleanTitle && (
+        <h2 className="text-2xl font-black tracking-tight text-white sm:text-3xl">
+          {cleanTitle}
         </h2>
-      </div>
+      )}
 
-      <div className="space-y-4">
-        {values.map((item, index) => {
-          if (
-            typeof item === "string"
-          ) {
-            return (
-              <div
-                key={index}
-                className="flex gap-4 rounded-xl border border-slate-800 bg-slate-950/70 p-4"
-              >
-                <span className="font-mono text-xs font-bold text-amber-400">
-                  {String(index + 1).padStart(
-                    2,
-                    "0"
-                  )}
-                </span>
-
-                <p className="text-sm leading-7 text-slate-300">
-                  {item}
-                </p>
-              </div>
-            );
-          }
-
-          return (
-            <div
-              key={index}
-              className="rounded-xl border border-slate-800 bg-slate-950/70 p-5"
-            >
-              <div className="flex gap-4">
-                <span className="font-mono text-xs font-bold text-amber-400">
-                  {String(index + 1).padStart(
-                    2,
-                    "0"
-                  )}
-                </span>
-
-                <div className="min-w-0 flex-1">
-                  {item.title && (
-                    <h3 className="font-semibold text-white">
-                      {clean(item.title)}
-                    </h3>
-                  )}
-
-                  <Paragraphs
-                    value={
-                      item.question ||
-                      item.problem ||
-                      item.description ||
-                      item.content
-                    }
-                  />
-
-                  {item.code && (
-                    <CodeBlock
-                      code={clean(
-                        item.code
-                      )}
-                      language={
-                        item.language ||
-                        "python"
-                      }
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      {description && (
+        <div className="mt-3 max-w-4xl">
+          <Paragraphs
+            value={description}
+          />
+        </div>
+      )}
     </div>
   );
 }
 
-function Summary({
-  items
-}: {
-  items: any;
-}) {
-  const values = asArray(items);
-
-  if (!values.length) return null;
-
-  return (
-    <div className="rounded-3xl border border-emerald-500/20 bg-emerald-500/5 p-6 sm:p-8">
-      <div className="mb-6">
-        <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400">
-          Lesson Complete
-        </div>
-
-        <h2 className="mt-1 text-xl font-bold text-white">
-          Summary
-        </h2>
-      </div>
-
-      <BulletList items={values} />
-    </div>
-  );
-}
-
-function InterviewQuestions({
-  items
-}: {
-  items: any;
-}) {
-  const values = asArray(items);
-
-  if (!values.length) return null;
-
-  return (
-    <div className="rounded-3xl border border-violet-500/20 bg-violet-500/5 p-6 sm:p-8">
-      <div className="mb-6">
-        <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-violet-300">
-          Interview Preparation
-        </div>
-
-        <h2 className="mt-1 text-xl font-bold text-white">
-          Questions to master
-        </h2>
-      </div>
-
-      <div className="space-y-3">
-        {values.map((question, index) => (
-          <div
-            key={index}
-            className="rounded-xl border border-slate-800 bg-slate-950/60 p-4"
-          >
-            <div className="flex gap-4">
-              <span className="font-mono text-xs font-bold text-violet-300">
-                Q{index + 1}
-              </span>
-
-              <p className="text-sm leading-7 text-slate-300">
-                {clean(
-                  typeof question ===
-                    "string"
-                    ? question
-                    : question.question ||
-                        question.title ||
-                        question.content
-                )}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+/* -------------------------------------------------------------------------- */
+/* HERO                                                                        */
+/* -------------------------------------------------------------------------- */
 
 function Hero({
-  lesson
+  lesson,
 }: {
   lesson: AnyObject;
 }) {
-  const title =
-    lesson.title ||
-    "Generative AI";
+  const title = firstText(
+    lesson.title,
+    "Generative AI"
+  );
 
-  const subtitle =
-    lesson.subtitle ||
-    lesson.description ||
-    "";
+  const subtitle = firstText(
+    lesson.subtitle,
+    lesson.description
+  );
 
   return (
-    <header className="relative overflow-hidden border-b border-slate-800 bg-gradient-to-br from-cyan-500/10 via-slate-950 to-violet-500/5 px-6 py-10 sm:px-10 sm:py-12 lg:px-12">
-      <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-cyan-400/5 blur-3xl" />
+    <header className="relative overflow-hidden border-b border-slate-800 bg-gradient-to-br from-cyan-500/[0.07] via-slate-950 to-violet-500/[0.06] px-6 py-9 sm:px-10 sm:py-11 lg:px-12">
+      <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-cyan-500/[0.07] blur-3xl" />
 
-      <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-violet-500/5 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-28 -left-24 h-72 w-72 rounded-full bg-violet-500/[0.06] blur-3xl" />
 
       <div className="relative">
         <div className="mb-5 flex flex-wrap items-center gap-2">
@@ -1065,38 +297,2138 @@ function Hero({
         </div>
 
         <h1 className="max-w-5xl text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl">
-          {clean(title)}
+          {title}
         </h1>
 
         {subtitle && (
-          <p className="mt-5 max-w-4xl text-sm leading-7 text-slate-400 sm:text-base">
-            {clean(subtitle)}
-          </p>
+          <div className="mt-5 max-w-4xl">
+            <Paragraphs
+              value={subtitle}
+            />
+          </div>
         )}
       </div>
     </header>
   );
 }
 
+/* -------------------------------------------------------------------------- */
+/* OBJECTIVES                                                                  */
+/* -------------------------------------------------------------------------- */
+
+function LearningObjectives({
+  objectives,
+}: {
+  objectives: any;
+}) {
+  const values = asArray(objectives);
+
+  if (!values.length) {
+    return null;
+  }
+
+  return (
+    <section className="rounded-3xl border border-cyan-500/15 bg-cyan-500/[0.025] p-6 sm:p-8">
+      <SectionTitle
+        eyebrow="Learning"
+        title="What You Will Learn"
+      />
+
+      <div className="grid gap-3 md:grid-cols-2">
+        {values.map((item, index) => {
+          const value =
+            typeof item === "string"
+              ? item
+              : firstText(
+                  item?.content,
+                  item?.text,
+                  item?.description,
+                  item?.title
+                );
+
+          return (
+            <div
+              key={index}
+              className="flex gap-4 rounded-2xl border border-slate-800/90 bg-slate-950/70 p-4"
+            >
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-400 text-xs font-black text-slate-950">
+                {index + 1}
+              </div>
+
+              <p className="text-sm leading-7 text-slate-300">
+                {value}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* FORMULA                                                                     */
+/* -------------------------------------------------------------------------- */
+
+function FormulaBlock({
+  formula,
+  title,
+}: {
+  formula: any;
+  title?: string;
+}) {
+  const value = clean(formula);
+
+  if (!value) {
+    return null;
+  }
+
+  return (
+    <div className="my-5 overflow-hidden rounded-2xl border border-violet-500/15 bg-violet-500/[0.025]">
+      {title && (
+        <div className="border-b border-violet-500/10 px-5 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-violet-300">
+          {clean(title)}
+        </div>
+      )}
+
+      <div className="overflow-x-auto px-5 py-5">
+        <code className="whitespace-pre-wrap break-words font-mono text-sm leading-7 text-violet-100">
+          {value}
+        </code>
+      </div>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* FLOWCHART                                                                    */
+/* -------------------------------------------------------------------------- */
+
+type FlowStep = {
+  title: string;
+  description?: string;
+  input?: string;
+  output?: string;
+};
+
+function isFlowArrow(
+  value: any
+): boolean {
+  const text = clean(value)
+    .replace(/\s+/g, "")
+    .toLowerCase();
+
+  return [
+    "→",
+    "->",
+    "⇒",
+    "➡",
+    "↓",
+    "⇓",
+    "▼",
+    "⬇",
+    "↑",
+    "⇑",
+    "←",
+    "<-",
+    "↔",
+    "⇄",
+  ].includes(text);
+}
+
+function normalizeFlow(
+  process: any
+): {
+  steps: FlowStep[];
+  direction:
+    | "horizontal"
+    | "vertical";
+  title?: string;
+} {
+  let source = process;
+
+  let direction:
+    | "horizontal"
+    | "vertical" = "horizontal";
+
+  let title = "";
+
+  if (
+    source &&
+    typeof source === "object" &&
+    !Array.isArray(source)
+  ) {
+    const requestedDirection =
+      firstText(
+        source.direction,
+        source.orientation,
+        source.layout
+      ).toLowerCase();
+
+    if (
+      requestedDirection ===
+        "vertical" ||
+      requestedDirection === "down"
+    ) {
+      direction = "vertical";
+    }
+
+    title = firstText(
+      source.title,
+      source.heading
+    );
+
+    source =
+      source.steps ??
+      source.items ??
+      source.nodes ??
+      source.flow ??
+      source.process ??
+      [];
+  }
+
+  const steps = asArray(source)
+    .filter((item) => {
+      if (typeof item === "string") {
+        return !isFlowArrow(item);
+      }
+
+      if (
+        item &&
+        typeof item === "object"
+      ) {
+        const label = firstText(
+          item.title,
+          item.name,
+          item.label,
+          item.text
+        );
+
+        return !isFlowArrow(label);
+      }
+
+      return false;
+    })
+    .map((item, index) => {
+      if (typeof item === "string") {
+        return {
+          title: clean(item),
+        };
+      }
+
+      return {
+        title: firstText(
+          item?.title,
+          item?.name,
+          item?.label,
+          item?.text,
+          `Step ${index + 1}`
+        ),
+
+        description: firstText(
+          item?.description,
+          item?.content,
+          item?.explanation
+        ),
+
+        input: firstText(
+          item?.input,
+          item?.prompt,
+          item?.given
+        ),
+
+        output: firstText(
+          item?.output,
+          item?.result,
+          item?.response,
+          item?.expected
+        ),
+      };
+    })
+    .filter(
+      (step) => step.title
+    );
+
+  return {
+    steps,
+    direction,
+    title: title || undefined,
+  };
+}
+
+function FlowStepBox({
+  step,
+}: {
+  step: FlowStep;
+}) {
+  return (
+    <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-5 shadow-lg transition duration-200 hover:border-cyan-500/30 hover:bg-slate-900">
+      <div className="font-bold leading-6 text-white">
+        {step.title}
+      </div>
+
+      {step.description && (
+        <p className="mt-2 text-xs leading-6 text-slate-400">
+          {step.description}
+        </p>
+      )}
+
+      {step.input && (
+        <div className="mt-3 rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-xs leading-5 text-slate-400">
+          <span className="font-bold text-slate-500">
+            IN:
+          </span>{" "}
+          {step.input}
+        </div>
+      )}
+
+      {step.output && (
+        <div className="mt-2 rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-xs leading-5 text-slate-400">
+          <span className="font-bold text-slate-500">
+            OUT:
+          </span>{" "}
+          {step.output}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ProcessFlow({
+  process,
+}: {
+  process: any;
+}) {
+  const normalized =
+    normalizeFlow(process);
+
+  if (!normalized.steps.length) {
+    return null;
+  }
+
+  const vertical =
+    normalized.direction ===
+    "vertical";
+
+  return (
+    <section className="my-9 rounded-[1.5rem] border border-cyan-500/15 bg-slate-950/70 p-5 sm:p-7">
+      <div className="mb-6">
+        <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-400">
+          Process Flow
+        </div>
+
+        {normalized.title && (
+          <h3 className="mt-2 text-lg font-bold text-white">
+            {normalized.title}
+          </h3>
+        )}
+      </div>
+
+      {vertical ? (
+        <div className="mx-auto flex max-w-3xl flex-col">
+          {normalized.steps.map(
+            (step, index) => (
+              <React.Fragment
+                key={index}
+              >
+                <FlowStepBox
+                  step={step}
+                />
+
+                {index <
+                  normalized.steps
+                    .length -
+                    1 && (
+                  <div
+                    aria-hidden="true"
+                    className="flex h-10 items-center justify-center text-xl font-bold text-cyan-400"
+                  >
+                    ↓
+                  </div>
+                )}
+              </React.Fragment>
+            )
+          )}
+        </div>
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {normalized.steps.map(
+            (step, index) => (
+              <div
+                key={index}
+                className="relative"
+              >
+                <FlowStepBox
+                  step={step}
+                />
+
+                {index <
+                  normalized.steps
+                    .length -
+                    1 && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute -right-3 top-1/2 z-10 hidden -translate-y-1/2 text-xl font-bold text-cyan-400 xl:block"
+                  >
+                    →
+                  </span>
+                )}
+              </div>
+            )
+          )}
+        </div>
+      )}
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* CLASSIFICATION TREE                                                         */
+/* -------------------------------------------------------------------------- */
+
+function ClassificationTree({
+  tree,
+}: {
+  tree: any;
+}) {
+  if (!tree) {
+    return null;
+  }
+
+  /*
+   * Supports both formats used by the course content:
+   *
+   * 1. Object tree:
+   *    {
+   *      title: "...",
+   *      children: [...]
+   *    }
+   *
+   * 2. Text tree:
+   *    [
+   *      "Generative AI",
+   *      "├── Text Generation",
+   *      "├── Image Generation",
+   *      "└── Multimodal Generation"
+   *    ]
+   */
+
+  const textTree = Array.isArray(tree)
+    ? tree.filter(
+        (item) =>
+          typeof item === "string" &&
+          item.trim().length > 0
+      )
+    : [];
+
+  const renderNode = (
+    node: any,
+    depth = 0
+  ): React.ReactNode => {
+    if (typeof node === "string") {
+      return (
+        <div
+          className={cx(
+            "rounded-xl border px-4 py-3",
+            depth === 0
+              ? "border-cyan-500/25 bg-cyan-500/[0.05]"
+              : "border-slate-800 bg-slate-900/80"
+          )}
+        >
+          <div className="font-semibold text-white">
+            {node}
+          </div>
+        </div>
+      );
+    }
+
+    if (
+      !node ||
+      typeof node !== "object"
+    ) {
+      return null;
+    }
+
+    const title = firstText(
+      node.title,
+      node.name,
+      node.label,
+      node.heading
+    );
+
+    const description = firstText(
+      node.description,
+      node.content,
+      node.explanation
+    );
+
+    const children = asArray(
+      node.children ??
+        node.items ??
+        node.branches ??
+        node.nodes
+    );
+
+    return (
+      <div>
+        <div
+          className={cx(
+            "rounded-xl border px-4 py-3",
+            depth === 0
+              ? "border-cyan-500/25 bg-cyan-500/[0.05]"
+              : "border-slate-800 bg-slate-900/80"
+          )}
+        >
+          {title && (
+            <div className="font-semibold text-white">
+              {title}
+            </div>
+          )}
+
+          {description && (
+            <div className="mt-1 text-xs leading-6 text-slate-400">
+              {description}
+            </div>
+          )}
+        </div>
+
+        {children.length > 0 && (
+          <div className="mt-3 ml-5 space-y-3 border-l border-slate-800 pl-5">
+            {children.map(
+              (child, index) => (
+                <React.Fragment
+                  key={index}
+                >
+                  {renderNode(
+                    child,
+                    depth + 1
+                  )}
+                </React.Fragment>
+              )
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <section className="my-9 rounded-3xl border border-slate-800 bg-slate-950/70 p-5 sm:p-7">
+      <div className="mb-6 text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-400">
+        Classification
+      </div>
+
+      {textTree.length > 0 ? (
+        <div className="overflow-x-auto rounded-2xl border border-cyan-500/15 bg-slate-950/80 p-5 sm:p-7">
+          <div className="mb-4 flex items-center gap-3">
+            <div className="h-2.5 w-2.5 rounded-full bg-cyan-400" />
+
+            <div className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">
+              Classification Structure
+            </div>
+          </div>
+
+          <pre className="overflow-x-auto whitespace-pre font-mono text-sm leading-8 text-slate-300 sm:text-[15px]">
+            {textTree.join("\n")}
+          </pre>
+        </div>
+      ) : (
+        renderNode(tree)
+      )}
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* TABLE                                                                       */
+/* -------------------------------------------------------------------------- *//* -------------------------------------------------------------------------- */
+/* TABLE                                                                       */
+/* -------------------------------------------------------------------------- */
+
+function SimpleTable({
+  table,
+}: {
+  table: any;
+}) {
+  if (!table) {
+    return null;
+  }
+
+  /*
+   * Supported table formats:
+   *
+   * 1. Structured table:
+   * {
+   *   headers: ["A", "B"],
+   *   rows: [
+   *     ["x", "y"]
+   *   ]
+   * }
+   *
+   * 2. Array of objects:
+   * [
+   *   { aspect: "...", predictive: "...", generative: "..." }
+   * ]
+   *
+   * 3. Object containing rows/data/values.
+   */
+
+  let title = firstText(
+    table?.title,
+    table?.heading
+  );
+
+  let headers: any[] = [];
+  let rows: any[] = [];
+
+  if (Array.isArray(table)) {
+    rows = table;
+  } else if (
+    typeof table === "object"
+  ) {
+    headers = asArray(
+      table.headers ??
+        table.columns ??
+        table.headings
+    );
+
+    rows = asArray(
+      table.rows ??
+        table.data ??
+        table.values
+    );
+  }
+
+  /*
+   * When the lesson provides an array
+   * of objects, derive the columns from
+   * the object keys automatically.
+   */
+  const objectRows = rows.filter(
+    (row) =>
+      row &&
+      typeof row === "object" &&
+      !Array.isArray(row)
+  );
+
+  if (
+    !headers.length &&
+    objectRows.length > 0
+  ) {
+    const keySet = new Set<string>();
+
+    objectRows.forEach((row) => {
+      Object.keys(row).forEach((key) => {
+        keySet.add(key);
+      });
+    });
+
+    headers = Array.from(keySet);
+  }
+
+  /*
+   * Convert object rows into ordered
+   * cell arrays using the derived headers.
+   */
+  const normalizedRows = rows.map(
+    (row) => {
+      if (Array.isArray(row)) {
+        return row;
+      }
+
+      if (
+        row &&
+        typeof row === "object"
+      ) {
+        return headers.map(
+          (header) =>
+            row?.[header] ?? ""
+        );
+      }
+
+      return [row];
+    }
+  );
+
+  if (
+    !headers.length &&
+    !normalizedRows.length
+  ) {
+    return null;
+  }
+
+  /*
+   * Human-friendly header labels.
+   * Example:
+   * "primaryPurpose"
+   * → "Primary Purpose"
+   *
+   * "predictive"
+   * → "Predictive"
+   */
+  const formatHeader = (
+    value: any
+  ) => {
+    const text = clean(value);
+
+    if (!text) {
+      return "";
+    }
+
+    return text
+      .replace(
+        /([a-z])([A-Z])/g,
+        "$1 $2"
+      )
+      .replace(
+        /[_-]+/g,
+        " "
+      )
+      .replace(
+        /\s+/g,
+        " "
+      )
+      .trim()
+      .replace(
+        /^./,
+        (char) =>
+          char.toUpperCase()
+      );
+  };
+
+  return (
+    <div className="my-9 overflow-hidden rounded-3xl border border-cyan-500/15 bg-slate-950/80 shadow-[0_0_40px_rgba(8,145,178,0.04)]">
+      {title && (
+        <div className="border-b border-slate-800 bg-slate-900/70 px-5 py-4 sm:px-6">
+          <div className="text-sm font-bold text-white">
+            {clean(title)}
+          </div>
+        </div>
+      )}
+
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[680px] border-collapse text-left text-sm">
+          {headers.length > 0 && (
+            <thead>
+              <tr className="bg-slate-900/90">
+                {headers.map(
+                  (
+                    header,
+                    index
+                  ) => (
+                    <th
+                      key={index}
+                      className="border-b border-slate-800 px-5 py-4 text-xs font-bold uppercase tracking-[0.12em] text-cyan-300"
+                    >
+                      {formatHeader(
+                        header
+                      )}
+                    </th>
+                  )
+                )}
+              </tr>
+            </thead>
+          )}
+
+          <tbody>
+            {normalizedRows.map(
+              (
+                row,
+                rowIndex
+              ) => (
+                <tr
+                  key={rowIndex}
+                  className="border-b border-slate-800/70 last:border-0 transition-colors hover:bg-cyan-500/[0.025]"
+                >
+                  {row.map(
+                    (
+                      cell,
+                      cellIndex
+                    ) => (
+                      <td
+                        key={
+                          cellIndex
+                        }
+                        className={cx(
+                          "px-5 py-4 align-top leading-7",
+                          cellIndex ===
+                            0
+                            ? "font-semibold text-white"
+                            : "text-slate-300"
+                        )}
+                      >
+                        {clean(
+                          cell
+                        )}
+                      </td>
+                    )
+                  )}
+                </tr>
+              )
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+function ComparisonTable({
+  table,
+}: {
+  table: any;
+}) {
+  if (!table) {
+    return null;
+  }
+
+  const title = firstText(
+    table.title,
+    table.heading
+  );
+
+  const columns = asArray(
+    table.columns ??
+      table.headers
+  );
+
+  const rows = asArray(
+    table.rows ??
+      table.data
+  );
+
+  if (
+    !columns.length &&
+    !rows.length
+  ) {
+    return null;
+  }
+
+  return (
+    <div className="my-8 overflow-hidden rounded-2xl border border-violet-500/15 bg-violet-500/[0.025]">
+      {title && (
+        <div className="border-b border-violet-500/10 px-5 py-4">
+          <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-violet-300">
+            Comparison
+          </div>
+
+          <div className="mt-1 text-lg font-bold text-white">
+            {title}
+          </div>
+        </div>
+      )}
+
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[720px] border-collapse text-sm">
+          {columns.length > 0 && (
+            <thead>
+              <tr className="bg-slate-900/80">
+                {columns.map(
+                  (column, index) => (
+                    <th
+                      key={index}
+                      className="border-b border-slate-800 px-4 py-4 text-left font-bold text-slate-200"
+                    >
+                      {clean(column)}
+                    </th>
+                  )
+                )}
+              </tr>
+            </thead>
+          )}
+
+          <tbody>
+            {rows.map(
+              (row, index) => {
+                const cells =
+                  Array.isArray(row)
+                    ? row
+                    : asArray(
+                        row?.cells ??
+                          row?.values ??
+                          row
+                      );
+
+                return (
+                  <tr
+                    key={index}
+                    className="border-b border-slate-800/70 last:border-0"
+                  >
+                    {cells.map(
+                      (
+                        cell,
+                        cellIndex
+                      ) => (
+                        <td
+                          key={
+                            cellIndex
+                          }
+                          className="px-4 py-4 align-top leading-6 text-slate-300"
+                        >
+                          {clean(cell)}
+                        </td>
+                      )
+                    )}
+                  </tr>
+                );
+              }
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* CODE                                                                        */
+/* -------------------------------------------------------------------------- */
+
+function CodeBlock({
+  code,
+  language,
+  title,
+  output,
+  explanation,
+}: {
+  code: any;
+  language?: any;
+  title?: any;
+  output?: any;
+  explanation?: any;
+}) {
+  const [copied, setCopied] =
+    useState(false);
+
+  const value = clean(code);
+
+  if (!value) {
+    return null;
+  }
+
+  async function copyCode() {
+    try {
+      await navigator.clipboard.writeText(
+        value
+      );
+
+      setCopied(true);
+
+      window.setTimeout(() => {
+        setCopied(false);
+      }, 1500);
+    } catch {
+      setCopied(false);
+    }
+  }
+
+  return (
+    <div className="my-7 overflow-hidden rounded-2xl border border-slate-800 bg-[#050a14]">
+      <div className="flex items-center justify-between gap-4 border-b border-slate-800 px-4 py-3">
+        <div className="min-w-0">
+          {title && (
+            <div className="truncate text-sm font-bold text-white">
+              {clean(title)}
+            </div>
+          )}
+
+          <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+            {clean(language) ||
+              "code"}
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={copyCode}
+          className="shrink-0 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-[11px] font-bold text-slate-300 transition hover:border-cyan-400/40 hover:text-white"
+        >
+          {copied
+            ? "Copied"
+            : "Copy"}
+        </button>
+      </div>
+
+      {explanation && (
+        <div className="border-b border-slate-800 px-5 py-4">
+          <Paragraphs
+            value={explanation}
+          />
+        </div>
+      )}
+
+      <pre className="overflow-x-auto p-5 text-[12px] leading-7 text-slate-300 sm:text-[13px]">
+        <code>{value}</code>
+      </pre>
+
+      {output && (
+        <div className="border-t border-slate-800 bg-slate-950 px-5 py-4">
+          <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-400">
+            Output
+          </div>
+
+          <pre className="overflow-x-auto whitespace-pre-wrap text-xs leading-6 text-slate-300">
+            {clean(output)}
+          </pre>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CodeExamples({
+  examples,
+}: {
+  examples: any;
+}) {
+  const values = asArray(examples);
+
+  if (!values.length) {
+    return null;
+  }
+
+  return (
+    <section>
+      <SectionTitle
+        eyebrow="Implementation"
+        title="Code Examples"
+      />
+
+      <div className="space-y-7">
+        {values.map(
+          (example, index) => {
+            if (
+              typeof example ===
+              "string"
+            ) {
+              return (
+                <CodeBlock
+                  key={index}
+                  code={example}
+                  language="python"
+                />
+              );
+            }
+
+            return (
+              <div key={index}>
+                {example.title && (
+                  <h3 className="mb-3 text-lg font-bold text-white">
+                    {clean(
+                      example.title
+                    )}
+                  </h3>
+                )}
+
+                {example.description && (
+                  <div className="mb-4">
+                    <Paragraphs
+                      value={
+                        example.description
+                      }
+                    />
+                  </div>
+                )}
+
+                <CodeBlock
+                  code={clean(
+                    example.code ??
+                      example.content ??
+                      example.example
+                  )}
+                  language={
+                    example.language ??
+                    "python"
+                  }
+                />
+              </div>
+            );
+          }
+        )}
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* MATHEMATICAL INTUITION                                                      */
+/* -------------------------------------------------------------------------- */
+
+function MathIntuition({
+  items,
+}: {
+  items: any;
+}) {
+  const values = asArray(items);
+
+  if (!values.length) {
+    return null;
+  }
+
+  return (
+    <section className="border-t border-slate-800/70 pt-12">
+      <div className="mb-7">
+        <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] text-violet-400">
+          Mathematics
+        </div>
+
+        <h2 className="text-2xl font-black tracking-tight text-white sm:text-3xl">
+          Mathematical Intuition
+        </h2>
+
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-400">
+          The key mathematical ideas behind
+          the concepts in this lesson,
+          expressed in a compact form for
+          easier understanding and recall.
+        </p>
+      </div>
+
+      <div className="grid gap-4">
+        {values.map(
+          (item, index) => {
+            const data =
+              typeof item === "string"
+                ? {
+                    content: item,
+                  }
+                : item ?? {};
+
+            const title = firstText(
+              data.title,
+              data.name
+            );
+
+            const explanation =
+              firstText(
+                data.content,
+                data.explanation,
+                data.description,
+                data.text
+              );
+
+            const formula =
+              firstText(
+                data.formula
+              );
+
+            return (
+              <div
+                key={index}
+                className="group overflow-hidden rounded-2xl border border-violet-500/15 bg-gradient-to-br from-violet-500/[0.045] via-slate-950/80 to-slate-950 transition-all duration-200 hover:border-violet-500/30"
+              >
+                <div className="flex items-start gap-4 px-5 py-5">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-violet-500/20 bg-violet-500/10 text-xs font-black text-violet-300">
+                    {String(
+                      index + 1
+                    ).padStart(2, "0")}
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    {title && (
+                      <h3 className="text-sm font-bold text-white">
+                        {title}
+                      </h3>
+                    )}
+
+                    {explanation &&
+                      explanation !==
+                        formula && (
+                        <p className="mt-2 text-sm leading-7 text-slate-400">
+                          {explanation}
+                        </p>
+                      )}
+
+                    {formula && (
+                      <div className="mt-4 overflow-x-auto rounded-xl border border-violet-500/10 bg-[#080b18] px-4 py-4">
+                        <code className="whitespace-pre-wrap break-words font-mono text-sm leading-7 text-violet-100 sm:text-[15px]">
+                          {formula}
+                        </code>
+                      </div>
+                    )}
+
+                    {!formula &&
+                      explanation && (
+                        <div className="mt-3 rounded-xl border border-violet-500/10 bg-[#080b18] px-4 py-4">
+                          <code className="whitespace-pre-wrap break-words font-mono text-sm leading-7 text-violet-100">
+                            {explanation}
+                          </code>
+                        </div>
+                      )}
+                  </div>
+                </div>
+              </div>
+            );
+          }
+        )}
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* EXERCISES                                                                   */
+/* -------------------------------------------------------------------------- */
+
+function Exercises({
+  items,
+  title,
+}: {
+  items: any;
+  title: string;
+}) {
+  const values = asArray(items);
+
+  if (!values.length) {
+    return null;
+  }
+
+  return (
+    <section>
+      <SectionTitle
+        eyebrow="Practice"
+        title={title}
+      />
+
+      <div className="space-y-4">
+        {values.map(
+          (item, index) => {
+            if (
+              typeof item ===
+              "string"
+            ) {
+              return (
+                <div
+                  key={index}
+                  className="flex gap-4 rounded-2xl border border-slate-800 bg-slate-950/70 p-5"
+                >
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-400 text-xs font-black text-slate-950">
+                    {index + 1}
+                  </div>
+
+                  <p className="text-sm leading-7 text-slate-300">
+                    {item}
+                  </p>
+                </div>
+              );
+            }
+
+            return (
+              <div
+                key={index}
+                className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5"
+              >
+                <div className="flex gap-4">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-400 text-xs font-black text-slate-950">
+                    {index + 1}
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    {item.title && (
+                      <h3 className="font-semibold text-white">
+                        {clean(
+                          item.title
+                        )}
+                      </h3>
+                    )}
+
+                    <Paragraphs
+                      value={
+                        item.question ??
+                        item.problem ??
+                        item.description ??
+                        item.content
+                      }
+                    />
+
+                    {item.code && (
+                      <CodeBlock
+                        code={item.code}
+                        language={
+                          item.language ??
+                          "python"
+                        }
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          }
+        )}
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* INTERVIEW QUESTIONS                                                         */
+/* -------------------------------------------------------------------------- */
+
+function InterviewQuestions({
+  items,
+}: {
+  items: any;
+}) {
+  const values = asArray(items);
+
+  if (!values.length) {
+    return null;
+  }
+
+  return (
+    <section>
+      <SectionTitle
+        eyebrow="Interview"
+        title="Interview Questions"
+      />
+
+      <div className="space-y-4">
+        {values.map(
+          (question, index) => {
+            const value =
+              typeof question ===
+              "string"
+                ? question
+                : firstText(
+                    question?.question,
+                    question?.title,
+                    question?.content
+                  );
+
+            return (
+              <div
+                key={index}
+                className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5"
+              >
+                <div className="flex gap-4">
+                  <span className="font-mono text-xs font-bold text-violet-300">
+                    Q{index + 1}
+                  </span>
+
+                  <p className="text-sm leading-7 text-slate-300">
+                    {value}
+                  </p>
+                </div>
+              </div>
+            );
+          }
+        )}
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* COMMON MISTAKES                                                            */
+/* -------------------------------------------------------------------------- */
+
+function CommonMistakes({
+  items,
+}: {
+  items: any;
+}) {
+  const values = asArray(items);
+
+  if (!values.length) {
+    return null;
+  }
+
+  return (
+    <section className="rounded-3xl border border-red-500/15 bg-red-500/[0.025] p-6 sm:p-8">
+      <SectionTitle
+        eyebrow="Reliability"
+        title="Common Mistakes"
+      />
+
+      <BulletList
+        items={values}
+      />
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* KEY TAKEAWAYS                                                               */
+/* -------------------------------------------------------------------------- */
+
+function KeyTakeaways({
+  items,
+}: {
+  items: any;
+}) {
+  const values = asArray(items);
+
+  if (!values.length) {
+    return null;
+  }
+
+  return (
+    <section>
+      <SectionTitle
+        eyebrow="Remember"
+        title="Key Takeaways"
+      />
+
+      <div className="grid gap-4 md:grid-cols-2">
+        {values.map(
+          (item, index) => {
+            const value =
+              typeof item ===
+              "string"
+                ? item
+                : firstText(
+                    item?.content,
+                    item?.text,
+                    item?.title,
+                    item?.description
+                  );
+
+            return (
+              <div
+                key={index}
+                className="rounded-2xl border border-cyan-500/15 bg-cyan-500/[0.025] p-5"
+              >
+                <div className="flex gap-4">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-400 text-xs font-black text-slate-950">
+                    {index + 1}
+                  </div>
+
+                  <p className="text-sm leading-7 text-slate-200">
+                    {value}
+                  </p>
+                </div>
+              </div>
+            );
+          }
+        )}
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* SUMMARY                                                                     */
+/* -------------------------------------------------------------------------- */
+
+function Summary({
+  items,
+}: {
+  items: any;
+}) {
+  const values = asArray(items);
+
+  if (!values.length) {
+    return null;
+  }
+
+  return (
+    <section className="rounded-3xl border border-emerald-500/15 bg-emerald-500/[0.025] p-6 sm:p-8">
+      <SectionTitle
+        eyebrow="Recap"
+        title="Summary"
+      />
+
+      <BulletList
+        items={values}
+      />
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* VISUAL REFERENCES                                                           */
+/* -------------------------------------------------------------------------- */
+
+function VisualReferences({
+  items,
+}: {
+  items: any;
+}) {
+  const values = asArray(items);
+
+  if (!values.length) {
+    return null;
+  }
+
+  function getImageSource(
+    data: any
+  ): string {
+    return firstText(
+      data?.image,
+      data?.imageUrl,
+      data?.src,
+      data?.path,
+      data?.asset,
+      data?.imageRef,
+      data?.imageReference,
+      data?.visual,
+      data?.visualReference,
+      data?.url
+    );
+  }
+
+  function looksLikeImage(
+    source: string
+  ): boolean {
+    if (!source) {
+      return false;
+    }
+
+    return (
+      /^https?:\/\//i.test(source) ||
+      /^\/(?!\/)/.test(source) ||
+      /\.(png|jpe?g|gif|webp|svg|avif|bmp)(\?.*)?(#.*)?$/i.test(
+        source
+      )
+    );
+  }
+
+  return (
+    <section className="border-t border-slate-800/70 pt-12">
+      <div className="mb-7">
+        <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] text-cyan-400">
+          Visual References
+        </div>
+
+        <h2 className="text-2xl font-black tracking-tight text-white sm:text-3xl">
+          Explore Visually
+        </h2>
+
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-400">
+          Diagrams, architecture references, workflows,
+          and visual explanations related to this lesson.
+        </p>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        {values.map((item, index) => {
+          const data =
+            typeof item === "string"
+              ? {
+                  title: item,
+                }
+              : item ?? {};
+
+          const imageSource =
+            getImageSource(data);
+
+          const title = firstText(
+            data?.title,
+            data?.name,
+            data?.label,
+            `Visual Reference ${index + 1}`
+          );
+
+          const description =
+            firstText(
+              data?.description,
+              data?.content,
+              data?.explanation,
+              data?.text
+            );
+
+          const caption =
+            firstText(
+              data?.caption,
+              data?.alt
+            );
+
+          const hasImage =
+            looksLikeImage(
+              imageSource
+            );
+
+          return (
+            <div
+              key={index}
+              className="group overflow-hidden rounded-3xl border border-slate-800 bg-slate-950/80 shadow-lg transition duration-200 hover:-translate-y-0.5 hover:border-cyan-500/30"
+            >
+              {hasImage ? (
+                <a
+                  href={imageSource}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block"
+                >
+                  <div className="relative overflow-hidden bg-slate-950">
+                    <img
+                      src={imageSource}
+                      alt={
+                        caption ||
+                        title
+                      }
+                      loading="lazy"
+                      className="block h-auto max-h-[420px] min-h-[180px] w-full object-contain bg-[#050a14] transition duration-300 group-hover:scale-[1.01]"
+                      onError={(event) => {
+                        event.currentTarget.style.display =
+                          "none";
+
+                        const parent =
+                          event.currentTarget
+                            .parentElement;
+
+                        if (
+                          parent &&
+                          !parent.querySelector(
+                            "[data-image-error]"
+                          )
+                        ) {
+                          const fallback =
+                            document.createElement(
+                              "div"
+                            );
+
+                          fallback.setAttribute(
+                            "data-image-error",
+                            "true"
+                          );
+
+                          fallback.className =
+                            "flex min-h-[180px] items-center justify-center bg-gradient-to-br from-cyan-500/10 via-slate-950 to-violet-500/10 px-6 text-center text-xs font-semibold uppercase tracking-[0.16em] text-slate-500";
+
+                          fallback.textContent =
+                            "Visual unavailable";
+
+                          parent.appendChild(
+                            fallback
+                          );
+                        }
+                      }}
+                    />
+                  </div>
+                </a>
+              ) : (
+                <div className="flex min-h-[180px] items-center justify-center bg-gradient-to-br from-cyan-500/[0.08] via-slate-950 to-violet-500/[0.08] px-6">
+                  <div className="text-center">
+                    <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan-500/20 bg-cyan-500/10 text-lg text-cyan-300">
+                      ◇
+                    </div>
+
+                    <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                      Visual Reference
+                    </div>
+
+                    <div className="mt-2 text-xs text-slate-600">
+                      Image source not provided
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="p-5">
+                <div className="text-base font-bold text-white">
+                  {title}
+                </div>
+
+                {caption &&
+                  caption !== title && (
+                    <div className="mt-2 text-xs font-medium text-cyan-300">
+                      {caption}
+                    </div>
+                  )}
+
+                {description && (
+                  <p className="mt-3 text-sm leading-7 text-slate-400">
+                    {description}
+                  </p>
+                )}
+
+                {hasImage && (
+                  <div className="mt-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-600">
+                    Click image to view full size
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* ARCHITECTURE                                                                */
+/* -------------------------------------------------------------------------- */
+
+function Architecture({
+  architecture,
+}: {
+  architecture: any;
+}) {
+  if (!architecture) {
+    return null;
+  }
+
+  const layers = asArray(
+    architecture.layers
+  );
+
+  return (
+    <section className="rounded-3xl border border-cyan-500/15 bg-cyan-500/[0.02] p-6 sm:p-8">
+      <SectionTitle
+        eyebrow="System Design"
+        title={firstText(
+          architecture.title,
+          "Architecture"
+        )}
+        description={
+          architecture.description
+        }
+      />
+
+      {layers.length > 0 && (
+        <div className="grid gap-4 md:grid-cols-2">
+          {layers.map(
+            (layer, index) => (
+              <div
+                key={index}
+                className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5"
+              >
+                <div className="font-bold text-white">
+                  {firstText(
+                    layer?.title,
+                    layer?.name
+                  )}
+                </div>
+
+                {layer?.description && (
+                  <div className="mt-2 text-sm leading-7 text-slate-400">
+                    {clean(
+                      layer.description
+                    )}
+                  </div>
+                )}
+              </div>
+            )
+          )}
+        </div>
+      )}
+
+      {(architecture.processFlow ||
+        architecture.process ||
+        architecture.flow) && (
+        <ProcessFlow
+          process={
+            architecture.processFlow ??
+            architecture.process ??
+            architecture.flow
+          }
+        />
+      )}
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* IMPLEMENTATION ROADMAP                                                      */
+/* -------------------------------------------------------------------------- */
+
+function ImplementationStages({
+  stages,
+}: {
+  stages: any;
+}) {
+  const values = asArray(stages);
+
+  if (!values.length) {
+    return null;
+  }
+
+  return (
+    <section>
+      <SectionTitle
+        eyebrow="Implementation"
+        title="Implementation Roadmap"
+      />
+
+      <div className="grid gap-4 md:grid-cols-2">
+        {values.map(
+          (stage, index) => {
+            const data =
+              typeof stage ===
+              "string"
+                ? {
+                    title: stage,
+                  }
+                : stage ?? {};
+
+            return (
+              <div
+                key={index}
+                className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5"
+              >
+                <div className="font-bold text-white">
+                  {firstText(
+                    data.title,
+                    data.name
+                  )}
+                </div>
+
+                {data.description && (
+                  <div className="mt-2 text-sm leading-7 text-slate-400">
+                    {clean(
+                      data.description
+                    )}
+                  </div>
+                )}
+
+                {data.tasks && (
+                  <div className="mt-4">
+                    <BulletList
+                      items={
+                        data.tasks
+                      }
+                    />
+                  </div>
+                )}
+              </div>
+            );
+          }
+        )}
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* SECTION RENDERER                                                            */
+/* -------------------------------------------------------------------------- */
+
+function SectionRenderer({
+  section,
+  index,
+}: {
+  section: AnyObject;
+  index: number;
+}) {
+  const heading = firstText(
+    section?.heading,
+    section?.title
+  );
+
+  const intro = firstText(
+    section?.intro,
+    section?.description
+  );
+
+  const mathSection =
+    /mathematical|mathematics|math intuition|formula/i.test(
+      heading
+    );
+
+  return (
+    <section
+      className={cx(
+        "border-t border-slate-800/70 pt-12",
+        index === 0 &&
+          "border-t-0 pt-0"
+      )}
+    >
+      {(heading || intro) && (
+        <SectionTitle
+          eyebrow={
+            mathSection
+              ? "Mathematics"
+              : undefined
+          }
+          title={
+            mathSection
+              ? heading.replace(
+                  /^\s*\d+[\s.)-]+/,
+                  ""
+                )
+              : heading
+          }
+          description={intro}
+        />
+      )}
+
+      {section?.content && (
+        <Paragraphs
+          value={section.content}
+        />
+      )}
+
+      {section?.paragraphs && (
+        <Paragraphs
+          value={section.paragraphs}
+        />
+      )}
+
+      {section?.bullets && (
+        <div className="my-7">
+          <BulletList
+            items={section.bullets}
+          />
+        </div>
+      )}
+
+      {section?.orderedList && (
+        <div className="my-7">
+          <OrderedList
+            items={
+              section.orderedList
+            }
+          />
+        </div>
+      )}
+
+      {(section?.process ||
+        section?.processFlow ||
+        section?.flow) && (
+        <ProcessFlow
+          process={
+            section.process ??
+            section.processFlow ??
+            section.flow
+          }
+        />
+      )}
+
+      {(section?.classificationTree ||
+        section?.tree) && (
+        <ClassificationTree
+          tree={
+            section.classificationTree ??
+            section.tree
+          }
+        />
+      )}
+
+      {section?.formula && (
+        <FormulaBlock
+          formula={
+            section.formula
+          }
+          title={
+            section.formulaTitle
+          }
+        />
+      )}
+
+      {section?.formulas &&
+        asArray(
+          section.formulas
+        ).map((formula, i) => (
+          <FormulaBlock
+            key={i}
+            formula={
+              typeof formula ===
+              "string"
+                ? formula
+                : formula?.formula ??
+                  formula?.content
+            }
+            title={
+              typeof formula ===
+              "object"
+                ? formula?.title
+                : undefined
+            }
+          />
+        ))}
+
+      {section?.table && (
+        <SimpleTable
+          table={section.table}
+        />
+      )}
+
+      {section?.tables &&
+        asArray(
+          section.tables
+        ).map((table, i) => (
+          <SimpleTable
+            key={i}
+            table={table}
+          />
+        ))}
+
+      {section?.comparisonTable && (
+        <ComparisonTable
+          table={
+            section.comparisonTable
+          }
+        />
+      )}
+
+      {section?.comparisonTables &&
+        asArray(
+          section.comparisonTables
+        ).map((table, i) => (
+          <ComparisonTable
+            key={i}
+            table={table}
+          />
+        ))}
+
+      {section?.examples && (
+        <div className="my-8 space-y-5">
+          {asArray(
+            section.examples
+          ).map(
+            (example, i) => {
+              if (
+                typeof example ===
+                "string"
+              ) {
+                return (
+                  <div
+                    key={i}
+                    className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5"
+                  >
+                    <Paragraphs
+                      value={
+                        example
+                      }
+                    />
+                  </div>
+                );
+              }
+
+              return (
+                <div
+                  key={i}
+                  className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5"
+                >
+                  {example?.title && (
+                    <h3 className="font-bold text-white">
+                      {clean(
+                        example.title
+                      )}
+                    </h3>
+                  )}
+
+                  <div className="mt-3">
+                    <Paragraphs
+                      value={
+                        example?.content ||
+                        example?.description ||
+                        example?.explanation
+                      }
+                    />
+                  </div>
+
+                  {example?.code && (
+                    <CodeBlock
+                      code={
+                        example.code
+                      }
+                      language={
+                        example.language ??
+                        "text"
+                      }
+                    />
+                  )}
+                </div>
+              );
+            }
+          )}
+        </div>
+      )}
+
+      {section?.code && (
+        <CodeBlock
+          code={section.code}
+          language={
+            section.language ??
+            "text"
+          }
+        />
+      )}
+
+      {section?.codeExamples &&
+        asArray(
+          section.codeExamples
+        ).map(
+          (example, i) => {
+            const data =
+              typeof example ===
+              "string"
+                ? {
+                    code: example,
+                  }
+                : example ?? {};
+
+            return (
+              <CodeBlock
+                key={i}
+                code={
+                  data.code ??
+                  data.content ??
+                  data.example
+                }
+                language={
+                  data.language ??
+                  "text"
+                }
+                title={
+                  data.title
+                }
+                output={
+                  data.output
+                }
+                explanation={
+                  data.explanation ??
+                  data.description
+                }
+              />
+            );
+          }
+        )}
+
+      {section?.mathIntuition && (
+        <MathIntuition
+          items={
+            section.mathIntuition
+          }
+        />
+      )}
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* MAIN LESSON                                                                 */
+/* -------------------------------------------------------------------------- */
+
 function MainLesson({
-  lesson
+  lesson,
 }: {
   lesson: AnyObject;
 }) {
   return (
-    <div className="w-full min-w-0 overflow-visible break-words [overflow-wrap:anywhere]">
+    <div className="w-full min-w-0 break-words [overflow-wrap:anywhere]">
       <Hero lesson={lesson} />
 
-      <div className="px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
-        <LearningObjectives
-          objectives={
-            lesson.learningObjectives
-          }
-        />
+      <div className="space-y-12 px-5 py-9 sm:px-8 sm:py-11 lg:px-12 lg:py-12">
+        {lesson.learningObjectives && (
+          <LearningObjectives
+            objectives={
+              lesson.learningObjectives
+            }
+          />
+        )}
+
+        {lesson.overview && (
+          <section>
+            <SectionTitle
+              eyebrow="Overview"
+              title="Overview"
+            />
+
+            <Paragraphs
+              value={lesson.overview}
+            />
+          </section>
+        )}
 
         {lesson.sections && (
           <div className="space-y-10">
-            {asArray(lesson.sections).map(
+            {asArray(
+              lesson.sections
+            ).map(
               (section, index) => (
                 <SectionRenderer
                   key={index}
@@ -1109,229 +2441,153 @@ function MainLesson({
         )}
 
         {lesson.codeExamples && (
-          <div className="mt-12">
-            <SectionHeading>
-              Code Examples
-            </SectionHeading>
-
-            <CodeExamples
-              examples={
-                lesson.codeExamples
-              }
-            />
-          </div>
+          <CodeExamples
+            examples={
+              lesson.codeExamples
+            }
+          />
         )}
 
         {lesson.mathIntuition && (
-          <div className="mt-12">
-            <SectionHeading>
-              Mathematical Intuition
-            </SectionHeading>
-
-            <div className="space-y-4">
-              {asArray(
-                lesson.mathIntuition
-              ).map((item, index) => (
-                <div
-                  key={index}
-                  className="rounded-2xl border border-violet-500/20 bg-violet-500/5 p-5"
-                >
-                  {typeof item ===
-                  "string" ? (
-                    <p className="text-sm leading-7 text-slate-300">
-                      {item}
-                    </p>
-                  ) : (
-                    <>
-                      {item.title && (
-                        <h3 className="mb-2 font-semibold text-white">
-                          {clean(
-                            item.title
-                          )}
-                        </h3>
-                      )}
-
-                      <Paragraphs
-                        value={
-                          item.content ||
-                          item.explanation ||
-                          item.description
-                        }
-                      />
-
-                      {item.formula && (
-                        <FormulaCard
-                          formula={
-                            item.formula
-                          }
-                        />
-                      )}
-                    </>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+          <MathIntuition
+            items={
+              lesson.mathIntuition
+            }
+          />
         )}
 
         {lesson.comparisonTables && (
-          <div className="mt-12">
-            <SectionHeading>
-              Comparisons
-            </SectionHeading>
+          <section>
+            <SectionTitle
+              eyebrow="Compare"
+              title="Comparisons"
+            />
 
-            <div className="space-y-7">
+            <div className="space-y-6">
               {asArray(
                 lesson.comparisonTables
-              ).map((table, index) => (
-                <ComparisonTable
-                  key={index}
-                  table={table}
-                />
-              ))}
+              ).map(
+                (table, index) => (
+                  <ComparisonTable
+                    key={index}
+                    table={table}
+                  />
+                )
+              )}
             </div>
-          </div>
+          </section>
         )}
 
         {lesson.exercises && (
-          <div className="mt-12">
-            <Exercises
-              items={lesson.exercises}
-              title="Conceptual Exercises"
-            />
-          </div>
+          <Exercises
+            items={lesson.exercises}
+            title="Conceptual Exercises"
+          />
         )}
 
         {lesson.codingExercises && (
-          <div className="mt-12">
-            <Exercises
-              items={
-                lesson.codingExercises
-              }
-              title="Coding Exercises"
-            />
-          </div>
+          <Exercises
+            items={
+              lesson.codingExercises
+            }
+            title="Coding Exercises"
+          />
         )}
 
         {lesson.architectureExercises && (
-          <div className="mt-12">
-            <Exercises
-              items={
-                lesson.architectureExercises
-              }
-              title="Architecture Exercises"
-            />
-          </div>
+          <Exercises
+            items={
+              lesson.architectureExercises
+            }
+            title="Architecture Exercises"
+          />
         )}
 
         {lesson.interviewQuestions && (
-          <div className="mt-12">
-            <InterviewQuestions
-              items={
-                lesson.interviewQuestions
-              }
-            />
-          </div>
+          <InterviewQuestions
+            items={
+              lesson.interviewQuestions
+            }
+          />
         )}
 
         {lesson.commonMistakes && (
-          <div className="mt-12 rounded-3xl border border-red-500/20 bg-red-500/5 p-6 sm:p-8">
-            <div className="mb-5">
-              <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-red-300">
-                Avoid These
-              </div>
-
-              <h2 className="mt-1 text-xl font-bold text-white">
-                Common Mistakes
-              </h2>
-            </div>
-
-            <BulletList
-              items={
-                lesson.commonMistakes
-              }
-            />
-          </div>
-        )}
-
-        {lesson.summary && (
-          <div className="mt-12">
-            <Summary
-              items={lesson.summary}
-            />
-          </div>
-        )}
-
-        {lesson.keyTakeaways && (
-          <div className="mt-12">
-            <SectionHeading>
-              Key Takeaways
-            </SectionHeading>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              {asArray(
-                lesson.keyTakeaways
-              ).map((item, index) => (
-                <KeyTakeaway
-                  key={index}
-                  value={
-                    typeof item ===
-                    "string"
-                      ? item
-                      : item.content ||
-                        item.text ||
-                        item.title ||
-                        item
-                  }
-                  index={index}
-                />
-              ))}
-            </div>
-          </div>
+          <CommonMistakes
+            items={
+              lesson.commonMistakes
+            }
+          />
         )}
 
         {lesson.visualReferences && (
-          <ReferenceLinks
-            references={
+          <VisualReferences
+            items={
               lesson.visualReferences
             }
           />
         )}
+
+        {lesson.summary && (
+          <Summary
+            items={lesson.summary}
+          />
+        )}
+
+        {lesson.keyTakeaways && (
+          <KeyTakeaways
+            items={
+              lesson.keyTakeaways
+            }
+          />
+        )}
+
+        <GenerativeAIVisualGallery
+          images={
+            generativeAIVisualMap[
+              `${lesson.moduleId}/${lesson.id}`
+            ] ?? []
+          }
+        />
       </div>
     </div>
   );
 }
 
+/* -------------------------------------------------------------------------- */
+/* SPECIAL CONTENT                                                             */
+/* -------------------------------------------------------------------------- */
+
 function SpecialContent({
-  content
+  content,
 }: {
   content: AnyObject;
 }) {
-  const title =
-    content.title ||
-    "Module Content";
-
   return (
-    <div className="w-full">
+    <div className="w-full min-w-0 break-words [overflow-wrap:anywhere]">
       <Hero lesson={content} />
 
-      <div className="px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
-        {content.overview && (
-          <section className="mb-10">
-            <SectionHeading>
-              Overview
-            </SectionHeading>
-
+      <div className="space-y-12 px-5 py-9 sm:px-8 sm:py-11 lg:px-12 lg:py-12">
+        {content.description && (
+          <section>
             <Paragraphs
-              value={content.overview}
+              value={
+                content.description
+              }
             />
           </section>
         )}
 
-        {content.description && (
-          <section className="mb-10">
+        {content.overview && (
+          <section>
+            <SectionTitle
+              eyebrow="Overview"
+              title="Overview"
+            />
+
             <Paragraphs
-              value={content.description}
+              value={
+                content.overview
+              }
             />
           </section>
         )}
@@ -1348,201 +2604,154 @@ function SpecialContent({
           <div className="space-y-10">
             {asArray(
               content.sections
-            ).map((section, index) => (
-              <SectionRenderer
-                key={index}
-                section={section}
-                index={index}
-              />
-            ))}
+            ).map(
+              (section, index) => (
+                <SectionRenderer
+                  key={index}
+                  section={section}
+                  index={index}
+                />
+              )
+            )}
           </div>
         )}
 
-        {content.coreFeatures && (
-          <section className="mt-10">
-            <SectionHeading>
-              Core Features
-            </SectionHeading>
+        {content.codeExamples && (
+          <CodeExamples
+            examples={
+              content.codeExamples
+            }
+          />
+        )}
 
-            <div className="grid gap-4 md:grid-cols-2">
-              {asArray(
-                content.coreFeatures
-              ).map((item, index) => (
-                <div
-                  key={index}
-                  className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5"
-                >
-                  {item.title && (
-                    <h3 className="font-semibold text-white">
-                      {clean(item.title)}
-                    </h3>
-                  )}
-
-                  <Paragraphs
-                    value={
-                      item.description ||
-                      item.content
-                    }
-                  />
-                </div>
-              ))}
-            </div>
-          </section>
+        {content.mathIntuition && (
+          <MathIntuition
+            items={
+              content.mathIntuition
+            }
+          />
         )}
 
         {content.architecture && (
-          <section className="mt-10">
-            <SectionHeading>
-              {content.architecture.title ||
-                "Architecture"}
-            </SectionHeading>
-
-            {content.architecture.description && (
-              <Paragraphs
-                value={
-                  content.architecture
-                    .description
-                }
-              />
-            )}
-
-            {content.architecture.layers && (
-              <div className="grid gap-4 md:grid-cols-2">
-                {asArray(
-                  content.architecture
-                    .layers
-                ).map((layer, index) => (
-                  <div
-                    key={index}
-                    className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5"
-                  >
-                    <h3 className="font-semibold text-cyan-300">
-                      {clean(
-                        layer.name ||
-                          layer.title
-                      )}
-                    </h3>
-
-                    <BulletList
-                      items={
-                        layer.components ||
-                        layer.items
-                      }
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {content.architecture.processFlow && (
-              <ProcessFlow
-                items={
-                  content.architecture
-                    .processFlow
-                }
-              />
-            )}
-          </section>
+          <Architecture
+            architecture={
+              content.architecture
+            }
+          />
         )}
 
         {content.implementationStages && (
-          <section className="mt-10">
-            <SectionHeading>
-              Implementation Roadmap
-            </SectionHeading>
+          <ImplementationStages
+            stages={
+              content.implementationStages
+            }
+          />
+        )}
 
-            <div className="space-y-4">
-              {asArray(
-                content.implementationStages
-              ).map((stage, index) => (
-                <div
-                  key={index}
-                  className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5"
-                >
-                  <div className="mb-3 flex items-center gap-3">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-400 text-xs font-black text-slate-950">
-                      {stage.stage ||
-                        index + 1}
-                    </span>
+        {content.exercises && (
+          <Exercises
+            items={content.exercises}
+            title="Exercises"
+          />
+        )}
 
-                    <h3 className="font-semibold text-white">
-                      {clean(
-                        stage.title
-                      )}
-                    </h3>
-                  </div>
+        {content.codingExercises && (
+          <Exercises
+            items={
+              content.codingExercises
+            }
+            title="Coding Exercises"
+          />
+        )}
 
-                  <BulletList
-                    items={stage.tasks}
-                  />
-                </div>
-              ))}
-            </div>
-          </section>
+        {content.architectureExercises && (
+          <Exercises
+            items={
+              content.architectureExercises
+            }
+            title="Architecture Exercises"
+          />
+        )}
+
+        {content.interviewQuestions && (
+          <InterviewQuestions
+            items={
+              content.interviewQuestions
+            }
+          />
+        )}
+
+        {content.commonMistakes && (
+          <CommonMistakes
+            items={
+              content.commonMistakes
+            }
+          />
+        )}
+
+        {content.visualReferences && (
+          <VisualReferences
+            items={
+              content.visualReferences
+            }
+          />
         )}
 
         {content.summary && (
-          <div className="mt-12">
-            <Summary
-              items={content.summary}
-            />
-          </div>
+          <Summary
+            items={
+              content.summary
+            }
+          />
         )}
 
         {content.keyTakeaways && (
-          <div className="mt-12">
-            <SectionHeading>
-              Key Takeaways
-            </SectionHeading>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              {asArray(
-                content.keyTakeaways
-              ).map((item, index) => (
-                <KeyTakeaway
-                  key={index}
-                  value={
-                    typeof item ===
-                    "string"
-                      ? item
-                      : item.content ||
-                        item.text ||
-                        item.title ||
-                        item
-                  }
-                  index={index}
-                />
-              ))}
-            </div>
-          </div>
+          <KeyTakeaways
+            items={
+              content.keyTakeaways
+            }
+          />
         )}
       </div>
     </div>
   );
 }
 
+/* -------------------------------------------------------------------------- */
+/* NORMALIZATION                                                               */
+/* -------------------------------------------------------------------------- */
+
 function normalizeContent(
   content: any
 ): AnyObject | null {
-  if (!content) return null;
+  if (!content) {
+    return null;
+  }
 
   if (
     typeof content === "object" &&
     content.content &&
-    typeof content.content === "object"
+    typeof content.content ===
+      "object"
   ) {
     return content.content;
   }
 
-  if (typeof content === "object") {
+  if (
+    typeof content === "object"
+  ) {
     return content;
   }
 
   return null;
 }
 
+/* -------------------------------------------------------------------------- */
+/* EXPORT                                                                      */
+/* -------------------------------------------------------------------------- */
+
 export default function GenerativeAIContentRenderer({
-  content
+  content,
 }: {
   content: unknown;
 }) {
@@ -1563,7 +2772,8 @@ export default function GenerativeAIContentRenderer({
     ) ||
     normalized.learningObjectives ||
     normalized.codeExamples ||
-    normalized.keyTakeaways;
+    normalized.keyTakeaways ||
+    normalized.mathIntuition;
 
   if (hasLessonStructure) {
     return (

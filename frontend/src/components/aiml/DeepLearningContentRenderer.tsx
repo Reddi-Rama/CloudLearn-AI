@@ -1,5 +1,6 @@
-﻿"use client";
+"use client";
 
+import React from "react";
 import type { ReactNode } from "react";
 
 /* ============================================================================
@@ -498,7 +499,7 @@ function SectionTitle({
   }
 
   return (
-    <h2 className="mb-5 mt-10 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+    <h2 className="mb-7 mt-12 text-3xl font-black tracking-tight text-white sm:text-4xl">
       {safeTitle}
     </h2>
   );
@@ -520,7 +521,7 @@ function Paragraph({
   }
 
   return (
-    <p className="my-4 text-base leading-8 text-slate-300 sm:text-lg">
+    <p className="my-4 text-[17px] leading-8 text-slate-300 sm:text-[18px] sm:text-lg">
       <InlineText text={value} />
     </p>
   );
@@ -544,7 +545,7 @@ function BulletList({
       {items.map((item, index) => (
         <li
           key={index}
-          className="flex items-start gap-3 text-base leading-8 text-slate-300 sm:text-lg"
+          className="flex items-start gap-3 text-[17px] leading-8 text-slate-300 sm:text-[18px] sm:text-lg"
         >
           <span className="mt-3 h-2 w-2 shrink-0 rounded-full bg-cyan-400" />
 
@@ -575,7 +576,7 @@ function NumberedList({
       {items.map((item, index) => (
         <li
           key={index}
-          className="flex items-start gap-4 text-base leading-8 text-slate-300 sm:text-lg"
+          className="flex items-start gap-4 text-[17px] leading-8 text-slate-300 sm:text-[18px] sm:text-lg"
         >
           <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-violet-500/15 text-sm font-bold text-violet-300">
             {index + 1}
@@ -686,7 +687,7 @@ function CodeBlock({
         </span>
       </div>
 
-      <pre className="overflow-x-auto p-5 text-sm leading-7 text-slate-200 sm:p-6 sm:text-[15px]">
+      <pre className="overflow-x-auto p-5 text-[17px] leading-8 text-slate-200 sm:text-[18px] sm:p-6 sm:text-[15px]">
         <code>{cleanedCode}</code>
       </pre>
     </div>
@@ -1280,55 +1281,612 @@ function renderTextBlock(
    Section Renderer
    ========================================================================== */
 
+function DeepLearningRichBlock({
+  block,
+  index,
+}: {
+  block: any;
+  index: number;
+}) {
+  if (!block || typeof block !== "object") {
+    return null;
+  }
+
+  const type = String(block.type ?? "").trim();
+  const title = block.title ?? block.heading ?? "";
+  const content = block.content ?? block.text ?? block.description ?? "";
+
+  const normalizeValues = (value: any): string[] => {
+    if (Array.isArray(value)) {
+      return value
+        .map((item) => {
+          if (typeof item === "string") return item;
+
+          if (item && typeof item === "object") {
+            return (
+              item.text ??
+              item.content ??
+              item.label ??
+              item.description ??
+              item.title ??
+              JSON.stringify(item)
+            );
+          }
+
+          return String(item ?? "");
+        })
+        .filter(Boolean);
+    }
+
+    if (typeof value === "string") {
+      return value
+        .split(/\r?\n/)
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    if (value !== undefined && value !== null) {
+      return [String(value)];
+    }
+
+    return [];
+  };
+
+  const values = normalizeValues(
+    block.items ??
+      block.bullets ??
+      block.steps ??
+      block.questions ??
+      block.options ??
+      block.checklist ??
+      block.content
+  );
+
+  const renderTitle = (value: any, level = "h3") => {
+    if (!value) return null;
+
+    if (level === "h2") {
+      return (
+        <h2 className="mb-8 mt-14 text-4xl font-black tracking-tight text-white sm:text-5xl">
+          {String(value)}
+        </h2>
+      );
+    }
+
+    return (
+      <h3 className="mb-5 mt-10 text-2xl font-bold tracking-tight text-slate-100 sm:text-3xl">
+        {String(value)}
+      </h3>
+    );
+  };
+
+  const renderParagraphs = (value: any) => {
+    const items = normalizeValues(value);
+
+    if (!items.length) return null;
+
+    return (
+      <div className="space-y-3">
+        {items.map((item, itemIndex) => (
+          <p
+            key={`${index}-paragraph-${itemIndex}`}
+            className="text-[15px] leading-7 text-slate-300"
+          >
+            {item}
+          </p>
+        ))}
+      </div>
+    );
+  };
+
+  const renderBullets = (items: string[]) => {
+    if (!items.length) return null;
+
+    return (
+      <ul className="my-3 space-y-2 pl-5 text-[15px] leading-7 text-slate-300">
+        {items.map((item, itemIndex) => (
+          <li key={`${index}-bullet-${itemIndex}`} className="pl-1">
+            <span className="mr-2 text-cyan-400">•</span>
+            {item}
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
+  const renderNumbered = (items: string[]) => {
+    if (!items.length) return null;
+
+    return (
+      <ol className="my-3 space-y-3 pl-6 text-[15px] leading-7 text-slate-300">
+        {items.map((item, itemIndex) => (
+          <li key={`${index}-step-${itemIndex}`} className="pl-1">
+            <span className="mr-2 font-semibold text-cyan-400">
+              {itemIndex + 1}.
+            </span>
+            {item}
+          </li>
+        ))}
+      </ol>
+    );
+  };
+
+  const renderCode = (value: any) => {
+    const code = Array.isArray(value)
+      ? value.join("\n")
+      : String(value ?? "");
+
+    if (!code.trim()) return null;
+
+    return (
+      <div className="my-4 overflow-hidden rounded-xl border border-slate-800 bg-slate-950 shadow-lg">
+        <div className="flex items-center border-b border-slate-800 bg-slate-900/80 px-4 py-2">
+          <span className="text-xs font-medium uppercase tracking-wider text-slate-400">
+            Code
+          </span>
+        </div>
+
+        <pre className="overflow-x-auto p-4 text-[16px] leading-7 text-slate-200">
+          <code>{code}</code>
+        </pre>
+      </div>
+    );
+  };
+
+  const renderFormula = (value: any) => {
+    const formula = Array.isArray(value)
+      ? value.join("\n")
+      : String(value ?? "");
+
+    if (!formula.trim()) return null;
+
+    return (
+      <div className="my-5 overflow-x-auto rounded-xl border border-violet-500/20 bg-violet-500/5 p-5">
+        <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-violet-300">
+          Formula
+        </div>
+
+        <div className="font-mono text-[18px] leading-9 text-violet-100">
+          {formula}
+        </div>
+      </div>
+    );
+  };
+
+  const renderOutput = (value: any) => {
+    const output = Array.isArray(value)
+      ? value.join("\n")
+      : String(value ?? "");
+
+    if (!output.trim()) return null;
+
+    return (
+      <div className="my-4 overflow-hidden rounded-xl border border-emerald-500/20 bg-emerald-500/5">
+        <div className="border-b border-emerald-500/20 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-emerald-300">
+          Expected Output
+        </div>
+
+        <pre className="overflow-x-auto p-4 text-[16px] leading-7 text-emerald-100">
+          {output}
+        </pre>
+      </div>
+    );
+  };
+
+  const renderTable = () => {
+    const rawRows =
+      block.rows ??
+      block.data ??
+      block.values ??
+      [];
+
+    const rawHeaders = block.headers ?? [];
+
+    if (!Array.isArray(rawRows) || !rawRows.length) {
+      return renderParagraphs(content);
+    }
+
+    let headers: string[] = Array.isArray(rawHeaders)
+      ? rawHeaders.map(String)
+      : [];
+
+    let rows: any[] = rawRows;
+
+    if (
+      !headers.length &&
+      rows[0] &&
+      typeof rows[0] === "object" &&
+      !Array.isArray(rows[0])
+    ) {
+      headers = Object.keys(rows[0]);
+    }
+
+    return (
+      <div className="my-5 overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/70">
+        <table className="w-full min-w-[600px] border-collapse text-left text-sm">
+          {headers.length > 0 && (
+            <thead>
+              <tr className="border-b border-slate-800 bg-slate-900">
+                {headers.map((header, headerIndex) => (
+                  <th
+                    key={`${index}-header-${headerIndex}`}
+                    className="px-4 py-3 font-semibold text-slate-100"
+                  >
+                    {header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+          )}
+
+          <tbody>
+            {rows.map((row, rowIndex) => {
+              const cells = Array.isArray(row)
+                ? row
+                : headers.map((header) => row?.[header] ?? "");
+
+              return (
+                <tr
+                  key={`${index}-row-${rowIndex}`}
+                  className="border-b border-slate-800/70 last:border-b-0"
+                >
+                  {cells.map((cell: any, cellIndex: number) => (
+                    <td
+                      key={`${index}-cell-${rowIndex}-${cellIndex}`}
+                      className="px-4 py-3 align-top leading-6 text-slate-300"
+                    >
+                      {typeof cell === "object"
+                        ? JSON.stringify(cell)
+                        : String(cell ?? "")}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  const renderQuestionAnswer = () => {
+    const question =
+      block.question ??
+      block.prompt ??
+      block.title ??
+      "";
+
+    const answer =
+      block.answer ??
+      block.expectedAnswer ??
+      block.explanation ??
+      block.solution ??
+      "";
+
+    return (
+      <div className="my-5 space-y-3">
+        {question && (
+          <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-4">
+            <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-cyan-300">
+              Question
+            </div>
+            <p className="leading-7 text-slate-200">{String(question)}</p>
+          </div>
+        )}
+
+        {answer && (
+          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
+            <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Answer
+            </div>
+            <div className="leading-7 text-slate-300">
+              {renderParagraphs(answer)}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderTask = () => {
+    const task =
+      block.task ??
+      block.description ??
+      block.instructions ??
+      block.content ??
+      "";
+
+    const requirements =
+      block.requirements ??
+      block.items ??
+      block.steps ??
+      [];
+
+    return (
+      <div className="my-5 rounded-xl border border-amber-500/20 bg-amber-500/5 p-5">
+        {renderTitle(title || type, "h3")}
+
+        {task && (
+          <div className="mb-3 text-[15px] leading-7 text-slate-300">
+            {renderParagraphs(task)}
+          </div>
+        )}
+
+        {Array.isArray(requirements) &&
+          requirements.length > 0 &&
+          renderBullets(normalizeValues(requirements))}
+      </div>
+    );
+  };
+
+  const renderGeneric = () => {
+    const parts: React.ReactNode[] = [];
+
+    if (title) {
+      parts.push(
+        <React.Fragment key="title">
+          {renderTitle(title)}
+        </React.Fragment>
+      );
+    }
+
+    if (content) {
+      parts.push(
+        <React.Fragment key="content">
+          {renderParagraphs(content)}
+        </React.Fragment>
+      );
+    }
+
+    if (values.length > 0) {
+      parts.push(
+        <React.Fragment key="values">
+          {renderBullets(values)}
+        </React.Fragment>
+      );
+    }
+
+    if (block.steps && values.length > 0) {
+      parts.push(
+        <React.Fragment key="steps">
+          {renderNumbered(normalizeValues(block.steps))}
+        </React.Fragment>
+      );
+    }
+
+    return parts.length ? <div className="my-5">{parts}</div> : null;
+  };
+
+  switch (type) {
+    case "heading":
+      return (
+        <div className="my-6">
+          {renderTitle(title || content, "h2")}
+        </div>
+      );
+
+    case "intro":
+      return (
+        <div className="my-5 rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-5">
+          {renderTitle(title || "Introduction")}
+          {renderParagraphs(content || values)}
+        </div>
+      );
+
+    case "paragraph":
+      return <div className="my-6">{renderParagraphs(content)}</div>;
+
+    case "concept":
+      return (
+        <div className="my-5 rounded-xl border border-slate-800 bg-slate-900/50 p-5">
+          {renderTitle(title || "Concept")}
+          {renderParagraphs(content)}
+          {values.length > 0 && renderBullets(values)}
+        </div>
+      );
+
+    case "bullet":
+    case "bullets":
+    case "list":
+      return (
+        <div className="my-5">
+          {title && renderTitle(title)}
+          {renderBullets(values)}
+        </div>
+      );
+
+    case "process":
+      return (
+        <div className="my-6 rounded-xl border border-cyan-500/20 bg-slate-900/50 p-5">
+          {renderTitle(title || "Process")}
+          {content && renderParagraphs(content)}
+          {renderNumbered(normalizeValues(block.steps))}
+        </div>
+      );
+
+    case "formula":
+      return renderFormula(block.formula ?? content);
+
+    case "code":
+    case "coding":
+      return (
+        <div className="my-5">
+          {title && renderTitle(title)}
+          {renderCode(block.code ?? block.example ?? content)}
+        </div>
+      );
+
+    case "output":
+      return renderOutput(block.output ?? content);
+
+    case "table":
+      return (
+        <div className="my-5">
+          {title && renderTitle(title)}
+          {renderTable()}
+        </div>
+      );
+
+    case "qa":
+    case "question":
+    case "questions":
+      return renderQuestionAnswer();
+
+    case "exercise":
+    case "exercises":
+    case "codingTask":
+    case "debuggingTask":
+    case "debugging":
+    case "challenge":
+    case "projectTask":
+    case "activity":
+    case "checklist":
+      return renderTask();
+
+    case "experiment":
+      return (
+        <div className="my-5 rounded-xl border border-violet-500/20 bg-violet-500/5 p-5">
+          {renderTitle(title || "Experiment")}
+          {renderParagraphs(
+            block.objective ??
+              block.description ??
+              block.instructions ??
+              content
+          )}
+
+          {Array.isArray(block.steps) &&
+            renderNumbered(normalizeValues(block.steps))}
+
+          {block.code && renderCode(block.code)}
+
+          {block.output && renderOutput(block.output)}
+        </div>
+      );
+
+    case "summary":
+      return (
+        <div className="my-6 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-5">
+          {renderTitle(title || "Summary")}
+          {renderParagraphs(content || block.summary || values)}
+        </div>
+      );
+
+    case "takeaway":
+    case "keyTakeaway":
+      return (
+        <div className="my-5 rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-5">
+          <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-cyan-300">
+            Key Takeaway
+          </div>
+
+          {renderTitle(title)}
+          {renderParagraphs(
+            content ||
+              block.takeaway ||
+              block.keyTakeaway ||
+              values
+          )}
+        </div>
+      );
+
+    case "Major Module Project":
+      return (
+        <div className="my-6 rounded-2xl border border-violet-500/30 bg-violet-500/10 p-6">
+          {renderTitle(title || "Major Module Project", "h2")}
+          {renderParagraphs(content || block.description)}
+
+          {Array.isArray(block.steps) &&
+            renderNumbered(normalizeValues(block.steps))}
+
+          {Array.isArray(block.deliverables) &&
+            renderBullets(normalizeValues(block.deliverables))}
+        </div>
+      );
+
+    default:
+      return renderGeneric();
+  }
+}
+
 function SectionRenderer({
   section,
   index,
 }: {
-  section: LessonSection;
+  section: any;
   index: number;
 }) {
-  const title = cleanText(section.title);
+  if (!section) return null;
+
+  if (typeof section === "string") {
+    return (
+      <div className="my-5">
+        {renderTextBlock([section], `section-${index}`)}
+      </div>
+    );
+  }
+
+  if (Array.isArray(section)) {
+    return (
+      <div className="my-5">
+        {renderTextBlock(
+          section.map(String),
+          `section-${index}`
+        )}
+      </div>
+    );
+  }
+
+  if (typeof section !== "object") {
+    return null;
+  }
+
+  if (section.type) {
+    return (
+      <DeepLearningRichBlock
+        block={section}
+        index={index}
+      />
+    );
+  }
+
+  const title =
+    section.title ??
+    section.heading ??
+    "";
 
   const content =
-    section.content !== undefined
-      ? normalizeContent(section.content)
-      : [];
+    section.content ??
+    section.text ??
+    section.description ??
+    "";
 
-  if (!title && content.length === 0) {
+  const normalized =
+    typeof content === "string"
+      ? [content]
+      : Array.isArray(content)
+        ? content.map(String)
+        : [];
+
+  if (!title && normalized.length === 0) {
     return null;
   }
 
   return (
-    <section
-      id={
-        section.id ||
-        `section-${index + 1}`
-      }
-      className="scroll-mt-24"
-    >
+    <section className="my-6">
       {title && (
-        <SectionTitle
-          title={title.replace(
-            /^\d+\.\s*/,
-            ""
-          )}
-          level={2}
-        />
+        <h3 className="mb-3 text-lg font-semibold text-slate-100">
+          {title}
+        </h3>
       )}
 
-      {content.length > 0 &&
+      {normalized.length > 0 &&
         renderTextBlock(
-          content,
+          normalized,
           `section-${index}`
         )}
     </section>
   );
 }
-
-/* ============================================================================
-   Lesson Detection
-   ========================================================================== */
-
 function isDeepLearningLesson(
   value: unknown
 ): value is DeepLearningLesson {
@@ -1397,7 +1955,7 @@ export default function DeepLearningContentRenderer({
   if (lesson) {
     return (
       <div className="w-full min-w-0 max-w-full overflow-visible break-words [overflow-wrap:anywhere]">
-        <div className="px-5 py-7 sm:px-8 sm:py-9 lg:px-10 lg:py-10">
+        <div className="px-6 py-10 sm:px-9 sm:py-12 lg:px-14 lg:py-14">
 
           {/* ----------------------------------------------------------------
              Header
@@ -1407,7 +1965,7 @@ export default function DeepLearningContentRenderer({
             <div className="mb-5 flex flex-wrap items-center gap-2">
 
               {lesson.moduleId && (
-                <span className="rounded-full border border-violet-500/20 bg-violet-500/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-violet-300">
+                <span className="rounded-full border border-violet-500/20 bg-violet-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-violet-300">
                   {lesson.moduleId.replace(
                     /^module/i,
                     "Module "
@@ -1417,7 +1975,7 @@ export default function DeepLearningContentRenderer({
 
               {lesson.lessonNumber !==
                 undefined && (
-                <span className="rounded-full border border-slate-700 bg-slate-800 px-3 py-1 text-xs font-semibold text-slate-400">
+                <span className="rounded-full border border-slate-700 bg-slate-800 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-slate-400">
                   Lesson{" "}
                   {lesson.lessonNumber}
                 </span>
@@ -1445,7 +2003,7 @@ export default function DeepLearningContentRenderer({
 
             {lesson.description && (
               <div className="mt-7 rounded-2xl border border-slate-800 bg-slate-950/50 p-5 sm:p-6">
-                <p className="text-base leading-8 text-slate-300 sm:text-lg">
+                <p className="text-[17px] leading-8 text-slate-300 sm:text-[18px] sm:text-lg">
                   <InlineText
                     text={lesson.description}
                   />
@@ -1669,7 +2227,7 @@ export default function DeepLearningContentRenderer({
                   level={2}
                 />
 
-                <div className="space-y-4">
+                <div className="space-y-5">
                   {lesson.exercises.map(
                     (
                       exercise,
@@ -1697,7 +2255,7 @@ export default function DeepLearningContentRenderer({
                           )}
                         </div>
 
-                        <p className="mt-4 text-base leading-8 text-slate-200 sm:text-lg">
+                        <p className="mt-4 text-[17px] leading-8 text-slate-200 sm:text-[18px] sm:text-lg sm:text-lg">
                           <InlineText
                             text={
                               exercise.question ||
@@ -1752,7 +2310,7 @@ export default function DeepLearningContentRenderer({
                         )}
 
                         {exercise.task && (
-                          <p className="mt-3 text-base leading-8 text-slate-200 sm:text-lg">
+                          <p className="mt-3 text-[17px] leading-8 text-slate-200 sm:text-[18px] sm:text-lg sm:text-lg">
                             <InlineText
                               text={
                                 exercise.task
@@ -1796,7 +2354,7 @@ export default function DeepLearningContentRenderer({
                               Mistake
                             </div>
 
-                            <p className="mt-2 text-base leading-7 text-slate-200 sm:text-lg">
+                            <p className="mt-2 text-[17px] leading-8 text-slate-200 sm:text-[18px] sm:text-lg sm:text-lg">
                               <InlineText
                                 text={
                                   item.mistake
@@ -1812,7 +2370,7 @@ export default function DeepLearningContentRenderer({
                               Correction
                             </div>
 
-                            <p className="mt-2 text-base leading-7 text-slate-200 sm:text-lg">
+                            <p className="mt-2 text-[17px] leading-8 text-slate-200 sm:text-[18px] sm:text-lg sm:text-lg">
                               <InlineText
                                 text={
                                   item.correction
@@ -1880,12 +2438,12 @@ export default function DeepLearningContentRenderer({
                     </h2>
                   </div>
 
-                  <ul className="space-y-4">
+                  <ul className="space-y-5">
                     {lesson.keyTakeaways.map(
                       (item, index) => (
                         <li
                           key={index}
-                          className="flex items-start gap-3 text-base leading-8 text-slate-200 sm:text-lg"
+                          className="flex items-start gap-3 text-[17px] leading-8 text-slate-200 sm:text-[18px] sm:text-lg sm:text-lg"
                         >
                           <span className="mt-3 h-2 w-2 shrink-0 rounded-full bg-violet-400" />
 
@@ -1912,7 +2470,7 @@ export default function DeepLearningContentRenderer({
 
   if (typeof content === "string") {
     return (
-      <div className="w-full min-w-0 max-w-full overflow-visible break-words [overflow-wrap:anywhere] px-5 py-7 sm:px-8 sm:py-9 lg:px-10 lg:py-10">
+      <div className="w-full min-w-0 max-w-full overflow-visible break-words [overflow-wrap:anywhere] px-6 py-10 sm:px-9 sm:py-12 lg:px-14 lg:py-14">
         {renderTextBlock(
           content,
           "string-content"
@@ -1927,7 +2485,7 @@ export default function DeepLearningContentRenderer({
 
   if (Array.isArray(content)) {
     return (
-      <div className="w-full min-w-0 max-w-full overflow-visible break-words [overflow-wrap:anywhere] px-5 py-7 sm:px-8 sm:py-9 lg:px-10 lg:py-10">
+      <div className="w-full min-w-0 max-w-full overflow-visible break-words [overflow-wrap:anywhere] px-6 py-10 sm:px-9 sm:py-12 lg:px-14 lg:py-14">
         {renderTextBlock(
           content.map(String),
           "array-content"
@@ -1947,7 +2505,7 @@ export default function DeepLearningContentRenderer({
           Lesson content could not be loaded
         </h2>
 
-        <p className="mt-3 text-sm leading-7 text-slate-400">
+        <p className="mt-3 text-[16px] leading-8 text-slate-400 sm:text-[17px]">
           The lesson exists, but its content
           format could not be recognized by
           the Deep Learning renderer.

@@ -2,7 +2,6 @@
 
 import ProfileCard from "./ProfileCard";
 import SettingsPanel from "./SettingsPanel";
-import NotificationPanel from "./NotificationPanel";
 
 export default function ProfilePageContent() {
   return (
@@ -13,7 +12,6 @@ export default function ProfilePageContent() {
       </div>
 
       <div className="lg:col-span-2 space-y-8">
-        <NotificationPanel />
         <SettingsPanel />
       </div>
 
