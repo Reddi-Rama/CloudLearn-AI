@@ -9,7 +9,6 @@ import {
 
 import AIMLSidebar from "@/components/aiml/AIMLSidebar";
 import AIMLContentRenderer from "@/components/aiml/AIMLContentRenderer";
-import AIMLCourseCompletion from "@/components/aiml/AIMLCourseCompletion";
 
 interface Props {
   params: Promise<{
@@ -23,11 +22,19 @@ export default async function AIMLLessonPage({
 }: Props) {
   const { moduleId, lessonId } = await params;
 
+  // ============================================================
+  // MODULE
+  // ============================================================
+
   const module = getAIMLModule(moduleId);
 
   if (!module) {
     notFound();
   }
+
+  // ============================================================
+  // CONTENT
+  // ============================================================
 
   let lessonContent: any;
 
@@ -38,7 +45,7 @@ export default async function AIMLLessonPage({
     );
   } catch (error) {
     console.error(
-      "Failed to load AIML lesson content:",
+      "Failed to load AI Foundations content:",
       error
     );
 
@@ -49,13 +56,15 @@ export default async function AIMLLessonPage({
     notFound();
   }
 
-  const currentIndex = module.lessons.findIndex(
-    (lesson: any) => lesson.id === lessonId
-  );
+  // ============================================================
+  // LESSON NAVIGATION
+  // ============================================================
 
-  if (currentIndex === -1) {
-    notFound();
-  }
+  const currentIndex =
+    module.lessons.findIndex(
+      (lesson: any) =>
+        lesson.id === lessonId
+    );
 
   const previousLesson =
     currentIndex > 0
@@ -63,120 +72,128 @@ export default async function AIMLLessonPage({
       : null;
 
   const nextLesson =
+    currentIndex >= 0 &&
     currentIndex < module.lessons.length - 1
       ? module.lessons[currentIndex + 1]
       : null;
 
-  /*
-   * The final AIML lesson is the last lesson
-   * of the last AIML module.
-   */
-  const lastModule =
-    AIML_MODULES[AIML_MODULES.length - 1];
-
-  const lastLesson =
-    lastModule?.lessons[
-      lastModule.lessons.length - 1
-    ];
-
-  const isFinalLesson =
-    moduleId === lastModule?.id &&
-    lessonId === lastLesson?.id;
+  // ============================================================
+  // RENDER
+  // ============================================================
 
   return (
-    <main className="min-h-screen w-full bg-[#020617] pt-20 text-white">
+    <main className="min-h-screen w-full bg-[#020617] text-white">
 
-      {/* COURSE NAVIGATION */}
+      {/* ======================================================
+          BACK BUTTON
+      ====================================================== */}
 
-      <div className="w-full px-4 pb-4 pt-5 sm:px-6 lg:px-8 xl:px-10">
-        <div className="mx-auto flex w-full max-w-[1800px] items-center">
+      <div className="w-full px-4 pb-5 pt-5 sm:px-6 lg:px-8 xl:px-10">
+        <div className="mx-auto w-full max-w-[1800px]">
+
           <Link
             href="/courses/aiml/ai-foundations"
             className="
-              group inline-flex items-center gap-3
-              rounded-2xl border border-cyan-500/20
-              bg-slate-950/90 px-4 py-2.5
-              text-sm font-bold text-slate-200
-              shadow-[0_8px_30px_rgba(8,145,178,0.10)]
-              backdrop-blur-xl transition-all duration-200
-              hover:-translate-y-0.5
-              hover:border-cyan-400/40
-              hover:bg-slate-900
-              hover:text-white
+              inline-flex
+              items-center
+              gap-2
+              rounded-xl
+              border
+              border-slate-300
+              bg-white
+              px-4
+              py-2.5
+              text-sm
+              font-semibold
+              text-slate-700
+              shadow-lg
+              transition
+              hover:bg-slate-100
+              hover:text-slate-950
             "
           >
-            <span
-              className="
-                flex h-8 w-8 shrink-0 items-center
-                justify-center rounded-xl
-                border border-cyan-400/20
-                bg-cyan-400/10 text-lg text-cyan-300
-                transition-transform duration-200
-                group-hover:-translate-x-0.5
-              "
-            >
-              ←
-            </span>
-
-            <span className="flex flex-col">
-              <span className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-400">
-                Course Navigation
-              </span>
-
-              <span className="mt-0.5 text-sm font-bold text-slate-100">
-                Back to AI Foundations
-              </span>
-            </span>
+            ← Back to Course
           </Link>
+
         </div>
       </div>
 
-      {/* LESSON AREA */}
+      {/* ======================================================
+          LESSON AREA
+      ====================================================== */}
 
       <section className="w-full px-4 pb-16 sm:px-6 lg:px-8 xl:px-10">
+
         <div
           className="
-            mx-auto grid w-full max-w-[1800px]
-            grid-cols-1 gap-6
+            mx-auto
+            grid
+            w-full
+            max-w-[1800px]
+            grid-cols-1
+            gap-6
             lg:grid-cols-[300px_minmax(0,1fr)]
+            lg:gap-6
           "
         >
 
-          {/* SIDEBAR */}
+          {/* ==================================================
+              SIDEBAR
+          ================================================== */}
 
           <aside className="hidden min-w-0 lg:block">
+
             <div
               className="
-                sticky top-24 z-20 w-full
+                sticky
+                top-24
+                z-20
+                w-full
                 max-h-[calc(100vh-7rem)]
                 overflow-hidden
               "
             >
               <AIMLSidebar />
             </div>
+
           </aside>
 
-          {/* ARTICLE */}
+          {/* ==================================================
+              ARTICLE
+          ================================================== */}
 
           <article
             className="
-              min-w-0 w-full overflow-hidden
-              rounded-3xl border border-slate-800
-              bg-slate-900/70 shadow-2xl
+              min-w-0
+              w-full
+              overflow-hidden
+              rounded-3xl
+              border
+              border-slate-800
+              bg-slate-900/70
+              shadow-2xl
             "
           >
 
-            {/* CONTENT */}
+            {/* =================================================
+                LESSON CONTENT
+            ================================================= */}
 
             <div
               className="
-                w-full min-w-0
-                px-5 py-7
-                sm:px-8 sm:py-9
-                lg:px-10 lg:py-10
-                xl:px-12 xl:py-12
+                w-full
+                min-w-0
+                px-5
+                py-7
+                sm:px-8
+                sm:py-9
+                lg:px-10
+                lg:py-10
+                xl:px-12
+                xl:py-12
               "
             >
+
               <AIMLContentRenderer
                 content={
                   lessonContent.content ??
@@ -184,54 +201,64 @@ export default async function AIMLLessonPage({
                 }
               />
 
-              {/* LESSON COMPLETION */}
-
-              <AIMLCourseCompletion
-                moduleId={moduleId}
-                lessonId={lessonId}
-                courseSlug="ai-foundations"
-                isFinalLesson={isFinalLesson}
-              />
             </div>
 
-            {/* PREVIOUS / NEXT */}
+            {/* =================================================
+                PREVIOUS / NEXT
+            ================================================= */}
 
             {(previousLesson || nextLesson) && (
+
               <div
                 className="
-                  border-t border-slate-800
+                  border-t
+                  border-slate-800
                   bg-slate-950/30
-                  px-5 py-6
+                  px-5
+                  py-6
                   sm:px-8
                   lg:px-10
                   xl:px-12
                 "
               >
+
                 <div
                   className="
-                    grid grid-cols-1 gap-4
+                    grid
+                    grid-cols-1
+                    gap-4
                     lg:grid-cols-2
                   "
                 >
 
-                  {/* PREVIOUS */}
+                  {/* =================================================
+                      PREVIOUS
+                  ================================================= */}
 
                   {previousLesson ? (
+
                     <Link
                       href={`/lesson/aiml/${moduleId}/${previousLesson.id}`}
                       className="
-                        group min-w-0 rounded-2xl
-                        border border-slate-800
-                        bg-slate-900/60 p-5
+                        group
+                        min-w-0
+                        rounded-2xl
+                        border
+                        border-slate-800
+                        bg-slate-900/60
+                        p-5
                         transition
                         hover:border-sky-500/40
                         hover:bg-slate-900
                       "
                     >
+
                       <div
                         className="
-                          text-[10px] font-bold
-                          uppercase tracking-[0.18em]
+                          text-[10px]
+                          font-bold
+                          uppercase
+                          tracking-[0.18em]
                           text-slate-500
                         "
                       >
@@ -239,44 +266,60 @@ export default async function AIMLLessonPage({
                       </div>
 
                       <div className="mt-2 flex items-center gap-2">
+
                         <span className="text-sky-400">
                           ←
                         </span>
 
                         <span
                           className="
-                            truncate text-sm
-                            font-semibold text-slate-200
+                            truncate
+                            text-sm
+                            font-semibold
+                            text-slate-200
                             group-hover:text-white
                           "
                         >
                           {previousLesson.title}
                         </span>
+
                       </div>
+
                     </Link>
+
                   ) : (
                     <div />
                   )}
 
-                  {/* NEXT */}
+                  {/* =================================================
+                      NEXT
+                  ================================================= */}
 
                   {nextLesson ? (
+
                     <Link
                       href={`/lesson/aiml/${moduleId}/${nextLesson.id}`}
                       className="
-                        group min-w-0 rounded-2xl
-                        border border-slate-800
-                        bg-slate-900/60 p-5
+                        group
+                        min-w-0
+                        rounded-2xl
+                        border
+                        border-slate-800
+                        bg-slate-900/60
+                        p-5
                         transition
                         hover:border-sky-500/40
                         hover:bg-slate-900
                         lg:text-right
                       "
                     >
+
                       <div
                         className="
-                          text-[10px] font-bold
-                          uppercase tracking-[0.18em]
+                          text-[10px]
+                          font-bold
+                          uppercase
+                          tracking-[0.18em]
                           text-sky-400
                         "
                       >
@@ -285,14 +328,20 @@ export default async function AIMLLessonPage({
 
                       <div
                         className="
-                          mt-2 flex items-center
-                          gap-2 lg:justify-end
+                          mt-2
+                          flex
+                          items-center
+                          gap-2
+                          lg:justify-end
                         "
                       >
+
                         <span
                           className="
-                            truncate text-sm
-                            font-semibold text-slate-200
+                            truncate
+                            text-sm
+                            font-semibold
+                            text-slate-200
                             group-hover:text-white
                           "
                         >
@@ -302,19 +351,27 @@ export default async function AIMLLessonPage({
                         <span className="text-sky-400">
                           →
                         </span>
+
                       </div>
+
                     </Link>
+
                   ) : (
                     <div />
                   )}
 
                 </div>
+
               </div>
+
             )}
 
           </article>
+
         </div>
+
       </section>
+
     </main>
   );
 }

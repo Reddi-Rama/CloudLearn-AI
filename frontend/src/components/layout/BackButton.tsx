@@ -17,10 +17,8 @@ export default function BackButton({
       href={href}
       aria-label={label}
       className="
-        fixed
-        left-5
-        top-[112px]
-        z-40
+        relative
+        z-10
 
         inline-flex
         h-10

@@ -61,7 +61,50 @@ export default function BackNavigation() {
 
   /*
    * ============================================================
-   * COURSE DETAIL
+   * AI & MACHINE LEARNING DOMAIN
+   * ============================================================
+   */
+
+  if (pathname === "/domains/aiml") {
+    return (
+      <div className="cloudlearn-back-nav">
+        <BackButton
+          href="/domains"
+          label="Back to Domains"
+        />
+      </div>
+    );
+  }
+
+
+  /*
+   * ============================================================
+   * AI & MACHINE LEARNING COURSES
+   * ============================================================
+   */
+
+  const aimlCourses = [
+    "/courses/aiml/ai-foundations",
+    "/courses/aiml/machine-learning",
+    "/courses/aiml/deep-learning",
+    "/courses/aiml/generative-ai",
+  ];
+
+  if (aimlCourses.includes(pathname)) {
+    return (
+      <div className="cloudlearn-back-nav">
+        <BackButton
+          href="/domains/aiml"
+          label="Back to AI & Machine Learning"
+        />
+      </div>
+    );
+  }
+
+
+  /*
+   * ============================================================
+   * OTHER COURSE DETAIL PAGES
    * ============================================================
    */
 
