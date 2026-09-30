@@ -2,7 +2,7 @@ const lesson = {
   lesson: "14",
   title: "AI Project Experimentation & Iteration",
 
-  description: `
+  content: `
 # Lesson 14 — AI Project Experimentation & Iteration
 
 ## What You Will Learn

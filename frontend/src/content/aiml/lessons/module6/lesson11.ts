@@ -2,7 +2,7 @@ const lesson = {
   lesson: "11",
   title: "AI Project Documentation & Reproducibility",
 
-  description: `
+  content: `
 # Lesson 11 — AI Project Documentation & Reproducibility
 
 ## What You Will Learn

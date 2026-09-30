@@ -2,7 +2,7 @@ const lesson = {
   lesson: "06",
   title: "Data Preparation for AI",
 
-  description: `
+  content: `
 # Lesson 06 — Data Preparation for AI
 
 ## What You Will Learn

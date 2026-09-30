@@ -2,7 +2,7 @@ const lesson = {
   lesson: "09",
   title: "Error Analysis & Model Improvement",
 
-  description: `
+  content: `
 # Lesson 09 — Error Analysis & Model Improvement
 
 ## What You Will Learn

@@ -2,7 +2,7 @@ const lesson = {
   lesson: "13",
   title: "AI Monitoring & Continuous Improvement",
 
-  description: `
+  content: `
 # Lesson 13 — AI Monitoring & Continuous Improvement
 
 ## What You Will Learn

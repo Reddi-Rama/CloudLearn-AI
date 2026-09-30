@@ -2,7 +2,7 @@ const lesson = {
   lesson: "05",
   title: "Data Collection for AI Projects",
 
-  description: `
+  content: `
 # Lesson 05 — Data Collection for AI Projects
 
 ## What You Will Learn

@@ -2,7 +2,7 @@ const lesson = {
   lesson: "15",
   title: "From AI Prototype to Complete Project",
 
-  description: `
+  content: `
 # Lesson 15 — From AI Prototype to Complete Project
 
 ## What You Will Learn

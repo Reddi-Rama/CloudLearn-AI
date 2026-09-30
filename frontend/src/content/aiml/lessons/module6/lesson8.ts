@@ -2,7 +2,7 @@ const lesson = {
   lesson: "08",
   title: "Model Evaluation & Validation",
 
-  description: `
+  content: `
 # Lesson 08 — Model Evaluation & Validation
 
 ## What You Will Learn

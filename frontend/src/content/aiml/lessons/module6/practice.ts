@@ -1,99 +1,179 @@
-export const practice = {
+const practice = {
   id: "module06-practice",
   title: "AI Project Lifecycle Practice",
-  description:
-    "Practice activities covering problem formulation, data preparation, model development, evaluation, experimentation, deployment, and the complete AI project lifecycle.",
 
-  objectives: [
-    "Formulate real-world problems as AI problems.",
-    "Identify suitable inputs, outputs, targets, and AI tasks.",
-    "Design a basic AI project workflow.",
-    "Analyze model evaluation results and errors.",
-    "Plan controlled AI experiments.",
-    "Understand the transition from an AI prototype to a complete AI project."
-  ],
+  content: `
+# Module 06 Practice — AI Project Lifecycle
 
-  activities: [
-    {
-      id: "practice-01",
-      title: "AI Problem Formulation",
-      task:
-        "Choose a real-world problem and define its objective, inputs, output, unit of prediction, AI task, constraints, and evaluation metric.",
-      expectedOutput:
-        "A complete AI problem formulation."
-    },
+## Practice Objective
 
-    {
-      id: "practice-02",
-      title: "Design the AI Workflow",
-      task:
-        "Create an end-to-end workflow for your selected AI problem, beginning with problem definition and ending with deployment and monitoring.",
-      expectedOutput:
-        "A flow diagram showing the complete AI project lifecycle."
-    },
+Use the complete AI project lifecycle to analyze a realistic AI problem from initial definition through deployment and monitoring.
 
-    {
-      id: "practice-03",
-      title: "Baseline and Model Comparison",
-      task:
-        "Select a suitable dataset and compare a simple baseline with at least two candidate machine learning models.",
-      expectedOutput:
-        "A comparison of model results using appropriate evaluation metrics."
-    },
+## Activity 1 — Define the Problem
 
-    {
-      id: "practice-04",
-      title: "AI Experiment Design",
-      task:
-        "Design three controlled experiments by changing features, preprocessing, models, or hyperparameters. Record the configuration and results of each experiment.",
-      expectedOutput:
-        "An experiment log containing observations and conclusions."
-    },
+Choose a real-world problem that could benefit from AI.
 
-    {
-      id: "practice-05",
-      title: "Error Analysis",
-      task:
-        "Examine incorrect predictions from a trained model and identify possible reasons for the errors.",
-      expectedOutput:
-        "An error-analysis report containing observed patterns and proposed improvements."
-    },
+Write:
 
-    {
-      id: "practice-06",
-      title: "Prototype to AI System",
-      task:
-        "Convert a simple model-training notebook into a project plan containing data processing, model training, evaluation, inference, testing, documentation, deployment, and monitoring components.",
-      expectedOutput:
-        "A complete AI project structure and implementation plan."
-    }
-  ],
+- Problem statement.
+- Target users.
+- Expected input.
+- Expected output.
+- Why AI is appropriate.
+- Constraints.
 
-  challenge: {
-    title: "End-to-End AI Project Planning Challenge",
-    description:
-      "Design a complete AI solution for a real-world problem. Define the problem, formulate the AI task, identify the data requirements, select a baseline and candidate models, define evaluation metrics, plan experiments, and describe how the final system would be deployed and monitored.",
-    deliverables: [
-      "Problem statement",
-      "AI problem formulation",
-      "Input and output specification",
-      "Dataset requirements",
-      "Model strategy",
-      "Evaluation strategy",
-      "Experiment plan",
-      "System workflow",
-      "Deployment plan",
-      "Monitoring plan"
-    ]
-  },
+## Activity 2 — Formulate the AI Task
 
-  completionCriteria: [
-    "Problem is clearly defined.",
-    "AI task is correctly formulated.",
-    "Inputs and outputs are appropriate.",
-    "Evaluation metrics match the problem.",
-    "Experiments are logically designed.",
-    "Results are analyzed rather than only recorded.",
-    "The complete AI lifecycle is addressed."
-  ]
+Identify whether the problem is:
+
+- Classification.
+- Regression.
+- Clustering.
+- Recommendation.
+- Forecasting.
+- Computer vision.
+- Natural language processing.
+
+Explain why the selected formulation is appropriate.
+
+## Activity 3 — Design the Dataset
+
+Specify:
+
+- Data sources.
+- Required features.
+- Target variable.
+- Data format.
+- Expected dataset size.
+- Data quality requirements.
+
+## Activity 4 — Data Preparation
+
+Describe how you would:
+
+- Remove invalid records.
+- Handle missing values.
+- Encode categorical features.
+- Scale numerical features when appropriate.
+- Detect outliers.
+- Split training and evaluation data.
+
+## Activity 5 — Baseline Model
+
+Choose a simple baseline model.
+
+Explain:
+
+- Why it is suitable.
+- What inputs it requires.
+- What output it produces.
+- Which metric you would use.
+
+## Activity 6 — Evaluation
+
+Design an evaluation strategy.
+
+For classification consider:
+
+- Accuracy.
+- Precision.
+- Recall.
+- F1-score.
+
+For regression consider:
+
+- MAE.
+- MSE.
+- RMSE.
+- R².
+
+Explain why your selected metric matches the problem.
+
+## Activity 7 — Error Analysis
+
+Suppose your model produces incorrect predictions.
+
+Investigate:
+
+- Which examples fail?
+- Are some classes harder?
+- Is the dataset unbalanced?
+- Are important features missing?
+- Is there possible data leakage?
+- Is the model too simple or too complex?
+
+## Activity 8 — Experimentation
+
+Design three controlled experiments.
+
+For every experiment specify:
+
+- Hypothesis.
+- Variable being changed.
+- Evaluation metric.
+- Expected result.
+- Actual result.
+- Conclusion.
+
+## Activity 9 — Deployment
+
+Describe how your model could be deployed.
+
+Consider:
+
+- API.
+- Application.
+- Model storage.
+- Input validation.
+- Authentication.
+- Logging.
+- Error handling.
+
+## Activity 10 — Monitoring
+
+After deployment, decide what should be monitored.
+
+Examples:
+
+- Prediction quality.
+- Latency.
+- Error rate.
+- Data distribution.
+- Model drift.
+- Resource usage.
+
+## Final Practice Challenge
+
+Design a complete AI workflow:
+
+\`\`\`text
+Problem
+ ↓
+Data
+ ↓
+Preparation
+ ↓
+Baseline
+ ↓
+Training
+ ↓
+Evaluation
+ ↓
+Error Analysis
+ ↓
+Experimentation
+ ↓
+Deployment
+ ↓
+Monitoring
+ ↓
+Improvement
+\`\`\`
+
+### Expected Outcome
+
+The final solution should demonstrate that an AI project is a complete engineering lifecycle rather than only a model-training step.
+`,
 };
+
+export default practice;

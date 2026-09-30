@@ -2,7 +2,7 @@ const lesson = {
   lesson: "10",
   title: "End-to-End AI Project Workflow",
 
-  description: `
+  content: `
 # Lesson 10 — End-to-End AI Project Workflow
 
 ## What You Will Learn

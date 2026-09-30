@@ -2,7 +2,7 @@ const lesson = {
   lesson: "07",
   title: "Model Selection & Baseline Models",
 
-  description: `
+  content: `
 # Lesson 07 — Model Selection & Baseline Models
 
 ## What You Will Learn

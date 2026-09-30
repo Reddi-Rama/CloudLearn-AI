@@ -2,7 +2,7 @@ const lesson = {
   lesson: "12",
   title: "AI Deployment Basics",
 
-  description: `
+  content: `
 # Lesson 12 — AI Deployment Basics
 
 ## What You Will Learn
