@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { ArrowLeft, BookOpen, Clock3 } from "lucide-react";
@@ -12,39 +12,7 @@ export default function DataSciencePage() {
   return (
     <main className="min-h-screen bg-[#080d20] text-slate-100">
 
-      {/* =========================================================
-          BACK TO LEARNING PATHS
-      ========================================================= */}
-      <div className="mx-auto w-full max-w-[1600px] bg-[#080d20] px-6 py-4 lg:px-8">
-        <Link
-          href="/learning-paths"
-          className="
-            inline-flex
-            items-center
-            gap-2
-            rounded-xl
-            border
-            border-slate-700
-            bg-slate-800
-            px-4
-            py-2.5
-            text-base
-            font-semibold
-            text-slate-200
-            shadow-md
-            transition-all
-            duration-200
-            hover:-translate-y-0.5
-            hover:border-sky-500
-            hover:bg-slate-700
-            hover:text-sky-400
-            hover:shadow-lg
-          "
-        >
-          <ArrowLeft size={19} />
-          Back to Learning Paths
-        </Link>
-      </div>
+      {
 
       {/* =========================================================
           TOP NAVIGATION
@@ -767,7 +735,7 @@ export default function DataSciencePage() {
                 </p>
 
                 <h2 className="mt-2 text-3xl font-bold text-white md:text-4xl">
-                  Understand → Improve
+                  Understand â†’ Improve
                 </h2>
 
                 <div className="mt-10 grid gap-5 sm:grid-cols-2">
@@ -815,3 +783,4 @@ export default function DataSciencePage() {
     </main>
   );
 }
+

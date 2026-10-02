@@ -1254,7 +1254,7 @@ function getCourseName(courseId: string) {
   }
 
   if (courseId === "cpp-development") {
-    return "Cpp Development";
+    return "C++ Development";
   }
 
   if (courseId === "java-development") {
@@ -1479,28 +1479,46 @@ export default async function LessonPage({
             lg:pl-[calc((100vw-1088px)/2)]
           "
         >
-
           <Link
-            href={`/course-complete?course=${courseId}`}
+            href={`/courses/${courseId}`}
             className="
+              group
               inline-flex
               items-center
+              gap-3
               rounded-2xl
-              bg-sky-600
-              px-7
-              py-4
-              text-lg
+              border
+              border-cyan-500/20
+              bg-slate-950/90
+              px-4
+              py-2.5
+              text-sm
               font-bold
-              text-white
-              shadow-lg
-              transition
+              text-slate-200
+              shadow-[0_8px_30px_rgba(8,145,178,0.10)]
+              backdrop-blur-xl
+              transition-all
+              duration-200
               hover:-translate-y-0.5
-              hover:bg-sky-700
+              hover:border-cyan-400/40
+              hover:bg-slate-900
+              hover:text-white
             "
           >
-            &rarr;
-          </Link>
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/10 text-lg text-cyan-300 transition-transform duration-200 group-hover:-translate-x-0.5">
+              &larr;
+            </span>
 
+            <span className="flex flex-col">
+              <span className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-400">
+                Course Navigation
+              </span>
+
+              <span className="mt-0.5 text-sm font-bold text-slate-100">
+                Back to {courseName}
+              </span>
+            </span>
+          </Link>
         </div>
 
 

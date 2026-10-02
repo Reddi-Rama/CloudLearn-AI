@@ -36,37 +36,6 @@ export default function CoursesPage() {
     <main className="min-h-screen bg-slate-50 py-20 dark:bg-slate-950">
       <div className="mx-auto max-w-7xl px-6">
 
-        <Link
-          href="/domains/programming"
-          className="
-            mb-10
-            inline-flex
-            items-center
-            gap-2
-            rounded-xl
-            border
-            border-slate-200
-            bg-white
-            px-4
-            py-2
-            text-sm
-            font-medium
-            text-slate-700
-            shadow-sm
-            transition
-            hover:border-sky-300
-            hover:text-sky-600
-            dark:border-slate-700
-            dark:bg-slate-900
-            dark:text-slate-200
-            dark:hover:border-sky-500
-            dark:hover:text-sky-400
-          "
-        >
-          <span aria-hidden="true">&larr;</span>
-          Back to Programming
-        </Link>
-
         <div className="mb-12">
           <p className="font-medium text-sky-600 dark:text-sky-400">
             Programming Domain

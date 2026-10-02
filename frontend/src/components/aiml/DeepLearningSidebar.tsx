@@ -68,7 +68,7 @@ export default function DeepLearningSidebar() {
           </div>
 
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-white">
+            <p className="text-[13px] font-semibold text-white">
               Deep Learning
             </p>
 
@@ -184,7 +184,7 @@ export default function DeepLearningSidebar() {
                       className={`
                         block
                         truncate
-                        text-xs
+                        text-[11px]
                         font-semibold
                         ${
                           isActiveModule
@@ -296,7 +296,7 @@ export default function DeepLearningSidebar() {
                                 min-w-0
                                 flex-1
                                 break-words
-                                text-[11px]
+                                text-[10px]
                                 leading-4
                                 ${
                                   isActive

@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import MachineLearningSidebar from "@/components/aiml/MachineLearningSidebar";
@@ -686,26 +686,15 @@ export default async function MachineLearningLessonPage({
                 Therefore the completion component is rendered
                 ONLY when the URL is an actual lesson URL.
             ================================================= */}
-            {/* =================================================
-                LEARNING PAGE COMPLETION
-            ================================================= */}
 
-            <AIMLCourseLessonCompletion
-              courseSlug="machine-learning"
-              moduleId={moduleId}
-              lessonId={lessonId}
-              totalLessons={totalLessons}
-              totalTrackableItems={128}
-              itemType={
-                isLesson
-                  ? "lesson"
-                  : lessonId === "about"
-                    ? "about"
-                    : lessonId === "practice"
-                      ? "practice"
-                      : "project"
-              }
-            />
+            {isLesson ? (
+              <AIMLCourseLessonCompletion
+                courseSlug="machine-learning"
+                moduleId={moduleId}
+                lessonId={lessonId}
+                totalLessons={totalLessons}
+              />
+            ) : null}
 
             {/* =================================================
                 PREVIOUS / NEXT
@@ -777,7 +766,7 @@ export default async function MachineLearningLessonPage({
                       >
 
                         <span className="text-sky-400">
-                          {"\u2190"}
+                          ←
                         </span>
 
                         <span
@@ -858,7 +847,7 @@ export default async function MachineLearningLessonPage({
                         </span>
 
                         <span className="text-sky-400">
-                          {"\u2192"}
+                          →
                         </span>
 
                       </div>
@@ -882,4 +871,3 @@ export default async function MachineLearningLessonPage({
     </main>
   );
 }
-

@@ -20,7 +20,7 @@ export default function DomainsPage() {
           BACK TO HOME
       ====================================================== */}
 
-      <div className="px-6 pt-6">
+      <div className="fixed left-6 top-[92px] z-[99999]">
         <BackButton
           href="/"
           label="Back to Home"

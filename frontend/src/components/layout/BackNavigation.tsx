@@ -8,15 +8,6 @@ import BackButton from "./BackButton";
 export default function BackNavigation() {
   const pathname = usePathname();
 
-  /*
-   * ============================================================
-   * FORCE HORIZONTAL SCROLL POSITION BACK TO ZERO
-   * ============================================================
-   *
-   * This is important because the screenshots show that the
-   * entire page can become horizontally shifted.
-   */
-
   useEffect(() => {
     document.documentElement.scrollLeft = 0;
     document.body.scrollLeft = 0;
@@ -28,61 +19,67 @@ export default function BackNavigation() {
     });
   }, [pathname]);
 
-
-  /*
-   * ============================================================
-   * HOME
-   * ============================================================
-   */
-
+  /* HOME */
   if (pathname === "/") {
     return null;
   }
 
-
-  /*
-   * ============================================================
-   * LOGIN
-   * ============================================================
-   */
-
-  /*
-   * ============================================================
-   * AIML LESSONS
-   *
-   * AIML lesson pages provide their own course navigation.
-   * The global back navigation must stay out of these pages.
-   * ============================================================
-   */
-
-  if (pathname.startsWith("/lesson/aiml/")) {
-    return null;
-  }
-
-  /*
-   * ============================================================
-   * AI & MACHINE LEARNING DOMAIN
-   * ============================================================
-   */
-
-  if (pathname === "/domains/aiml") {
+  /* AUTH PAGES */
+  if (pathname === "/login") {
     return (
       <div className="cloudlearn-back-nav">
-        <BackButton
-          href="/domains"
-          label="Back to Domains"
-        />
+        <BackButton href="/" label="Back to Home" />
       </div>
     );
   }
 
+  if (
+    pathname === "/register" ||
+    pathname === "/forgot-password" ||
+    pathname === "/reset-password"
+  ) {
+    return (
+      <div className="cloudlearn-back-nav">
+        <BackButton href="/login" label="Back to Login" />
+      </div>
+    );
+  }
 
-  /*
-   * ============================================================
-   * AI & MACHINE LEARNING COURSES
-   * ============================================================
-   */
+  /* AIML LESSONS HAVE THEIR OWN NAVIGATION */
+  if (pathname.startsWith("/lesson/aiml/")) {
+    return null;
+  }
 
+  /* PROGRAMMING LESSONS HAVE THEIR OWN COURSE NAVIGATION */
+  if (pathname.startsWith("/lesson/")) {
+    return null;
+  }
+
+  /* ALL LEARNING-PATH PAGES HAVE THEIR OWN NAVIGATION */
+  if (pathname === "/learning-paths") {
+    return null;
+  }
+
+  if (pathname.startsWith("/learning-paths/")) {
+    return null;
+  }
+
+  /* MAIN DOMAIN PAGE HAS ITS OWN NAVIGATION */
+  if (pathname === "/domains") {
+    return null;
+  }
+
+  /* AI & MACHINE LEARNING DOMAIN */
+  if (pathname === "/domains/aiml") {
+    return null;
+  }
+
+  /* DOMAIN DETAIL PAGES HAVE THEIR OWN NAVIGATION */
+  if (/^\/domains\/[^/]+$/.test(pathname)) {
+    return null;
+  }
+
+  /* AIML COURSE PAGES */
   const aimlCourses = [
     "/courses/aiml/ai-foundations",
     "/courses/aiml/machine-learning",
@@ -101,71 +98,41 @@ export default function BackNavigation() {
     );
   }
 
-
-  /*
-   * ============================================================
-   * OTHER COURSE DETAIL PAGES
-   * ============================================================
-   */
-
+  /* OTHER COURSE DETAIL PAGES */
   if (
     pathname.startsWith("/courses/") &&
     pathname !== "/courses"
   ) {
     return (
       <div className="cloudlearn-back-nav">
-        <BackButton
-          href="/courses"
-          label="Back to Courses"
-        />
+        <BackButton href="/courses" label="Back to Courses" />
       </div>
     );
   }
 
-
-  /*
-   * ============================================================
-   * MAIN PAGES
-   * ============================================================
-   */
-
-  const mainPages = [
-    "/domains",
-    "/learning-paths",
-    "/courses",
-    "/my-certificates",
-    "/certificates",
-    "/certificate",
-    "/about",
-    "/contact",
-    "/assessments",
-    "/bookmarks",
-  ];
-
-  if (mainPages.includes(pathname)) {
+  /* MAIN COURSE PAGE */
+  if (pathname === "/courses") {
     return (
       <div className="cloudlearn-back-nav">
-        <BackButton
-          href="/"
-          label="Back to Home"
-        />
+        <BackButton href="/" label="Back to Home" />
       </div>
     );
   }
 
+  /* PAGES THAT ALREADY CONTAIN THEIR OWN NAVIGATION */
+  if (pathname === "/about" || pathname === "/contact") {
+    return null;
+  }
 
-  /*
-   * ============================================================
-   * DEFAULT
-   * ============================================================
-   */
+  /* MY CERTIFICATES HAS ITS OWN NAVIGATION */
+  if (pathname === "/my-certificates") {
+    return null;
+  }
 
+  /* DEFAULT */
   return (
     <div className="cloudlearn-back-nav">
-      <BackButton
-        href="/"
-        label="Back to Home"
-      />
+      <BackButton href="/" label="Back to Home" />
     </div>
   );
 }

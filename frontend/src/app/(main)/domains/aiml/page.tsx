@@ -40,11 +40,15 @@ const courses = [
 export default function AIMLDomainPage() {
   return (
     <main className="min-h-screen bg-[#020617] text-white">
-      <div className="mx-auto max-w-7xl px-5 pb-20 pt-6 sm:px-6">
 
-        <div className="mb-10">
-          <BackButton href="/domains" label="Back to Domains" />
-        </div>
+      <div className="fixed left-6 top-[92px] z-[99999]">
+        <BackButton
+          href="/domains"
+          label="Back to Domains"
+        />
+      </div>
+
+      <div className="mx-auto max-w-7xl px-5 pb-20 pt-6 sm:px-6">
 
         <section className="relative overflow-hidden rounded-[36px] border border-slate-800 bg-[#0f172a] px-8 py-14 shadow-2xl md:px-12 md:py-16">
 
@@ -68,61 +72,84 @@ export default function AIMLDomainPage() {
           </div>
         </section>
 
-        <section className="mt-12">
-          <div className="mb-8">
-            <p className="text-sm font-bold uppercase tracking-[0.16em] text-sky-400">
-              AI & Machine Learning Courses
-            </p>
+        <section className="mt-10 grid gap-6 md:grid-cols-2">
 
-            <h2 className="mt-2 text-3xl font-black md:text-4xl">
-              Choose Your Course
-            </h2>
+          {courses.map((course) => {
+            const Icon = course.icon;
 
-            <p className="mt-3 max-w-2xl text-slate-400">
-              Select a course to explore its modules, lessons,
-              practice work, projects, and assessments.
-            </p>
-          </div>
+            return (
+              <Link
+                key={course.href}
+                href={course.href}
+                className="
+                  group
+                  relative
+                  overflow-hidden
+                  rounded-[30px]
+                  border
+                  border-slate-800
+                  bg-[#0f172a]
+                  p-8
+                  transition-all
+                  duration-300
+                  hover:-translate-y-1
+                  hover:border-sky-700
+                  hover:bg-[#111c31]
+                  hover:shadow-2xl
+                "
+              >
+                <div className="flex items-start gap-6">
 
-          <div className="grid gap-5 md:grid-cols-2">
-            {courses.map((course) => {
-              const Icon = course.icon;
+                  <div
+                    className="
+                      flex
+                      h-14
+                      w-14
+                      shrink-0
+                      items-center
+                      justify-center
+                      rounded-2xl
+                      border
+                      border-sky-800
+                      bg-sky-950/50
+                      text-sky-400
+                      transition-all
+                      duration-300
+                      group-hover:border-sky-600
+                      group-hover:bg-sky-900/50
+                    "
+                  >
+                    <Icon size={28} />
+                  </div>
 
-              return (
-                <Link
-                  key={course.number}
-                  href={course.href}
-                  className="group rounded-3xl border border-slate-800 bg-[#0f172a] p-7 transition hover:-translate-y-1 hover:border-sky-700 hover:bg-[#111c31]"
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-sky-950/60 text-sky-400">
-                      <Icon size={22} />
+                  <div className="flex-1">
+
+                    <div className="mb-2 text-sm font-semibold text-sky-400">
+                      COURSE {course.number}
                     </div>
 
-                    <span className="text-sm font-bold text-sky-400">
-                      {course.number}
-                    </span>
+                    <h2 className="text-2xl font-bold text-white">
+                      {course.title}
+                    </h2>
+
+                    <p className="mt-3 leading-7 text-slate-400">
+                      {course.description}
+                    </p>
+
+                    <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-sky-400">
+                      Explore Course
+                      <ArrowRight
+                        size={17}
+                        className="transition-transform duration-300 group-hover:translate-x-1"
+                      />
+                    </div>
+
                   </div>
+                </div>
+              </Link>
+            );
+          })}
 
-                  <h3 className="mt-7 text-2xl font-bold">
-                    {course.title}
-                  </h3>
-
-                  <p className="mt-3 min-h-[84px] text-sm leading-7 text-slate-400">
-                    {course.description}
-                  </p>
-
-                  <div className="mt-7 inline-flex items-center gap-2 rounded-xl bg-slate-800 px-4 py-2.5 text-sm font-semibold text-white transition group-hover:bg-sky-600">
-                    Explore Course
-                    <ArrowRight
-                      size={16}
-                      className="transition-transform group-hover:translate-x-1"
-                    />
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
         </section>
 
       </div>

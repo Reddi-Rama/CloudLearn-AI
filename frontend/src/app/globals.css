@@ -2311,3 +2311,192 @@ html.dark .exam-result-page article .bg-slate-50 {
   background-color: #111827 !important;
 }
 
+/* ============================================================
+   CLOUDLEARN AIML EXAM
+   LIGHT MODE — AURORA INDIGO / VIOLET THEME
+   ============================================================ */
+
+html:not(.dark) .aiml-exam-page {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  background-color: #f7f7ff !important;
+  background-image:
+    radial-gradient(circle at 8% 8%, rgba(99, 102, 241, 0.10), transparent 28%),
+    radial-gradient(circle at 92% 18%, rgba(139, 92, 246, 0.09), transparent 30%),
+    radial-gradient(circle at 50% 100%, rgba(236, 72, 153, 0.06), transparent 34%);
+  color: #17172f !important;
+}
+
+/* Main white surfaces */
+html:not(.dark) .aiml-exam-page .bg-white {
+  background-color: rgba(255, 255, 255, 0.94) !important;
+}
+
+html:not(.dark) .aiml-exam-page .bg-slate-50 {
+  background-color: #f5f5ff !important;
+}
+
+html:not(.dark) .aiml-exam-page .bg-slate-100 {
+  background-color: #eeefff !important;
+}
+
+html:not(.dark) .aiml-exam-page .bg-slate-200 {
+  background-color: #dedfff !important;
+}
+
+/* Lavender borders */
+html:not(.dark) .aiml-exam-page .border-slate-200 {
+  border-color: #e1e1f2 !important;
+}
+
+html:not(.dark) .aiml-exam-page .border-slate-300 {
+  border-color: #cfcfe5 !important;
+}
+
+/* Light replacements for dark translucent utility classes */
+html:not(.dark) .aiml-exam-page [class*="bg-white/5"] {
+  background-color: #f4f3ff !important;
+}
+
+html:not(.dark) .aiml-exam-page [class*="bg-white/10"] {
+  background-color: #ecebff !important;
+}
+
+html:not(.dark) .aiml-exam-page [class*="bg-white/[0.03]"] {
+  background-color: #f8f8ff !important;
+}
+
+html:not(.dark) .aiml-exam-page [class*="bg-white/[0.035]"] {
+  background-color: #f8f8ff !important;
+}
+
+/* Typography */
+html:not(.dark) .aiml-exam-page .text-slate-100 { color: #20203a !important; }
+html:not(.dark) .aiml-exam-page .text-slate-200 { color: #30304b !important; }
+html:not(.dark) .aiml-exam-page .text-slate-300 { color: #464664 !important; }
+html:not(.dark) .aiml-exam-page .text-slate-400 { color: #686887 !important; }
+html:not(.dark) .aiml-exam-page .text-slate-500 { color: #737394 !important; }
+html:not(.dark) .aiml-exam-page .text-slate-600 { color: #555572 !important; }
+html:not(.dark) .aiml-exam-page .text-slate-700 { color: #3f3f5d !important; }
+html:not(.dark) .aiml-exam-page .text-slate-800 { color: #292942 !important; }
+html:not(.dark) .aiml-exam-page .text-slate-950 { color: #17172f !important; }
+
+/* Primary indigo accent */
+html:not(.dark) .aiml-exam-page [class*="bg-cyan-400"] {
+  background-color: #635bff !important;
+}
+
+html:not(.dark) .aiml-exam-page [class*="text-cyan-500"],
+html:not(.dark) .aiml-exam-page [class*="text-cyan-600"] {
+  color: #4f46e5 !important;
+}
+
+html:not(.dark) .aiml-exam-page [class*="border-cyan-300"],
+html:not(.dark) .aiml-exam-page [class*="border-cyan-400"] {
+  border-color: #8b83ff !important;
+}
+
+html:not(.dark) .aiml-exam-page [class*="bg-cyan-50"] {
+  background-color: #f0efff !important;
+}
+
+html:not(.dark) .aiml-exam-page [class*="bg-cyan-400/10"] {
+  background-color: #eeecff !important;
+}
+
+/* Progress bar: indigo → violet → pink */
+html:not(.dark) .aiml-exam-page [class*="from-cyan-400"][class*="to-violet-400"] {
+  background-image: linear-gradient(90deg, #5b5bf7 0%, #7c3aed 52%, #db2777 100%) !important;
+  background-color: transparent !important;
+  color: #ffffff !important;
+}
+
+/* Selected/current question buttons */
+html:not(.dark) .aiml-exam-page [class*="shadow-cyan-400"] {
+  --tw-shadow-color: rgba(99, 91, 255, 0.24) !important;
+}
+
+/* Mark-for-review state stays warm and clearly distinct */
+html:not(.dark) .aiml-exam-page [class*="bg-amber-400"] {
+  background-color: #f59e0b !important;
+}
+
+/* Answered state */
+html:not(.dark) .aiml-exam-page [class*="bg-emerald-50"] {
+  background-color: #ecfdf5 !important;
+}
+
+html:not(.dark) .aiml-exam-page [class*="border-emerald-300"] {
+  border-color: #86efac !important;
+}
+
+html:not(.dark) .aiml-exam-page [class*="text-emerald-700"] {
+  color: #047857 !important;
+}
+
+/* Major cards */
+html:not(.dark) .aiml-exam-page > div > header,
+html:not(.dark) .aiml-exam-page aside,
+html:not(.dark) .aiml-exam-page section > div,
+html:not(.dark) .aiml-exam-page article {
+  box-shadow: 0 16px 45px rgba(68, 63, 145, 0.08) !important;
+}
+
+/* Keep the exam header clearly above the page content and below the site navbar. */
+html:not(.dark) .aiml-exam-page > div > header {
+  border-color: #deddf3 !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  box-shadow: 0 18px 42px rgba(66, 63, 130, 0.10) !important;
+}
+
+/* Buttons get a more premium light-mode treatment */
+html:not(.dark) .aiml-exam-page button,
+html:not(.dark) .aiml-exam-page a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html:not(.dark) .aiml-exam-page button:focus-visible,
+html:not(.dark) .aiml-exam-page a:focus-visible {
+  outline: 2px solid #7c3aed;
+  outline-offset: 3px;
+}
+
+html:not(.dark) .aiml-exam-page button:hover {
+  transition-duration: 180ms;
+}
+
+/* Premium submit / primary CTA */
+html:not(.dark) .aiml-exam-page button[class*="from-cyan-400"] {
+  background-image: linear-gradient(135deg, #5b5bf7 0%, #7c3aed 55%, #db2777 100%) !important;
+  background-color: transparent !important;
+  color: #ffffff !important;
+  box-shadow: 0 14px 28px rgba(99, 91, 255, 0.24) !important;
+}
+
+html:not(.dark) .aiml-exam-page button[class*="from-cyan-400"]:hover {
+  background-image: linear-gradient(135deg, #4f46e5 0%, #6d28d9 55%, #be185d 100%) !important;
+}
+
+/* Score ring and accent glows */
+html:not(.dark) .aiml-exam-page [class*="bg-cyan-100"] {
+  background-color: #e8e7ff !important;
+}
+
+/* Improve muted dividers */
+html:not(.dark) .aiml-exam-page [class*="border-t"] {
+  border-color: #e3e2f2 !important;
+}
+
+/* Responsive sticky offsets */
+@media (max-width: 1023px) {
+  html:not(.dark) .aiml-exam-page {
+    background-image:
+      radial-gradient(circle at 10% 4%, rgba(99, 102, 241, 0.09), transparent 34%),
+      radial-gradient(circle at 90% 18%, rgba(139, 92, 246, 0.08), transparent 36%);
+  }
+}
+
+html.dark .aiml-exam-page {
+  color: #ffffff;
+}

@@ -115,7 +115,7 @@ export default function AIMLExam({ course }: Props) {
     "all" | "wrong" | "unanswered"
   >("all");
 
-  const [dark, setDark] = useState(true);
+  const [dark, setDark] = useState(false);
 
   const selected =
     answers[questions[current]?.id];
@@ -216,11 +216,11 @@ export default function AIMLExam({ course }: Props) {
 
     return (
       <main
-        className={
+        className={`aiml-exam-page ${
           dark
             ? "min-h-screen bg-[#050816] text-white transition-colors duration-300"
             : "min-h-screen bg-slate-50 text-slate-950 transition-colors duration-300"
-        }
+          }`}
       >
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
 
@@ -595,21 +595,21 @@ export default function AIMLExam({ course }: Props) {
 
   return (
     <main
-      className={
+      className={`aiml-exam-page ${
         dark
           ? "min-h-screen bg-[#050816] text-white transition-colors duration-300"
           : "min-h-screen bg-slate-50 text-slate-950 transition-colors duration-300"
-      }
+        }`}
     >
-      <div className="mx-auto max-w-[1500px] px-3 py-3 sm:px-5 lg:px-7">
+      <div className="mx-auto max-w-[1500px] px-3 pb-8 pt-[96px] sm:px-5 lg:px-7">
 
         {/* HEADER */}
 
         <header
           className={
             dark
-              ? "sticky top-3 z-20 mb-4 rounded-3xl border border-white/10 bg-[#0b1022]/95 p-4 shadow-2xl backdrop-blur-xl"
-              : "sticky top-3 z-20 mb-4 rounded-3xl border border-slate-200 bg-white/95 p-4 shadow-lg backdrop-blur-xl"
+              ? "sticky top-[92px] z-20 mb-4 rounded-3xl border border-white/10 bg-[#0b1022]/95 p-4 shadow-2xl backdrop-blur-xl"
+              : "sticky top-[92px] z-20 mb-4 rounded-3xl border border-slate-200 bg-white/95 p-4 shadow-lg backdrop-blur-xl"
           }
         >
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -707,8 +707,8 @@ export default function AIMLExam({ course }: Props) {
           <aside
             className={
               dark
-                ? "rounded-3xl border border-white/10 bg-white/[0.035] p-4 lg:sticky lg:top-[140px] lg:h-[calc(100vh-160px)] lg:overflow-y-auto"
-                : "rounded-3xl border border-slate-200 bg-white p-4 shadow-sm lg:sticky lg:top-[140px] lg:h-[calc(100vh-160px)] lg:overflow-y-auto"
+                ? "rounded-3xl border border-white/10 bg-white/[0.035] p-4 lg:sticky lg:top-[185px] lg:h-[calc(100vh-205px)] lg:overflow-y-auto"
+                : "rounded-3xl border border-slate-200 bg-white p-4 shadow-sm lg:sticky lg:top-[185px] lg:h-[calc(100vh-205px)] lg:overflow-y-auto"
             }
           >
             <div className="mb-4">
@@ -1005,8 +1005,64 @@ export default function AIMLExam({ course }: Props) {
                     }
                     className={
                       dark
-                        ? "inline-flex min-w-[160px] items-center justify-center gap-2 rounded-2xl bg-white px-7 py-3.5 font-black text-slate-950 shadow-lg transition hover:-translate-y-0.5 hover:bg-slate-100"
-                        : "inline-flex min-w-[160px] items-center justify-center gap-2 rounded-2xl bg-slate-950 px-7 py-3.5 font-black text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-slate-800"
+                        ? `
+                          inline-flex
+                          min-w-[180px]
+                          items-center
+                          justify-center
+                          gap-2
+                          rounded-2xl
+                          border
+                          border-cyan-300/30
+                          bg-gradient-to-r
+                          from-cyan-400
+                          via-sky-400
+                          to-violet-400
+                          px-7
+                          py-3.5
+                          text-sm
+                          font-black
+                          text-slate-950
+                          shadow-lg
+                          shadow-cyan-500/20
+                          transition-all
+                          duration-200
+                          hover:-translate-y-0.5
+                          hover:from-cyan-300
+                          hover:via-sky-300
+                          hover:to-violet-300
+                          hover:shadow-xl
+                          hover:shadow-cyan-400/25
+                          focus:outline-none
+                          focus:ring-2
+                          focus:ring-cyan-400/50
+                        `
+                        : `
+                          inline-flex
+                          min-w-[180px]
+                          items-center
+                          justify-center
+                          gap-2
+                          rounded-2xl
+                          border
+                          border-slate-800
+                          bg-slate-950
+                          px-7
+                          py-3.5
+                          text-sm
+                          font-black
+                          text-white
+                          shadow-lg
+                          shadow-slate-300/30
+                          transition-all
+                          duration-200
+                          hover:-translate-y-0.5
+                          hover:bg-slate-800
+                          hover:shadow-xl
+                          focus:outline-none
+                          focus:ring-2
+                          focus:ring-slate-400/40
+                        `
                     }
                   >
                     Save & Next

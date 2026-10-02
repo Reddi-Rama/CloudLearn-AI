@@ -1,7 +1,8 @@
-import { notFound } from "next/navigation";
+﻿import { notFound } from "next/navigation";
 
 import DeepLearningSidebar from "@/components/aiml/DeepLearningSidebar";
 import DeepLearningContentRenderer from "@/components/aiml/DeepLearningContentRenderer";
+import AIMLCourseLessonCompletion from "@/components/aiml/AIMLCourseLessonCompletion";
 
 // Module 1
 import dlModule1Lesson1 from "@/content/aiml/deep-learning/lessons/module1/lesson1";
@@ -235,6 +236,8 @@ const modules: Record<string, any[]> = {
   ],
 };
 
+const totalLessons = 100;
+
 type Props = {
   params: Promise<{
     moduleId: string;
@@ -307,13 +310,26 @@ export default async function DeepLearningLessonPage({ params }: Props) {
               <DeepLearningContentRenderer content={lesson} />
             </article>
 
+            {/* =================================================
+                LEARNING PAGE COMPLETION
+            ================================================= */}
+
+            <AIMLCourseLessonCompletion
+              courseSlug="deep-learning"
+              moduleId={moduleId}
+              lessonId={lessonId}
+              totalLessons={totalLessons}
+              totalTrackableItems={100}
+              itemType="lesson"
+            />
+
             <div className="mt-6 flex items-center justify-between gap-4">
               {previousLesson ? (
                 <a
                   href={`/lesson/aiml/deep-learning/${previousLesson.moduleId}/${previousLesson.lessonId}`}
                   className="rounded-xl border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-medium text-slate-200 transition hover:border-slate-500 hover:bg-slate-800"
                 >
-                  ← Previous Lesson
+                  {"\u2190"} Previous Lesson
                 </a>
               ) : (
                 <div />
@@ -324,7 +340,7 @@ export default async function DeepLearningLessonPage({ params }: Props) {
                   href={`/lesson/aiml/deep-learning/${nextLesson.moduleId}/${nextLesson.lessonId}`}
                   className="rounded-xl border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-medium text-slate-200 transition hover:border-slate-500 hover:bg-slate-800"
                 >
-                  Next Lesson →
+                  Next Lesson {"\u2192"}
                 </a>
               ) : (
                 <div />
@@ -336,3 +352,5 @@ export default async function DeepLearningLessonPage({ params }: Props) {
     </main>
   );
 }
+
+

@@ -11,25 +11,21 @@ export default function Timer({
 }: TimerProps) {
   return (
     <section className="rounded-[30px] bg-gradient-to-r from-red-500 to-orange-500 p-6 text-white shadow-lg">
-
       <div className="flex items-center gap-4">
 
         <Clock3 size={30} />
 
         <div>
-
-          <p className="text-sm">
+          <p className="text-sm text-white/90">
             Remaining Time
           </p>
 
           <h2 className="text-3xl font-black">
             {time}
           </h2>
-
         </div>
 
       </div>
-
     </section>
   );
 }

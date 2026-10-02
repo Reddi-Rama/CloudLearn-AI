@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import GenerativeAISidebar from "@/components/aiml/GenerativeAISidebar";
 import GenerativeAIContentRenderer from "@/components/aiml/GenerativeAIContentRenderer";
+import AIMLCourseLessonCompletion from "@/components/aiml/AIMLCourseLessonCompletion";
 
 // ============================================================
 // MODULE 1
@@ -421,6 +422,11 @@ const MODULES: ModuleDefinition[] = [
   },
 ];
 
+const TOTAL_GENERATIVE_AI_LESSONS = MODULES.reduce(
+  (total, module) => total + module.lessons.length,
+  0
+);
+
 // ============================================================
 // SPECIAL CONTENT
 // ============================================================
@@ -488,6 +494,15 @@ export default async function GenerativeAILessonPage({
   if (!content) {
     notFound();
   }
+
+  // Provide the renderer with stable module/lesson identity so
+  // local visual assets can be resolved for every lesson and
+  // special page without changing the original content objects.
+  const renderableContent = {
+    ...content,
+    moduleId: content.moduleId ?? moduleId,
+    id: content.id ?? lessonId,
+  };
 
   // ==========================================================
   // NAVIGATION
@@ -638,9 +653,27 @@ export default async function GenerativeAILessonPage({
               "
             >
               <GenerativeAIContentRenderer
-                content={content}
+                content={renderableContent}
               />
             </article>
+
+            {/* ==========================================================
+                LESSON COMPLETION + COURSE PROGRESS
+
+                Only actual lessons are tracked here.
+                About / Practice / Project remain navigation pages.
+            ========================================================== */}
+
+            {lesson ? (
+              <AIMLCourseLessonCompletion
+                courseSlug="generative-ai"
+                moduleId={moduleId}
+                lessonId={lessonId}
+                totalLessons={TOTAL_GENERATIVE_AI_LESSONS}
+                totalTrackableItems={TOTAL_GENERATIVE_AI_LESSONS}
+                itemType="lesson"
+              />
+            ) : null}
 
             {/* PREVIOUS / NEXT */}
 

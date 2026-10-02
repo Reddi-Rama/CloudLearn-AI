@@ -15,7 +15,7 @@ export default function AssessmentResultPage() {
     <>
       <Header />
 
-      <main className="min-h-screen bg-slate-50 pt-36 pb-20">
+      <main className="min-h-screen bg-slate-50 pt-36 pb-20 text-slate-900 transition-colors dark:bg-slate-950 dark:text-slate-100">
 
         <div className="mx-auto max-w-5xl space-y-8 px-6">
 
@@ -43,7 +43,6 @@ export default function AssessmentResultPage() {
       </main>
 
       <Footer />
-
     </>
   );
 }

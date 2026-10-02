@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import type { ReactNode } from "react";
@@ -89,6 +89,17 @@ function cleanText(value: unknown): string {
     .replace(/\u00a0/g, " ")
     .replace(/\\`\\`\\`/g, "```")
     .replace(/\\`/g, "`")
+    .replace(/\\u00e2\\u20ac\\u00a2/g, "\\u2022")
+    .replace(/\\u00e2\\u2020\\u2019/g, "\\u2192")
+    .replace(/\\u00e2\\u2020\\u201c/g, "\\u2193")
+    .replace(/\\u00e2\\u2020\\u2018/g, "\\u2191")
+    .replace(/\\u00e2\\u20ac\\u201d/g, "\\u2014")
+    .replace(/\\u00e2\\u20ac\\u2013/g, "\\u2013")
+    .replace(/\\u00e2\\u20ac\\u0153/g, "\\u201c")
+    .replace(/\\u00e2\\u20ac\\u009d/g, "\\u201d")
+    .replace(/\\u00e2\\u20ac\\u02dc/g, "\\u2018")
+    .replace(/\\u00e2\\u20ac\\u2122/g, "\\u2019")
+    .replace(/\\u00c2\\u0020/g, " ")
     .trim();
 }
 
@@ -144,7 +155,7 @@ function headingText(text: string): string {
 }
 
 function isBullet(text: string): boolean {
-  return /^[-*•]\s+/.test(text.trim());
+  return /^[-*\u2022]\s+/.test(text.trim());
 }
 
 function isNumberedItem(text: string): boolean {
@@ -152,7 +163,7 @@ function isNumberedItem(text: string): boolean {
 }
 
 function removeBulletPrefix(text: string): string {
-  return text.trim().replace(/^[-*•]\s+/, "");
+  return text.trim().replace(/^[-*\u2022]\s+/, "");
 }
 
 function removeNumberPrefix(text: string): string {
@@ -291,7 +302,7 @@ function isFormula(text: string): boolean {
    */
   if (
     value.length > 180 &&
-    !/[∑∫√∞λμσθ∇≤≥→←⊗]/.test(value)
+    !/[\u2211\u222B\u221A\u221E\u03BB\u03BC\u03C3\u03B8\u2207\u2264\u2265\u2192\u2297]/.test(value)
   ) {
     return false;
   }
@@ -314,7 +325,7 @@ function isFormula(text: string): boolean {
    * Mathematical symbols strongly indicate formulas.
    */
   if (
-    /[∑∫√∞∇≤≥≈≠±⊙⊗]/.test(value)
+    /[\u2211\u222B\u221A\u221E\u2207\u2264\u2265\u2248\u2260\u00B1\u2299\u2297]/.test(value)
   ) {
     return true;
   }
@@ -324,11 +335,11 @@ function isFormula(text: string): boolean {
    *
    * Examples:
    * y = Xw + b
-   * L = (y - ŷ)^2
+   * L = (y - Å·)^2
    * p(y|x)
    */
   if (
-    /^[A-Za-zΔ∇][A-Za-z0-9_{}()^]*\s*=\s*.+/.test(value) &&
+    /^[A-Za-z\u0394\u2207][A-Za-z0-9_{}()^]*\s*=\s*.+/.test(value) &&
     (
       /[+\-*/^]/.test(value) ||
       /[A-Za-z]\([A-Za-z]/.test(value) ||
@@ -342,7 +353,7 @@ function isFormula(text: string): boolean {
    * Vector / matrix notation.
    */
   if (
-    /[A-Za-z]\s*∈\s*[Rℝ]/.test(value) ||
+    /[A-Za-z]\s*\u2208\s*[R\u211D]/.test(value) ||
     /\bR\^\w+/.test(value) ||
     /\bR\s*\^/.test(value)
   ) {
@@ -356,29 +367,65 @@ function isFormula(text: string): boolean {
    Flow Detection
    ========================================================================== */
 
+function isFlowArrowLine(text: string): boolean {
+  const value = cleanText(text).replace(/\s+/g, "");
+
+  return (
+    value === "\u2192" ||
+    value === "\u21D2" ||
+    value === "\u2193" ||
+    value === "\u2191" ||
+    value === "\u2194" ||
+    value === "\u2195" ||
+    value === "->" ||
+    value === "=>"
+  );
+}
+
+function normalizeFlowArrow(text: string): string {
+  const value = cleanText(text).replace(/\s+/g, "");
+
+  if (value === "->" || value === "=>") return "\u2192";
+  return value;
+}
+
+function isFlowNodeCandidate(text: string): boolean {
+  const value = cleanText(text);
+
+  if (!value || value.length > 90) {
+    return false;
+  }
+
+  if (
+    isHeading(value) ||
+    isBullet(value) ||
+    isNumberedItem(value) ||
+    isCodeFence(value) ||
+    isLikelyCode(value) ||
+    isFormula(value) ||
+    isHorizontalRule(value)
+  ) {
+    return false;
+  }
+
+  if (
+    value.includes("{") ||
+    value.includes("}") ||
+    value.includes(";")
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
 function splitFlow(text: string): string[] | null {
-  const value = text.trim();
+  const value = cleanText(text);
 
   if (!value) {
     return null;
   }
 
-  /*
-   * Only explicitly written arrows become flowcharts.
-   * This prevents normal prose from becoming flow nodes.
-   */
-  const hasArrow =
-    value.includes("→") ||
-    value.includes("->") ||
-    value.includes("⇒");
-
-  if (!hasArrow) {
-    return null;
-  }
-
-  /*
-   * Never turn source code into a flowchart.
-   */
   if (
     isLikelyCode(value) ||
     value.includes("{") ||
@@ -388,16 +435,106 @@ function splitFlow(text: string): string[] | null {
     return null;
   }
 
+  const hasArrow =
+    value.includes("\u2192") ||
+    value.includes("\u21D2") ||
+    value.includes("->") ||
+    value.includes("=>");
+
+  if (!hasArrow) {
+    return null;
+  }
+
   const parts = value
-    .split(/\s*(?:→|->|⇒)\s*/)
+    .split(/\s*(?:\u2192|\u21D2|->|=>)\s*/)
     .map((item) => item.trim())
     .filter(Boolean);
 
-  if (parts.length < 2) {
+  if (parts.length < 2 || parts.some((item) => !isFlowNodeCandidate(item))) {
     return null;
   }
 
   return parts;
+}
+
+function parseVerticalFlow(
+  lines: string[],
+  startIndex: number
+): {
+  items: string[];
+  arrows: string[];
+  endIndex: number;
+} | null {
+  const first = cleanText(lines[startIndex] ?? "");
+
+  if (!isFlowNodeCandidate(first)) {
+    return null;
+  }
+
+  const items = [first];
+  const arrows: string[] = [];
+  let cursor = startIndex + 1;
+
+  while (cursor < lines.length) {
+    while (
+      cursor < lines.length &&
+      !cleanText(lines[cursor] ?? "")
+    ) {
+      cursor++;
+    }
+
+    if (cursor >= lines.length) {
+      break;
+    }
+
+    const arrow = cleanText(lines[cursor]);
+
+    if (!isFlowArrowLine(arrow)) {
+      break;
+    }
+
+    cursor++;
+
+    while (
+      cursor < lines.length &&
+      !cleanText(lines[cursor] ?? "")
+    ) {
+      cursor++;
+    }
+
+    if (cursor >= lines.length) {
+      break;
+    }
+
+    const node = cleanText(lines[cursor]);
+
+    if (!isFlowNodeCandidate(node)) {
+      break;
+    }
+
+    arrows.push(normalizeFlowArrow(arrow));
+    items.push(node);
+    cursor++;
+  }
+
+  if (items.length >= 2 && arrows.length === items.length - 1) {
+    const hasVerticalArrow = arrows.some(
+      (arrow) =>
+        arrow === "\u2193" ||
+        arrow === "\u2191" ||
+        arrow === "\u2195"
+    );
+
+    if (hasVerticalArrow) {
+      return {
+        items,
+        arrows,
+        endIndex: cursor,
+      };
+    }
+  }
+
+  return null;
 }
 
 /* ============================================================================
@@ -484,7 +621,7 @@ function SectionTitle({
 
   if (level === 1) {
     return (
-      <h2 className="mb-6 mt-12 border-b border-slate-800 pb-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+      <h2 className="mb-5 mt-10 border-b border-slate-800 pb-3 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
         {safeTitle}
       </h2>
     );
@@ -492,14 +629,14 @@ function SectionTitle({
 
   if (level === 3) {
     return (
-      <h3 className="mb-4 mt-8 text-xl font-bold text-cyan-300 sm:text-2xl">
+      <h3 className="mb-3 mt-7 text-lg font-bold text-cyan-300 sm:text-xl">
         {safeTitle}
       </h3>
     );
   }
 
   return (
-    <h2 className="mb-7 mt-12 text-3xl font-black tracking-tight text-white sm:text-4xl">
+    <h2 className="mb-5 mt-9 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
       {safeTitle}
     </h2>
   );
@@ -601,12 +738,15 @@ function FormulaCard({
   formula: string;
 }) {
   return (
-    <div className="my-7 overflow-x-auto rounded-2xl border border-violet-500/20 bg-violet-500/5 p-5 sm:p-7">
-      <div className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-violet-300">
-        Mathematical Expression
+    <div className="my-7 overflow-x-auto rounded-2xl border border-violet-400/20 bg-gradient-to-br from-violet-500/[0.08] via-slate-950 to-violet-500/[0.03] p-5 shadow-lg sm:p-7">
+      <div className="mb-4 flex items-center gap-2">
+        <span className="h-2 w-2 rounded-full bg-violet-400" />
+        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-violet-300">
+          Mathematical Expression
+        </span>
       </div>
 
-      <div className="whitespace-pre-wrap font-mono text-base leading-8 text-violet-100 sm:text-lg">
+      <div className="whitespace-pre-wrap font-mono text-lg font-semibold leading-9 text-violet-100 sm:text-xl">
         {formula}
       </div>
     </div>
@@ -619,39 +759,87 @@ function FormulaCard({
 
 function FlowChart({
   items,
+  arrows = [],
 }: {
   items: string[];
+  arrows?: string[];
 }) {
   if (!items.length) {
     return null;
   }
 
+  const resolvedArrows =
+    arrows.length === items.length - 1
+      ? arrows
+      : items.slice(1).map(() => "\u2192");
+
+  const isVertical = resolvedArrows.some(
+    (arrow) =>
+      arrow === "\u2193" ||
+      arrow === "\u2191" ||
+      arrow === "\u2195"
+  );
+
   return (
-    <div className="my-8 overflow-x-auto rounded-2xl border border-cyan-500/20 bg-slate-950 p-5 sm:p-7">
-      <div className="flex min-w-max items-center gap-3">
-        {items.map((item, index) => {
-          const isArrow = item === "→";
+    <div className="my-8 w-full overflow-hidden rounded-2xl border border-cyan-400/15 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-5 shadow-lg sm:p-7">
+      <div className="mb-5 flex items-center gap-2">
+        <span className="h-2 w-2 rounded-full bg-cyan-400" />
+        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-300">
+          Process Flow
+        </span>
+      </div>
 
-          if (isArrow) {
-            return (
-              <span
-                key={index}
-                className="px-1 text-2xl font-bold text-cyan-400"
-              >
-                →
-              </span>
-            );
-          }
-
-          return (
+      <div
+        className={
+          isVertical
+            ? "mx-auto flex max-w-3xl flex-col items-center"
+            : "flex w-full items-center justify-center gap-2 overflow-x-auto pb-2"
+        }
+      >
+        {items.map((item, index) => (
+          <React.Fragment key={`flow-item-${index}`}>
             <div
-              key={index}
-              className="rounded-xl border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-semibold text-slate-200 shadow-lg sm:text-base"
+              className="
+                flex
+                min-h-[64px]
+                w-full
+                max-w-[420px]
+                items-center
+                justify-center
+                rounded-2xl
+                border
+                border-cyan-400/20
+                bg-slate-900
+                px-5
+                py-4
+                text-center
+                text-sm
+                font-semibold
+                leading-6
+                text-slate-100
+                shadow-md
+                ring-1
+                ring-white/5
+                sm:text-base
+              "
             >
               {item}
             </div>
-          );
-        })}
+
+            {index < items.length - 1 && (
+              <div
+                className={
+                  isVertical
+                    ? "flex h-10 items-center justify-center text-2xl font-bold text-cyan-400"
+                    : "flex shrink-0 items-center justify-center px-1 text-2xl font-bold text-cyan-400"
+                }
+                aria-hidden="true"
+              >
+                {resolvedArrows[index]}
+              </div>
+            )}
+          </React.Fragment>
+        ))}
       </div>
     </div>
   );
@@ -1108,26 +1296,35 @@ function renderTextBlock(
     }
 
     /* ---------------------------------------------------------------------- */
-    /* Explicit Flow                                                         */
+    /* Vertical / Process Flow                                                */
+    /* ---------------------------------------------------------------------- */
+
+    const verticalFlow = parseVerticalFlow(content, i);
+
+    if (verticalFlow) {
+      elements.push(
+        <FlowChart
+          key={`${keyPrefix}-vertical-flow-${i}`}
+          items={verticalFlow.items}
+          arrows={verticalFlow.arrows}
+        />
+      );
+
+      i = verticalFlow.endIndex;
+      continue;
+    }
+
+    /* ---------------------------------------------------------------------- */
+    /* Inline Flow                                                             */
     /* ---------------------------------------------------------------------- */
 
     const flow = splitFlow(text);
 
     if (flow) {
-      const flowItems: string[] = [];
-
-      flow.forEach((item, index) => {
-        flowItems.push(item);
-
-        if (index < flow.length - 1) {
-          flowItems.push("→");
-        }
-      });
-
       elements.push(
         <FlowChart
           key={`${keyPrefix}-flow-${i}`}
-          items={flowItems}
+          items={flow}
         />
       );
 
@@ -1347,14 +1544,14 @@ function DeepLearningRichBlock({
 
     if (level === "h2") {
       return (
-        <h2 className="mb-8 mt-14 text-4xl font-black tracking-tight text-white sm:text-5xl">
+        <h2 className="mb-5 mt-9 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
           {String(value)}
         </h2>
       );
     }
 
     return (
-      <h3 className="mb-5 mt-10 text-2xl font-bold tracking-tight text-slate-100 sm:text-3xl">
+      <h3 className="mb-4 mt-7 text-lg font-bold tracking-tight text-slate-100 sm:text-xl">
         {String(value)}
       </h3>
     );
@@ -1386,7 +1583,7 @@ function DeepLearningRichBlock({
       <ul className="my-3 space-y-2 pl-5 text-[15px] leading-7 text-slate-300">
         {items.map((item, itemIndex) => (
           <li key={`${index}-bullet-${itemIndex}`} className="pl-1">
-            <span className="mr-2 text-cyan-400">•</span>
+            <span className="mr-2 text-cyan-400">{"\u2022"}</span>
             {item}
           </li>
         ))}
@@ -1765,7 +1962,10 @@ function DeepLearningRichBlock({
 
     case "summary":
       return (
-        <div className="my-6 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-5">
+        <div className="my-6 rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.05] p-5 shadow-sm sm:p-6">
+          <div className="mb-3 text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-300">
+            Lesson Summary
+          </div>
           {renderTitle(title || "Summary")}
           {renderParagraphs(content || block.summary || values)}
         </div>
@@ -1774,8 +1974,8 @@ function DeepLearningRichBlock({
     case "takeaway":
     case "keyTakeaway":
       return (
-        <div className="my-5 rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-5">
-          <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-cyan-300">
+        <div className="my-5 rounded-2xl border border-cyan-400/20 bg-cyan-400/[0.05] p-5 shadow-sm sm:p-6">
+          <div className="mb-3 text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-300">
             Key Takeaway
           </div>
 
@@ -1874,9 +2074,13 @@ function SectionRenderer({
   return (
     <section className="my-6">
       {title && (
-        <h3 className="mb-3 text-lg font-semibold text-slate-100">
-          {title}
-        </h3>
+        <SectionTitle
+          title={title.replace(
+            /^\d+\.\s*/,
+            ""
+          )}
+          level={2}
+        />
       )}
 
       {normalized.length > 0 &&
@@ -1900,6 +2104,7 @@ function isDeepLearningLesson(
   >;
 
   return (
+    Array.isArray(record.content) ||
     Array.isArray(record.sections) ||
     Array.isArray(record.learningObjectives) ||
     Array.isArray(record.codeExamples) ||
@@ -1955,7 +2160,7 @@ export default function DeepLearningContentRenderer({
   if (lesson) {
     return (
       <div className="w-full min-w-0 max-w-full overflow-visible break-words [overflow-wrap:anywhere]">
-        <div className="px-6 py-10 sm:px-9 sm:py-12 lg:px-14 lg:py-14">
+        <div className="px-6 py-9 sm:px-9 sm:py-11 lg:px-12 lg:py-12">
 
           {/* ----------------------------------------------------------------
              Header
@@ -1988,7 +2193,7 @@ export default function DeepLearningContentRenderer({
               )}
             </div>
 
-            <h1 className="text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
+            <h1 className="text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl lg:text-[2.75rem]">
               {lesson.title ||
                 "Deep Learning Lesson"}
             </h1>
@@ -2071,6 +2276,33 @@ export default function DeepLearningContentRenderer({
                 </ul>
               </InfoCard>
             )}
+
+          {/* ============================================================
+             TOP-LEVEL LESSON CONTENT
+             Supports lessons using content: [{ title, content }, ...]
+             ============================================================ */}
+
+          {Array.isArray(
+  (lesson as { content?: unknown }).content
+) &&
+  ((lesson as { content?: unknown[] }).content?.length ?? 0) > 0 && (
+    <div className="space-y-10">
+      {(
+        (lesson as {
+          content?: unknown[];
+        }).content ?? []
+      ).map((section: any, index: number) => (
+        <SectionRenderer
+          key={
+            section?.id ||
+            `content-section-${index}`
+          }
+          section={section}
+          index={index}
+        />
+      ))}
+    </div>
+  )}
 
           {/* ----------------------------------------------------------------
              Main Sections
@@ -2392,30 +2624,33 @@ export default function DeepLearningContentRenderer({
 
           {lesson.summary &&
             lesson.summary.length > 0 && (
-              <section className="mt-12">
-                <InfoCard
-                  title="Summary"
-                  tone="emerald"
-                >
+              <section className="mt-10">
+                <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.05] p-5 shadow-lg sm:p-6">
+                  <div className="mb-4 flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-400/10 text-emerald-300">
+                      {"\u2713"}
+                    </div>
+                    <h2 className="text-xl font-extrabold tracking-tight text-emerald-300 sm:text-2xl">
+                      Summary
+                    </h2>
+                  </div>
+
                   <ul className="space-y-3">
                     {(Array.isArray(lesson.summary) ? lesson.summary : lesson.summary ? [lesson.summary] : []).map(
                       (item, index) => (
                         <li
                           key={index}
-                          className="flex items-start gap-3 text-base leading-8 sm:text-lg"
+                          className="flex items-start gap-3 text-[15px] leading-7 text-slate-200 sm:text-base"
                         >
-                          <span className="mt-3 h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
-
+                          <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
                           <span className="min-w-0">
-                            <InlineText
-                              text={item}
-                            />
+                            <InlineText text={item} />
                           </span>
                         </li>
                       )
                     )}
                   </ul>
-                </InfoCard>
+                </div>
               </section>
             )}
 
@@ -2427,30 +2662,26 @@ export default function DeepLearningContentRenderer({
             lesson.keyTakeaways.length >
               0 && (
               <section className="mt-10">
-                <div className="rounded-3xl border border-violet-500/30 bg-gradient-to-br from-violet-500/10 via-slate-900 to-cyan-500/5 p-6 shadow-xl sm:p-8">
-                  <div className="mb-5 flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/15 text-violet-300">
-                      ✓
+                <div className="rounded-2xl border border-violet-400/20 bg-gradient-to-br from-violet-500/[0.08] via-slate-900 to-cyan-500/[0.04] p-5 shadow-lg sm:p-6">
+                  <div className="mb-4 flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-400/10 text-violet-300">
+                      {"\u2713"}
                     </div>
-
-                    <h2 className="text-2xl font-extrabold text-violet-300">
+                    <h2 className="text-xl font-extrabold tracking-tight text-violet-300 sm:text-2xl">
                       Key Takeaways
                     </h2>
                   </div>
 
-                  <ul className="space-y-5">
+                  <ul className="space-y-3">
                     {lesson.keyTakeaways.map(
                       (item, index) => (
                         <li
                           key={index}
-                          className="flex items-start gap-3 text-[17px] leading-8 text-slate-200 sm:text-[18px] sm:text-lg sm:text-lg"
+                          className="flex items-start gap-3 text-[15px] leading-7 text-slate-200 sm:text-base"
                         >
-                          <span className="mt-3 h-2 w-2 shrink-0 rounded-full bg-violet-400" />
-
+                          <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-violet-400" />
                           <span className="min-w-0">
-                            <InlineText
-                              text={item}
-                            />
+                            <InlineText text={item} />
                           </span>
                         </li>
                       )
@@ -2514,3 +2745,11 @@ export default function DeepLearningContentRenderer({
     </div>
   );
 }
+
+
+
+
+
+
+
+

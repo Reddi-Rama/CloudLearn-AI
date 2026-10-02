@@ -13,7 +13,10 @@ interface Props {
 export default async function ExamPage({ params }: Props) {
   const { course } = await params;
 
-  // Existing programming exams — PRESERVED
+  /* =========================================================
+     PROGRAMMING FINAL ASSESSMENTS
+     ========================================================= */
+
   if (course === "python-development") {
     return <PythonExam />;
   }
@@ -30,14 +33,25 @@ export default async function ExamPage({ params }: Props) {
     return <CExam />;
   }
 
-  // AIML final assessments
-  if (
-    course === "ai-foundations" ||
-    course === "machine-learning" ||
-    course === "deep-learning" ||
-    course === "generative-ai"
-  ) {
-    return <AIMLExam course={course} />;
+  /* =========================================================
+     AI & MACHINE LEARNING FINAL ASSESSMENTS
+     SAME AIMLExam.tsx FOR ALL FOUR COURSES
+     ========================================================= */
+
+  if (course === "ai-foundations") {
+    return <AIMLExam course="ai-foundations" />;
+  }
+
+  if (course === "machine-learning") {
+    return <AIMLExam course="machine-learning" />;
+  }
+
+  if (course === "deep-learning") {
+    return <AIMLExam course="deep-learning" />;
+  }
+
+  if (course === "generative-ai") {
+    return <AIMLExam course="generative-ai" />;
   }
 
   notFound();
