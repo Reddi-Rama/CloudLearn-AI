@@ -12,7 +12,7 @@ export default function CloudComputingPage() {
   return (
     <main className="min-h-screen bg-[#080d20] text-slate-100">
 
-      {
+      
 
       {/* =========================================================
           TOP NAVIGATION

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -48,28 +48,28 @@ const COURSE_META: Record<
 > = {
   "ai-foundations": {
     title: "AI Foundations",
-    eyebrow: "AIML � FINAL ASSESSMENT",
+    eyebrow: "AIML ï¿½ FINAL ASSESSMENT",
     description:
       "Reasoning across AI concepts, mathematics, data, models, evaluation and the complete AI project lifecycle.",
   },
 
   "machine-learning": {
     title: "Machine Learning",
-    eyebrow: "AIML � FINAL ASSESSMENT",
+    eyebrow: "AIML ï¿½ FINAL ASSESSMENT",
     description:
       "A rigorous assessment of supervised and unsupervised learning, preprocessing, features, evaluation, tuning and real-world ML.",
   },
 
   "deep-learning": {
     title: "Deep Learning",
-    eyebrow: "AIML � FINAL ASSESSMENT",
+    eyebrow: "AIML ï¿½ FINAL ASSESSMENT",
     description:
       "Test neural-network reasoning, optimization, CNN architecture, computer vision and production deep-learning decisions.",
   },
 
   "generative-ai": {
     title: "Generative AI",
-    eyebrow: "AIML � FINAL ASSESSMENT",
+    eyebrow: "AIML ï¿½ FINAL ASSESSMENT",
     description:
       "Challenge yourself on LLMs, prompting, embeddings, vector retrieval, RAG, multimodality, agents and LLMOps.",
   },
@@ -351,7 +351,7 @@ const [backendResult, setBackendResult] =
       <main
         className={`aiml-exam-page ${
           dark
-            ? "min-h-screen bg-[#050816] text-white transition-colors duration-300"
+            ? "min-h-screen bg-[#050816] text-white! transition-colors duration-300"
             : "min-h-screen bg-slate-50 text-slate-950 transition-colors duration-300"
           }`}
       >
@@ -375,7 +375,7 @@ const [backendResult, setBackendResult] =
               <h1
                 className={
                   dark
-                    ? "text-xl font-black text-white sm:text-2xl"
+                    ? "text-xl font-black text-white! sm:text-2xl"
                     : "text-xl font-black text-slate-950 sm:text-2xl"
                 }
               >
@@ -388,7 +388,7 @@ const [backendResult, setBackendResult] =
               onClick={() => setDark(!dark)}
               className={
                 dark
-                  ? "rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white transition hover:bg-white/10"
+                  ? "rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white! transition hover:bg-white/10"
                   : "rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-bold text-slate-800 shadow-sm transition hover:bg-slate-100"
               }
             >
@@ -437,8 +437,8 @@ const [backendResult, setBackendResult] =
                   <span
                     className={
                       dark
-                        ? "text-5xl font-black text-white"
-                        : "text-5xl font-black text-slate-950"
+                        ? "text-5xl font-black text-white!!"
+                        : "text-5xl font-black text-slate-950!!"
                     }
                   >
                     {displayPercentage}%  
@@ -460,7 +460,7 @@ const [backendResult, setBackendResult] =
                 <div
                   className={
                     dark
-                      ? "mb-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white"
+                      ? "mb-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white!"
                       : "mb-3 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-bold text-slate-800"
                   }
                 >
@@ -478,8 +478,8 @@ const [backendResult, setBackendResult] =
                 <h2
                   className={
                     dark
-                      ? "text-3xl font-black text-white sm:text-4xl"
-                      : "text-3xl font-black text-slate-950 sm:text-4xl"
+                      ? "text-3xl font-black text-white! sm:text-4xl"
+                      : "text-3xl font-black text-slate-950! sm:text-4xl"
                   }
                 >
                   {displayCorrect} / {displayTotal} correct
@@ -488,15 +488,15 @@ const [backendResult, setBackendResult] =
                 <p
                   className={
                     dark
-                      ? "mt-3 max-w-2xl text-slate-400"
-                      : "mt-3 max-w-2xl text-slate-600"
+                      ? "mt-3 max-w-2xl text-slate-300!"
+                      : "mt-3 max-w-2xl text-slate-600!"
                   }
                 >
                   Passing score:{" "}
                   <strong
                     className={
                       dark
-                        ? "text-white"
+                        ? "text-white!"
                         : "text-slate-950"
                     }
                   >
@@ -546,7 +546,7 @@ const [backendResult, setBackendResult] =
           backendResult.certificate!.certificateId
         )
       }
-      className="inline-flex items-center gap-2 rounded-2xl bg-emerald-500 px-5 py-3 font-bold text-white transition hover:bg-emerald-400"
+      className="inline-flex items-center gap-2 rounded-2xl bg-emerald-500 px-5 py-3 font-bold text-white! transition hover:bg-emerald-400"
     >
       Download Certificate
     </button>
@@ -555,8 +555,8 @@ const [backendResult, setBackendResult] =
                     href={`/courses/aiml/${course}`}
                     className={
                       dark
-                        ? "rounded-2xl border border-white/10 bg-white/5 px-5 py-3 font-bold text-white transition hover:bg-white/10"
-                        : "rounded-2xl border border-slate-300 bg-white px-5 py-3 font-bold text-slate-800 shadow-sm transition hover:bg-slate-100"
+                        ? "rounded-2xl border border-white/10 bg-white/5 px-5 py-3 font-bold text-white! transition hover:bg-white/10"
+                        : "rounded-2xl border border-slate-300 bg-white px-5 py-3 font-bold text-slate-800! shadow-sm transition hover:bg-slate-100"
                     }
                   >
                     Back to course
@@ -574,8 +574,8 @@ const [backendResult, setBackendResult] =
                 <h2
                   className={
                     dark
-                      ? "text-2xl font-black text-white"
-                      : "text-2xl font-black text-slate-950"
+                      ? "text-2xl font-black text-white!"
+                      : "text-2xl font-black text-slate-950!"
                   }
                 >
                   Detailed Review
@@ -584,8 +584,8 @@ const [backendResult, setBackendResult] =
                 <p
                   className={
                     dark
-                      ? "text-sm text-slate-400"
-                      : "text-sm text-slate-600"
+                      ? "text-sm text-slate-400!"
+                      : "text-sm text-slate-600!"
                   }
                 >
                   Your selected answer, the correct
@@ -653,7 +653,7 @@ const [backendResult, setBackendResult] =
                       <span
                         className={
                           dark
-                            ? "rounded-lg bg-white/10 px-2.5 py-1 text-xs font-black text-white"
+                            ? "rounded-lg bg-white/10 px-2.5 py-1 text-xs font-black text-white!"
                             : "rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-black text-slate-800"
                         }
                       >
@@ -684,8 +684,8 @@ const [backendResult, setBackendResult] =
                     <h3
                       className={
                         dark
-                          ? "text-base font-bold leading-7 text-white"
-                          : "text-base font-bold leading-7 text-slate-950"
+                          ? "text-base font-bold leading-7 text-white!"
+                          : "text-base font-bold leading-7 text-slate-950!"
                       }
                     >
                       {q.question}
@@ -744,7 +744,7 @@ const [backendResult, setBackendResult] =
     <main
       className={`aiml-exam-page ${
         dark
-          ? "min-h-screen bg-[#050816] text-white transition-colors duration-300"
+          ? "min-h-screen bg-[#050816] text-white! transition-colors duration-300"
           : "min-h-screen bg-slate-50 text-slate-950 transition-colors duration-300"
         }`}
     >
@@ -770,8 +770,8 @@ const [backendResult, setBackendResult] =
               <h1
                 className={
                   dark
-                    ? "mt-1 truncate text-xl font-black text-white sm:text-2xl"
-                    : "mt-1 truncate text-xl font-black text-slate-950 sm:text-2xl"
+                    ? "mt-1 truncate text-xl font-black text-white! sm:text-2xl"
+                    : "mt-1 truncate text-xl font-black text-slate-950! sm:text-2xl"
                 }
               >
                 {meta.title}
@@ -780,8 +780,8 @@ const [backendResult, setBackendResult] =
               <p
                 className={
                   dark
-                    ? "mt-1 hidden text-xs text-slate-400 sm:block"
-                    : "mt-1 hidden text-xs text-slate-600 sm:block"
+                    ? "mt-1 hidden text-xs text-slate-400! sm:block"
+                    : "mt-1 hidden text-xs text-slate-600! sm:block"
                 }
               >
                 {meta.description}
@@ -793,7 +793,7 @@ const [backendResult, setBackendResult] =
               <div
                 className={
                   dark
-                    ? "rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-bold text-white"
+                    ? "rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-bold text-white!"
                     : "rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-800"
                 }
               >
@@ -803,7 +803,7 @@ const [backendResult, setBackendResult] =
               <div
                 className={
                   dark
-                    ? "rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-bold text-white"
+                    ? "rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-bold text-white!"
                     : "rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-800"
                 }
               >
@@ -820,7 +820,7 @@ const [backendResult, setBackendResult] =
                 }
                 className={
                   dark
-                    ? "rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-bold text-white transition hover:bg-white/10"
+                    ? "rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-bold text-white! transition hover:bg-white/10"
                     : "rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-bold text-slate-800 shadow-sm transition hover:bg-slate-100"
                 }
               >
@@ -862,7 +862,7 @@ const [backendResult, setBackendResult] =
               <div
                 className={
                   dark
-                    ? "text-sm font-black text-white"
+                    ? "text-sm font-black text-white!"
                     : "text-sm font-black text-slate-950"
                 }
               >
@@ -904,11 +904,11 @@ const [backendResult, setBackendResult] =
                         ? "border-cyan-300 bg-cyan-400 text-slate-950 shadow-lg shadow-cyan-400/20"
                         : answered
                         ? dark
-                          ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-300"
-                          : "border-emerald-300 bg-emerald-50 text-emerald-700"
+                          ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-300!"
+                          : "border-emerald-300 bg-emerald-50 text-emerald-700!"
                         : dark
-                        ? "border-white/10 bg-white/5 text-slate-400 hover:bg-white/10"
-                        : "border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100"
+                        ? "border-white/10 bg-white/5 text-slate-300! hover:bg-white/10"
+                        : "border-slate-200 bg-slate-50 text-slate-600! hover:bg-slate-100"
                     }`}
                   >
                     {index + 1}
@@ -924,7 +924,7 @@ const [backendResult, setBackendResult] =
             <div
               className={
                 dark
-                  ? "mt-5 space-y-2 border-t border-white/10 pt-4 text-xs text-slate-400"
+                  ? "mt-5 space-y-2 border-t border-white/10 pt-4 text-xs text-slate-400!"
                   : "mt-5 space-y-2 border-t border-slate-200 pt-4 text-xs text-slate-600"
               }
             >
@@ -967,8 +967,8 @@ const [backendResult, setBackendResult] =
                 <span
                   className={
                     dark
-                      ? "rounded-xl border border-white/10 px-3 py-1.5 text-xs font-bold text-slate-400"
-                      : "rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-600"
+                      ? "rounded-xl border border-white/10 px-3 py-1.5 text-xs font-bold text-slate-300!"
+                      : "rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-600!"
                   }
                 >
                   {q.topic}
@@ -1003,8 +1003,8 @@ const [backendResult, setBackendResult] =
               <h2
                 className={
                   dark
-                    ? "mt-7 max-w-5xl text-xl font-black leading-8 text-white sm:text-2xl sm:leading-9"
-                    : "mt-7 max-w-5xl text-xl font-black leading-8 text-slate-950 sm:text-2xl sm:leading-9"
+                    ? "mt-7 max-w-5xl text-xl font-black leading-8 text-white! sm:text-2xl sm:leading-9"
+                    : "mt-7 max-w-5xl text-xl font-black leading-8 text-slate-950! sm:text-2xl sm:leading-9"
                 }
               >
                 {q.question}
@@ -1055,8 +1055,8 @@ const [backendResult, setBackendResult] =
                         <span
                           className={
                             dark
-                              ? "pt-1 text-sm font-semibold leading-6 text-slate-200"
-                              : "pt-1 text-sm font-semibold leading-6 text-slate-800"
+                              ? "pt-1 text-sm font-semibold leading-6 text-slate-100!"
+                              : "pt-1 text-sm font-semibold leading-6 text-slate-800!"
                           }
                         >
                           {option.text}
@@ -1092,8 +1092,8 @@ const [backendResult, setBackendResult] =
                   }
                   className={
                     dark
-                      ? "inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 font-bold text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-30"
-                      : "inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-5 py-3 font-bold text-slate-800 shadow-sm transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30"
+                      ? "inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 font-bold text-white! transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-30"
+                      : "inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-5 py-3 font-bold text-slate-800! shadow-sm transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30"
                   }
                 >
                   <ChevronLeft className="h-4 w-4" />
@@ -1120,7 +1120,7 @@ const [backendResult, setBackendResult] =
                   }
                   className={
                     dark
-                      ? "inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold text-slate-400 hover:text-white disabled:opacity-30"
+                      ? "inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold text-slate-400 hover:text-white! disabled:opacity-30"
                       : "inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold text-slate-500 hover:text-slate-950 disabled:opacity-30"
                   }
                 >
@@ -1199,7 +1199,7 @@ const [backendResult, setBackendResult] =
                           py-3.5
                           text-sm
                           font-black
-                          text-white
+                          text-white!
                           shadow-lg
                           shadow-slate-300/30
                           transition-all
@@ -1274,8 +1274,8 @@ function Stat({
       <div
         className={
           dark
-            ? "text-2xl font-black text-white"
-            : "text-2xl font-black text-slate-950"
+            ? "text-2xl font-black text-white!"
+            : "text-2xl font-black text-slate-950!"
         }
       >
         {value}
@@ -1284,8 +1284,8 @@ function Stat({
       <div
         className={
           dark
-            ? "text-xs text-slate-400"
-            : "text-xs text-slate-500"
+            ? "text-xs text-slate-400!"
+            : "text-xs text-slate-500!"
         }
       >
         {label}
@@ -1377,7 +1377,7 @@ function InfoCard({
       <div
         className={
           dark
-            ? "text-xl font-black text-white"
+            ? "text-xl font-black text-white!"
             : "text-xl font-black text-slate-950"
         }
       >
@@ -1387,8 +1387,8 @@ function InfoCard({
       <div
         className={
           dark
-            ? "text-xs text-slate-400"
-            : "text-xs text-slate-500"
+            ? "text-xs text-slate-400!"
+            : "text-xs text-slate-500!"
         }
       >
         {label}
@@ -1396,3 +1396,9 @@ function InfoCard({
     </div>
   );
 }
+
+
+
+
+
+

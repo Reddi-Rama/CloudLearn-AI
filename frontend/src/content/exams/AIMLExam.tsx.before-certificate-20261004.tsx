@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -19,13 +19,6 @@ import {
   AIMLCourseSlug,
   AIMLQuestion,
 } from "./aimlExamBanks";
-
-import {
-  API,
-  apiPost,
-} from "@/lib/api";
-
-import { certificateService } from "@/services/certificate.service";
 
 type Props = {
   course: AIMLCourseSlug;
@@ -48,28 +41,28 @@ const COURSE_META: Record<
 > = {
   "ai-foundations": {
     title: "AI Foundations",
-    eyebrow: "AIML � FINAL ASSESSMENT",
+    eyebrow: "AIML • FINAL ASSESSMENT",
     description:
       "Reasoning across AI concepts, mathematics, data, models, evaluation and the complete AI project lifecycle.",
   },
 
   "machine-learning": {
     title: "Machine Learning",
-    eyebrow: "AIML � FINAL ASSESSMENT",
+    eyebrow: "AIML • FINAL ASSESSMENT",
     description:
       "A rigorous assessment of supervised and unsupervised learning, preprocessing, features, evaluation, tuning and real-world ML.",
   },
 
   "deep-learning": {
     title: "Deep Learning",
-    eyebrow: "AIML � FINAL ASSESSMENT",
+    eyebrow: "AIML • FINAL ASSESSMENT",
     description:
       "Test neural-network reasoning, optimization, CNN architecture, computer vision and production deep-learning decisions.",
   },
 
   "generative-ai": {
     title: "Generative AI",
-    eyebrow: "AIML � FINAL ASSESSMENT",
+    eyebrow: "AIML • FINAL ASSESSMENT",
     description:
       "Challenge yourself on LLMs, prompting, embeddings, vector retrieval, RAG, multimodality, agents and LLMOps.",
   },
@@ -117,25 +110,6 @@ export default function AIMLExam({ course }: Props) {
   >({});
 
   const [submitted, setSubmitted] = useState(false);
-
-  const [submitting, setSubmitting] = useState(false);
-
-const [submitError, setSubmitError] =
-  useState<string | null>(null);
-
-const [backendResult, setBackendResult] =
-  useState<{
-    score: number;
-    total: number;
-    percentage: number;
-    passingPercentage: number;
-    passed: boolean;
-    certificate: {
-      certificateId: string;
-      courseTitle: string;
-      issuedAt: string;
-    } | null;
-  } | null>(null);
 
   const [reviewFilter, setReviewFilter] = useState<
     "all" | "wrong" | "unanswered"
@@ -206,87 +180,6 @@ const [backendResult, setBackendResult] =
     }));
   }
 
-  async function submitExam() {
-  if (submitting || submitted) {
-    return;
-  }
-
-    if (course !== "ai-foundations") {
-    setSubmitted(true);
-    return;
-  }
-
-  setSubmitting(true);
-  setSubmitError(null);
-
-  try {
-    const token = localStorage.getItem(
-      "cloudlearn-access-token"
-    );
-
-    if (!token) {
-      throw new Error("Please login first.");
-    }
-
-    const submittedAnswers = questions.map(
-      (question) => {
-        const match =
-          question.id.match(/^q(\d+)$/);
-
-        if (!match) {
-          throw new Error(
-            `Invalid question ID: ${question.id}`
-          );
-        }
-
-        return {
-          questionId: Number(match[1]),
-          answer:
-            answers[question.id] ?? -1,
-        };
-      }
-    );
-
-    const response = await apiPost<{
-      success: boolean;
-      message: string;
-      data: {
-        attemptId: string;
-        courseSlug: string;
-        courseTitle: string;
-        score: number;
-        total: number;
-        percentage: number;
-        passingPercentage: number;
-        passed: boolean;
-        certificate: {
-          certificateId: string;
-          courseTitle: string;
-          issuedAt: string;
-        } | null;
-        submittedAt: string;
-      };
-    }>(
-      `${API.BASE_URL}${API.ENDPOINTS.EXAM}/${course}/submit`,
-      {
-        answers: submittedAnswers,
-      },
-      token
-    );
-
-    setBackendResult(response.data);
-    setSubmitted(true);
-  } catch (error) {
-    setSubmitError(
-      error instanceof Error
-        ? error.message
-        : "Failed to submit the assessment."
-    );
-  } finally {
-    setSubmitting(false);
-  }
-}
-
   function retake() {
     setQuestions(
       prepare(AIML_EXAM_BANKS[course])
@@ -296,8 +189,6 @@ const [backendResult, setBackendResult] =
     setAnswers({});
     setMarked({});
     setSubmitted(false);
-    setBackendResult(null);
-    setSubmitError(null);
     setReviewFilter("all");
   }
 
@@ -307,31 +198,7 @@ const [backendResult, setBackendResult] =
    * =========================================================
    */
 
-  if (
-  submitted &&
-  result &&
-  (course !== "ai-foundations" || backendResult)
-) {
-
-      const displayPercentage =
-    course === "ai-foundations"
-      ? backendResult?.percentage ?? result?.percentage ?? 0
-      : result?.percentage ?? 0;
-
-  const displayPassed =
-    course === "ai-foundations"
-      ? backendResult?.passed ?? result?.passed ?? false
-      : result?.passed ?? false;
-
-  const displayCorrect =
-    course === "ai-foundations"
-      ? backendResult?.score ?? result?.correct ?? 0
-      : result?.correct ?? 0;
-
-  const displayTotal =
-    course === "ai-foundations"
-      ? backendResult?.total ?? questions.length
-      : questions.length;
+  if (submitted && result) {
     const review = questions.filter((q) => {
       if (reviewFilter === "wrong") {
         return (
@@ -419,7 +286,7 @@ const [backendResult, setBackendResult] =
                 className="mx-auto flex h-52 w-52 items-center justify-center rounded-full p-3"
                 style={{
                   background: `conic-gradient(rgb(34 211 238) ${
-                    displayPercentage * 3.6
+                    result.percentage * 3.6
                   }deg, ${
                     dark
                       ? "rgba(255,255,255,.08)"
@@ -441,7 +308,7 @@ const [backendResult, setBackendResult] =
                         : "text-5xl font-black text-slate-950"
                     }
                   >
-                    {displayPercentage}%  
+                    {result.percentage}%
                   </span>
 
                   <span
@@ -464,13 +331,13 @@ const [backendResult, setBackendResult] =
                       : "mb-3 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-bold text-slate-800"
                   }
                 >
-                  {displayPassed ? (
+                  {result.passed ? (
                     <Trophy className="h-4 w-4 text-emerald-500" />
                   ) : (
                     <CircleAlert className="h-4 w-4 text-amber-500" />
                   )}
 
-                  {displayPassed
+                  {result.passed
                     ? "Assessment Passed"
                     : "Assessment Not Passed"}
                 </div>
@@ -482,7 +349,7 @@ const [backendResult, setBackendResult] =
                       : "text-3xl font-black text-slate-950 sm:text-4xl"
                   }
                 >
-                  {displayCorrect} / {displayTotal} correct
+                  {result.correct} / {questions.length} correct
                 </h2>
 
                 <p
@@ -510,13 +377,13 @@ const [backendResult, setBackendResult] =
                 <div className="mt-6 grid grid-cols-3 gap-3">
                   <Stat
                     label="Correct"
-                    value={displayCorrect}
+                    value={result.correct}
                     dark={dark}
                   />
 
                   <Stat
                     label="Wrong"
-                    value={displayTotal - displayCorrect - result.unanswered}
+                    value={result.wrong}
                     dark={dark}
                   />
 
@@ -536,21 +403,7 @@ const [backendResult, setBackendResult] =
                     <RotateCcw className="h-4 w-4" />
                     Retake with new order
                   </button>
-                    {course === "ai-foundations" &&
-  displayPassed &&
-  backendResult?.certificate?.certificateId && (
-    <button
-      type="button"
-      onClick={() =>
-        certificateService.downloadCertificate(
-          backendResult.certificate!.certificateId
-        )
-      }
-      className="inline-flex items-center gap-2 rounded-2xl bg-emerald-500 px-5 py-3 font-bold text-white transition hover:bg-emerald-400"
-    >
-      Download Certificate
-    </button>
-  )}
+
                   <Link
                     href={`/courses/aiml/${course}`}
                     className={
@@ -1070,7 +923,7 @@ const [backendResult, setBackendResult] =
                   }
                 )}
               </div>
-             
+
               {/* ACTION BAR */}
 
               <div
@@ -1134,10 +987,9 @@ const [backendResult, setBackendResult] =
                 questions.length - 1 ? (
                   <button
                     type="button"
-                    onClick={submitExam}
-                    disabled={submitting}
-                      
-                    
+                    onClick={() =>
+                      setSubmitted(true)
+                    }
                     className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-400 to-violet-400 px-7 py-3.5 font-black text-slate-950 shadow-xl shadow-cyan-400/20 transition hover:-translate-y-0.5 hover:from-cyan-300 hover:to-violet-300"
                   >
                     Submit Assessment
@@ -1236,7 +1088,7 @@ const [backendResult, setBackendResult] =
               />
 
               <InfoCard
-                number="8"
+                number="∞"
                 label="no time limit"
                 dark={dark}
               />

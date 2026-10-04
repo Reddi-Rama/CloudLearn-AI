@@ -29,6 +29,7 @@ export const examController = {
         data: exam,
       });
     } catch (error) {
+      console.error("SUBMIT EXAM ERROR:", error);
       const message =
         error instanceof Error ? error.message : "Failed to load exam";
 

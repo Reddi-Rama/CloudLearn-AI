@@ -1,4 +1,4 @@
-﻿@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -538,7 +538,7 @@ body::after {
 
 
 /* ============================================================
-   HOME â€” REMOVE SECTION BACKGROUNDS
+   HOME — REMOVE SECTION BACKGROUNDS
 ============================================================ */
 
 /*
@@ -571,7 +571,7 @@ body::after {
 
 
 /* ============================================================
-   HOME â€” REMOVE FULL-WIDTH SEPARATORS
+   HOME — REMOVE FULL-WIDTH SEPARATORS
 ============================================================ */
 
 .home-page section {
@@ -582,7 +582,7 @@ body::after {
 
 
 /* ============================================================
-   HOME â€” WHITE CARDS ONLY
+   HOME — WHITE CARDS ONLY
 ============================================================ */
 
 /*
@@ -601,7 +601,7 @@ body::after {
 
 
 /* ============================================================
-   HOME â€” GLASS CARDS
+   HOME — GLASS CARDS
 ============================================================ */
 
 .home-page .glass-card {
@@ -610,7 +610,7 @@ body::after {
 
 
 /* ============================================================
-   HOME â€” PREMIUM SURFACES
+   HOME — PREMIUM SURFACES
 ============================================================ */
 
 .home-page .surface {
@@ -619,7 +619,7 @@ body::after {
 
 
 /* ============================================================
-   HOME â€” INPUTS
+   HOME — INPUTS
 ============================================================ */
 
 .home-page input,
@@ -1019,7 +1019,7 @@ html.dark body {
 
 
 /* ============================================================
-   MAIN LIGHT PAGES â†’ DARK
+   MAIN LIGHT PAGES → DARK
 ============================================================ */
 
 html.dark .home-page,
@@ -2127,7 +2127,7 @@ html.dark .programming-domain-page .bg-sky-100 {
 
 /* ============================================================
    CLOUDLEARN EXAMS DARK MODE
-   UI ONLY â€” backend/certificate logic untouched
+   UI ONLY — backend/certificate logic untouched
 ============================================================ */
 
 html.dark .exam-result-page {
@@ -2181,7 +2181,7 @@ html.dark .exam-result-page .text-slate-400 {
   color: #94a3b8 !important;
 }
 
-/* Failed result â€” amber instead of red */
+/* Failed result — amber instead of red */
 html.dark .exam-result-page .bg-red-50 {
   background-color: #211a0b !important;
 }
@@ -2294,7 +2294,7 @@ html.dark .exam-result-page button.bg-white {
   border-color: #475569 !important;
 }
 
-/* Certificate button â€” presentation only.
+/* Certificate button — presentation only.
    Existing href/backend connection remains unchanged. */
 html.dark .exam-result-page a.bg-green-600 {
   background-color: #16a34a !important;
@@ -2313,7 +2313,7 @@ html.dark .exam-result-page article .bg-slate-50 {
 
 /* ============================================================
    CLOUDLEARN AIML EXAM
-   LIGHT MODE â€” AURORA INDIGO / VIOLET THEME
+   LIGHT MODE — AURORA INDIGO / VIOLET THEME
    ============================================================ */
 
 html:not(.dark) .aiml-exam-page {
@@ -2405,7 +2405,7 @@ html:not(.dark) .aiml-exam-page [class*="bg-cyan-400/10"] {
   background-color: #eeecff !important;
 }
 
-/* Progress bar: indigo â†’ violet â†’ pink */
+/* Progress bar: indigo → violet → pink */
 html:not(.dark) .aiml-exam-page [class*="from-cyan-400"][class*="to-violet-400"] {
   background-image: linear-gradient(90deg, #5b5bf7 0%, #7c3aed 52%, #db2777 100%) !important;
   background-color: transparent !important;
@@ -2499,57 +2499,4 @@ html:not(.dark) .aiml-exam-page [class*="border-t"] {
 
 html.dark .aiml-exam-page {
   color: #ffffff;
-}
-
-/* AIML Save & Next visibility fix */
-.aiml-exam-page button.aiml-save-next {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  opacity: 1 !important;
-}
-
-.aiml-exam-page button.aiml-save-next * {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-/* AIML SAVE NEXT FINAL FIX */
-.aiml-exam-page .aiml-save-next-label {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  opacity: 1 !important;
-}
-
-.aiml-exam-page .aiml-save-next-label + svg {
-  color: #ffffff !important;
-  stroke: #ffffff !important;
-  opacity: 1 !important;
-}
-
-/* Dark mode uses dark text on the cyan gradient button */
-.dark .aiml-exam-page .aiml-save-next-label {
-  color: #020617 !important;
-  -webkit-text-fill-color: #020617 !important;
-}
-
-.dark .aiml-exam-page .aiml-save-next-label + svg {
-  color: #020617 !important;
-  stroke: #020617 !important;
-}
-
-/* =========================================================
-   AIML SAVE NEXT FINAL GLOBAL FIX
-   ========================================================= */
-
-.aiml-exam-page button.bg-slate-950 {
-  background-color: #020617 !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  opacity: 1 !important;
-}
-
-.aiml-exam-page button.bg-slate-950 svg {
-  color: #ffffff !important;
-  stroke: #ffffff !important;
-  opacity: 1 !important;
 }

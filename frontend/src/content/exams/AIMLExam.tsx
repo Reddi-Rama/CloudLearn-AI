@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -19,6 +19,13 @@ import {
   AIMLCourseSlug,
   AIMLQuestion,
 } from "./aimlExamBanks";
+
+import {
+  API,
+  apiPost,
+} from "@/lib/api";
+
+import { certificateService } from "@/services/certificate.service";
 
 type Props = {
   course: AIMLCourseSlug;
@@ -41,28 +48,28 @@ const COURSE_META: Record<
 > = {
   "ai-foundations": {
     title: "AI Foundations",
-    eyebrow: "AIML • FINAL ASSESSMENT",
+    eyebrow: "AIML � FINAL ASSESSMENT",
     description:
       "Reasoning across AI concepts, mathematics, data, models, evaluation and the complete AI project lifecycle.",
   },
 
   "machine-learning": {
     title: "Machine Learning",
-    eyebrow: "AIML • FINAL ASSESSMENT",
+    eyebrow: "AIML � FINAL ASSESSMENT",
     description:
       "A rigorous assessment of supervised and unsupervised learning, preprocessing, features, evaluation, tuning and real-world ML.",
   },
 
   "deep-learning": {
     title: "Deep Learning",
-    eyebrow: "AIML • FINAL ASSESSMENT",
+    eyebrow: "AIML � FINAL ASSESSMENT",
     description:
       "Test neural-network reasoning, optimization, CNN architecture, computer vision and production deep-learning decisions.",
   },
 
   "generative-ai": {
     title: "Generative AI",
-    eyebrow: "AIML • FINAL ASSESSMENT",
+    eyebrow: "AIML � FINAL ASSESSMENT",
     description:
       "Challenge yourself on LLMs, prompting, embeddings, vector retrieval, RAG, multimodality, agents and LLMOps.",
   },
@@ -110,6 +117,25 @@ export default function AIMLExam({ course }: Props) {
   >({});
 
   const [submitted, setSubmitted] = useState(false);
+
+  const [submitting, setSubmitting] = useState(false);
+
+const [submitError, setSubmitError] =
+  useState<string | null>(null);
+
+const [backendResult, setBackendResult] =
+  useState<{
+    score: number;
+    total: number;
+    percentage: number;
+    passingPercentage: number;
+    passed: boolean;
+    certificate: {
+      certificateId: string;
+      courseTitle: string;
+      issuedAt: string;
+    } | null;
+  } | null>(null);
 
   const [reviewFilter, setReviewFilter] = useState<
     "all" | "wrong" | "unanswered"
@@ -180,6 +206,87 @@ export default function AIMLExam({ course }: Props) {
     }));
   }
 
+  async function submitExam() {
+  if (submitting || submitted) {
+    return;
+  }
+
+    if (course !== "ai-foundations" && course !== "machine-learning" && course !== "deep-learning" && course !== "generative-ai") {
+    setSubmitted(true);
+    return;
+  }
+
+  setSubmitting(true);
+  setSubmitError(null);
+
+  try {
+    const token = localStorage.getItem(
+      "cloudlearn-access-token"
+    );
+
+    if (!token) {
+      throw new Error("Please login first.");
+    }
+
+    const submittedAnswers = questions.map(
+      (question) => {
+        const match =
+          question.id.match(/^q(\d+)$/);
+
+        if (!match) {
+          throw new Error(
+            `Invalid question ID: ${question.id}`
+          );
+        }
+
+        return {
+          questionId: Number(match[1]),
+          answer:
+            answers[question.id] ?? -1,
+        };
+      }
+    );
+
+    const response = await apiPost<{
+      success: boolean;
+      message: string;
+      data: {
+        attemptId: string;
+        courseSlug: string;
+        courseTitle: string;
+        score: number;
+        total: number;
+        percentage: number;
+        passingPercentage: number;
+        passed: boolean;
+        certificate: {
+          certificateId: string;
+          courseTitle: string;
+          issuedAt: string;
+        } | null;
+        submittedAt: string;
+      };
+    }>(
+      `${API.BASE_URL}${API.ENDPOINTS.EXAM}/${course}/submit`,
+      {
+        answers: submittedAnswers,
+      },
+      token
+    );
+
+    setBackendResult(response.data);
+    setSubmitted(true);
+  } catch (error) {
+    setSubmitError(
+      error instanceof Error
+        ? error.message
+        : "Failed to submit the assessment."
+    );
+  } finally {
+    setSubmitting(false);
+  }
+}
+
   function retake() {
     setQuestions(
       prepare(AIML_EXAM_BANKS[course])
@@ -189,6 +296,8 @@ export default function AIMLExam({ course }: Props) {
     setAnswers({});
     setMarked({});
     setSubmitted(false);
+    setBackendResult(null);
+    setSubmitError(null);
     setReviewFilter("all");
   }
 
@@ -198,7 +307,31 @@ export default function AIMLExam({ course }: Props) {
    * =========================================================
    */
 
-  if (submitted && result) {
+  if (
+  submitted &&
+  result &&
+  ((course !== "ai-foundations" && course !== "machine-learning" && course !== "deep-learning" && course !== "generative-ai") || backendResult)
+) {
+
+      const displayPercentage =
+    (course === "ai-foundations" || course === "machine-learning" || course === "deep-learning" || course === "generative-ai")
+      ? backendResult?.percentage ?? result?.percentage ?? 0
+      : result?.percentage ?? 0;
+
+  const displayPassed =
+    (course === "ai-foundations" || course === "machine-learning" || course === "deep-learning" || course === "generative-ai")
+      ? backendResult?.passed ?? result?.passed ?? false
+      : result?.passed ?? false;
+
+  const displayCorrect =
+    (course === "ai-foundations" || course === "machine-learning" || course === "deep-learning" || course === "generative-ai")
+      ? backendResult?.score ?? result?.correct ?? 0
+      : result?.correct ?? 0;
+
+  const displayTotal =
+    (course === "ai-foundations" || course === "machine-learning" || course === "deep-learning" || course === "generative-ai")
+      ? backendResult?.total ?? questions.length
+      : questions.length;
     const review = questions.filter((q) => {
       if (reviewFilter === "wrong") {
         return (
@@ -218,7 +351,7 @@ export default function AIMLExam({ course }: Props) {
       <main
         className={`aiml-exam-page ${
           dark
-            ? "min-h-screen bg-[#050816] text-white transition-colors duration-300"
+            ? "min-h-screen bg-[#050816] text-white! transition-colors duration-300"
             : "min-h-screen bg-slate-50 text-slate-950 transition-colors duration-300"
           }`}
       >
@@ -242,7 +375,7 @@ export default function AIMLExam({ course }: Props) {
               <h1
                 className={
                   dark
-                    ? "text-xl font-black text-white sm:text-2xl"
+                    ? "text-xl font-black text-white! sm:text-2xl"
                     : "text-xl font-black text-slate-950 sm:text-2xl"
                 }
               >
@@ -255,7 +388,7 @@ export default function AIMLExam({ course }: Props) {
               onClick={() => setDark(!dark)}
               className={
                 dark
-                  ? "rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white transition hover:bg-white/10"
+                  ? "rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white! transition hover:bg-white/10"
                   : "rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-bold text-slate-800 shadow-sm transition hover:bg-slate-100"
               }
             >
@@ -286,7 +419,7 @@ export default function AIMLExam({ course }: Props) {
                 className="mx-auto flex h-52 w-52 items-center justify-center rounded-full p-3"
                 style={{
                   background: `conic-gradient(rgb(34 211 238) ${
-                    result.percentage * 3.6
+                    displayPercentage * 3.6
                   }deg, ${
                     dark
                       ? "rgba(255,255,255,.08)"
@@ -304,11 +437,11 @@ export default function AIMLExam({ course }: Props) {
                   <span
                     className={
                       dark
-                        ? "text-5xl font-black text-white"
-                        : "text-5xl font-black text-slate-950"
+                        ? "text-5xl font-black text-white!!"
+                        : "text-5xl font-black text-slate-950!!"
                     }
                   >
-                    {result.percentage}%
+                    {displayPercentage}%  
                   </span>
 
                   <span
@@ -327,17 +460,17 @@ export default function AIMLExam({ course }: Props) {
                 <div
                   className={
                     dark
-                      ? "mb-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white"
+                      ? "mb-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white!"
                       : "mb-3 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-bold text-slate-800"
                   }
                 >
-                  {result.passed ? (
+                  {displayPassed ? (
                     <Trophy className="h-4 w-4 text-emerald-500" />
                   ) : (
                     <CircleAlert className="h-4 w-4 text-amber-500" />
                   )}
 
-                  {result.passed
+                  {displayPassed
                     ? "Assessment Passed"
                     : "Assessment Not Passed"}
                 </div>
@@ -345,25 +478,25 @@ export default function AIMLExam({ course }: Props) {
                 <h2
                   className={
                     dark
-                      ? "text-3xl font-black text-white sm:text-4xl"
-                      : "text-3xl font-black text-slate-950 sm:text-4xl"
+                      ? "text-3xl font-black text-white! sm:text-4xl"
+                      : "text-3xl font-black text-slate-950! sm:text-4xl"
                   }
                 >
-                  {result.correct} / {questions.length} correct
+                  {displayCorrect} / {displayTotal} correct
                 </h2>
 
                 <p
                   className={
                     dark
-                      ? "mt-3 max-w-2xl text-slate-400"
-                      : "mt-3 max-w-2xl text-slate-600"
+                      ? "mt-3 max-w-2xl text-slate-300!"
+                      : "mt-3 max-w-2xl text-slate-600!"
                   }
                 >
                   Passing score:{" "}
                   <strong
                     className={
                       dark
-                        ? "text-white"
+                        ? "text-white!"
                         : "text-slate-950"
                     }
                   >
@@ -377,13 +510,13 @@ export default function AIMLExam({ course }: Props) {
                 <div className="mt-6 grid grid-cols-3 gap-3">
                   <Stat
                     label="Correct"
-                    value={result.correct}
+                    value={displayCorrect}
                     dark={dark}
                   />
 
                   <Stat
                     label="Wrong"
-                    value={result.wrong}
+                    value={displayTotal - displayCorrect - result.unanswered}
                     dark={dark}
                   />
 
@@ -403,13 +536,27 @@ export default function AIMLExam({ course }: Props) {
                     <RotateCcw className="h-4 w-4" />
                     Retake with new order
                   </button>
-
+                    {(course === "ai-foundations" || course === "machine-learning" || course === "deep-learning" || course === "generative-ai") &&
+  displayPassed &&
+  backendResult?.certificate?.certificateId && (
+    <button
+      type="button"
+      onClick={() =>
+        certificateService.downloadCertificate(
+          backendResult.certificate!.certificateId
+        )
+      }
+      className="inline-flex items-center gap-2 rounded-2xl bg-emerald-500 px-5 py-3 font-bold text-white! transition hover:bg-emerald-400"
+    >
+      Download Certificate
+    </button>
+  )}
                   <Link
                     href={`/courses/aiml/${course}`}
                     className={
                       dark
-                        ? "rounded-2xl border border-white/10 bg-white/5 px-5 py-3 font-bold text-white transition hover:bg-white/10"
-                        : "rounded-2xl border border-slate-300 bg-white px-5 py-3 font-bold text-slate-800 shadow-sm transition hover:bg-slate-100"
+                        ? "rounded-2xl border border-white/10 bg-white/5 px-5 py-3 font-bold text-white! transition hover:bg-white/10"
+                        : "rounded-2xl border border-slate-300 bg-white px-5 py-3 font-bold text-slate-800! shadow-sm transition hover:bg-slate-100"
                     }
                   >
                     Back to course
@@ -427,8 +574,8 @@ export default function AIMLExam({ course }: Props) {
                 <h2
                   className={
                     dark
-                      ? "text-2xl font-black text-white"
-                      : "text-2xl font-black text-slate-950"
+                      ? "text-2xl font-black text-white!"
+                      : "text-2xl font-black text-slate-950!"
                   }
                 >
                   Detailed Review
@@ -437,8 +584,8 @@ export default function AIMLExam({ course }: Props) {
                 <p
                   className={
                     dark
-                      ? "text-sm text-slate-400"
-                      : "text-sm text-slate-600"
+                      ? "text-sm text-slate-400!"
+                      : "text-sm text-slate-600!"
                   }
                 >
                   Your selected answer, the correct
@@ -506,7 +653,7 @@ export default function AIMLExam({ course }: Props) {
                       <span
                         className={
                           dark
-                            ? "rounded-lg bg-white/10 px-2.5 py-1 text-xs font-black text-white"
+                            ? "rounded-lg bg-white/10 px-2.5 py-1 text-xs font-black text-white!"
                             : "rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-black text-slate-800"
                         }
                       >
@@ -537,8 +684,8 @@ export default function AIMLExam({ course }: Props) {
                     <h3
                       className={
                         dark
-                          ? "text-base font-bold leading-7 text-white"
-                          : "text-base font-bold leading-7 text-slate-950"
+                          ? "text-base font-bold leading-7 text-white!"
+                          : "text-base font-bold leading-7 text-slate-950!"
                       }
                     >
                       {q.question}
@@ -597,7 +744,7 @@ export default function AIMLExam({ course }: Props) {
     <main
       className={`aiml-exam-page ${
         dark
-          ? "min-h-screen bg-[#050816] text-white transition-colors duration-300"
+          ? "min-h-screen bg-[#050816] text-white! transition-colors duration-300"
           : "min-h-screen bg-slate-50 text-slate-950 transition-colors duration-300"
         }`}
     >
@@ -623,8 +770,8 @@ export default function AIMLExam({ course }: Props) {
               <h1
                 className={
                   dark
-                    ? "mt-1 truncate text-xl font-black text-white sm:text-2xl"
-                    : "mt-1 truncate text-xl font-black text-slate-950 sm:text-2xl"
+                    ? "mt-1 truncate text-xl font-black text-white! sm:text-2xl"
+                    : "mt-1 truncate text-xl font-black text-slate-950! sm:text-2xl"
                 }
               >
                 {meta.title}
@@ -633,8 +780,8 @@ export default function AIMLExam({ course }: Props) {
               <p
                 className={
                   dark
-                    ? "mt-1 hidden text-xs text-slate-400 sm:block"
-                    : "mt-1 hidden text-xs text-slate-600 sm:block"
+                    ? "mt-1 hidden text-xs text-slate-400! sm:block"
+                    : "mt-1 hidden text-xs text-slate-600! sm:block"
                 }
               >
                 {meta.description}
@@ -646,7 +793,7 @@ export default function AIMLExam({ course }: Props) {
               <div
                 className={
                   dark
-                    ? "rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-bold text-white"
+                    ? "rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-bold text-white!"
                     : "rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-800"
                 }
               >
@@ -656,7 +803,7 @@ export default function AIMLExam({ course }: Props) {
               <div
                 className={
                   dark
-                    ? "rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-bold text-white"
+                    ? "rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-bold text-white!"
                     : "rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-800"
                 }
               >
@@ -673,7 +820,7 @@ export default function AIMLExam({ course }: Props) {
                 }
                 className={
                   dark
-                    ? "rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-bold text-white transition hover:bg-white/10"
+                    ? "rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-bold text-white! transition hover:bg-white/10"
                     : "rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-bold text-slate-800 shadow-sm transition hover:bg-slate-100"
                 }
               >
@@ -715,7 +862,7 @@ export default function AIMLExam({ course }: Props) {
               <div
                 className={
                   dark
-                    ? "text-sm font-black text-white"
+                    ? "text-sm font-black text-white!"
                     : "text-sm font-black text-slate-950"
                 }
               >
@@ -757,11 +904,11 @@ export default function AIMLExam({ course }: Props) {
                         ? "border-cyan-300 bg-cyan-400 text-slate-950 shadow-lg shadow-cyan-400/20"
                         : answered
                         ? dark
-                          ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-300"
-                          : "border-emerald-300 bg-emerald-50 text-emerald-700"
+                          ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-300!"
+                          : "border-emerald-300 bg-emerald-50 text-emerald-700!"
                         : dark
-                        ? "border-white/10 bg-white/5 text-slate-400 hover:bg-white/10"
-                        : "border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100"
+                        ? "border-white/10 bg-white/5 text-slate-300! hover:bg-white/10"
+                        : "border-slate-200 bg-slate-50 text-slate-600! hover:bg-slate-100"
                     }`}
                   >
                     {index + 1}
@@ -777,7 +924,7 @@ export default function AIMLExam({ course }: Props) {
             <div
               className={
                 dark
-                  ? "mt-5 space-y-2 border-t border-white/10 pt-4 text-xs text-slate-400"
+                  ? "mt-5 space-y-2 border-t border-white/10 pt-4 text-xs text-slate-400!"
                   : "mt-5 space-y-2 border-t border-slate-200 pt-4 text-xs text-slate-600"
               }
             >
@@ -820,8 +967,8 @@ export default function AIMLExam({ course }: Props) {
                 <span
                   className={
                     dark
-                      ? "rounded-xl border border-white/10 px-3 py-1.5 text-xs font-bold text-slate-400"
-                      : "rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-600"
+                      ? "rounded-xl border border-white/10 px-3 py-1.5 text-xs font-bold text-slate-300!"
+                      : "rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-600!"
                   }
                 >
                   {q.topic}
@@ -856,8 +1003,8 @@ export default function AIMLExam({ course }: Props) {
               <h2
                 className={
                   dark
-                    ? "mt-7 max-w-5xl text-xl font-black leading-8 text-white sm:text-2xl sm:leading-9"
-                    : "mt-7 max-w-5xl text-xl font-black leading-8 text-slate-950 sm:text-2xl sm:leading-9"
+                    ? "mt-7 max-w-5xl text-xl font-black leading-8 text-white! sm:text-2xl sm:leading-9"
+                    : "mt-7 max-w-5xl text-xl font-black leading-8 text-slate-950! sm:text-2xl sm:leading-9"
                 }
               >
                 {q.question}
@@ -908,8 +1055,8 @@ export default function AIMLExam({ course }: Props) {
                         <span
                           className={
                             dark
-                              ? "pt-1 text-sm font-semibold leading-6 text-slate-200"
-                              : "pt-1 text-sm font-semibold leading-6 text-slate-800"
+                              ? "pt-1 text-sm font-semibold leading-6 text-slate-100!"
+                              : "pt-1 text-sm font-semibold leading-6 text-slate-800!"
                           }
                         >
                           {option.text}
@@ -923,7 +1070,7 @@ export default function AIMLExam({ course }: Props) {
                   }
                 )}
               </div>
-
+             
               {/* ACTION BAR */}
 
               <div
@@ -945,8 +1092,8 @@ export default function AIMLExam({ course }: Props) {
                   }
                   className={
                     dark
-                      ? "inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 font-bold text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-30"
-                      : "inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-5 py-3 font-bold text-slate-800 shadow-sm transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30"
+                      ? "inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 font-bold text-white! transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-30"
+                      : "inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-5 py-3 font-bold text-slate-800! shadow-sm transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30"
                   }
                 >
                   <ChevronLeft className="h-4 w-4" />
@@ -973,7 +1120,7 @@ export default function AIMLExam({ course }: Props) {
                   }
                   className={
                     dark
-                      ? "inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold text-slate-400 hover:text-white disabled:opacity-30"
+                      ? "inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold text-slate-400 hover:text-white! disabled:opacity-30"
                       : "inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold text-slate-500 hover:text-slate-950 disabled:opacity-30"
                   }
                 >
@@ -987,9 +1134,10 @@ export default function AIMLExam({ course }: Props) {
                 questions.length - 1 ? (
                   <button
                     type="button"
-                    onClick={() =>
-                      setSubmitted(true)
-                    }
+                    onClick={submitExam}
+                    disabled={submitting}
+                      
+                    
                     className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-400 to-violet-400 px-7 py-3.5 font-black text-slate-950 shadow-xl shadow-cyan-400/20 transition hover:-translate-y-0.5 hover:from-cyan-300 hover:to-violet-300"
                   >
                     Submit Assessment
@@ -997,77 +1145,44 @@ export default function AIMLExam({ course }: Props) {
                   </button>
                 ) : (
                   <button
-                    type="button"
-                    onClick={() =>
-                      setCurrent(
-                        (value) => value + 1
-                      )
-                    }
-                    className={
-                      dark
-                        ? `
-                          inline-flex
-                          min-w-[180px]
-                          items-center
-                          justify-center
-                          gap-2
-                          rounded-2xl
-                          border
-                          border-cyan-300/30
-                          bg-gradient-to-r
-                          from-cyan-400
-                          via-sky-400
-                          to-violet-400
-                          px-7
-                          py-3.5
-                          text-sm
-                          font-black
-                          text-slate-950
-                          shadow-lg
-                          shadow-cyan-500/20
-                          transition-all
-                          duration-200
-                          hover:-translate-y-0.5
-                          hover:from-cyan-300
-                          hover:via-sky-300
-                          hover:to-violet-300
-                          hover:shadow-xl
-                          hover:shadow-cyan-400/25
-                          focus:outline-none
-                          focus:ring-2
-                          focus:ring-cyan-400/50
-                        `
-                        : `
-                          inline-flex
-                          min-w-[180px]
-                          items-center
-                          justify-center
-                          gap-2
-                          rounded-2xl
-                          border
-                          border-slate-800
-                          bg-slate-950
-                          px-7
-                          py-3.5
-                          text-sm
-                          font-black
-                          text-white
-                          shadow-lg
-                          shadow-slate-300/30
-                          transition-all
-                          duration-200
-                          hover:-translate-y-0.5
-                          hover:bg-slate-800
-                          hover:shadow-xl
-                          focus:outline-none
-                          focus:ring-2
-                          focus:ring-slate-400/40
-                        `
-                    }
-                  >
-                    Save & Next
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
+  type="button"
+  onClick={() =>
+    setCurrent(
+      (value) => value + 1
+    )
+  }
+  className={
+    dark
+      ? "inline-flex min-w-[180px] flex-row items-center justify-center gap-2 whitespace-nowrap rounded-2xl border border-cyan-300/30 bg-gradient-to-r from-cyan-400 via-sky-400 to-violet-400 px-7 py-3.5 text-sm font-black text-slate-950 shadow-lg shadow-cyan-500/20 transition-all duration-200 hover:-translate-y-0.5 hover:from-cyan-300 hover:via-sky-300 hover:to-violet-300 hover:shadow-xl hover:shadow-cyan-400/25 focus:outline-none focus:ring-2 focus:ring-cyan-400/50"
+      : "inline-flex min-w-[180px] flex-row items-center justify-center gap-2 whitespace-nowrap rounded-2xl border border-slate-800 bg-slate-950 px-7 py-3.5 text-sm font-black text-white shadow-lg shadow-slate-300/30 transition-all duration-200 hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-slate-400/40"
+  }
+  style={{
+    display: "inline-flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "0.5rem",
+    whiteSpace: "nowrap"
+  }}
+>
+  <span
+    style={{
+      whiteSpace: "nowrap",
+      color: dark ? "#020617" : "#ffffff",
+      WebkitTextFillColor: dark ? "#020617" : "#ffffff"
+    }}
+  >
+    Save & Next
+  </span>
+
+  <ChevronRight
+    className="h-4 w-4 shrink-0"
+    style={{
+      color: dark ? "#020617" : "#ffffff",
+      stroke: dark ? "#020617" : "#ffffff"
+    }}
+  />
+</button>
                 )}
               </div>
             </div>
@@ -1088,7 +1203,7 @@ export default function AIMLExam({ course }: Props) {
               />
 
               <InfoCard
-                number="∞"
+                number="8"
                 label="no time limit"
                 dark={dark}
               />
@@ -1126,8 +1241,8 @@ function Stat({
       <div
         className={
           dark
-            ? "text-2xl font-black text-white"
-            : "text-2xl font-black text-slate-950"
+            ? "text-2xl font-black text-white!"
+            : "text-2xl font-black text-slate-950!"
         }
       >
         {value}
@@ -1136,8 +1251,8 @@ function Stat({
       <div
         className={
           dark
-            ? "text-xs text-slate-400"
-            : "text-xs text-slate-500"
+            ? "text-xs text-slate-400!"
+            : "text-xs text-slate-500!"
         }
       >
         {label}
@@ -1229,7 +1344,7 @@ function InfoCard({
       <div
         className={
           dark
-            ? "text-xl font-black text-white"
+            ? "text-xl font-black text-white!"
             : "text-xl font-black text-slate-950"
         }
       >
@@ -1239,8 +1354,8 @@ function InfoCard({
       <div
         className={
           dark
-            ? "text-xs text-slate-400"
-            : "text-xs text-slate-500"
+            ? "text-xs text-slate-400!"
+            : "text-xs text-slate-500!"
         }
       >
         {label}
@@ -1248,3 +1363,14 @@ function InfoCard({
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
