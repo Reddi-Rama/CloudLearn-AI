@@ -8,1011 +8,925 @@
     "Understand how modern generative systems are organized, how different model families work, and how models become complete AI applications.",
 
   description:
-    "This lesson develops an architectural understanding of Generative AI. You will move from individual models to complete systems and learn how autoregressive models, VAEs, GANs, diffusion models, transformers, multimodal models, and application components fit together.",
+    "This lesson develops an architectural understanding of Generative AI. You will move from individual models to complete systems and learn how autoregressive models, VAEs, GANs, diffusion models, and multimodal systems are organized. The goal is not only to recognize model names, but to understand what happens between input data, learned representations, model computation, sampling, decoding, and the final application output.",
 
-  estimatedTime: "110–140 min",
+  estimatedTime: "70–90 minutes",
   difficulty: "Intermediate",
 
   learningObjectives: [
-    "Understand the difference between a model architecture and an AI application architecture.",
-    "Identify the major layers of a Generative AI system.",
-    "Understand the data, representation, model, decoding, and application layers.",
-    "Classify major generative model families.",
-    "Understand autoregressive model architecture at a high level.",
-    "Understand the encoder-decoder pattern.",
-    "Understand the generator-discriminator architecture of GANs.",
-    "Understand the forward and reverse processes of diffusion models.",
-    "Understand transformer-based generative architectures.",
-    "Understand multimodal generative systems.",
-    "Understand the difference between base models and application systems.",
-    "Understand inference pipelines and production components.",
-    "Identify where prompting, retrieval, tools, databases, and validation fit into an AI application."
+    "Explain the difference between a generative model and a complete Generative AI application.",
+    "Understand the major layers of a Generative AI architecture.",
+    "Describe the role of data, preprocessing, representation, model parameters, inference, decoding, and application layers.",
+    "Explain the basic architecture of autoregressive generative models.",
+    "Understand the encoder–decoder structure of Variational Autoencoders.",
+    "Explain the generator and discriminator relationship in GANs.",
+    "Understand the forward-noising and reverse-denoising architecture of diffusion models.",
+    "Compare autoregressive models, VAEs, GANs, and diffusion models at an architectural level.",
+    "Understand conditional generation and how external information controls generation.",
+    "Understand latent spaces and why learned representations are useful.",
+    "Trace the path from a user request to generated output in a modern AI application.",
+    "Identify engineering components surrounding a foundation model, including retrieval, tools, safety, evaluation, and application logic."
+  ],
+
+  overview: [
+    "A generative model is only one component of a real Generative AI system. A production application usually contains an input interface, preprocessing layer, model or model API, inference configuration, output processing, safety controls, evaluation mechanisms, storage, and application-specific business logic.",
+    "Understanding architecture prevents a common beginner mistake: treating every Generative AI system as if it were simply a neural network that receives a prompt and returns an answer. The model performs learned computation, but the surrounding system determines what information reaches the model, how generation is controlled, how outputs are validated, and how the result becomes useful to a user.",
+    "Different generative model families solve the generation problem in different ways. Autoregressive models generate sequences step by step. VAEs learn a probabilistic latent representation and decode samples from that representation. GANs train a generator against a discriminator. Diffusion models learn to reverse a controlled corruption process. Each architecture has different mathematical assumptions, training behavior, strengths, and engineering trade-offs."
   ],
 
   sections: [
     {
-      heading: "1. Why Architecture Matters",
-      content: [
-        "Learning the name of a model is not enough to understand Generative AI. A developer needs to understand how information moves through the system.",
-        "Architecture answers questions such as: What enters the system? How is the input represented? Where is context stored? How does the model transform the representation? How is the output generated? How is the output returned to the user?",
-        "This lesson therefore studies Generative AI from two levels: model architecture and application architecture."
+      heading: "1. From a Generative Model to a Generative AI System",
+      paragraphs: [
+        "A neural network that can generate an output is a model. A Generative AI application is a larger system that uses one or more models to solve a user-facing problem. This distinction becomes increasingly important as applications move from demonstrations to production.",
+        "Consider a document question-answering application. The user types a question. The application may authenticate the user, normalize the request, retrieve relevant documents, construct context, build a prompt, call a language model, validate the generated response, apply safety rules, store the interaction, and finally display the answer. The language model is central, but it is not the entire application.",
+        "The architecture can therefore be viewed as a sequence of transformations. Raw user information becomes structured input. Structured input is converted into a representation suitable for the model. The model produces a probability distribution or intermediate representation. A decoding or sampling procedure turns that distribution into an output. Application logic then determines how that output is presented or used."
       ],
-      classificationTree: [
-        "Generative AI Architecture",
-        "├── Model Architecture",
-        "│   ├── Inputs",
-        "│   ├── Representations",
-        "│   ├── Neural-network layers",
-        "│   ├── Parameters",
-        "│   └── Generation mechanism",
-        "└── Application Architecture",
-        "    ├── User interface",
-        "    ├── Backend",
-        "    ├── Context",
-        "    ├── Retrieval",
-        "    ├── Model API",
-        "    ├── Tools",
-        "    ├── Validation",
-        "    └── Monitoring"
-      ]
-    },
 
-    {
-      heading: "2. Model Architecture vs Application Architecture",
-      content: [
-        "A model architecture describes how a neural network or generative model processes information internally.",
-        "An application architecture describes how the model is integrated into a complete software system.",
-        "For example, a transformer is a model architecture. A chatbot containing a web interface, authentication, backend API, prompt construction, retrieval, an LLM, output validation, and logging is an application architecture.",
-        "Confusing these two levels leads to poor system design."
-      ],
-      table: [
+      process: [
         {
-          aspect: "Model architecture",
-          meaning: "Internal computational structure of the model",
-          examples: "Transformer, VAE, GAN, diffusion network"
+          title: "User Input",
+          description:
+            "A user provides text, an image, audio, structured data, or another input modality.",
+          input: "Human intent",
+          output: "Raw application input"
         },
         {
-          aspect: "Application architecture",
-          meaning: "Software system surrounding and using the model",
-          examples: "Frontend, API, database, retrieval, model service"
+          title: "Preprocessing",
+          description:
+            "The application cleans, validates, tokenizes, normalizes, resizes, or otherwise prepares the input.",
+          input: "Raw input",
+          output: "Model-ready representation"
+        },
+        {
+          title: "Representation",
+          description:
+            "The input is transformed into vectors, tokens, tensors, latent variables, or other numerical representations.",
+          input: "Prepared input",
+          output: "Numerical representation"
+        },
+        {
+          title: "Generative Model",
+          description:
+            "Learned parameters transform the representation and estimate or construct a distribution over possible outputs.",
+          input: "Representation",
+          output: "Model distribution or generated representation"
+        },
+        {
+          title: "Sampling / Decoding",
+          description:
+            "A decoding strategy converts model probabilities or latent representations into an actual output.",
+          input: "Model output",
+          output: "Candidate generated output"
+        },
+        {
+          title: "Post-processing",
+          description:
+            "The system validates, filters, formats, transforms, or enriches the generated result.",
+          input: "Candidate output",
+          output: "Application-ready output"
+        },
+        {
+          title: "Application Layer",
+          description:
+            "The final result is displayed, stored, sent to another system, or used to perform an action.",
+          input: "Processed output",
+          output: "User-visible or system-level result"
         }
       ]
     },
 
     {
-      heading: "3. The Seven-Layer Generative AI Stack",
-      content: [
-        "A useful way to understand modern Generative AI systems is to divide them into layers. Real systems may combine or omit layers, but this model is useful for architecture analysis."
+      heading: "2. A Layered Architecture for Generative AI",
+      paragraphs: [
+        "A useful mental model is to organize a Generative AI system into layers. These layers are not universal software standards, but they provide a practical way to reason about system design.",
+        "The data layer contains the information from which the model learns or from which the application retrieves context. The representation layer converts raw information into numerical structures. The model layer contains learned parameters and neural-network operations. The inference layer controls generation. The application layer connects the model to a real product. Finally, the governance and evaluation layer measures quality, safety, reliability, and operational behavior.",
+        "This layered view also explains why changing a model does not necessarily require rebuilding an entire application. A well-designed system can keep its user interface, retrieval pipeline, validation logic, and monitoring infrastructure while changing the underlying model."
       ],
-      classificationTree: [
-        "Generative AI Stack",
-        "├── 1. Data Layer",
-        "│   ├── Text",
-        "│   ├── Images",
-        "│   ├── Audio",
-        "│   └── Video",
-        "├── 2. Representation Layer",
-        "│   ├── Tokens",
-        "│   ├── Embeddings",
-        "│   └── Latent representations",
-        "├── 3. Model Layer",
-        "│   ├── Transformer",
-        "│   ├── VAE",
-        "│   ├── GAN",
-        "│   └── Diffusion",
-        "├── 4. Generation Layer",
-        "│   ├── Sampling",
-        "│   ├── Decoding",
-        "│   └── Denoising",
-        "├── 5. Context Layer",
-        "│   ├── Prompt",
-        "│   ├── Conversation",
-        "│   └── Retrieved information",
-        "├── 6. Tool Layer",
-        "│   ├── Search",
-        "│   ├── Databases",
-        "│   ├── APIs",
-        "│   └── Code execution",
-        "└── 7. Application Layer",
-        "    ├── UI",
-        "    ├── Backend",
-        "    ├── Security",
-        "    ├── Evaluation",
-        "    └── Monitoring"
-      ]
-    },
 
-    {
-      heading: "4. Data Layer",
-      content: [
-        "Every generative system ultimately operates on some form of data.",
-        "Text models process language representations. Image models operate on visual information. Audio models process sound-related representations. Video models must represent both spatial and temporal information.",
-        "Data quality strongly influences model quality. Poorly curated or inappropriate training data can introduce noise, bias, duplication, or unwanted behavior."
-      ],
-      process: [
-        "Raw data",
-        "Collection",
-        "Cleaning",
-        "Filtering",
-        "Transformation",
-        "Training representation"
-      ]
-    },
-
-    {
-      heading: "5. Representation Layer",
-      content: [
-        "Neural networks generally do not operate directly on high-level human concepts. Information must be represented numerically.",
-        "For language, tokenization converts text into token IDs, which are then mapped into vector representations.",
-        "For images, pixels or encoded visual features can be transformed into numerical representations.",
-        "For other modalities, specialized encoders may transform the original signal into a representation suitable for the model."
-      ],
-      process: [
-        "Human-readable or raw signal",
-        "Tokenizer / encoder",
-        "Numerical representation",
-        "Neural-network processing"
-      ]
-    },
-
-    {
-      heading: "6. Model Layer",
-      content: [
-        "The model layer contains the learned neural network responsible for transforming representations.",
-        "Different generative problems require different architectures.",
-        "Language generation commonly uses transformer-based models. Image generation can use diffusion or other architectures. Latent-variable modeling can use VAEs. GANs use generator-discriminator systems.",
-        "The model architecture determines how information is processed, while training determines the learned parameter values."
-      ]
-    },
-
-    {
-      heading: "7. Generation Layer",
-      content: [
-        "After the model computes its internal outputs, the system needs a mechanism for converting those outputs into actual generated content.",
-        "For autoregressive language models, this involves decoding from next-token probabilities.",
-        "For diffusion models, generation involves repeated denoising steps.",
-        "The generation mechanism can strongly influence output quality, diversity, speed, and reproducibility."
-      ],
-      classificationTree: [
-        "Generation Mechanisms",
-        "├── Autoregressive decoding",
-        "│   ├── Greedy selection",
-        "│   ├── Sampling",
-        "│   └── Constrained decoding",
-        "├── Latent sampling",
-        "├── Adversarial generation",
-        "└── Iterative denoising"
-      ]
-    },
-
-    {
-      heading: "8. Context Layer",
-      content: [
-        "Modern AI applications often provide models with context beyond the immediate user request.",
-        "Context can include system instructions, conversation history, retrieved documents, structured data, tool results, user preferences, or application state.",
-        "Context engineering is therefore a major part of modern Generative AI application development."
-      ],
-      process: [
-        "User input",
-        "System instructions",
-        "Conversation history",
-        "External knowledge",
-        "Tool results",
-        "Combined context",
-        "Model"
-      ]
-    },
-
-    {
-      heading: "9. Tool Layer",
-      content: [
-        "A generative model by itself may not have direct access to every external capability required by an application.",
-        "Tools allow an AI system to interact with external services such as databases, search systems, calculators, APIs, file systems, or other software.",
-        "The model can determine when a tool may be useful, while the application executes the tool and provides the result back to the model."
-      ],
-      classificationTree: [
-        "AI Tools",
-        "├── Information",
-        "│   ├── Search",
-        "│   └── Retrieval",
-        "├── Data",
-        "│   ├── SQL database",
-        "│   └── Vector database",
-        "├── Computation",
-        "│   ├── Calculator",
-        "│   └── Code execution",
-        "├── External services",
-        "│   ├── Weather API",
-        "│   ├── Payment API",
-        "│   └── Business API",
-        "└── Actions",
-        "    ├── Create",
-        "    ├── Update",
-        "    └── Notify"
-      ]
-    },
-
-    {
-      heading: "10. Application Layer",
-      content: [
-        "The application layer is where users interact with the AI system.",
-        "A production application may contain a frontend, backend, authentication, authorization, databases, model APIs, monitoring, evaluation, and security controls.",
-        "This layer turns a model capability into a usable software product."
-      ]
-    },
-
-    {
-      heading: "11. Autoregressive Architecture",
-      content: [
-        "An autoregressive model generates a sequence one element at a time.",
-        "For language models, the elements are usually tokens.",
-        "At every generation step, the model receives the current context and computes a distribution over possible next tokens.",
-        "The selected token is added to the context and the model runs again."
-      ],
-      process: [
-        "Input sequence",
-        "Token representations",
-        "Neural network",
-        "Logits",
-        "Probability distribution",
-        "Decoding",
-        "Next token",
-        "Append token",
-        "Repeat"
-      ]
-    },
-
-    {
-      heading: "12. Autoregressive Mathematical View",
-      content: [
-        "The probability of a sequence can be decomposed into conditional probabilities.",
-        "This decomposition is one of the foundations of language modeling."
-      ],
-      formulas: [
-        "P(x_1,...,x_T) = P(x_1) × P(x_2|x_1) × ... × P(x_T|x_1,...,x_{T-1})",
-        "P(x_t|x_1,...,x_{t-1})"
-      ],
-      contentAfterFormula: [
-        "The second expression represents the probability of the next token given the tokens that came before it."
-      ]
-    },
-
-    {
-      heading: "13. Transformer Architecture",
-      content: [
-        "Transformers are neural-network architectures built around attention mechanisms.",
-        "Attention allows the model to dynamically determine which parts of the available context are relevant when computing representations.",
-        "Modern language models commonly use repeated transformer blocks containing attention-related computation, feed-forward computation, residual pathways, and normalization.",
-        "The exact architecture differs among model families."
-      ],
-      classificationTree: [
-        "Transformer Block",
-        "├── Input representation",
-        "├── Attention mechanism",
-        "│   ├── Query",
-        "│   ├── Key",
-        "│   └── Value",
-        "├── Residual connection",
-        "├── Normalization",
-        "├── Feed-forward network",
-        "├── Residual connection",
-        "└── Normalization"
-      ]
-    },
-
-    {
-      heading: "14. Encoder-Decoder Architecture",
-      content: [
-        "The encoder-decoder pattern separates representation of the input from generation of the output.",
-        "The encoder transforms an input sequence into internal representations. The decoder uses those representations to generate an output sequence.",
-        "This pattern is useful for tasks where one sequence must be transformed into another, such as translation and other sequence-to-sequence problems."
-      ],
-      process: [
-        "Input sequence",
-        "Encoder",
-        "Encoded representation",
-        "Decoder",
-        "Output generation"
-      ]
-    },
-
-    {
-      heading: "15. Encoder-Only, Decoder-Only, and Encoder-Decoder",
-      table: [
-        {
-          architecture: "Encoder-only",
-          generalRole: "Build representations",
-          typicalUse: "Understanding or classification tasks"
-        },
-        {
-          architecture: "Decoder-only",
-          generalRole: "Autoregressive generation",
-          typicalUse: "Text generation and LLM-style applications"
-        },
-        {
-          architecture: "Encoder-decoder",
-          generalRole: "Transform one representation into another sequence",
-          typicalUse: "Sequence-to-sequence tasks"
-        }
-      ],
-      contentAfterTable: [
-        "These are architectural patterns rather than absolute boundaries. Modern model designs can contain additional mechanisms and variations."
-      ]
-    },
-
-    {
-      heading: "16. VAE Architecture",
-      content: [
-        "A VAE contains an encoder and decoder connected through a probabilistic latent representation.",
-        "The encoder maps the input into parameters of a latent distribution. A latent vector is sampled from that distribution. The decoder then attempts to reconstruct or generate the target output."
-      ],
-      process: [
-        "Input",
-        "Encoder",
-        "Latent distribution",
-        "Sampling",
-        "Latent vector",
-        "Decoder",
-        "Generated output"
-      ],
-      formulas: [
-        "z ~ q_phi(z|x)",
-        "x_hat = decoder_theta(z)"
-      ]
-    },
-
-    {
-      heading: "17. GAN Architecture",
-      content: [
-        "GANs contain two networks with competing roles.",
-        "The generator maps a source of randomness into synthetic samples.",
-        "The discriminator receives samples and estimates whether they resemble real data or generated data.",
-        "Training alternates between improving the discriminator and improving the generator."
-      ],
-      process: [
-        "Random noise",
-        "Generator",
-        "Synthetic sample",
-        "Discriminator",
-        "Real/fake assessment",
-        "Loss",
-        "Parameter updates"
-      ]
-    },
-
-    {
-      heading: "18. Diffusion Architecture",
-      content: [
-        "Diffusion systems generally involve a process for progressively corrupting data with noise and a learned reverse process that removes noise.",
-        "For generation, the system starts from a noisy state and repeatedly predicts how the state should be transformed toward the target data distribution.",
-        "Modern implementations may operate in different spaces and use sophisticated conditioning mechanisms."
-      ],
-      process: [
-        "Random noise",
-        "Denoising model",
-        "Denoising step",
-        "Updated representation",
-        "Repeated denoising",
-        "Generated sample"
-      ]
-    },
-
-    {
-      heading: "19. Model Family Classification",
-      classificationTree: [
-        "Generative Models",
-        "├── Autoregressive",
-        "│   └── Sequence probability factorization",
-        "├── Latent-variable",
-        "│   └── VAE",
-        "├── Adversarial",
-        "│   └── GAN",
-        "├── Diffusion",
-        "│   └── Iterative denoising",
-        "├── Flow-based",
-        "│   └── Invertible transformations",
-        "└── Hybrid / Multimodal",
-        "    └── Multiple mechanisms combined"
-      ]
-    },
-
-    {
-      heading: "20. Flow-Based Generative Models",
-      content: [
-        "Flow-based models use invertible transformations to map between a simple base distribution and a more complex data distribution.",
-        "Because the transformation is invertible, the model can support useful probabilistic calculations involving density estimation.",
-        "Flow-based models are an important part of the history and theory of deep generative modeling, even though other model families dominate many current application areas."
-      ],
-      process: [
-        "Simple base distribution",
-        "Invertible transformation",
-        "Complex learned distribution",
-        "Generated sample"
-      ]
-    },
-
-    {
-      heading: "21. Multimodal Generative AI",
-      content: [
-        "Multimodal systems work with more than one type of information, such as text, images, audio, or video.",
-        "A multimodal architecture must provide mechanisms for representing and connecting information from different modalities.",
-        "For example, a system may receive an image and text question and produce a text answer.",
-        "More advanced systems can generate or transform content across multiple modalities."
-      ],
-      classificationTree: [
-        "Multimodal AI",
-        "├── Text → Text",
-        "├── Text → Image",
-        "├── Image → Text",
-        "├── Text → Audio",
-        "├── Audio → Text",
-        "├── Text → Video",
-        "├── Image → Image",
-        "└── Multiple modalities → Multiple modalities"
-      ]
-    },
-
-    {
-      heading: "22. Multimodal Application Pipeline",
-      process: [
-        "User provides multiple inputs",
-        "Each modality is processed",
-        "Modal representations are aligned",
-        "Shared or connected model processes context",
-        "Generation mechanism produces output",
-        "Output is converted to required modality",
-        "Application displays result"
-      ]
-    },
-
-    {
-      heading: "23. Foundation Model Architecture",
-      content: [
-        "Foundation models are designed to support many downstream tasks rather than one narrow application.",
-        "Large-scale pretraining creates a general-purpose learned representation or generation capability.",
-        "Applications can then specialize the model using prompting, retrieval, fine-tuning, adapters, tools, structured outputs, or combinations of these techniques."
-      ],
-      process: [
-        "Large dataset",
-        "Large-scale pretraining",
-        "Foundation model",
-        "Application adaptation",
-        "Task-specific context",
-        "Generated result"
-      ]
-    },
-
-    {
-      heading: "24. Base Model vs AI Application",
-      table: [
-        {
-          component: "Base model",
-          responsibility: "Provides learned general capabilities"
-        },
-        {
-          component: "Prompt",
-          responsibility: "Provides instructions and task context"
-        },
-        {
-          component: "Retrieval",
-          responsibility: "Provides external information"
-        },
-        {
-          component: "Tools",
-          responsibility: "Provides external capabilities"
-        },
-        {
-          component: "Application",
-          responsibility: "Coordinates the complete user experience"
-        }
-      ]
-    },
-
-    {
-      heading: "25. Complete LLM Application Architecture",
-      classificationTree: [
-        "User",
-        "└── Frontend",
-        "    └── Backend API",
-        "        ├── Authentication",
-        "        ├── Input validation",
-        "        ├── Prompt construction",
-        "        ├── Conversation state",
-        "        ├── Retrieval",
-        "        │   └── Vector database",
-        "        ├── Tool execution",
-        "        ├── Model API",
-        "        │   └── LLM",
-        "        ├── Output validation",
-        "        ├── Logging",
-        "        └── Monitoring"
-      ]
-    },
-
-    {
-      heading: "26. End-to-End Request Flow",
-      process: [
-        "User enters a request",
-        "Frontend validates basic input",
-        "Frontend sends request to backend",
-        "Backend authenticates request",
-        "Backend validates input",
-        "Application retrieves relevant context if required",
-        "Application constructs model input",
-        "Model processes the request",
-        "Model generates output",
-        "Application validates the result",
-        "Backend returns response",
-        "Frontend displays result",
-        "System records appropriate telemetry"
-      ]
-    },
-
-    {
-      heading: "27. Prompt Construction",
-      content: [
-        "The prompt sent to a model can be much more than the raw sentence entered by the user.",
-        "An application can combine system instructions, user input, conversation history, retrieved information, tool results, output-format requirements, and other context.",
-        "This combined request is often constructed dynamically by the application."
-      ],
-      classificationTree: [
-        "Model Input",
-        "├── System instructions",
-        "├── Developer instructions",
-        "├── User request",
-        "├── Conversation history",
-        "├── Retrieved context",
-        "├── Tool results",
-        "└── Output constraints"
-      ]
-    },
-
-    {
-      heading: "28. Output Generation Is Not the End",
-      content: [
-        "A production application should not necessarily display every model output immediately.",
-        "Depending on the application, the output may need schema validation, safety checks, formatting, factual grounding checks, business-rule validation, or tool-result verification.",
-        "This is especially important when generated output is consumed by another program rather than directly read by a human."
-      ],
-      process: [
-        "Model output",
-        "Parse",
-        "Validate",
-        "Check constraints",
-        "Transform if necessary",
-        "Return to user or downstream system"
-      ]
-    },
-
-    {
-      heading: "29. Structured Generation",
-      content: [
-        "Many applications need machine-readable output rather than free-form text.",
-        "For example, a backend might require a JSON object containing a title, summary, and list of actions.",
-        "Structured generation reduces ambiguity and makes it easier for software systems to consume model output.",
-        "The exact mechanism for enforcing structure depends on the model API and application framework."
-      ],
-      example: {
-        input: "Extract the important fields from this customer request.",
-        outputShape: {
-          intent: "string",
-          priority: "string",
-          summary: "string",
-          actions: [
-            "string"
-          ]
-        }
+      classificationTree: {
+        title: "Generative AI System Architecture",
+        description:
+          "A complete application contains multiple cooperating layers rather than only a generative model.",
+        children: [
+          {
+            title: "Data Layer",
+            description: "Training data, evaluation data, documents, images, audio, and application data."
+          },
+          {
+            title: "Representation Layer",
+            description: "Tokens, embeddings, latent variables, tensors, and other numerical representations."
+          },
+          {
+            title: "Model Layer",
+            description: "Transformer, VAE, GAN, diffusion, multimodal, or other generative architectures."
+          },
+          {
+            title: "Inference Layer",
+            description: "Sampling, decoding, temperature, top-k, top-p, guidance, batching, and serving."
+          },
+          {
+            title: "Application Layer",
+            description: "User interface, APIs, workflows, business logic, storage, and integrations."
+          },
+          {
+            title: "Safety & Evaluation Layer",
+            description: "Validation, moderation, testing, monitoring, quality measurement, and feedback."
+          }
+        ]
       }
     },
 
     {
-      heading: "30. Context Window",
-      content: [
-        "A model cannot necessarily process unlimited context in one request.",
-        "The context window defines how much input and generated context the model can handle within a particular interaction.",
-        "Applications therefore need strategies for managing long conversations and large documents.",
-        "Common strategies include summarization, retrieval, chunking, selective history, and context compression."
+      heading: "3. The Mathematical View of Generative Architecture",
+      paragraphs: [
+        "At a high level, a generative model learns a probability distribution over data. Let x represent an observation such as a sentence, image, sound signal, or structured object. The model attempts to represent a distribution P(x) that captures the patterns present in the training data.",
+        "Training adjusts the parameters θ so that the model assigns high probability to realistic examples. The exact objective depends on the architecture, but a general optimization view is:"
+      ],
+      formulaTitle: "Parameter Optimization",
+      formula:
+        "θ* = argmin_θ L(θ) = argmin_θ E_{x∼p_data}[ℓ(x; θ)]",
+      paragraphsAfterFormula: [
+        "Here θ represents the learnable parameters of the model, p_data represents the data distribution, ℓ is a loss function, and θ* represents parameters that minimize the expected training loss.",
+        "Generation then uses the learned parameters θ* to construct or sample an output. In other words, training learns the transformation, while inference uses that learned transformation."
       ]
     },
 
     {
-      heading: "31. Latency and Cost",
-      content: [
-        "A technically correct architecture may still be unsuitable if it is too slow or expensive.",
-        "Generative AI systems must consider model size, number of generated tokens, input context size, retrieval operations, tool calls, network latency, and infrastructure cost.",
-        "Architecture is therefore a trade-off between capability, quality, speed, reliability, and cost."
+      heading: "4. Autoregressive Generative Models",
+      paragraphs: [
+        "Autoregressive generation decomposes a sequence into conditional predictions. Instead of producing an entire sequence in one indivisible operation, the model predicts one element at a time while conditioning on previously generated elements.",
+        "For a token sequence x₁, x₂, ..., xₜ, the joint probability can be factorized using the chain rule:"
       ],
-      table: [
+      formula:
+        "P(x₁, x₂, ..., xₜ) = ∏_{i=1}^{t} P(xᵢ | x₁, x₂, ..., xᵢ₋₁)",
+      paragraphsAfterFormula: [
+        "This equation is one of the most important mathematical ideas behind language generation. The model does not need to directly learn one enormous probability for every possible complete sentence. Instead, it learns conditional next-token distributions.",
+        "During inference, the model receives a prefix, predicts a probability distribution for the next token, selects or samples a token, appends that token to the sequence, and repeats the process until a stopping condition is reached."
+      ],
+      process: [
         {
-          factor: "Large model",
-          potentialEffect: "Higher capability but potentially higher latency and cost"
+          title: "Context",
+          description: "The model receives the current sequence of tokens.",
+          input: "x₁, x₂, ..., xᵢ₋₁",
+          output: "Hidden representation"
         },
         {
-          factor: "Long context",
-          potentialEffect: "More information but greater processing requirements"
+          title: "Next-token Distribution",
+          description: "The model computes logits and converts them into probabilities.",
+          input: "Hidden representation",
+          output: "P(xᵢ | x₁,...,xᵢ₋₁)"
         },
         {
-          factor: "Multiple tool calls",
-          potentialEffect: "More capability but more latency and failure points"
+          title: "Decoding",
+          description: "A decoding rule selects or samples the next token.",
+          input: "Token probabilities",
+          output: "xᵢ"
         },
         {
-          factor: "Retrieval",
-          potentialEffect: "Better access to external knowledge but adds infrastructure"
+          title: "Append",
+          description: "The generated token becomes part of the context for the next prediction.",
+          input: "Previous sequence + xᵢ",
+          output: "Updated sequence"
         }
       ]
     },
 
     {
-      heading: "32. Reliability Architecture",
-      content: [
-        "Reliability should be designed into the system rather than added after deployment.",
-        "A robust architecture can include input validation, retrieval grounding, structured output, deterministic business logic, tool validation, monitoring, evaluation datasets, retries, timeouts, and human review where appropriate."
+      heading: "5. Autoregressive Model Architecture",
+      paragraphs: [
+        "A modern autoregressive language model commonly contains token embeddings, positional information, repeated transformer blocks, a final normalization layer, and an output projection that maps hidden states into vocabulary logits.",
+        "Suppose the vocabulary contains V possible tokens and the hidden dimension is d. At each generation step, the model produces a hidden vector hᵢ ∈ ℝᵈ. A linear projection maps this vector into V logits:"
       ],
-      classificationTree: [
-        "Reliability",
-        "├── Input validation",
-        "├── Context quality",
-        "├── Retrieval quality",
-        "├── Model quality",
-        "├── Output validation",
-        "├── Tool validation",
-        "├── Evaluation",
-        "├── Monitoring",
-        "└── Recovery mechanisms"
-      ]
-    },
-
-    {
-      heading: "33. Security Architecture",
-      content: [
-        "Generative AI applications introduce security concerns at both the model and application layers.",
-        "Applications need to consider authentication, authorization, data exposure, malicious input, prompt injection, insecure tool access, sensitive information handling, and unsafe downstream actions.",
-        "The correct security design depends on the application and its threat model."
-      ]
-    },
-
-    {
-      heading: "34. Where RAG Fits",
-      content: [
-        "Retrieval-Augmented Generation belongs primarily to the application/context layer rather than being a replacement for the underlying generative model.",
-        "The model remains responsible for generating the answer, while retrieval supplies relevant external information.",
-        "This distinction becomes important when designing systems that need knowledge beyond the model's internal parameters."
+      formula:
+        "zᵢ = hᵢW_out + b_out",
+      paragraphsAfterFormula: [
+        "The logits are converted into probabilities using softmax:"
       ],
-      process: [
-        "Question",
-        "Retriever",
-        "Relevant chunks",
-        "Context builder",
-        "Generative model",
-        "Grounded response"
+      formula2:
+        "P(xᵢ = j | x₁,...,xᵢ₋₁) = exp(zᵢⱼ) / ∑_{k=1}^{V} exp(zᵢₖ)",
+      paragraphsAfterFormula2: [
+        "The resulting vector contains one probability for every vocabulary token. Decoding then determines which token becomes the next element of the generated sequence."
       ]
     },
 
     {
-      heading: "35. Where Agents Fit",
-      content: [
-        "An agent-style system adds decision-making and tool-use loops around a generative model.",
-        "Instead of simply generating a single answer, the system can determine a sequence of actions, call tools, inspect results, and continue until the task reaches a defined stopping condition.",
-        "Agents therefore represent an application architecture pattern built on top of model capabilities."
+      heading: "6. Variational Autoencoders",
+      paragraphs: [
+        "A Variational Autoencoder, or VAE, uses an encoder–latent–decoder structure. The encoder maps an input into parameters of a probability distribution in latent space. A latent sample is then decoded back into the original data space.",
+        "The important idea is that the latent representation is not treated simply as one deterministic compressed vector. Instead, the encoder predicts a distribution, usually represented by a mean μ and standard deviation σ for a Gaussian latent distribution.",
+        "For an input x, the encoder produces μ(x) and σ(x). A latent vector z is sampled using the reparameterization trick:"
+      ],
+      formula:
+        "z = μ + σ ⊙ ε,  where  ε ∼ N(0, I)",
+      paragraphsAfterFormula: [
+        "The decoder then reconstructs or generates an observation from z. During training, the model balances reconstruction quality with a regularization term that encourages the latent distribution to remain well behaved."
+      ],
+      formula2:
+        "L_VAE = L_reconstruction + β D_KL(q_φ(z|x) || p(z))",
+      paragraphsAfterFormula2: [
+        "The reconstruction term encourages the decoder to reproduce meaningful information from the input. The KL-divergence term encourages the learned latent distribution to remain close to a chosen prior, often N(0, I). The coefficient β controls the relative strength of this regularization."
       ],
       process: [
-        "User goal",
-        "Model reasoning or planning",
-        "Tool selection",
-        "Tool execution",
-        "Observe result",
-        "Update context",
-        "Continue or finish"
-      ]
-    },
-
-    {
-      heading: "36. Model Selection",
-      content: [
-        "Choosing a generative model should begin with the task rather than the popularity of a model.",
-        "Important considerations include modality, quality requirements, context requirements, latency, cost, privacy, deployment constraints, tool support, structured-output support, and evaluation results.",
-        "A smaller model can sometimes be more appropriate than a larger model when the task is narrow and latency or cost matters."
-      ],
-      classificationTree: [
-        "Model Selection",
-        "├── Task",
-        "├── Modality",
-        "├── Quality",
-        "├── Context",
-        "├── Latency",
-        "├── Cost",
-        "├── Privacy",
-        "├── Deployment",
-        "├── Tool support",
-        "└── Evaluation results"
-      ]
-    },
-
-    {
-      heading: "37. Architecture Decision Example",
-      content: [
-        "Suppose an organization wants an internal question-answering assistant over company documents.",
-        "A reasonable architecture might contain a web interface, authentication, backend API, document ingestion pipeline, chunking, embeddings, vector search, context construction, a language model, response validation, logging, and evaluation.",
-        "The important point is that simply connecting a chatbot to a model does not automatically create a reliable document question-answering system."
-      ],
-      process: [
-        "Employee question",
-        "Authentication",
-        "Question processing",
-        "Semantic retrieval",
-        "Relevant company documents",
-        "Context construction",
-        "LLM",
-        "Grounded response",
-        "Citation or source information",
-        "Logging and evaluation"
-      ]
-    },
-
-    {
-      heading: "38. Architecture Trade-Offs",
-      table: [
         {
-          decision: "Local model vs API",
-          consideration: "Privacy, infrastructure, cost, latency, control"
+          title: "Encoder",
+          description:
+            "The encoder transforms x into distribution parameters μ and σ.",
+          input: "Input x",
+          output: "μ, σ"
         },
         {
-          decision: "Small vs large model",
-          consideration: "Capability, cost, latency"
+          title: "Latent Sampling",
+          description:
+            "The reparameterization trick creates a differentiable latent sample.",
+          input: "μ, σ, ε",
+          output: "z"
         },
         {
-          decision: "RAG vs model-only",
-          consideration: "External knowledge and freshness"
+          title: "Decoder",
+          description:
+            "The decoder maps the latent representation into the data space.",
+          input: "z",
+          output: "x̂"
         },
         {
-          decision: "Single call vs agent loop",
-          consideration: "Simplicity versus multi-step capability"
-        },
-        {
-          decision: "Free-form vs structured output",
-          consideration: "Human flexibility versus machine reliability"
+          title: "Loss",
+          description:
+            "Reconstruction and KL regularization jointly train the model.",
+          input: "x, x̂, q_φ(z|x), p(z)",
+          output: "L_VAE"
         }
       ]
     },
 
     {
-      heading: "39. Complete Architecture Mental Model",
-      content: [
-        "The most useful architecture mental model is to think of Generative AI as a pipeline rather than a single neural network.",
-        "Data becomes representations. Representations are processed by a model. The model produces a probability distribution or intermediate result. A generation mechanism converts that into content. The application adds context, tools, validation, and user-facing behavior.",
-        "Once this mental model is clear, later topics such as LLMs, embeddings, RAG, agents, and multimodal AI become much easier to understand."
+      heading: "7. Generative Adversarial Networks",
+      paragraphs: [
+        "Generative Adversarial Networks use two neural networks with competing objectives: a generator G and a discriminator D. The generator attempts to create synthetic examples that resemble real data. The discriminator attempts to distinguish real examples from generated examples.",
+        "The generator receives a latent vector z and produces a synthetic sample G(z). The discriminator receives either a real sample x or a generated sample G(z) and estimates whether the sample came from the real data distribution.",
+        "The classical GAN objective can be expressed as:"
+      ],
+      formula:
+        "min_G max_D V(D,G) = E_{x∼p_data}[log D(x)] + E_{z∼p(z)}[log(1 − D(G(z)))]",
+      paragraphsAfterFormula: [
+        "The adversarial relationship forces the generator to improve as the discriminator becomes better at detecting generated samples. In practice, GAN training can be difficult because the two networks must remain sufficiently balanced."
       ],
       process: [
-        "DATA",
-        "↓",
-        "REPRESENTATION",
-        "↓",
-        "MODEL",
-        "↓",
-        "GENERATION",
-        "↓",
-        "CONTEXT + TOOLS",
-        "↓",
-        "VALIDATION",
-        "↓",
-        "APPLICATION",
-        "↓",
-        "USER"
+        {
+          title: "Sample Latent Noise",
+          description: "Draw a random latent vector z.",
+          input: "z ∼ p(z)",
+          output: "Latent vector"
+        },
+        {
+          title: "Generate",
+          description: "The generator maps z into a synthetic example.",
+          input: "z",
+          output: "G(z)"
+        },
+        {
+          title: "Discriminate",
+          description: "The discriminator evaluates real and generated samples.",
+          input: "x or G(z)",
+          output: "D(x)"
+        },
+        {
+          title: "Adversarial Update",
+          description:
+            "Generator and discriminator parameters are updated according to their objectives.",
+          input: "Generator/discriminator losses",
+          output: "Updated parameters"
+        }
       ]
     },
 
     {
-      heading: "40. Common Mistakes",
-      content: [
-        "Mistake 1: Treating a model and an application as the same thing.",
-        "Mistake 2: Choosing a model before defining the task.",
-        "Mistake 3: Ignoring representation and tokenization.",
-        "Mistake 4: Sending unlimited conversation history into every request.",
-        "Mistake 5: Assuming retrieval automatically guarantees correct answers.",
-        "Mistake 6: Allowing a model to directly perform sensitive actions without application-level controls.",
-        "Mistake 7: Ignoring latency and cost.",
-        "Mistake 8: Returning free-form model output when the backend actually needs structured data.",
-        "Mistake 9: Deploying without an evaluation strategy.",
-        "Mistake 10: Assuming a bigger model automatically means a better application."
+      heading: "8. Diffusion Models",
+      paragraphs: [
+        "Diffusion models generate data by learning to reverse a gradual corruption process. During training, clean data is progressively transformed into noisy data. The model learns how to estimate the information needed to reverse that corruption.",
+        "A simplified forward process can be represented as a sequence of noisy states x₀, x₁, ..., x_T. The final state is close to random noise. Generation begins from noise and repeatedly applies the learned reverse process to obtain a structured sample.",
+        "A common forward formulation is:"
+      ],
+      formula:
+        "q(x_t | x_{t−1}) = N(x_t; √(1−β_t)x_{t−1}, β_t I)",
+      paragraphsAfterFormula: [
+        "The variance schedule β_t controls how much noise is introduced at each step. During generation, the learned model estimates the reverse transition so that the process moves from a noisy representation toward a meaningful sample."
+      ],
+      process: [
+        {
+          title: "Clean Data",
+          description: "Begin with a real training example.",
+          input: "x₀",
+          output: "Clean representation"
+        },
+        {
+          title: "Forward Noise",
+          description:
+            "Gradually add controlled noise according to a schedule.",
+          input: "x₀",
+          output: "x_t"
+        },
+        {
+          title: "Learn Reverse Process",
+          description:
+            "Train a neural network to predict information required for denoising.",
+          input: "Noisy sample + timestep",
+          output: "Noise or denoising estimate"
+        },
+        {
+          title: "Sampling",
+          description:
+            "Start from noise and repeatedly apply the learned reverse transitions.",
+          input: "x_T",
+          output: "Generated x₀"
+        }
       ]
     },
 
     {
-      heading: "41. Interview Questions",
-      content: [
-        "What is the difference between model architecture and application architecture?",
-        "What are the major layers of a Generative AI system?",
-        "What is an autoregressive architecture?",
-        "What is a transformer?",
-        "What is an encoder-decoder architecture?",
-        "How does a VAE work at a high level?",
-        "How does a GAN work?",
-        "How does diffusion-based generation work?",
-        "What is a multimodal model?",
-        "What is the difference between a foundation model and an AI application?",
-        "Where does RAG fit in a Generative AI architecture?",
-        "Where do tools fit?",
-        "Why is output validation important?",
-        "What factors should be considered when selecting a model?",
-        "Why are latency and cost architectural concerns?",
-        "What is structured generation?",
-        "Why is context management important?"
+      heading: "9. Comparing Major Generative Model Families",
+      paragraphs: [
+        "The model families discussed above all learn to generate data, but they organize the generation problem differently. The distinction is architectural as well as mathematical.",
+        "Autoregressive models naturally fit sequences because they explicitly model conditional next-element probabilities. VAEs emphasize continuous latent representations and probabilistic encoding. GANs use adversarial competition. Diffusion models learn an iterative denoising process."
+      ],
+      comparisonTables: [
+        {
+          title: "Major Generative Model Families",
+          columns: [
+            "Model family",
+            "Core idea",
+            "Generation mechanism",
+            "Typical strengths",
+            "Typical challenges"
+          ],
+          rows: [
+            [
+              "Autoregressive",
+              "Factorize probability into conditional predictions",
+              "Generate one element at a time",
+              "Strong sequence modeling and controllable conditioning",
+              "Sequential generation can be computationally expensive"
+            ],
+            [
+              "VAE",
+              "Learn a probabilistic latent representation",
+              "Sample latent variables and decode",
+              "Structured latent spaces and stable training",
+              "Outputs may be less sharp depending on objective"
+            ],
+            [
+              "GAN",
+              "Generator competes with discriminator",
+              "Generate directly from latent noise",
+              "Sharp synthetic outputs",
+              "Training instability and mode collapse"
+            ],
+            [
+              "Diffusion",
+              "Learn reverse of a noise process",
+              "Iterative denoising",
+              "High-quality image and multimodal generation",
+              "Sampling may require many network evaluations"
+            ]
+          ]
+        }
       ]
-    }
-  ],
-
-  formulas: [
-    "P(x_1,...,x_T) = ∏ P(x_t|x_1,...,x_{t-1})",
-    "p_model(x) ≈ p_data(x)",
-    "z ~ q_phi(z|x)",
-    "x_hat = decoder_theta(z)",
-    "cosine_similarity(a,b) = (a · b) / (||a|| ||b||)"
-  ],
-
-  codeExamples: [
-    {
-      title: "Simple Autoregressive Generator",
-      language: "python",
-      description:
-        "A toy example showing how generated output can be constructed one element at a time.",
-      code: "import random\n\ntransitions = {\n    'Generative': ['AI', 'models'],\n    'AI': ['can', 'helps'],\n    'models': ['learn', 'generate'],\n    'can': ['generate', 'learn'],\n    'helps': ['developers', 'users'],\n    'learn': ['patterns', 'representations'],\n    'generate': ['content', 'outputs']\n}\n\nword = 'Generative'\nresult = [word]\n\nfor _ in range(8):\n    choices = transitions.get(word, ['.'])\n    word = random.choice(choices)\n    result.append(word)\n\nprint(' '.join(result))"
     },
+
     {
-      title: "Layered AI Application Representation",
-      language: "python",
-      description:
-        "Represent a simplified Generative AI architecture using Python dictionaries.",
-      code: "architecture = {\n    'input': 'user prompt',\n    'context': ['instructions', 'history', 'retrieved data'],\n    'model': 'generative model',\n    'generation': 'decoding',\n    'validation': 'schema and application checks',\n    'output': 'response'\n}\n\nfor layer, value in architecture.items():\n    print(f'{layer}: {value}')"
+      heading: "10. Conditional Generation",
+      paragraphs: [
+        "Generative models can generate unconditionally or conditionally. Unconditional generation attempts to sample from the learned data distribution without an explicit external condition. Conditional generation adds information that guides the generated output.",
+        "For example, a text-to-image system may condition an image generator on a text representation c. The conceptual objective becomes modeling P(x|c), where x is the generated image and c represents the conditioning information.",
+        "Conditioning can come from class labels, text embeddings, another image, structured metadata, retrieved documents, user preferences, or previous generated content."
+      ],
+      formula:
+        "x̂ ∼ P_θ(x | c)",
+      paragraphsAfterFormula: [
+        "The conditioning signal does not necessarily determine one unique output. Instead, it changes the probability distribution so that outputs consistent with the condition become more likely."
+      ]
     },
+
     {
-      title: "Simple Structured Output Validation",
-      language: "python",
-      description:
-        "Demonstrates why application code should validate generated structured data.",
-      code: "response = {\n    'intent': 'question',\n    'priority': 'medium',\n    'summary': 'Explain Generative AI'\n}\n\nrequired_fields = ['intent', 'priority', 'summary']\n\nvalid = all(field in response for field in required_fields)\n\nprint('Valid response:', valid)"
+      heading: "11. Latent Spaces",
+      paragraphs: [
+        "A latent space is a learned representation space in which complex observations can be represented using a smaller or more structured set of variables. Latent spaces are useful because many real-world observations contain hidden factors that are easier to reason about in a learned representation than in raw input space.",
+        "For an image, for example, raw pixel values are extremely high-dimensional. A learned latent representation may capture higher-level information such as shape, texture, composition, or semantic attributes.",
+        "The geometry of a latent space can also support interpolation. If two latent vectors correspond to meaningful samples, moving between those vectors may produce a sequence of outputs that gradually changes between the underlying concepts."
+      ],
+      formula:
+        "z(α) = (1 − α)z₁ + αz₂,  0 ≤ α ≤ 1",
+      paragraphsAfterFormula: [
+        "This simple linear interpolation is only a conceptual example. Whether interpolation produces semantically smooth results depends on the model architecture and the quality of the learned representation."
+      ]
+    },
+
+    {
+      heading: "12. From Model to Application",
+      paragraphs: [
+        "A production Generative AI system usually adds significant engineering around the model. The model may be hosted locally, accessed through an API, accelerated on GPUs, or deployed behind an inference service.",
+        "The application can add retrieval, tool calling, memory, authentication, logging, caching, rate limiting, safety filtering, structured output validation, and human review. These components transform a model capability into a usable product."
+      ],
+      processFlow: [
+        {
+          title: "User",
+          description: "Provides a request."
+        },
+        {
+          title: "Application API",
+          description: "Authenticates and validates the request."
+        },
+        {
+          title: "Context Builder",
+          description: "Adds relevant instructions, retrieved information, and application state."
+        },
+        {
+          title: "Generative Model",
+          description: "Computes a conditional probability distribution or generation process."
+        },
+        {
+          title: "Decoder",
+          description: "Converts model probabilities or latent states into an output."
+        },
+        {
+          title: "Validator",
+          description: "Checks structure, safety, policy, and application constraints."
+        },
+        {
+          title: "Application",
+          description: "Displays or uses the result."
+        }
+      ]
+    },
+
+    {
+      heading: "13. Worked Architecture Example: AI Writing Assistant",
+      paragraphs: [
+        "Suppose we are building an AI writing assistant. The user enters a paragraph and requests a clearer version. The application first receives the text through a frontend interface. The backend validates the request and constructs a structured instruction.",
+        "The text is tokenized and converted into model representations. The autoregressive model processes the sequence and estimates a next-token distribution. A decoding strategy selects tokens repeatedly until the response is complete.",
+        "The application can then validate the response, apply output formatting, store the interaction if appropriate, and display the result. If the application supports organization-specific terminology, a retrieval layer could supply relevant documentation before generation."
+      ],
+      codeExamples: [
+        {
+          title: "Conceptual Generative AI Application Pipeline",
+          language: "python",
+          explanation:
+            "This simplified example demonstrates the architecture around a generative model. It intentionally separates application logic from the model call.",
+          code: `def generate_response(user_text, model, retriever=None):
+    if not user_text.strip():
+        raise ValueError("Input cannot be empty")
+
+    context = ""
+    if retriever is not None:
+        documents = retriever.search(user_text)
+        context = "\\n".join(documents)
+
+    prompt = f"""
+    Task: Improve the user's writing.
+    Context:
+    {context}
+
+    User text:
+    {user_text}
+
+    Return a clearer version while preserving the original meaning.
+    """
+
+    response = model.generate(prompt)
+
+    if not response.strip():
+        raise RuntimeError("Model returned an empty response")
+
+    return response`,
+          output:
+            "The application validates input, optionally retrieves context, constructs a prompt, invokes the model, validates the response, and returns the result."
+        }
+      ]
+    },
+
+    {
+      heading: "14. Mathematical Intuition: Why Architecture Matters",
+      paragraphs: [
+        "Architecture determines how information flows through a model. Two models can receive the same data but learn very different representations because their computational structures impose different inductive biases.",
+        "An autoregressive model imposes a sequential factorization. A VAE explicitly introduces a latent random variable. A GAN introduces a two-player adversarial objective. A diffusion model introduces a sequence of noisy states and learns a reverse process.",
+        "These architectural choices change the optimization problem. They also influence memory requirements, inference latency, controllability, stability, representation quality, and the type of data for which the model is naturally suited."
+      ],
+      formula:
+        "Architecture → Representation → Objective → Optimization → Generation Behavior",
+      paragraphsAfterFormula: [
+        "This chain is a useful way to reason about new model architectures. Instead of memorizing names, ask what representation the model uses, what objective it optimizes, what information flows through the network, and how generation is performed."
+      ]
+    },
+
+    {
+      heading: "15. Model Selection as an Engineering Decision",
+      paragraphs: [
+        "There is no single generative architecture that is automatically appropriate for every problem. Model selection depends on the data modality, quality requirements, latency constraints, available hardware, controllability requirements, training budget, deployment environment, and evaluation criteria.",
+        "For a sequence-generation task, autoregressive modeling may provide a natural formulation. For structured latent representations, a VAE may be useful. For certain image-generation tasks, diffusion models are common. GANs remain important historically and conceptually and can still be useful for specialized generation problems.",
+        "In modern application development, engineers often consume pretrained foundation models instead of training large generative models from scratch. Understanding model families remains important because it helps engineers reason about capabilities, limitations, inference behavior, and system trade-offs."
+      ]
+    },
+
+    {
+      heading: "16. Common Failure Modes by Architecture",
+      paragraphs: [
+        "Different architectures fail in different ways. Autoregressive models can produce repetitive or incorrect sequences and may accumulate errors across long generations. VAEs can produce overly smooth outputs when the reconstruction objective does not preserve fine detail. GANs can suffer from mode collapse, where the generator produces insufficiently diverse outputs. Diffusion models can require substantial computation during sampling and may produce outputs that do not perfectly satisfy conditioning information.",
+        "Failure analysis should therefore consider both the model and the surrounding application. A poor output can result from the model itself, incorrect preprocessing, inadequate conditioning, poor decoding settings, missing context, data quality problems, or an application-level integration error."
+      ]
+    },
+
+    {
+      heading: "17. Practical Architecture Checklist",
+      bullets: [
+        "Identify the input modality and representation used by the system.",
+        "Identify whether generation is autoregressive, latent-variable based, adversarial, diffusion-based, or another formulation.",
+        "Determine what the model actually predicts during training.",
+        "Determine what the model receives during inference.",
+        "Identify the sampling or decoding strategy.",
+        "Identify external context such as retrieved documents or tool outputs.",
+        "Identify post-processing and validation mechanisms.",
+        "Identify safety and evaluation mechanisms.",
+        "Measure latency, memory use, throughput, and output quality.",
+        "Document model assumptions and known failure modes."
+      ]
+    },
+
+    {
+      heading: "18. Mini Architecture Exercise",
+      paragraphs: [
+        "Imagine an application that accepts a text prompt and generates an image. Describe the system from the user's input to the final image. Your answer should identify the text representation, conditioning mechanism, generative model, sampling process, output decoding, and application layer.",
+        "Then modify the design so that the user can provide an additional reference image. Explain what changes in the conditioning pathway and why multimodal conditioning requires an appropriate representation for each input modality."
+      ]
     }
   ],
 
   mathIntuition: [
     {
-      concept: "Architecture",
+      title: "Probability as the Foundation",
       explanation:
-        "Architecture describes how computations and information flow through a system."
+        "Generative modeling can be understood as learning a probability distribution over possible observations. Training adjusts θ so that realistic training examples receive high probability or low generation error."
     },
     {
-      concept: "Autoregressive factorization",
+      title: "Autoregressive Factorization",
+      formula:
+        "P(x₁,...,xₜ) = ∏_{i=1}^{t} P(xᵢ | x₁,...,xᵢ₋₁)",
       explanation:
-        "A complex sequence distribution can be represented as a sequence of conditional predictions."
+        "A complex sequence distribution becomes a chain of conditional predictions. This makes next-token prediction a practical training objective."
     },
     {
-      concept: "Latent representation",
+      title: "Latent Variable Modeling",
+      formula:
+        "p(x) = ∫ p_θ(x|z)p(z) dz",
       explanation:
-        "A latent representation captures hidden structure in a numerical space that can support generation."
+        "A latent-variable model explains observed data through hidden variables z. The decoder generates observations conditioned on the latent representation."
     },
     {
-      concept: "Context",
+      title: "Optimization",
+      formula:
+        "θ* = argmin_θ L(θ)",
       explanation:
-        "Context changes the information available to the model and therefore influences the generated output."
+        "Learning is an optimization problem. The architecture defines the computations used to produce the loss, while optimization changes θ to reduce that loss."
+    }
+  ],
+
+  codeExamples: [
+    {
+      title: "Autoregressive Sampling",
+      language: "python",
+      code: `import random
+
+def sample_next_token(probabilities):
+    tokens = list(probabilities.keys())
+    weights = list(probabilities.values())
+    return random.choices(tokens, weights=weights, k=1)[0]
+
+sequence = ["Generative"]
+
+for _ in range(5):
+    probabilities = {
+        "AI": 0.45,
+        "models": 0.25,
+        "systems": 0.20,
+        "learn": 0.10,
+    }
+
+    token = sample_next_token(probabilities)
+    sequence.append(token)
+
+print(" ".join(sequence))`,
+      output:
+        "A sampled sequence is produced one token at a time. Real language models calculate the probability distribution from a neural network rather than using a manually defined dictionary."
     },
     {
-      concept: "Generation",
-      explanation:
-        "Generation converts model outputs into actual content using sampling, decoding, denoising, or another mechanism."
+      title: "VAE Reparameterization Intuition",
+      language: "python",
+      code: `import numpy as np
+
+mu = np.array([0.5, -0.2])
+sigma = np.array([0.8, 0.4])
+
+epsilon = np.random.randn(2)
+
+z = mu + sigma * epsilon
+
+print("μ:", mu)
+print("σ:", sigma)
+print("ε:", epsilon)
+print("z:", z)`,
+      output:
+        "The latent sample z changes because ε is sampled from a standard normal distribution."
+    },
+    {
+      title: "Diffusion Noise Schedule Concept",
+      language: "python",
+      code: `import numpy as np
+
+x = np.array([0.2, -0.4, 0.7])
+
+beta = 0.2
+noise = np.random.randn(*x.shape)
+
+x_noisy = (
+    np.sqrt(1 - beta) * x
+    + np.sqrt(beta) * noise
+)
+
+print("Original:", x)
+print("Noisy:", x_noisy)`,
+      output:
+        "The example demonstrates the intuition of mixing a clean representation with Gaussian noise."
+    }
+  ],
+
+  comparisonTables: [
+    {
+      title: "Generation Strategy Comparison",
+      columns: [
+        "Property",
+        "Autoregressive",
+        "VAE",
+        "GAN",
+        "Diffusion"
+      ],
+      rows: [
+        [
+          "Primary representation",
+          "Sequence / hidden states",
+          "Latent distribution",
+          "Latent noise",
+          "Noisy intermediate states"
+        ],
+        [
+          "Generation",
+          "Sequential prediction",
+          "Latent sampling + decoding",
+          "Generator mapping",
+          "Iterative denoising"
+        ],
+        [
+          "Training concept",
+          "Likelihood / next-token prediction",
+          "Reconstruction + KL regularization",
+          "Adversarial objective",
+          "Noise prediction / denoising objective"
+        ],
+        [
+          "Typical bottleneck",
+          "Sequential inference",
+          "Reconstruction quality",
+          "Training stability",
+          "Sampling computation"
+        ]
+      ]
+    }
+  ],
+
+  architecture: {
+    title: "End-to-End Generative AI Architecture",
+    description:
+      "A practical Generative AI system connects data, representations, model computation, inference, application logic, and evaluation.",
+    layers: [
+      {
+        title: "Input",
+        components: ["Text", "Image", "Audio", "Structured data"]
+      },
+      {
+        title: "Preprocessing",
+        components: ["Validation", "Normalization", "Tokenization", "Resizing"]
+      },
+      {
+        title: "Representation",
+        components: ["Tokens", "Embeddings", "Latent vectors", "Tensors"]
+      },
+      {
+        title: "Generative Model",
+        components: ["Transformer", "VAE", "GAN", "Diffusion"]
+      },
+      {
+        title: "Inference",
+        components: ["Sampling", "Decoding", "Temperature", "Guidance"]
+      },
+      {
+        title: "Application",
+        components: ["API", "UI", "Storage", "Business logic"]
+      },
+      {
+        title: "Evaluation & Safety",
+        components: ["Validation", "Monitoring", "Testing", "Guardrails"]
+      }
+    ]
+  },
+
+  implementationStages: [
+    {
+      title: "Define the Generation Task",
+      description:
+        "Specify what the system receives, what it should generate, and what quality means."
+    },
+    {
+      title: "Select a Model Family",
+      description:
+        "Choose an architecture based on modality, quality, latency, controllability, and compute requirements."
+    },
+    {
+      title: "Prepare Representations",
+      description:
+        "Convert raw inputs into tokens, embeddings, tensors, or latent representations."
+    },
+    {
+      title: "Configure Inference",
+      description:
+        "Choose decoding, sampling, temperature, guidance, maximum length, or other generation parameters."
+    },
+    {
+      title: "Build the Application Layer",
+      description:
+        "Connect the model to APIs, user interfaces, databases, retrieval systems, and business logic."
+    },
+    {
+      title: "Evaluate and Monitor",
+      description:
+        "Measure output quality, latency, reliability, safety, cost, and failure modes."
     }
   ],
 
   exercises: [
     {
-      question:
-        "Explain the difference between a model architecture and an application architecture.",
-      difficulty: "Easy"
+      title: "Architecture Identification",
+      description:
+        "Given a generative application, identify its input, representation, model, inference, post-processing, and application layers."
     },
     {
-      question:
-        "Draw the seven-layer Generative AI stack.",
-      difficulty: "Easy"
+      title: "Model Family Analysis",
+      description:
+        "Explain how autoregressive models, VAEs, GANs, and diffusion models differ in their generation process."
     },
     {
-      question:
-        "Explain how an autoregressive language model generates a paragraph.",
-      difficulty: "Medium"
+      title: "Probability Factorization",
+      description:
+        "For the sequence x₁, x₂, x₃, x₄, write the autoregressive factorization of P(x₁,x₂,x₃,x₄)."
     },
     {
-      question:
-        "Compare encoder-only, decoder-only, and encoder-decoder architectures.",
-      difficulty: "Medium"
-    },
-    {
-      question:
-        "Draw a VAE architecture and label every major component.",
-      difficulty: "Medium"
-    },
-    {
-      question:
-        "Draw the generator-discriminator loop of a GAN.",
-      difficulty: "Medium"
-    },
-    {
-      question:
-        "Explain the high-level architecture of a diffusion model.",
-      difficulty: "Medium"
-    },
-    {
-      question:
-        "Design an architecture for an AI assistant that answers questions from university documents.",
-      difficulty: "Hard"
-    },
-    {
-      question:
-        "Explain where RAG, tools, validation, and monitoring belong in an AI application.",
-      difficulty: "Hard"
+      title: "System Design",
+      description:
+        "Design a high-level architecture for a text-to-image application and explain the role of conditioning."
     }
   ],
 
   codingExercises: [
     {
-      title: "Build an Architecture Map",
-      task:
-        "Create a Python dictionary representing a complete Generative AI application.",
+      title: "Build a Toy Autoregressive Generator",
+      description:
+        "Create a Python program that stores conditional next-token probabilities and repeatedly samples the next token until a stop token appears.",
       requirements: [
-        "Include frontend.",
-        "Include backend.",
-        "Include context.",
-        "Include model.",
-        "Include retrieval.",
-        "Include tools.",
-        "Include validation.",
-        "Include monitoring."
+        "Represent the vocabulary using strings.",
+        "Store conditional probabilities.",
+        "Sample tokens using weighted random selection.",
+        "Stop when an end token is generated.",
+        "Print the complete generated sequence."
       ]
     },
     {
-      title: "Toy Autoregressive Model",
-      task:
-        "Create a dictionary-based transition model and generate a sequence one element at a time.",
-      requirements: [
-        "Use at least 15 transitions.",
-        "Generate at least 20 elements.",
-        "Allow a configurable starting token.",
-        "Stop safely when no transition exists."
+      title: "Implement a Latent Sampling Experiment",
+      description:
+        "Generate multiple latent vectors using z = μ + σ ⊙ ε and observe how changing σ affects the spread of generated samples."
+    }
+  ],
+
+  architectureExercises: [
+    {
+      title: "Generative AI Assistant Architecture",
+      prompt:
+        "Design an architecture for an AI assistant that accepts text, retrieves relevant information, generates a response, validates the response, and displays it.",
+      expectedComponents: [
+        "User interface",
+        "Application API",
+        "Input validation",
+        "Retrieval layer",
+        "Context construction",
+        "Generative model",
+        "Decoding",
+        "Output validation",
+        "Monitoring"
       ]
     },
     {
-      title: "Architecture Decision Program",
-      task:
-        "Create a Python program that asks the developer about task requirements and prints architecture considerations.",
-      requirements: [
-        "Ask whether external knowledge is needed.",
-        "Ask whether structured output is needed.",
-        "Ask whether tool access is required.",
-        "Ask whether low latency is important.",
-        "Print the resulting architecture recommendations."
+      title: "Text-to-Image Architecture",
+      prompt:
+        "Design a high-level architecture for a text-to-image system with optional reference-image conditioning.",
+      expectedComponents: [
+        "Text encoder",
+        "Image encoder",
+        "Conditioning mechanism",
+        "Generative model",
+        "Sampling process",
+        "Image decoder",
+        "Safety validation",
+        "Application interface"
       ]
     }
   ],
 
+  interviewQuestions: [
+    {
+      question: "What is the difference between a generative model and a Generative AI application?",
+      answer:
+        "A generative model learns to produce or model data, while a Generative AI application includes the model plus interfaces, preprocessing, inference logic, validation, safety, storage, and application-specific workflows."
+    },
+    {
+      question: "How does an autoregressive model generate a sequence?",
+      answer:
+        "It predicts a conditional probability distribution for the next element given previously generated elements, selects or samples one element, appends it to the context, and repeats."
+    },
+    {
+      question: "What is the role of a latent space?",
+      answer:
+        "A latent space provides a learned representation in which important underlying factors of the data can be represented more compactly or structurally."
+    },
+    {
+      question: "How does a VAE differ from a standard autoencoder?",
+      answer:
+        "A VAE learns a probability distribution over latent representations and uses probabilistic sampling with a regularization objective rather than only learning a deterministic compressed representation."
+    },
+    {
+      question: "What are the two networks in a GAN?",
+      answer:
+        "A generator produces synthetic samples and a discriminator attempts to distinguish real samples from generated samples."
+    },
+    {
+      question: "What is the basic idea behind diffusion models?",
+      answer:
+        "Diffusion models learn to reverse a gradual noise-addition process, starting from noise during generation and iteratively denoising toward a structured sample."
+    },
+    {
+      question: "Why is decoding important?",
+      answer:
+        "The model typically produces a distribution or intermediate representation rather than directly selecting one final output. Decoding determines how the final output is selected or sampled."
+    },
+    {
+      question: "Why should model architecture and application architecture be separated conceptually?",
+      answer:
+        "Because the model is only one component of a production system. Separating the concepts makes it easier to change models, add retrieval, apply safety controls, monitor behavior, and maintain application logic."
+    }
+  ],
+
+  commonMistakes: [
+    "Thinking that a foundation model is the same thing as a complete AI application.",
+    "Memorizing model names without understanding how generation occurs.",
+    "Confusing training architecture with inference architecture.",
+    "Assuming every generative model generates outputs in one single step.",
+    "Ignoring the role of sampling and decoding.",
+    "Treating latent variables as ordinary input features without understanding their probabilistic role.",
+    "Assuming GANs and diffusion models use the same training objective.",
+    "Ignoring preprocessing and representation layers.",
+    "Evaluating a model only by visual or textual quality while ignoring latency, cost, safety, and reliability.",
+    "Assuming a better model automatically produces a better application."
+  ],
+
   summary: [
-    "Generative AI should be understood at both the model and application levels.",
-    "A complete AI application contains many components beyond the neural network.",
-    "The major layers include data, representation, model, generation, context, tools, and application infrastructure.",
-    "Autoregressive models generate sequences step by step.",
-    "Transformers use attention-based computation and are central to modern language generation.",
-    "VAEs use probabilistic latent representations.",
-    "GANs use generator-discriminator competition.",
-    "Diffusion models use iterative denoising.",
-    "Multimodal systems connect multiple forms of information.",
-    "RAG supplies external knowledge to a generative model.",
-    "Tools allow AI applications to interact with external systems.",
-    "Validation and monitoring are essential parts of production architecture.",
-    "Model selection should consider task, quality, latency, cost, privacy, context, and deployment requirements."
+    "Generative AI systems are layered architectures rather than isolated neural networks.",
+    "A complete application can contain data processing, representation, model inference, decoding, post-processing, application logic, retrieval, tools, safety, and evaluation.",
+    "Autoregressive models factorize a sequence probability into conditional next-element probabilities.",
+    "VAEs use probabilistic latent representations and balance reconstruction with latent regularization.",
+    "GANs train a generator and discriminator through an adversarial objective.",
+    "Diffusion models learn to reverse a controlled noise process.",
+    "Conditional generation changes the distribution of possible outputs using additional information.",
+    "Latent spaces provide useful learned representations for generation and interpolation.",
+    "Architecture affects representation, optimization, inference behavior, controllability, compute requirements, and failure modes.",
+    "Production Generative AI engineering requires both model understanding and system-level engineering."
   ],
 
   keyTakeaways: [
-    "A model is not the same thing as an AI application.",
-    "Architecture is about information flow and system responsibilities.",
-    "Different generative model families use different generation mechanisms.",
-    "Modern Generative AI applications combine models with context, retrieval, tools, and software infrastructure.",
-    "The architecture surrounding a model is often just as important as the model itself.",
-    "Understanding this architecture prepares you for the next lessons on LLMs and transformer-based systems."
+    "Think in terms of systems, not only models.",
+    "Understand the probability distribution or generation process that the model learns.",
+    "Remember that θ represents learnable model parameters.",
+    "Autoregressive generation repeatedly predicts the next element.",
+    "VAEs learn probabilistic latent representations.",
+    "GANs use generator–discriminator competition.",
+    "Diffusion models learn iterative denoising.",
+    "Conditioning provides information that guides generation.",
+    "Decoding converts model distributions or latent states into concrete outputs.",
+    "A production system requires evaluation, safety, monitoring, and application logic around the model."
   ]
 };
 

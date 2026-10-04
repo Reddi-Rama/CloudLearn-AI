@@ -1152,53 +1152,18 @@ function parseDefinition(text: string): {
 }
 
 function looksLikeCandidateContext(text: string): boolean {
-  const value = clean(text);
-
-  if (!value) {
-    return false;
-  }
-
-  /*
-   * Candidate groups are intentionally HIGH CONFIDENCE only.
-   *
-   * "Examples" must NEVER activate this renderer. Example content is
-   * educational content and must remain an ExampleCard / normal example
-   * structure. The previous implementation treated phrases such as
-   * "provides one example" as candidate context and then swallowed the
-   * following Example/Input/Output lines into a "Possible next choices"
-   * grid.
-   */
-  return /(?:possible\s+(?:next\s+)?(?:tokens?|outputs?|choices?|candidates?)|candidate\s+(?:tokens?|outputs?|choices?)|(?:available|valid|allowed)\s+(?:options?|choices?|outputs?)|(?:options?|choices?)\s+(?:include|are)\b|(?:candidate(?:s)?)\s+(?:include|are)\b)/i.test(
-    value
+  return /\b(?:possible|potential|candidate|next|outputs?|tokens?|choices?|options?|alternatives?|examples?)\b/i.test(
+    text
   );
 }
 
 function looksLikeCandidateItem(text: string): boolean {
   const value = clean(text);
-
-  if (!value || value.length > 55) {
-    return false;
-  }
-
-  /*
-   * These are almost always fields inside an example or structured
-   * explanation, not candidate tokens.
-   */
-  if (
-    /^(?:example|input|output|positive|negative|classification|answer|question|prompt|response|result|explanation)\s*:/i.test(
-      value
-    )
-  ) {
-    return false;
-  }
-
-  if (/[:.]$/.test(value)) {
-    return false;
-  }
+  if (!value || value.length > 55) return false;
 
   return (
     value.split(/\s+/).length <= 6 &&
-    !/[!?]$/.test(value) &&
+    !/[.!?]$/.test(value) &&
     !/^(?:the|this|that|these|those|because|therefore|however|for|during|when|if|while)\b/i.test(
       value
     )
@@ -1966,384 +1931,6 @@ function splitSmartText(
   return [text];
 }
 
-/* -------------------------------------------------------------------------- */
-/* INLINE EDUCATIONAL STRUCTURE DETECTION                                     */
-/* -------------------------------------------------------------------------- */
-
-/**
- * Lesson authors sometimes store diagrams inside a single template string.
- * In that form the visual tree can arrive as:
- *
- *   ROOT | ├─ Branch A | ├─ Branch B | └─ Branch C
- *
- * rather than as separate lines. Convert only high-confidence box-drawing
- * structures into real lines. Ordinary "|" characters are never touched
- * unless box-drawing branch markers are present.
- */
-function expandInlineAsciiTree(text: string): string {
-  const value = clean(text);
-
-  if (
-    !value ||
-    !/[├└┣┗╰╭]/.test(value) ||
-    !/(?:├─|└─|┣━|┗━|╰─|╭─)/.test(value)
-  ) {
-    return value;
-  }
-
-  return value
-    .replace(/\s*[|│┃]\s*(?=(?:├─|└─|┣━|┗━|╰─|╭─))/g, "\n")
-    .replace(/\s*[|│┃]\s*(?=[A-Za-z0-9])/g, "\n")
-    .replace(/[ \t]+\n/g, "\n")
-    .replace(/\n[ \t]+/g, "\n")
-    .trim();
-}
-
-function findInlineAsciiTree(text: string): {
-  title: string;
-  nodes: AsciiTreeNode[];
-  before: string;
-  after: string;
-} | null {
-  const value = clean(text);
-
-  if (
-    !value ||
-    !/[├└┣┗╰╭]/.test(value) ||
-    !/(?:├─|└─|┣━|┗━|╰─|╭─)/.test(value)
-  ) {
-    return null;
-  }
-
-  const expanded = expandInlineAsciiTree(value);
-  const lines = expanded
-    .split(/\n+/)
-    .map((line) => line.trim())
-    .filter(Boolean);
-
-  const firstBranchIndex = lines.findIndex((line) =>
-    /(?:├─|└─|┣━|┗━|╰─|╭─)/.test(line)
-  );
-
-  if (firstBranchIndex < 1) {
-    return null;
-  }
-
-  const rootLine = lines[firstBranchIndex - 1];
-
-  if (
-    !rootLine ||
-    rootLine.length > 140 ||
-    /[.!?]$/.test(rootLine)
-  ) {
-    return null;
-  }
-
-  const treeLines: string[] = [rootLine];
-  let endIndex = firstBranchIndex;
-
-  while (
-    endIndex < lines.length &&
-    (
-      /(?:├─|└─|┣━|┗━|╰─|╭─)/.test(lines[endIndex]) ||
-      /^[|│┃\s]+$/.test(lines[endIndex])
-    )
-  ) {
-    treeLines.push(lines[endIndex]);
-    endIndex += 1;
-  }
-
-  const parsed = parseAsciiTreeLines(treeLines);
-
-  if (!parsed || parsed.nodes.length < 2) {
-    return null;
-  }
-
-  /*
-   * Anything before the root is normal prose. Anything after the last
-   * branch is also normal prose. This prevents the diagram from swallowing
-   * the next educational paragraph.
-   */
-  const rootPosition = expanded.indexOf(rootLine);
-  const treeEndPosition = treeLines.length
-    ? expanded.indexOf(treeLines[treeLines.length - 1], rootPosition) +
-      treeLines[treeLines.length - 1].length
-    : expanded.length;
-
-  return {
-    title: parsed.title || rootLine,
-    nodes: parsed.nodes,
-    before: expanded.slice(0, Math.max(0, rootPosition)).trim(),
-    after: expanded.slice(Math.max(0, treeEndPosition)).trim(),
-  };
-}
-
-function parseInlineNumberedList(text: string): {
-  before: string;
-  items: string[];
-  after: string;
-} | null {
-  const value = clean(text);
-
-  /*
-   * Only promote numbered text when there is an explicit educational cue.
-   * This avoids converting years, equations, or ordinary prose into lists.
-   */
-  const cuePattern =
-    /\b(?:stages?|steps?|process|workflow|sequence|procedure|use)\s*:\s*(?=\d+\.\s+)/i;
-
-  const cueMatch = value.match(cuePattern);
-
-  if (!cueMatch || cueMatch.index === undefined) {
-    return null;
-  }
-
-  const listStart =
-    cueMatch.index + cueMatch[0].length;
-
-  const listText = value.slice(listStart);
-
-  const matches = [
-    ...listText.matchAll(
-      /(?:^|\s)(\d+)\.\s+/g
-    ),
-  ];
-
-  if (matches.length < 3) {
-    return null;
-  }
-
-  const items: string[] = [];
-
-  for (let index = 0; index < matches.length; index += 1) {
-    const current = matches[index];
-    const start =
-      (current.index ?? 0) + current[0].length;
-
-    const next =
-      matches[index + 1];
-
-    const end =
-      next?.index ?? listText.length;
-
-    const item = listText
-      .slice(start, end)
-      .trim()
-      .replace(/^["“]+/, "")
-      .replace(/["”]+$/, "")
-      .trim();
-
-    if (item) {
-      items.push(item);
-    }
-  }
-
-  if (items.length < 3) {
-    return null;
-  }
-
-  /*
-   * The final list item can be followed by explanatory prose. Split it at
-   * strong discourse boundaries only.
-   */
-  let after = "";
-  const last = items[items.length - 1];
-
-  const boundary =
-    last.search(
-      /\s+(?=(?:The prompt|The application|The process|The structure|The key|This prompt|This structure|This process|In practical|In practice|Therefore|Overall|The goal|The important)\b)/i
-    );
-
-  if (boundary > 0) {
-    after = last.slice(boundary).trim();
-    items[items.length - 1] =
-      last.slice(0, boundary).trim();
-  }
-
-  if (!items[items.length - 1]) {
-    items.pop();
-  }
-
-  if (items.length < 3) {
-    return null;
-  }
-
-  return {
-    before: value.slice(0, listStart).trim(),
-    items,
-    after,
-  };
-}
-
-type ExamplePair = {
-  input: string;
-  output: string;
-};
-
-function parseInlineExamplePairs(text: string): {
-  before: string;
-  pairs: ExamplePair[];
-  after: string;
-} | null {
-  const value = clean(text);
-
-  /*
-   * Example blocks are only promoted when the text contains repeated
-   * Input:/Output: pairs. A single "Example:" remains ordinary prose.
-   */
-  if (
-    !/\bExample\s*:/i.test(value) ||
-    !/\bInput\s*:/i.test(value) ||
-    !/\bOutput\s*:/i.test(value)
-  ) {
-    return null;
-  }
-
-  const firstInput = value.search(/\bInput\s*:/i);
-
-  if (firstInput < 0) {
-    return null;
-  }
-
-  const before = value
-    .slice(0, firstInput)
-    .trim();
-
-  const remainder = value.slice(firstInput);
-
-  const inputMatches = [
-    ...remainder.matchAll(
-      /\bInput\s*:/gi
-    ),
-  ];
-
-  const pairs: ExamplePair[] = [];
-
-  for (let index = 0; index < inputMatches.length; index += 1) {
-    const inputMatch = inputMatches[index];
-    const inputStart =
-      (inputMatch.index ?? 0) +
-      inputMatch[0].length;
-
-    const outputMatch = remainder
-      .slice(inputStart)
-      .match(
-        /\bOutput\s*:/i
-      );
-
-    if (!outputMatch || outputMatch.index === undefined) {
-      break;
-    }
-
-    const outputStart =
-      inputStart +
-      outputMatch.index +
-      outputMatch[0].length;
-
-    const nextInput =
-      inputMatches[index + 1];
-
-    const inputEnd =
-      nextInput?.index ?? remainder.length;
-
-    const input = remainder
-      .slice(inputStart, inputStart + outputMatch.index)
-      .trim();
-
-    const output = remainder
-      .slice(outputStart, inputEnd)
-      .trim();
-
-    if (input && output) {
-      pairs.push({ input, output });
-    }
-  }
-
-  if (pairs.length < 2) {
-    return null;
-  }
-
-  /*
-   * Remove duplicated example text from the end of the final output when
-   * a paragraph continues into ordinary explanation.
-   */
-  let after = "";
-  const finalPair = pairs[pairs.length - 1];
-
-  const afterBoundary =
-    finalPair.output.search(
-      /\s+(?=(?:The examples|The pattern|This demonstrates|This approach|Few-shot prompting|Zero-shot prompting|In practice|Therefore|Overall|The trade-off)\b)/i
-    );
-
-  if (afterBoundary > 0) {
-    after = finalPair.output
-      .slice(afterBoundary)
-      .trim();
-
-    finalPair.output =
-      finalPair.output
-        .slice(0, afterBoundary)
-        .trim();
-  }
-
-  return {
-    before,
-    pairs,
-    after,
-  };
-}
-
-function InlineExamplePairs({
-  pairs,
-}: {
-  pairs: ExamplePair[];
-}) {
-  if (!pairs.length) {
-    return null;
-  }
-
-  return (
-    <div className="my-7 overflow-hidden rounded-3xl border border-amber-500/15 bg-amber-500/[0.025]">
-      <div className="border-b border-amber-500/10 px-5 py-4">
-        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">
-          Examples
-        </div>
-        <div className="mt-1 text-sm leading-6 text-slate-400">
-          The examples show how the prompt pattern maps an input to the
-          required output behavior.
-        </div>
-      </div>
-
-      <div className="divide-y divide-slate-800/80">
-        {pairs.map((pair, index) => (
-          <div
-            key={index}
-            className="grid gap-4 px-5 py-5 lg:grid-cols-[1fr_1fr]"
-          >
-            <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
-              <div className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-cyan-300">
-                Input {index + 1}
-              </div>
-              <p className="text-[15px] leading-8 text-slate-300 sm:text-base">
-                {pair.input}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
-              <div className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-emerald-300">
-                Output {index + 1}
-              </div>
-              <p className="text-[15px] leading-8 text-slate-300 sm:text-base">
-                {pair.output}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function SmartParagraph({
   text,
 }: {
@@ -2356,80 +1943,17 @@ function SmartParagraph({
   }
 
   /*
-   * 1. Inline box-drawing diagrams have the highest structural priority.
-   */
-  const inlineTree = findInlineAsciiTree(value);
-
-  if (inlineTree) {
-    return (
-      <div className="space-y-4">
-        {inlineTree.before && (
-          <SmartParagraph text={inlineTree.before} />
-        )}
-
-        <AsciiHierarchy
-          title={inlineTree.title}
-          nodes={inlineTree.nodes}
-        />
-
-        {inlineTree.after && (
-          <SmartParagraph text={inlineTree.after} />
-        )}
-      </div>
-    );
-  }
-
-  /*
-   * 2. Inline numbered workflows.
-   */
-  const numbered = parseInlineNumberedList(value);
-
-  if (numbered) {
-    return (
-      <div className="space-y-5">
-        {numbered.before && (
-          <SmartParagraph text={numbered.before} />
-        )}
-
-        <OrderedList items={numbered.items} />
-
-        {numbered.after && (
-          <SmartParagraph text={numbered.after} />
-        )}
-      </div>
-    );
-  }
-
-  /*
-   * 3. Repeated Input/Output examples.
-   */
-  const examples = parseInlineExamplePairs(value);
-
-  if (examples) {
-    return (
-      <div className="space-y-5">
-        {examples.before && (
-          <SmartParagraph text={examples.before} />
-        )}
-
-        <InlineExamplePairs pairs={examples.pairs} />
-
-        {examples.after && (
-          <SmartParagraph text={examples.after} />
-        )}
-      </div>
-    );
-  }
-
-  /*
-   * 4. Mathematics comes before generic flow detection.
+   * 1. Mathematics comes first.
+   *
+   * This keeps equations from being mistaken for flows, definitions,
+   * or ordinary prose.
    */
   if (isLikelyFormulaText(value)) {
     return <SmartFormula formula={value} />;
   }
 
   /*
-   * 5. Explicit bullet characters inside plain content.
+   * 2. Explicit bullet characters inside plain content.
    */
   const bulletData = splitInlineBullets(value);
 
@@ -2452,9 +1976,12 @@ function SmartParagraph({
   }
 
   /*
-   * 6. Definitions such as:
+   * 3. Definitions such as:
    *
    * Token: A small unit used by a language model.
+   *
+   * Only short, clearly labelled definitions are promoted so normal
+   * prose containing a colon is not redesigned.
    */
   const definition = parseDefinition(value);
 
@@ -2468,7 +1995,7 @@ function SmartParagraph({
   }
 
   /*
-   * 7. Arrow-based relationships.
+   * 4. Arrow-based relationships.
    */
   const flow = findArrowRun(value);
 
@@ -2496,7 +2023,7 @@ function SmartParagraph({
   }
 
   /*
-   * 8. Ordinary educational paragraph.
+   * 5. Ordinary educational paragraph.
    */
   return (
     <p className="w-full max-w-5xl text-left text-[17px] leading-8 text-slate-300 sm:text-[18px]">
@@ -2602,7 +2129,7 @@ function Paragraphs({
           <CandidateGroup
             key={`candidate-${elements.length}`}
             items={candidates.items}
-            label="Possible Choices"
+            label="Possible next choices"
           />
         );
         index = candidates.endIndex;
@@ -6103,4 +5630,3 @@ export default function GenerativeAIContentRenderer({
     />
   );
 }
-

@@ -149,19 +149,6 @@ function parseTextFlow(
     .map((part) => part.trim())
     .filter(Boolean);
 
-  /*
-   * Labelled inline relationships such as
-   * "Predictive model: Input → prediction"
-   * must be handled by SmartParagraph so the label
-   * can be preserved.
-   */
-  if (
-    first.includes(":") &&
-    inlineParts.length >= 2
-  ) {
-    return null;
-  }
-
   if (
     inlineParts.length >= 2 &&
     inlineParts.every(isFlowNodeText)
@@ -208,88 +195,53 @@ function parseTextFlow(
 function ContentFlow({
   nodes,
   arrows,
-  compact = false,
-  label,
 }: {
   nodes: string[];
   arrows: string[];
-  compact?: boolean;
-  label?: string;
 }) {
-  if (!nodes.length) return null;
-
   const vertical = arrows.some(
     (arrow) => arrow === "↓" || arrow === "↑"
   );
 
   return (
-    <div className={cx("my-6 w-full", compact && "my-4")}>
-      {label && (
-        <div className="mb-3 text-sm font-semibold leading-7 text-slate-300">
-          {label}
-        </div>
-      )}
-
-      {compact ? (
-        <div className="w-full overflow-x-auto">
-          <div className="flex min-w-max items-center gap-2 py-1">
-            {nodes.map((node, index) => (
-              <React.Fragment key={index}>
-                <span className="rounded-lg border border-cyan-400/20 bg-cyan-400/[0.035] px-3.5 py-2 text-sm font-medium leading-6 text-slate-200">
-                  {node}
-                </span>
-
-                {index < nodes.length - 1 && (
-                  <span
-                    aria-hidden="true"
-                    className="px-1 text-lg font-semibold text-cyan-400"
-                  >
-                    {arrows[index] || "→"}
-                  </span>
-                )}
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
-      ) : vertical ? (
-        <div className="mx-auto flex max-w-4xl flex-col items-center">
+    <div className="my-7 w-full overflow-hidden rounded-2xl border border-cyan-400/15 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-5 shadow-lg sm:p-7">
+      {vertical ? (
+        <div className="mx-auto flex max-w-3xl flex-col items-center">
           {nodes.map((node, index) => (
             <React.Fragment key={index}>
-              <div className="w-full rounded-xl border border-cyan-400/20 bg-slate-900/70 px-5 py-4 text-center text-sm font-semibold leading-7 text-slate-100 sm:text-base">
-                {node}
+              <div className="relative flex min-h-[72px] w-full items-center justify-center rounded-2xl border border-cyan-400/20 bg-slate-900 px-6 py-4 text-center text-sm font-semibold leading-6 text-slate-100 shadow-md ring-1 ring-white/5 sm:text-base">
+                <span>{node}</span>
               </div>
 
               {index < nodes.length - 1 && (
                 <div
+                  className="flex h-10 items-center justify-center text-2xl font-black text-cyan-400"
                   aria-hidden="true"
-                  className="flex h-9 items-center justify-center text-lg font-semibold text-cyan-400"
                 >
-                  {arrows[index] || "↓"}
+                  {arrows[index]}
                 </div>
               )}
             </React.Fragment>
           ))}
         </div>
       ) : (
-        <div className="w-full overflow-x-auto">
-          <div className="flex min-w-max items-center gap-2 py-1">
-            {nodes.map((node, index) => (
-              <React.Fragment key={index}>
-                <span className="rounded-xl border border-cyan-400/20 bg-slate-900/70 px-4 py-3 text-center text-sm font-semibold leading-6 text-slate-100">
-                  {node}
-                </span>
+        <div className="flex w-full items-stretch gap-2 overflow-x-auto pb-2">
+          {nodes.map((node, index) => (
+            <React.Fragment key={index}>
+              <div className="flex min-h-[86px] min-w-[190px] flex-1 items-center justify-center gap-3 rounded-2xl border border-cyan-400/20 bg-slate-900 px-5 py-4 text-center text-sm font-semibold leading-6 text-slate-100 shadow-md ring-1 ring-white/5 sm:min-w-[210px] sm:text-base">
+                <span>{node}</span>
+              </div>
 
-                {index < nodes.length - 1 && (
-                  <span
-                    aria-hidden="true"
-                    className="px-1 text-xl font-semibold text-cyan-400"
-                  >
-                    {arrows[index] || "→"}
-                  </span>
-                )}
-              </React.Fragment>
-            ))}
-          </div>
+              {index < nodes.length - 1 && (
+                <div
+                  className="flex shrink-0 items-center justify-center px-1 text-2xl font-black text-cyan-400"
+                  aria-hidden="true"
+                >
+                  {arrows[index]}
+                </div>
+              )}
+            </React.Fragment>
+          ))}
         </div>
       )}
     </div>
@@ -529,7 +481,7 @@ function QuestionCard({
       tone="violet"
     >
       {question && (
-        <p className="text-[16px] font-semibold leading-8 text-slate-100 sm:text-[17px]">
+        <p className="text-[15px] font-semibold leading-8 text-slate-100 sm:text-base">
           {question}
         </p>
       )}
@@ -539,7 +491,7 @@ function QuestionCard({
           <div className="mb-1 text-[10px] font-black uppercase tracking-[0.18em] text-emerald-300">
             Answer
           </div>
-          <p className="text-[16px] leading-8 text-slate-200 sm:text-[17px]">
+          <p className="text-sm leading-7 text-slate-200">
             {answer}
           </p>
         </div>
@@ -550,7 +502,7 @@ function QuestionCard({
           <div className="mb-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
             Explanation
           </div>
-          <p className="w-full max-w-5xl text-left text-[16px] leading-8 text-slate-400 sm:text-[17px]">
+          <p className="text-sm leading-7 text-slate-400">
             {explanation}
           </p>
         </div>
@@ -586,7 +538,7 @@ function ExampleCard({
       tone="amber"
     >
       {description && (
-        <p className="text-[16px] leading-8 text-slate-300 sm:text-[17px]">
+        <p className="text-sm leading-8 text-slate-300 sm:text-[15px]">
           {description}
         </p>
       )}
@@ -626,7 +578,7 @@ function ExplanationCard({
       title={firstText(item.title, item.heading)}
       tone="cyan"
     >
-      <p className="w-full max-w-5xl text-left text-[17px] leading-8 text-slate-300 sm:text-[18px]">
+      <p className="max-w-4xl text-sm leading-8 text-slate-300 sm:text-[15px]">
         {explanation}
       </p>
     </InfoCard>
@@ -786,535 +738,8 @@ function splitInlineBullets(text: string): {
   };
 }
 
-
-/* -------------------------------------------------------------------------- */
-/* SEMANTIC INTELLIGENCE                                                       */
-/* -------------------------------------------------------------------------- */
-
-/**
- * Normalize common LaTeX-style mathematical notation into readable Unicode.
- * The lesson files can therefore use either LaTeX or Unicode without making
- * the renderer display raw control sequences such as \theta or \sqrt{}.
- */
-function normalizeMathText(input: string): string {
-  let value = clean(input);
-
-  if (!value) return "";
-
-  value = value
-    .replace(/^\$\$([\s\S]*?)\$\$$/, "$1")
-    .replace(/^\\\[([\s\S]*?)\\\]$/, "$1")
-    .replace(/^\\\(([\s\S]*?)\\\)$/, "$1")
-    .replace(/\\text\{([^{}]*)\}/g, "$1")
-    .replace(/\\mathrm\{([^{}]*)\}/g, "$1")
-    .replace(/\\mathbf\{([^{}]*)\}/g, "$1")
-    .replace(/\\mathit\{([^{}]*)\}/g, "$1")
-    .replace(/\\theta/g, "θ")
-    .replace(/\\alpha/g, "α")
-    .replace(/\\beta/g, "β")
-    .replace(/\\gamma/g, "γ")
-    .replace(/\\lambda/g, "λ")
-    .replace(/\\mu/g, "μ")
-    .replace(/\\sigma/g, "σ")
-    .replace(/\\phi/g, "φ")
-    .replace(/\\pi/g, "π")
-    .replace(/\\tau/g, "τ")
-    .replace(/\\eta/g, "η")
-    .replace(/\\epsilon/g, "ε")
-    .replace(/\\varepsilon/g, "ε")
-    .replace(/\\Delta/g, "Δ")
-    .replace(/\\Sigma/g, "Σ")
-    .replace(/\\sum/g, "∑")
-    .replace(/\\prod/g, "∏")
-    .replace(/\\int/g, "∫")
-    .replace(/\\partial/g, "∂")
-    .replace(/\\nabla/g, "∇")
-    .replace(/\\infty/g, "∞")
-    .replace(/\\cdot/g, "·")
-    .replace(/\\times/g, "×")
-    .replace(/\\pm/g, "±")
-    .replace(/\\leq/g, "≤")
-    .replace(/\\le/g, "≤")
-    .replace(/\\geq/g, "≥")
-    .replace(/\\ge/g, "≥")
-    .replace(/\\neq/g, "≠")
-    .replace(/\\approx/g, "≈")
-    .replace(/\\in/g, "∈")
-    .replace(/\\propto/g, "∝")
-    .replace(/\\rightarrow/g, "→")
-    .replace(/\\to/g, "→")
-    .replace(/\\left/g, "")
-    .replace(/\\right/g, "")
-    .replace(/\\,/g, " ")
-    .replace(/\\;/g, " ")
-    .replace(/\\!/g, "")
-    .replace(/\\quad/g, "  ")
-    .replace(/\\qquad/g, "    ");
-
-  // Repeatedly unwrap simple \frac{a}{b} expressions.
-  let previous = "";
-  while (previous !== value) {
-    previous = value;
-    value = value.replace(
-      /\\frac\s*\{([^{}]*)\}\s*\{([^{}]*)\}/g,
-      "($1) / ($2)"
-    );
-  }
-
-  value = value.replace(
-    /\\sqrt\s*\{([^{}]*)\}/g,
-    "√($1)"
-  );
-
-  // Common hats/bars/tilde notation.
-  value = value
-    .replace(/\\hat\s*\{([^{}]*)\}/g, "ŷ")
-    .replace(/\\bar\s*\{([^{}]*)\}/g, "ȳ")
-    .replace(/\\tilde\s*\{([^{}]*)\}/g, "~$1")
-    .replace(/\^\{([^{}]+)\}/g, "^($1)")
-    .replace(/_\{([^{}]+)\}/g, "_($1)");
-
-  return value
-    .replace(/[ \t]+/g, " ")
-    .replace(/\s*([=≈≤≥≠∈∝])\s*/g, " $1 ")
-    .replace(/\s*([·×])\s*/g, " $1 ")
-    .trim();
-}
-
-function isStandaloneOperator(value: any): boolean {
-  const text = clean(value).replace(/\s+/g, "");
-  return [
-    "=",
-    "≈",
-    "≤",
-    "≥",
-    "≠",
-    "∝",
-    "→",
-    "↔",
-    "+",
-    "−",
-    "-",
-    "×",
-    "·",
-  ].includes(text);
-}
-
-function isFormulaFragment(value: any): boolean {
-  const text = clean(value);
-  if (!text || text.length > 240) return false;
-
-  if (isStandaloneOperator(text)) return true;
-
-  return (
-    isLikelyFormulaText(text) ||
-    /^(?:P|p|L|D|E|H|KL|CE|ŷ|θ|x|y|z)\s*[\w₀₁₂₃₄₅₆₇₈₉⁰¹²³⁴⁵⁶⁷⁸⁹]*(?:\s*[\(\[])/.test(
-      text
-    ) ||
-    /[∑∏∫√∇∂∞θλμσπφαβγτ]/.test(text)
-  );
-}
-
-/**
- * Detect a formula that has been accidentally split over several array
- * elements, for example:
- *
- * P(x₁, x₂, ..., xₜ)
- * =
- * ∏ P(xᵢ | x₁, ..., xᵢ₋₁)
- */
-function findEquationRun(
-  items: string[],
-  startIndex: number
-): { formula: string; endIndex: number } | null {
-  if (startIndex >= items.length) return null;
-
-  const first = clean(items[startIndex]);
-  if (!isFormulaFragment(first)) return null;
-
-  let cursor = startIndex + 1;
-  const parts = [first];
-  let hasOperator = isStandaloneOperator(first);
-
-  while (cursor < items.length && cursor < startIndex + 7) {
-    const current = clean(items[cursor]);
-    if (!current) break;
-
-    if (
-      isStandaloneOperator(current) ||
-      isFormulaFragment(current)
-    ) {
-      parts.push(current);
-      hasOperator = hasOperator || isStandaloneOperator(current);
-      cursor += 1;
-      continue;
-    }
-
-    break;
-  }
-
-  if (!hasOperator || parts.length < 2) {
-    return null;
-  }
-
-  const joined = normalizeMathText(parts.join(" "));
-  const signalCount = [
-    /=/,
-    /[∑∏∫√∇∂∞]/,
-    /[θλμσπφαβγτŷȳ]/,
-    /[₀₁₂₃₄₅₆₇₈₉⁰¹²³⁴⁵⁶⁷⁸⁹]/,
-    /\bP\s*\(/,
-    /\barg(?:min|max)\b/,
-  ].filter((pattern) => pattern.test(joined)).length;
-
-  if (signalCount < 2) return null;
-
-  return {
-    formula: joined,
-    endIndex: cursor,
-  };
-}
-
-/**
- * Detect composition stacks such as:
- *
- * Foundation model
- * +
- * Application instructions
- * +
- * User context
- * +
- * External data
- *
- * These are relationships, not five independent paragraphs.
- */
-function findCompositionRun(
-  items: string[],
-  startIndex: number
-): { nodes: string[]; endIndex: number } | null {
-  const first = clean(items[startIndex]);
-  if (!first || first.length > 100 || isStandaloneOperator(first)) {
-    return null;
-  }
-
-  const nodes = [first];
-  let cursor = startIndex + 1;
-
-  while (cursor + 1 < items.length) {
-    const operator = clean(items[cursor]).replace(/\s+/g, "");
-    const next = clean(items[cursor + 1]);
-
-    if (
-      operator !== "+" &&
-      operator !== "＋"
-    ) {
-      break;
-    }
-
-    if (
-      !next ||
-      next.length > 100 ||
-      isStandaloneFlowArrow(next) ||
-      isLikelyFormulaText(next)
-    ) {
-      break;
-    }
-
-    nodes.push(next);
-    cursor += 2;
-  }
-
-  if (nodes.length < 3) {
-    return null;
-  }
-
-  return { nodes, endIndex: cursor };
-}
-
-function CompositionStack({
-  nodes,
-}: {
-  nodes: string[];
-}) {
-  if (!nodes.length) return null;
-
-  return (
-    <div className="my-6 w-full">
-      <div className="mx-auto flex max-w-3xl flex-col items-center">
-        {nodes.map((node, index) => (
-          <React.Fragment key={index}>
-            <div className="w-full rounded-2xl border border-cyan-400/20 bg-slate-900/75 px-5 py-4 text-center shadow-sm">
-              <div className="text-sm font-semibold leading-7 text-slate-100 sm:text-base">
-                {node}
-              </div>
-            </div>
-
-            {index < nodes.length - 1 && (
-              <div
-                aria-hidden="true"
-                className="flex h-8 items-center justify-center text-lg font-bold text-cyan-400"
-              >
-                +
-              </div>
-            )}
-          </React.Fragment>
-        ))}
-
-        <div className="mt-3 rounded-full border border-violet-500/20 bg-violet-500/[0.04] px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-violet-300">
-          Combined application system
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function CandidateGroup({
-  items,
-  label = "Possible candidates",
-}: {
-  items: string[];
-  label?: string;
-}) {
-  const values = items.map(clean).filter(Boolean);
-  if (!values.length) return null;
-
-  return (
-    <div className="my-6 rounded-2xl border border-amber-500/15 bg-amber-500/[0.025] p-5 sm:p-6">
-      <div className="mb-4 text-[10px] font-black uppercase tracking-[0.18em] text-amber-300">
-        {label}
-      </div>
-
-      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-        {values.map((item, index) => (
-          <div
-            key={`${item}-${index}`}
-            className="rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-3 text-sm font-medium text-slate-200"
-          >
-            <span className="mr-2 text-amber-400">•</span>
-            {item}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function DefinitionCard({
-  term,
-  definition,
-}: {
-  term: string;
-  definition: string;
-}) {
-  return (
-    <div className="my-5 rounded-2xl border border-cyan-500/15 bg-cyan-500/[0.025] p-5">
-      <div className="text-sm font-black text-cyan-300">
-        {term}
-      </div>
-      <div className="mt-2 text-[16px] leading-8 text-slate-300 sm:text-[17px]">
-        {definition}
-      </div>
-    </div>
-  );
-}
-
-function parseDefinition(text: string): {
-  term: string;
-  definition: string;
-} | null {
-  const value = clean(text);
-
-  if (!value || value.length > 320) return null;
-
-  const colon = value.indexOf(":");
-  if (colon <= 0 || colon > 65) return null;
-
-  const term = value.slice(0, colon).trim();
-  const definition = value.slice(colon + 1).trim();
-
-  if (
-    !term ||
-    !definition ||
-    term.split(/\s+/).length > 8 ||
-    definition.split(/\s+/).length < 3
-  ) {
-    return null;
-  }
-
-  if (
-    /[.!?]$/.test(term) ||
-    /\b(?:http|www\.)/i.test(term)
-  ) {
-    return null;
-  }
-
-  return { term, definition };
-}
-
-function looksLikeCandidateContext(text: string): boolean {
-  const value = clean(text);
-
-  if (!value) {
-    return false;
-  }
-
-  /*
-   * Candidate groups are intentionally HIGH CONFIDENCE only.
-   *
-   * "Examples" must NEVER activate this renderer. Example content is
-   * educational content and must remain an ExampleCard / normal example
-   * structure. The previous implementation treated phrases such as
-   * "provides one example" as candidate context and then swallowed the
-   * following Example/Input/Output lines into a "Possible next choices"
-   * grid.
-   */
-  return /(?:possible\s+(?:next\s+)?(?:tokens?|outputs?|choices?|candidates?)|candidate\s+(?:tokens?|outputs?|choices?)|(?:available|valid|allowed)\s+(?:options?|choices?|outputs?)|(?:options?|choices?)\s+(?:include|are)\b|(?:candidate(?:s)?)\s+(?:include|are)\b)/i.test(
-    value
-  );
-}
-
-function looksLikeCandidateItem(text: string): boolean {
-  const value = clean(text);
-
-  if (!value || value.length > 55) {
-    return false;
-  }
-
-  /*
-   * These are almost always fields inside an example or structured
-   * explanation, not candidate tokens.
-   */
-  if (
-    /^(?:example|input|output|positive|negative|classification|answer|question|prompt|response|result|explanation)\s*:/i.test(
-      value
-    )
-  ) {
-    return false;
-  }
-
-  if (/[:.]$/.test(value)) {
-    return false;
-  }
-
-  return (
-    value.split(/\s+/).length <= 6 &&
-    !/[!?]$/.test(value) &&
-    !/^(?:the|this|that|these|those|because|therefore|however|for|during|when|if|while)\b/i.test(
-      value
-    )
-  );
-}
-
-function findCandidateRun(
-  items: string[],
-  startIndex: number
-): { items: string[]; endIndex: number } | null {
-  if (startIndex <= 0) return null;
-
-  const previous = clean(items[startIndex - 1]);
-  if (!looksLikeCandidateContext(previous)) return null;
-
-  const candidates: string[] = [];
-  let cursor = startIndex;
-
-  while (
-    cursor < items.length &&
-    candidates.length < 12 &&
-    looksLikeCandidateItem(items[cursor])
-  ) {
-    candidates.push(clean(items[cursor]));
-    cursor += 1;
-  }
-
-  if (candidates.length < 3) return null;
-
-  return {
-    items: candidates,
-    endIndex: cursor,
-  };
-}
-
-
-function isLikelyFormulaText(text: string): boolean {
-  const value = clean(text);
-
-  if (!value || value.length > 220) {
-    return false;
-  }
-
-  // Full-sentence prose should remain prose.
-  if (
-    /[.!?]$/.test(value) &&
-    !/^[A-Za-zŷȳθλμσπφαβγτ][^.!?]{0,80}\s*(?:=|≈|≤|≥|≠|∈|∝)/.test(
-      value
-    ) &&
-    !/^P\s*\(/.test(value)
-  ) {
-    return false;
-  }
-
-  const strongFormulaPatterns = [
-    /^P\s*\(.+\)$/,
-    /^[A-Za-zŷȳθλμσπφαβγτ][A-Za-z0-9_ŷȳθλμσπφαβγτ₀₁₂₃₄₅₆₇₈₉⁰¹²³⁴⁵⁶⁷⁸⁹*'′]*\s*(?:=|≈|≤|≥|≠|∈|∝)/,
-    /^(?:θ|θ\*|L\(θ\)|D)\s*(?:=|≈|≤|≥|≠|∈)/,
-    /\barg(?:min|max)\b/,
-  ];
-
-  if (
-    strongFormulaPatterns.some((pattern) =>
-      pattern.test(value)
-    )
-  ) {
-    return true;
-  }
-
-  const mathSignals = [
-    /[=≈≤≥≠∈∝]/,
-    /[∑∏∫√∇∂∞]/,
-    /[θλμσπφαβγτŷȳ]/,
-    /[₀₁₂₃₄₅₆₇₈₉]/,
-    /[⁰¹²³⁴⁵⁶⁷⁸⁹]/,
-    /\^/,
-    /\barg(?:min|max)\b/,
-    /\b(?:log|exp|softmax|sigmoid)\s*\(/,
-  ];
-
-  const signals = mathSignals.filter((pattern) =>
-    pattern.test(value)
-  ).length;
-
-  const wordCount = value
-    .replace(/[()[\]{}=+\-*/|,:;<>]/g, " ")
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean).length;
-
-  return signals >= 2 && wordCount <= 16;
-}
-
-function SmartFormula({
-  formula,
-}: {
-  formula: string;
-}) {
-  const displayFormula = normalizeMathText(formula);
-
-  return (
-    <div className="my-5 w-full overflow-x-auto">
-      <div className="inline-flex min-w-[180px] items-center rounded-xl border border-violet-500/15 bg-violet-500/[0.025] px-5 py-3">
-        <code className="whitespace-pre-wrap font-mono text-sm font-medium leading-8 text-violet-100 sm:text-base">
-          {displayFormula}
-        </code>
-      </div>
-    </div>
-  );
-}
-
-function findArrowRun(
-  text: string
-): {
+function findEmbeddedArrowFlow(text: string): {
   before: string;
-  label?: string;
   nodes: string[];
   arrows: string[];
   after: string;
@@ -1325,270 +750,185 @@ function findArrowRun(
     return null;
   }
 
-  const arrowPattern = /→|⇒|->|=>|↓|↑/g;
-  const matches = [...value.matchAll(arrowPattern)];
+  const arrowPattern = /↓|↑|→|⇒|->|=>/g;
+  const arrowMatches = [...value.matchAll(arrowPattern)];
 
-  if (!matches.length) {
+  if (arrowMatches.length < 2) {
     return null;
   }
 
-  for (
-    let startIndex = 0;
-    startIndex < matches.length;
-    startIndex++
-  ) {
-    const first = matches[startIndex];
-    const firstIndex =
-      first.index ?? -1;
+  /*
+   * Detect a real process embedded inside normal prose.
+   *
+   * Example:
+   * "A complete flow is: USER QUESTION ↓ RETRIEVAL ↓ FILTER ↓ FINAL ANSWER
+   *  The quality of the response depends..."
+   *
+   * The final process node may be followed immediately by normal prose
+   * without punctuation. Therefore we explicitly separate the process
+   * from common explanatory transition phrases.
+   */
+  for (let start = 0; start < arrowMatches.length - 1; start++) {
+    const firstArrow = arrowMatches[start];
+    const firstArrowIndex = firstArrow.index ?? 0;
 
-    if (firstIndex < 0) {
-      continue;
-    }
+    const prefix = value.slice(0, firstArrowIndex);
+    const boundaryCandidates = [
+      prefix.lastIndexOf("."),
+      prefix.lastIndexOf(":"),
+      prefix.lastIndexOf("\n"),
+      prefix.lastIndexOf(";"),
+    ];
 
-    const beforeArrow =
-      value.slice(0, firstIndex);
+    const candidateStart =
+      Math.max(...boundaryCandidates) + 1;
 
-    /*
-     * Find the beginning of the sentence/statement
-     * containing the flow.
-     */
-    const sentenceBoundary = Math.max(
-      beforeArrow.lastIndexOf("\n"),
-      beforeArrow.lastIndexOf("."),
-      beforeArrow.lastIndexOf("?"),
-      beforeArrow.lastIndexOf("!")
-    );
-
-    const statementStart =
-      sentenceBoundary + 1;
-
-    const statementPrefix =
-      value
-        .slice(
-          statementStart,
-          firstIndex
-        )
-        .trim();
-
-    if (!statementPrefix) {
-      continue;
-    }
-
-    /*
-     * Handle:
-     *
-     * Predictive model: Input → prediction
-     *
-     * and:
-     *
-     * A useful hierarchy is:
-     * AI → ML → Deep Learning
-     *
-     * A colon in the current statement separates
-     * an optional label from the first node.
-     */
-    const colon =
-      statementPrefix.lastIndexOf(":");
-
-    let label = "";
-    let firstNode = statementPrefix;
-
-    if (colon >= 0) {
-      const possibleLabel =
-        statementPrefix
-          .slice(0, colon)
-          .trim();
-
-      const possibleNode =
-        statementPrefix
-          .slice(colon + 1)
-          .trim();
-
-      if (
-        possibleLabel &&
-        possibleNode
-      ) {
-        label = possibleLabel;
-        firstNode = possibleNode;
-      }
-    }
+    const firstNode = value
+      .slice(candidateStart, firstArrowIndex)
+      .trim();
 
     if (
-      firstNode.length > 100 ||
+      !firstNode ||
+      firstNode.length > 80 ||
       /[.!?]$/.test(firstNode)
     ) {
       continue;
     }
 
-    /*
-     * Single-arrow relationships should be compact.
-     * Multiple-arrow chains can have more descriptive nodes.
-     */
-    if (
-      matches.length === 1 &&
-      !label &&
-      firstNode.split(/\s+/).length > 7
-    ) {
-      continue;
-    }
-
-    /*
-     * Collect the node between each arrow.
-     */
     const nodes = [firstNode];
     const arrows: string[] = [];
+    let cursor = start;
+    let lastArrowEnd =
+      firstArrowIndex + firstArrow[0].length;
 
-    let previousEnd =
-      firstIndex +
-      first[0].length;
+    while (cursor < arrowMatches.length - 1) {
+      const arrowMatch = arrowMatches[cursor];
+      const arrowEnd =
+        (arrowMatch.index ?? 0) + arrowMatch[0].length;
 
-    let lastArrowIndex =
-      startIndex;
+      const nextArrow = arrowMatches[cursor + 1];
+      const nextArrowIndex =
+        nextArrow.index ?? value.length;
 
-    for (
-      let i = startIndex + 1;
-      i < matches.length;
-      i++
-    ) {
-      const current =
-        matches[i];
+      let nextNode = value
+        .slice(arrowEnd, nextArrowIndex)
+        .trim();
 
-      const currentIndex =
-        current.index ?? -1;
-
-      if (currentIndex < 0) {
-        break;
-      }
-
-      const middleNode =
-        value
-          .slice(
-            previousEnd,
-            currentIndex
-          )
-          .trim();
-
+      /*
+       * A process node should be short and should not contain sentence
+       * punctuation. This prevents ordinary prose from becoming a node.
+       */
       if (
-        !middleNode ||
-        middleNode.length > 100 ||
-        /[.!?]$/.test(middleNode)
+        !nextNode ||
+        nextNode.length > 80 ||
+        /[.!?]/.test(nextNode)
       ) {
         break;
       }
 
       arrows.push(
-        normalizeFlowArrow(
-          matches[
-            lastArrowIndex
-          ][0]
-        )
+        normalizeFlowArrow(arrowMatch[0])
       );
+      nodes.push(nextNode);
 
-      nodes.push(middleNode);
+      lastArrowEnd = nextArrowIndex + nextArrow[0].length;
+      cursor += 1;
 
-      previousEnd =
-        currentIndex +
-        current[0].length;
-
-      lastArrowIndex = i;
+      if (nodes.length >= 16) {
+        break;
+      }
     }
 
     /*
-     * Determine the final node from the text after
-     * the final arrow.
+     * We need at least three process nodes to confidently classify this
+     * as a process rather than ordinary text containing an arrow.
      */
-    const tail =
-      value.slice(previousEnd).trim();
-
-    if (!tail) {
+    if (nodes.length < 2) {
       continue;
     }
 
-    /*
-     * Separate the final flow node from the next
-     * explanatory sentence.
-     *
-     * Example:
-     *
-     * Foundation Models → Generative AI Applications
-     * This hierarchy is not...
-     */
-    const afterBoundary =
-      tail.search(
-        /\s+(?=(?:This|The|It|A|An|Therefore|For|During|Each|In|Overall|However|These|Those)\b)/
-      );
+    const finalArrow =
+      arrowMatches[cursor];
 
-    let finalNode =
-      afterBoundary >= 0
-        ? tail
-            .slice(0, afterBoundary)
-            .trim()
-        : tail;
+    if (!finalArrow) {
+      continue;
+    }
 
-    let after =
-      afterBoundary >= 0
-        ? tail
-            .slice(afterBoundary)
-            .trim()
-        : "";
+    const finalNodeStart =
+      (finalArrow.index ?? 0) +
+      finalArrow[0].length;
+
+    let finalTail = value
+      .slice(finalNodeStart)
+      .trim();
 
     /*
-     * A final node may have ordinary sentence punctuation
-     * because it is written as a complete statement.
-     * Remove only the punctuation from the visual node.
+     * Separate the last process node from trailing explanation.
+     * This handles content such as:
+     *
+     * "FINAL ANSWER The quality of the response depends..."
      */
-    finalNode =
-      finalNode.replace(
-        /[.!?]+$/,
-        ""
-      ).trim();
+    const trailingMarker =
+      /\s+(?=(?:The quality|The result|The response|The key|The goal|This stage|This process|This means|Therefore|Overall|In practice|After retrieval|After generation)\b)/i;
+
+    const markerMatch =
+      finalTail.match(trailingMarker);
+
+    let finalNode = finalTail;
+    let after = "";
+
+    if (markerMatch?.index !== undefined) {
+      finalNode = finalTail
+        .slice(0, markerMatch.index)
+        .trim();
+
+      after = finalTail
+        .slice(
+          markerMatch.index + markerMatch[0].length
+        )
+        .trim();
+    }
+
+    /*
+     * Also handle a clean sentence boundary after the final node.
+     */
+    if (
+      !after &&
+      finalNode.length > 80
+    ) {
+      const sentenceBreak =
+        finalNode.search(
+          /[.!?]\s+(?=[A-Z])/ 
+        );
+
+      if (sentenceBreak >= 0) {
+        after = finalNode
+          .slice(sentenceBreak + 1)
+          .trim();
+
+        finalNode = finalNode
+          .slice(0, sentenceBreak + 1)
+          .trim();
+      }
+    }
 
     if (
       !finalNode ||
-      finalNode.length > 110
+      finalNode.length > 80 ||
+      /[.!?]/.test(finalNode)
     ) {
       continue;
     }
 
     arrows.push(
-      normalizeFlowArrow(
-        matches[lastArrowIndex][0]
-      )
+      normalizeFlowArrow(finalArrow[0])
     );
     nodes.push(finalNode);
 
-    /*
-     * A single arrow without a label and with a
-     * long/descriptive right side is usually prose,
-     * not a diagram.
-     */
-    if (
-      nodes.length === 2 &&
-      !label &&
-      (
-        nodes[0].split(/\s+/).length > 7 ||
-        nodes[1].split(/\s+/).length > 9
-      )
-    ) {
-      continue;
-    }
-
-    /*
-     * Preserve everything before the flow as ordinary prose.
-     * If a label was used, the label itself stays attached
-     * to the flow rather than becoming a paragraph.
-     */
-    const before =
-      value
-        .slice(
-          0,
-          statementStart
-        )
-        .trim();
-
     return {
-      before,
-      label: label || undefined,
+      before: value
+        .slice(0, candidateStart)
+        .trim(),
       nodes,
       arrows,
       after,
@@ -1598,846 +938,14 @@ function findArrowRun(
   return null;
 }
 
-function isAsciiTreeLine(value: string): boolean {
-  const text = String(value ?? "").replace(/\s+$/, "");
-  if (!text.trim()) return false;
-
-  return (
-    /(?:├|└|│|╭|╰|┣|┗|┃|┌|┐|└|┘)/.test(text) &&
-    (/(?:├──|└──|├─|└─|╰─|╭─|┣━|┗━)/.test(text) || /^\s*[│┃|]+\s*$/.test(text))
-  );
-}
-
-type AsciiTreeNode = {
-  label: string;
-  depth: number;
-  branch: "root" | "branch" | "connector";
-};
-
-function parseAsciiTreeLines(lines: string[]): {
-  title: string;
-  nodes: AsciiTreeNode[];
-} | null {
-  const raw = lines
-    .map((line) => String(line ?? "").replace(/\s+$/, ""))
-    .filter((line) => line.trim());
-
-  if (raw.length < 3) return null;
-
-  const branchLines = raw.filter((line) =>
-    /(?:├──|└──|├─|└─|╰─|╭─|┣━|┗━)/.test(line)
-  );
-
-  if (branchLines.length < 2) return null;
-
-  const firstBranchIndex = raw.findIndex((line) =>
-    /(?:├──|└──|├─|└─|╰─|╭─|┣━|┗━)/.test(line)
-  );
-
-  const titleCandidate = firstBranchIndex > 0
-    ? raw.slice(0, firstBranchIndex).find((line) => {
-        const value = line.trim();
-        return value && !/^[|│┃]+$/.test(value);
-      })
-    : "";
-
-  const title = titleCandidate?.trim() ?? "";
-  const nodes: AsciiTreeNode[] = [];
-
-  for (const line of raw.slice(firstBranchIndex)) {
-    if (/^[\s|│┃]+$/.test(line)) continue;
-
-    const branchMatch = line.match(/(?:├──|└──|├─|└─|╰─|╭─|┣━|┗━)\s*(.*)$/);
-    if (!branchMatch) continue;
-
-    const label = branchMatch[1].trim();
-    if (!label) continue;
-
-    const prefix = line.slice(0, branchMatch.index ?? 0);
-
-    /*
-     * Each visible vertical connector represents one hierarchy level.
-     * The spaces used by the common ASCII tree format are also counted
-     * so trees remain correct when a lesson uses mixed spacing.
-     */
-    const verticalDepth = (prefix.match(/[│┃|]/g) ?? []).length;
-    const groupedSpaceDepth = Math.floor(
-      (prefix.replace(/[│┃|]/g, "").length) / 4
-    );
-
-    const depth = Math.max(
-      verticalDepth,
-      groupedSpaceDepth
-    );
-
-    nodes.push({
-      label,
-      depth,
-      branch: "branch",
-    });
-  }
-
-  if (nodes.length < 2) return null;
-
-  return { title, nodes };
-}
-
-function AsciiHierarchy({
-  title,
-  nodes,
-}: {
-  title: string;
-  nodes: AsciiTreeNode[];
-}) {
-  if (!nodes.length) return null;
-
-  const maxDepth = Math.max(...nodes.map((node) => node.depth), 0);
-
-  return (
-    <section className="my-8 w-full rounded-3xl border border-cyan-500/15 bg-slate-950/70 p-5 sm:p-7">
-      {title && (
-        <div className="mb-6 text-[17px] font-bold leading-8 text-white sm:text-[18px]">
-          {title}
-        </div>
-      )}
-
-      <div className="relative w-full overflow-x-auto">
-        <div className="min-w-[680px] space-y-1 py-1">
-          {nodes.map((node, index) => {
-            const next = nodes[index + 1];
-            const hasChildren = next && next.depth > node.depth;
-            const isLastAtDepth = !next || next.depth < node.depth;
-
-            return (
-              <div
-                key={`${node.label}-${index}`}
-                className="relative"
-                style={{ paddingLeft: `${node.depth * 34}px` }}
-              >
-                {node.depth > 0 && (
-                  <span
-                    aria-hidden="true"
-                    className="absolute left-0 top-0 bottom-0 border-l border-slate-700/80"
-                    style={{ left: `${(node.depth - 1) * 34 + 14}px` }}
-                  />
-                )}
-
-                <div className="relative flex min-h-[48px] items-center gap-3">
-                  {node.depth > 0 && (
-                    <span
-                      aria-hidden="true"
-                      className="absolute -left-5 top-1/2 w-5 -translate-y-1/2 border-t border-slate-700/80"
-                    />
-                  )}
-
-                  <div
-                    className={cx(
-                      "relative z-10 w-full rounded-xl border px-4 py-3 text-left transition",
-                      node.depth === 0
-                        ? "border-cyan-400/25 bg-cyan-400/[0.045]"
-                        : "border-slate-800 bg-slate-900/75"
-                    )}
-                  >
-                    <span className={cx(
-                      "text-[16px] leading-7 sm:text-[17px]",
-                      node.depth === 0
-                        ? "font-bold text-white"
-                        : "font-medium text-slate-300"
-                    )}>
-                      {node.label}
-                    </span>
-                  </div>
-                </div>
-
-                {hasChildren && (
-                  <div className="pointer-events-none absolute bottom-[-1px] left-0 h-3 w-full" />
-                )}
-
-                {isLastAtDepth && node.depth > 0 && (
-                  <span
-                    aria-hidden="true"
-                    className="pointer-events-none absolute left-0 top-0 h-1/2 border-l border-slate-700/80"
-                    style={{ left: `${(node.depth - 1) * 34 + 14}px` }}
-                  />
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {maxDepth > 0 && (
-        <div className="mt-5 text-xs leading-6 text-slate-500">
-          Hierarchy is shown from broader categories to more specific techniques.
-        </div>
-      )}
-    </section>
-  );
-}
-
-function findAsciiTreeRun(
-  items: string[],
-  startIndex: number
-): { title: string; nodes: AsciiTreeNode[]; endIndex: number } | null {
-  const first = clean(items[startIndex]);
-  if (!first) return null;
-
-  const looksLikeBranch = (value: string) =>
-    /(?:├──|└──|├─|└─|╰─|╭─|┣━|┗━)/.test(value);
-
-  const looksLikeConnector = (value: string) =>
-    /^[\s|│┃]+$/.test(value) && /[|│┃]/.test(value);
-
-  /*
-   * A lesson often introduces a hierarchy with one sentence first:
-   *
-   *   Major categories include:
-   *   PROMPTING TECHNIQUES
-   *   |
-   *   ├── Direct prompting
-   *
-   * We must start at PROMPTING TECHNIQUES, not at the introductory
-   * sentence, otherwise the hierarchy absorbs unrelated prose.
-   */
-  let firstBranchIndex = -1;
-
-  for (
-    let cursor = startIndex;
-    cursor < Math.min(items.length, startIndex + 8);
-    cursor += 1
-  ) {
-    if (looksLikeBranch(String(items[cursor] ?? ""))) {
-      firstBranchIndex = cursor;
-      break;
-    }
-  }
-
-  if (firstBranchIndex < 0) return null;
-
-  let rootIndex = firstBranchIndex - 1;
-
-  while (
-    rootIndex >= startIndex &&
-    looksLikeConnector(String(items[rootIndex] ?? ""))
-  ) {
-    rootIndex -= 1;
-  }
-
-  if (rootIndex < startIndex) return null;
-
-  const rootText = clean(items[rootIndex]);
-
-  /* Introductory prose is not a hierarchy root. */
-  if (
-    !rootText ||
-    rootText.length > 120 ||
-    /[.!?]$/.test(rootText) ||
-    isLikelyFormulaText(rootText)
-  ) {
-    return null;
-  }
-
-  const collected: string[] = [];
-  let cursor = rootIndex;
-  let branchCount = 0;
-
-  while (cursor < items.length) {
-    const raw = String(items[cursor] ?? "").replace(/\s+$/, "");
-    const trimmed = raw.trim();
-
-    if (!trimmed) break;
-
-    if (looksLikeBranch(raw)) {
-      collected.push(raw);
-      branchCount += 1;
-      cursor += 1;
-      continue;
-    }
-
-    if (looksLikeConnector(raw)) {
-      collected.push(raw);
-      cursor += 1;
-      continue;
-    }
-
-    /*
-     * Only the root is allowed to be an ordinary text line. Once the
-     * tree has started, another ordinary paragraph ends the structure.
-     */
-    if (cursor === rootIndex) {
-      collected.push(raw);
-      cursor += 1;
-      continue;
-    }
-
-    break;
-  }
-
-  if (branchCount < 2) return null;
-
-  const parsed = parseAsciiTreeLines(collected);
-  if (!parsed) return null;
-
-  return {
-    title: parsed.title || rootText,
-    nodes: parsed.nodes,
-    endIndex: cursor,
-  };
-}
-
-function splitSmartText(
-  value: string
-): string[] {
-  const text = clean(value);
-
-  if (!text) return [];
-
-  /*
-   * Preserve explicit line breaks as separate educational
-   * units whenever possible.
-   */
-  const lines = text
-    .split(/\n+/)
-    .map((line) => {
-      const raw = line.replace(/\s+$/, "");
-      return isAsciiTreeLine(raw) ? raw : raw.trim();
-    })
-    .filter((line) => line.trim());
-
-  if (lines.length > 1) {
-    return lines.flatMap((line) =>
-      splitSmartText(line)
-    );
-  }
-
-  /*
-   * Long prose is split at strong discourse boundaries,
-   * not blindly every two sentences.
-   */
-  const boundaryPattern =
-    /\s+(?=(?:This hierarchy|This relationship|This distinction|This process|This means|The hierarchy|The relationship|The distinction|The important point|The key idea|In practice|Therefore|Overall|However|For example|During training|During inference|At the application level|At a high level)\b)/g;
-
-  const chunks = text
-    .split(boundaryPattern)
-    .map((chunk) => chunk.trim())
-    .filter(Boolean);
-
-  if (chunks.length > 1) {
-    return chunks;
-  }
-
-  /*
-   * Only split very long prose when it clearly contains
-   * multiple complete sentences.
-   */
-  if (text.length > 650) {
-    const sentences =
-      text.match(
-        /[^.!?]+[.!?]+(?:\s+|$)/g
-      );
-
-    if (sentences && sentences.length >= 3) {
-      const result: string[] = [];
-      let buffer = "";
-
-      for (const sentence of sentences) {
-        const next =
-          `${buffer} ${sentence}`.trim();
-
-        if (
-          buffer &&
-          next.length > 360
-        ) {
-          result.push(buffer.trim());
-          buffer = sentence.trim();
-        } else {
-          buffer = next;
-        }
-      }
-
-      if (buffer) {
-        result.push(buffer.trim());
-      }
-
-      return result.filter(Boolean);
-    }
-  }
-
-  return [text];
-}
-
-/* -------------------------------------------------------------------------- */
-/* INLINE EDUCATIONAL STRUCTURE DETECTION                                     */
-/* -------------------------------------------------------------------------- */
-
-/**
- * Lesson authors sometimes store diagrams inside a single template string.
- * In that form the visual tree can arrive as:
- *
- *   ROOT | ├─ Branch A | ├─ Branch B | └─ Branch C
- *
- * rather than as separate lines. Convert only high-confidence box-drawing
- * structures into real lines. Ordinary "|" characters are never touched
- * unless box-drawing branch markers are present.
- */
-function expandInlineAsciiTree(text: string): string {
-  const value = clean(text);
-
-  if (
-    !value ||
-    !/[├└┣┗╰╭]/.test(value) ||
-    !/(?:├─|└─|┣━|┗━|╰─|╭─)/.test(value)
-  ) {
-    return value;
-  }
-
-  return value
-    .replace(/\s*[|│┃]\s*(?=(?:├─|└─|┣━|┗━|╰─|╭─))/g, "\n")
-    .replace(/\s*[|│┃]\s*(?=[A-Za-z0-9])/g, "\n")
-    .replace(/[ \t]+\n/g, "\n")
-    .replace(/\n[ \t]+/g, "\n")
-    .trim();
-}
-
-function findInlineAsciiTree(text: string): {
-  title: string;
-  nodes: AsciiTreeNode[];
-  before: string;
-  after: string;
-} | null {
-  const value = clean(text);
-
-  if (
-    !value ||
-    !/[├└┣┗╰╭]/.test(value) ||
-    !/(?:├─|└─|┣━|┗━|╰─|╭─)/.test(value)
-  ) {
-    return null;
-  }
-
-  const expanded = expandInlineAsciiTree(value);
-  const lines = expanded
-    .split(/\n+/)
-    .map((line) => line.trim())
-    .filter(Boolean);
-
-  const firstBranchIndex = lines.findIndex((line) =>
-    /(?:├─|└─|┣━|┗━|╰─|╭─)/.test(line)
-  );
-
-  if (firstBranchIndex < 1) {
-    return null;
-  }
-
-  const rootLine = lines[firstBranchIndex - 1];
-
-  if (
-    !rootLine ||
-    rootLine.length > 140 ||
-    /[.!?]$/.test(rootLine)
-  ) {
-    return null;
-  }
-
-  const treeLines: string[] = [rootLine];
-  let endIndex = firstBranchIndex;
-
-  while (
-    endIndex < lines.length &&
-    (
-      /(?:├─|└─|┣━|┗━|╰─|╭─)/.test(lines[endIndex]) ||
-      /^[|│┃\s]+$/.test(lines[endIndex])
-    )
-  ) {
-    treeLines.push(lines[endIndex]);
-    endIndex += 1;
-  }
-
-  const parsed = parseAsciiTreeLines(treeLines);
-
-  if (!parsed || parsed.nodes.length < 2) {
-    return null;
-  }
-
-  /*
-   * Anything before the root is normal prose. Anything after the last
-   * branch is also normal prose. This prevents the diagram from swallowing
-   * the next educational paragraph.
-   */
-  const rootPosition = expanded.indexOf(rootLine);
-  const treeEndPosition = treeLines.length
-    ? expanded.indexOf(treeLines[treeLines.length - 1], rootPosition) +
-      treeLines[treeLines.length - 1].length
-    : expanded.length;
-
-  return {
-    title: parsed.title || rootLine,
-    nodes: parsed.nodes,
-    before: expanded.slice(0, Math.max(0, rootPosition)).trim(),
-    after: expanded.slice(Math.max(0, treeEndPosition)).trim(),
-  };
-}
-
-function parseInlineNumberedList(text: string): {
-  before: string;
-  items: string[];
-  after: string;
-} | null {
-  const value = clean(text);
-
-  /*
-   * Only promote numbered text when there is an explicit educational cue.
-   * This avoids converting years, equations, or ordinary prose into lists.
-   */
-  const cuePattern =
-    /\b(?:stages?|steps?|process|workflow|sequence|procedure|use)\s*:\s*(?=\d+\.\s+)/i;
-
-  const cueMatch = value.match(cuePattern);
-
-  if (!cueMatch || cueMatch.index === undefined) {
-    return null;
-  }
-
-  const listStart =
-    cueMatch.index + cueMatch[0].length;
-
-  const listText = value.slice(listStart);
-
-  const matches = [
-    ...listText.matchAll(
-      /(?:^|\s)(\d+)\.\s+/g
-    ),
-  ];
-
-  if (matches.length < 3) {
-    return null;
-  }
-
-  const items: string[] = [];
-
-  for (let index = 0; index < matches.length; index += 1) {
-    const current = matches[index];
-    const start =
-      (current.index ?? 0) + current[0].length;
-
-    const next =
-      matches[index + 1];
-
-    const end =
-      next?.index ?? listText.length;
-
-    const item = listText
-      .slice(start, end)
-      .trim()
-      .replace(/^["“]+/, "")
-      .replace(/["”]+$/, "")
-      .trim();
-
-    if (item) {
-      items.push(item);
-    }
-  }
-
-  if (items.length < 3) {
-    return null;
-  }
-
-  /*
-   * The final list item can be followed by explanatory prose. Split it at
-   * strong discourse boundaries only.
-   */
-  let after = "";
-  const last = items[items.length - 1];
-
-  const boundary =
-    last.search(
-      /\s+(?=(?:The prompt|The application|The process|The structure|The key|This prompt|This structure|This process|In practical|In practice|Therefore|Overall|The goal|The important)\b)/i
-    );
-
-  if (boundary > 0) {
-    after = last.slice(boundary).trim();
-    items[items.length - 1] =
-      last.slice(0, boundary).trim();
-  }
-
-  if (!items[items.length - 1]) {
-    items.pop();
-  }
-
-  if (items.length < 3) {
-    return null;
-  }
-
-  return {
-    before: value.slice(0, listStart).trim(),
-    items,
-    after,
-  };
-}
-
-type ExamplePair = {
-  input: string;
-  output: string;
-};
-
-function parseInlineExamplePairs(text: string): {
-  before: string;
-  pairs: ExamplePair[];
-  after: string;
-} | null {
-  const value = clean(text);
-
-  /*
-   * Example blocks are only promoted when the text contains repeated
-   * Input:/Output: pairs. A single "Example:" remains ordinary prose.
-   */
-  if (
-    !/\bExample\s*:/i.test(value) ||
-    !/\bInput\s*:/i.test(value) ||
-    !/\bOutput\s*:/i.test(value)
-  ) {
-    return null;
-  }
-
-  const firstInput = value.search(/\bInput\s*:/i);
-
-  if (firstInput < 0) {
-    return null;
-  }
-
-  const before = value
-    .slice(0, firstInput)
-    .trim();
-
-  const remainder = value.slice(firstInput);
-
-  const inputMatches = [
-    ...remainder.matchAll(
-      /\bInput\s*:/gi
-    ),
-  ];
-
-  const pairs: ExamplePair[] = [];
-
-  for (let index = 0; index < inputMatches.length; index += 1) {
-    const inputMatch = inputMatches[index];
-    const inputStart =
-      (inputMatch.index ?? 0) +
-      inputMatch[0].length;
-
-    const outputMatch = remainder
-      .slice(inputStart)
-      .match(
-        /\bOutput\s*:/i
-      );
-
-    if (!outputMatch || outputMatch.index === undefined) {
-      break;
-    }
-
-    const outputStart =
-      inputStart +
-      outputMatch.index +
-      outputMatch[0].length;
-
-    const nextInput =
-      inputMatches[index + 1];
-
-    const inputEnd =
-      nextInput?.index ?? remainder.length;
-
-    const input = remainder
-      .slice(inputStart, inputStart + outputMatch.index)
-      .trim();
-
-    const output = remainder
-      .slice(outputStart, inputEnd)
-      .trim();
-
-    if (input && output) {
-      pairs.push({ input, output });
-    }
-  }
-
-  if (pairs.length < 2) {
-    return null;
-  }
-
-  /*
-   * Remove duplicated example text from the end of the final output when
-   * a paragraph continues into ordinary explanation.
-   */
-  let after = "";
-  const finalPair = pairs[pairs.length - 1];
-
-  const afterBoundary =
-    finalPair.output.search(
-      /\s+(?=(?:The examples|The pattern|This demonstrates|This approach|Few-shot prompting|Zero-shot prompting|In practice|Therefore|Overall|The trade-off)\b)/i
-    );
-
-  if (afterBoundary > 0) {
-    after = finalPair.output
-      .slice(afterBoundary)
-      .trim();
-
-    finalPair.output =
-      finalPair.output
-        .slice(0, afterBoundary)
-        .trim();
-  }
-
-  return {
-    before,
-    pairs,
-    after,
-  };
-}
-
-function InlineExamplePairs({
-  pairs,
-}: {
-  pairs: ExamplePair[];
-}) {
-  if (!pairs.length) {
-    return null;
-  }
-
-  return (
-    <div className="my-7 overflow-hidden rounded-3xl border border-amber-500/15 bg-amber-500/[0.025]">
-      <div className="border-b border-amber-500/10 px-5 py-4">
-        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">
-          Examples
-        </div>
-        <div className="mt-1 text-sm leading-6 text-slate-400">
-          The examples show how the prompt pattern maps an input to the
-          required output behavior.
-        </div>
-      </div>
-
-      <div className="divide-y divide-slate-800/80">
-        {pairs.map((pair, index) => (
-          <div
-            key={index}
-            className="grid gap-4 px-5 py-5 lg:grid-cols-[1fr_1fr]"
-          >
-            <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
-              <div className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-cyan-300">
-                Input {index + 1}
-              </div>
-              <p className="text-[15px] leading-8 text-slate-300 sm:text-base">
-                {pair.input}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
-              <div className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-emerald-300">
-                Output {index + 1}
-              </div>
-              <p className="text-[15px] leading-8 text-slate-300 sm:text-base">
-                {pair.output}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function SmartParagraph({
-  text,
-}: {
-  text: string;
-}) {
-  const value = clean(text);
-
-  if (!value) {
-    return null;
-  }
-
-  /*
-   * 1. Inline box-drawing diagrams have the highest structural priority.
-   */
-  const inlineTree = findInlineAsciiTree(value);
-
-  if (inlineTree) {
-    return (
-      <div className="space-y-4">
-        {inlineTree.before && (
-          <SmartParagraph text={inlineTree.before} />
-        )}
-
-        <AsciiHierarchy
-          title={inlineTree.title}
-          nodes={inlineTree.nodes}
-        />
-
-        {inlineTree.after && (
-          <SmartParagraph text={inlineTree.after} />
-        )}
-      </div>
-    );
-  }
-
-  /*
-   * 2. Inline numbered workflows.
-   */
-  const numbered = parseInlineNumberedList(value);
-
-  if (numbered) {
-    return (
-      <div className="space-y-5">
-        {numbered.before && (
-          <SmartParagraph text={numbered.before} />
-        )}
-
-        <OrderedList items={numbered.items} />
-
-        {numbered.after && (
-          <SmartParagraph text={numbered.after} />
-        )}
-      </div>
-    );
-  }
-
-  /*
-   * 3. Repeated Input/Output examples.
-   */
-  const examples = parseInlineExamplePairs(value);
-
-  if (examples) {
-    return (
-      <div className="space-y-5">
-        {examples.before && (
-          <SmartParagraph text={examples.before} />
-        )}
-
-        <InlineExamplePairs pairs={examples.pairs} />
-
-        {examples.after && (
-          <SmartParagraph text={examples.after} />
-        )}
-      </div>
-    );
-  }
-
-  /*
-   * 4. Mathematics comes before generic flow detection.
-   */
-  if (isLikelyFormulaText(value)) {
-    return <SmartFormula formula={value} />;
-  }
-
-  /*
-   * 5. Explicit bullet characters inside plain content.
-   */
-  const bulletData = splitInlineBullets(value);
+function SmartParagraph({ text }: { text: string }) {
+  const bulletData = splitInlineBullets(text);
 
   if (bulletData) {
     return (
-      <div className="space-y-4">
+      <div className="space-y-5">
         {bulletData.before && (
-          <p className="w-full max-w-5xl text-left text-[17px] leading-8 text-slate-300 sm:text-[18px]">
+          <p className="max-w-5xl text-[15px] leading-8 text-slate-300 sm:text-base">
             {bulletData.before}
           </p>
         )}
@@ -2451,56 +959,71 @@ function SmartParagraph({
     );
   }
 
-  /*
-   * 6. Definitions such as:
-   *
-   * Token: A small unit used by a language model.
-   */
-  const definition = parseDefinition(value);
+  const completeFlowMatch = text.match(
+    /A complete flow is:\s*(.+?)(?=\s+(?:The quality|The result|The response|The key|The goal|This stage|This process|This means|Therefore|Overall|In practice|After retrieval|After generation)\b|$)/i
+  );
 
-  if (definition) {
-    return (
-      <DefinitionCard
-        term={definition.term}
-        definition={definition.definition}
-      />
-    );
+  if (completeFlowMatch) {
+    const flowText = completeFlowMatch[1].trim();
+    const flowParts = flowText
+      .split(/\s*(?:↓|↑|→|⇒|->|=>)\s*/)
+      .map((part) => part.trim())
+      .filter(Boolean);
+
+    if (flowParts.length >= 3) {
+      const markerStart = completeFlowMatch.index ?? 0;
+      const beforeFlow = text.slice(0, markerStart).trim();
+      const afterFlow = text
+        .slice(markerStart + completeFlowMatch[0].length)
+        .trim();
+
+      return (
+        <div className="space-y-5">
+          {beforeFlow && (
+            <p className="max-w-5xl text-[15px] leading-8 text-slate-300 sm:text-base">
+              {beforeFlow}
+            </p>
+          )}
+
+          <ContentFlow
+            nodes={flowParts}
+            arrows={flowParts.slice(1).map(() => "↓")}
+          />
+
+          {afterFlow && (
+            <SmartParagraph text={afterFlow} />
+          )}
+        </div>
+      );
+    }
   }
 
-  /*
-   * 7. Arrow-based relationships.
-   */
-  const flow = findArrowRun(value);
+  const flowData = findEmbeddedArrowFlow(text);
 
-  if (flow) {
+  if (flowData) {
     return (
-      <div className="space-y-3">
-        {flow.before && (
-          <p className="w-full max-w-5xl text-left text-[17px] leading-8 text-slate-300 sm:text-[18px]">
-            {flow.before}
+      <div className="space-y-5">
+        {flowData.before && (
+          <p className="max-w-5xl text-[15px] leading-8 text-slate-300 sm:text-base">
+            {flowData.before}
           </p>
         )}
 
         <ContentFlow
-          nodes={flow.nodes}
-          arrows={flow.arrows}
-          label={flow.label}
-          compact={flow.nodes.length <= 3}
+          nodes={flowData.nodes}
+          arrows={flowData.arrows}
         />
 
-        {flow.after && (
-          <SmartParagraph text={flow.after} />
+        {flowData.after && (
+          <SmartParagraph text={flowData.after} />
         )}
       </div>
     );
   }
 
-  /*
-   * 8. Ordinary educational paragraph.
-   */
   return (
-    <p className="w-full max-w-5xl text-left text-[17px] leading-8 text-slate-300 sm:text-[18px]">
-      {value}
+    <p className="max-w-5xl text-[15px] leading-8 text-slate-300 sm:text-base">
+      {text}
     </p>
   );
 }
@@ -2510,7 +1033,9 @@ function Paragraphs({
 }: {
   value: any;
 }) {
-  const values = Array.isArray(value) ? value : [value];
+  const values = Array.isArray(value)
+    ? value
+    : [value];
 
   if (!values.length) {
     return null;
@@ -2520,95 +1045,13 @@ function Paragraphs({
   let paragraphBuffer: string[] = [];
 
   const flushParagraphBuffer = () => {
-    if (!paragraphBuffer.length) return;
+    if (!paragraphBuffer.length) {
+      return;
+    }
 
     let index = 0;
 
     while (index < paragraphBuffer.length) {
-      /*
-       * Highest-confidence structural detection: an ASCII/tree hierarchy
-       * must remain one visual unit. It must be detected before equations,
-       * candidate groups, compositions, or ordinary flow parsing so those
-       * components cannot split the hierarchy in the middle.
-       */
-      const hierarchy = findAsciiTreeRun(
-        paragraphBuffer,
-        index
-      );
-
-      if (hierarchy) {
-        elements.push(
-          <AsciiHierarchy
-            key={`ascii-hierarchy-${elements.length}`}
-            title={hierarchy.title}
-            nodes={hierarchy.nodes}
-          />
-        );
-        index = hierarchy.endIndex;
-        continue;
-      }
-
-      /*
-       * Highest-confidence multi-line formula grouping.
-       */
-      const equation = findEquationRun(
-        paragraphBuffer,
-        index
-      );
-
-      if (equation) {
-        elements.push(
-          <SmartFormula
-            key={`equation-${elements.length}`}
-            formula={equation.formula}
-          />
-        );
-        index = equation.endIndex;
-        continue;
-      }
-
-      /*
-       * Composition systems such as:
-       *
-       * Model + Instructions + Context + Tools
-       */
-      const composition = findCompositionRun(
-        paragraphBuffer,
-        index
-      );
-
-      if (composition) {
-        elements.push(
-          <CompositionStack
-            key={`composition-${elements.length}`}
-            nodes={composition.nodes}
-          />
-        );
-        index = composition.endIndex;
-        continue;
-      }
-
-      /*
-       * Context-aware candidate groups. The preceding sentence must
-       * explicitly indicate candidates/options/tokens/outputs.
-       */
-      const candidates = findCandidateRun(
-        paragraphBuffer,
-        index
-      );
-
-      if (candidates) {
-        elements.push(
-          <CandidateGroup
-            key={`candidate-${elements.length}`}
-            items={candidates.items}
-            label="Possible Choices"
-          />
-        );
-        index = candidates.endIndex;
-        continue;
-      }
-
       const flow = parseTextFlow(
         paragraphBuffer,
         index
@@ -2645,10 +1088,11 @@ function Paragraphs({
 
   values.forEach((item, index) => {
     if (isObject(item)) {
-      const structured = renderStructuredParagraphItem(
-        item,
-        index
-      );
+      const structured =
+        renderStructuredParagraphItem(
+          item,
+          index
+        );
 
       if (structured) {
         flushParagraphBuffer();
@@ -2665,21 +1109,19 @@ function Paragraphs({
       const text = clean(item);
 
       if (text) {
-        splitSmartText(text).forEach((piece) =>
-          paragraphBuffer.push(piece)
-        );
+        paragraphBuffer.push(text);
       }
-
       return;
     }
 
     if (Array.isArray(item)) {
       item.forEach((child) => {
         if (isObject(child)) {
-          const structured = renderStructuredParagraphItem(
-            child,
-            index
-          );
+          const structured =
+            renderStructuredParagraphItem(
+              child,
+              index
+            );
 
           if (structured) {
             flushParagraphBuffer();
@@ -2689,11 +1131,8 @@ function Paragraphs({
         }
 
         const text = clean(child);
-
         if (text) {
-          splitSmartText(text).forEach((piece) =>
-            paragraphBuffer.push(piece)
-          );
+          paragraphBuffer.push(text);
         }
       });
     }
@@ -2702,7 +1141,7 @@ function Paragraphs({
   flushParagraphBuffer();
 
   return (
-    <div className="w-full max-w-5xl space-y-5 text-left">
+    <div className="space-y-4">
       {elements}
     </div>
   );
@@ -2740,7 +1179,7 @@ function BulletList({
         return (
           <li
             key={index}
-            className="flex w-full max-w-5xl gap-3 text-left text-[17px] leading-8 text-slate-300 sm:text-[18px]"
+            className="flex gap-3 text-sm leading-7 text-slate-300"
           >
             <span className="mt-[11px] h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-400" />
 
@@ -2784,13 +1223,13 @@ function OrderedList({
         return (
           <div
             key={index}
-            className="flex gap-4 text-left"
+            className="flex gap-4"
           >
             <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-cyan-500/20 bg-cyan-500/10 text-xs font-bold text-cyan-300">
               {index + 1}
             </div>
 
-            <p className="text-[16px] leading-8 text-slate-300 sm:text-[17px]">
+            <p className="text-sm leading-7 text-slate-300">
               {value}
             </p>
           </div>
@@ -2846,7 +1285,7 @@ function SectionTitle({
       )}
 
       {description && (
-        <div className="mt-4 w-full max-w-5xl">
+        <div className="mt-4 max-w-4xl">
           <Paragraphs
             value={description}
           />
@@ -2959,7 +1398,7 @@ function LearningObjectives({
                 {index + 1}
               </div>
 
-              <p className="text-[16px] leading-8 text-slate-300 sm:text-[17px]">
+              <p className="text-sm leading-7 text-slate-300">
                 {value}
               </p>
             </div>
@@ -2981,7 +1420,7 @@ function FormulaBlock({
   formula: any;
   title?: string;
 }) {
-  const value = normalizeMathText(clean(formula));
+  const value = clean(formula);
 
   if (!value) {
     return null;
@@ -3044,29 +1483,43 @@ function normalizeFlow(
   process: any
 ): {
   steps: FlowStep[];
-  direction: "horizontal" | "vertical";
+  direction:
+    | "horizontal"
+    | "vertical";
   title?: string;
-  groups?: Array<{ title: string; items: string[] }>;
 } {
   let source = process;
-  let direction: "horizontal" | "vertical" = "horizontal";
+
+  let direction:
+    | "horizontal"
+    | "vertical" = "horizontal";
+
   let title = "";
 
-  if (source && typeof source === "object" && !Array.isArray(source)) {
-    const requestedDirection = firstText(
-      source.direction,
-      source.orientation,
-      source.layout
-    ).toLowerCase();
+  if (
+    source &&
+    typeof source === "object" &&
+    !Array.isArray(source)
+  ) {
+    const requestedDirection =
+      firstText(
+        source.direction,
+        source.orientation,
+        source.layout
+      ).toLowerCase();
 
     if (
-      requestedDirection === "vertical" ||
+      requestedDirection ===
+        "vertical" ||
       requestedDirection === "down"
     ) {
       direction = "vertical";
     }
 
-    title = firstText(source.title, source.heading, source.label);
+    title = firstText(
+      source.title,
+      source.heading
+    );
 
     source =
       source.steps ??
@@ -3074,129 +1527,59 @@ function normalizeFlow(
       source.nodes ??
       source.flow ??
       source.process ??
-      source.stages ??
       [];
   }
 
-  const rawValues: any[] = [];
-
-  const collect = (value: any) => {
-    if (value === null || value === undefined || value === "") return;
-
-    if (Array.isArray(value)) {
-      value.forEach(collect);
-      return;
-    }
-
-    if (typeof value === "object") {
-      const nestedTitle = firstText(
-        value.title,
-        value.name,
-        value.label,
-        value.heading,
-        value.text
-      );
-
-      const nestedDescription = firstText(
-        value.description,
-        value.content,
-        value.explanation,
-        value.details
-      );
-
-      const nestedChildren =
-        value.steps ??
-        value.items ??
-        value.nodes ??
-        value.children ??
-        value.branches;
-
-      if (nestedChildren !== undefined) {
-        if (nestedTitle) {
-          rawValues.push({
-            title: nestedTitle,
-            description: nestedDescription,
-          });
-        }
-        collect(nestedChildren);
-        return;
+  const steps = asArray(source)
+    .filter((item) => {
+      if (typeof item === "string") {
+        return !isFlowArrow(item);
       }
 
-      rawValues.push(value);
-      return;
-    }
+      if (
+        item &&
+        typeof item === "object"
+      ) {
+        const label = firstText(
+          item.title,
+          item.name,
+          item.label,
+          item.text
+        );
 
-    const text = String(value);
-    const lines = text
-      .split(/\r?\n/)
-      .map((line) => line.trim())
-      .filter(Boolean);
+        return !isFlowArrow(label);
+      }
 
-    if (lines.length > 1) {
-      lines.forEach((line) => rawValues.push(line));
-    } else {
-      rawValues.push(text);
-    }
-  };
-
-  collect(source);
-
-  const cleanFlowLabel = (value: any): string => {
-    let result = clean(value);
-
-    if (!result) return "";
-
-    // Remove ASCII-tree / box-drawing prefixes.
-    result = result
-      .replace(/^[\s|│┃├└┌┐┬┤┝┥╰╭╴─—\-]+/u, "")
-      .replace(/[|│┃]+$/u, "")
-      .trim();
-
-    // Remove decorative separators that are not content.
-    result = result.replace(/^[+•·]+\s*/u, "").trim();
-
-    return result;
-  };
-
-  const isStructuralOnly = (value: string): boolean => {
-    const normalized = value.replace(/\s+/g, "");
-    return (
-      !normalized ||
-      /^[|│┃├└┌┐┬┤┝┥╰╭╴─—\-+_.:]+$/u.test(normalized) ||
-      isStandaloneFlowArrow(normalized)
-    );
-  };
-
-  const cleanedValues = rawValues
-    .map((item) => {
+      return false;
+    })
+    .map((item, index) => {
       if (typeof item === "string") {
         return {
-          title: cleanFlowLabel(item),
-          original: item,
+          title: clean(item),
         };
       }
 
       return {
-        title: cleanFlowLabel(
-          firstText(
-            item?.title,
-            item?.name,
-            item?.label,
-            item?.heading,
-            item?.text
-          )
+        title: firstText(
+          item?.title,
+          item?.name,
+          item?.label,
+          item?.text,
+          `Step ${index + 1}`
         ),
+
         description: firstText(
           item?.description,
           item?.content,
-          item?.explanation,
-          item?.details
+          item?.explanation
         ),
+
         input: firstText(
           item?.input,
           item?.prompt,
           item?.given
         ),
+
         output: firstText(
           item?.output,
           item?.result,
@@ -3205,28 +1588,9 @@ function normalizeFlow(
         ),
       };
     })
-    .filter((item) => item.title && !isStructuralOnly(item.title));
-
-  // Infer a vertical flow for multi-stage educational processes.
-  if (cleanedValues.length >= 3 && !title) {
-    const firstTitle = cleanedValues[0]?.title?.toLowerCase() ?? "";
-
-    if (
-      firstTitle.includes("complex task") ||
-      firstTitle.includes("input") ||
-      firstTitle.includes("problem") ||
-      firstTitle.includes("request")
-    ) {
-      direction = "vertical";
-    }
-  }
-
-  const steps: FlowStep[] = cleanedValues.map((item, index) => ({
-    title: item.title || `Step ${index + 1}`,
-    description: item.description,
-    input: item.input,
-    output: item.output,
-  }));
+    .filter(
+      (step) => step.title
+    );
 
   return {
     steps,
@@ -3241,121 +1605,32 @@ function FlowStepBox({
   step: FlowStep;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-900/90 px-5 py-4 shadow-sm">
-      <div className="text-[16px] font-bold leading-7 text-white sm:text-[17px]">
+    <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-5 shadow-lg transition duration-200 hover:border-cyan-500/30 hover:bg-slate-900">
+      <div className="font-bold leading-6 text-white">
         {step.title}
       </div>
 
       {step.description && (
-        <p className="mt-2 text-[14px] leading-7 text-slate-400 sm:text-[15px]">
+        <p className="mt-2 text-xs leading-6 text-slate-400">
           {step.description}
         </p>
       )}
 
       {step.input && (
-        <div className="mt-3 rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-[13px] leading-6 text-slate-400">
-          <span className="font-bold text-slate-500">IN:</span>{" "}
+        <div className="mt-3 rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-xs leading-5 text-slate-400">
+          <span className="font-bold text-slate-500">
+            IN:
+          </span>{" "}
           {step.input}
         </div>
       )}
 
       {step.output && (
-        <div className="mt-2 rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-[13px] leading-6 text-slate-400">
-          <span className="font-bold text-slate-500">OUT:</span>{" "}
+        <div className="mt-2 rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-xs leading-5 text-slate-400">
+          <span className="font-bold text-slate-500">
+            OUT:
+          </span>{" "}
           {step.output}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function DecompositionFlow({
-  steps,
-}: {
-  steps: FlowStep[];
-}) {
-  if (steps.length < 3) return null;
-
-  const subtaskIndexes = steps
-    .map((step, index) => ({
-      step,
-      index,
-    }))
-    .filter(({ step }) =>
-      /\b(?:subtask|sub-task|task\s*[A-Z]?)\b/i.test(step.title)
-    );
-
-  if (subtaskIndexes.length < 2) return null;
-
-  const firstSubtask = subtaskIndexes[0].index;
-  const lastSubtask =
-    subtaskIndexes[subtaskIndexes.length - 1].index;
-
-  const before = steps.slice(0, firstSubtask);
-  const subtasks = subtaskIndexes.map(({ step }) => step);
-  const after = steps.slice(lastSubtask + 1);
-
-  return (
-    <div className="my-8 w-full">
-      {before.length > 0 && (
-        <div className="mx-auto max-w-3xl">
-          {before.map((step, index) => (
-            <React.Fragment key={`before-${index}`}>
-              <FlowStepBox step={step} />
-              {index < before.length - 1 && (
-                <div className="flex h-8 items-center justify-center text-lg font-bold text-cyan-400">
-                  ↓
-                </div>
-              )}
-            </React.Fragment>
-          ))}
-        </div>
-      )}
-
-      {before.length > 0 && (
-        <div className="flex h-8 items-center justify-center text-lg font-bold text-cyan-400">
-          ↓
-        </div>
-      )}
-
-      <div className="rounded-2xl border border-cyan-500/15 bg-slate-950/60 p-4 sm:p-5">
-        <div className="mb-4 text-center text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400">
-          Parallel Subtasks
-        </div>
-
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {subtasks.map((step, index) => (
-            <div key={`subtask-${index}`} className="relative">
-              <FlowStepBox step={step} />
-              {index < subtasks.length - 1 && (
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute -right-2 top-1/2 hidden -translate-y-1/2 text-cyan-400 lg:block"
-                >
-                  •
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {after.length > 0 && (
-        <div className="mx-auto mt-6 max-w-3xl">
-          <div className="flex h-8 items-center justify-center text-lg font-bold text-cyan-400">
-            ↓
-          </div>
-
-          {after.map((step, index) => (
-            <React.Fragment key={`after-${index}`}>
-              <FlowStepBox step={step} />
-              {index < after.length - 1 && (
-                <div className="flex h-8 items-center justify-center text-lg font-bold text-cyan-400">
-                  ↓
-                </div>
-              )}
-            </React.Fragment>
-          ))}
         </div>
       )}
     </div>
@@ -3367,72 +1642,77 @@ function ProcessFlow({
 }: {
   process: any;
 }) {
-  const normalized = normalizeFlow(process);
+  const normalized =
+    normalizeFlow(process);
 
   if (!normalized.steps.length) {
     return null;
   }
 
-  const decomposition = DecompositionFlow({
-    steps: normalized.steps,
-  });
-
-  if (decomposition) {
-    return (
-      <section className="my-8 w-full text-left">
-        {normalized.title && (
-          <div className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400">
-            {normalized.title}
-          </div>
-        )}
-        {decomposition}
-      </section>
-    );
-  }
-
-  const vertical = normalized.direction === "vertical";
+  const vertical =
+    normalized.direction ===
+    "vertical";
 
   return (
-    <section className="my-8 w-full text-left">
+    <section className="my-9 rounded-[1.5rem] border border-cyan-500/15 bg-slate-950/70 p-5 sm:p-7">
       {normalized.title && (
-        <div className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400">
+        <div className="mb-6 text-lg font-bold text-white">
           {normalized.title}
         </div>
       )}
 
       {vertical ? (
         <div className="mx-auto flex max-w-3xl flex-col">
-          {normalized.steps.map((step, index) => (
-            <React.Fragment key={index}>
-              <FlowStepBox step={step} />
+          {normalized.steps.map(
+            (step, index) => (
+              <React.Fragment
+                key={index}
+              >
+                <FlowStepBox
+                  step={step}
+                />
 
-              {index < normalized.steps.length - 1 && (
-                <div
-                  aria-hidden="true"
-                  className="flex h-8 items-center justify-center text-lg font-bold text-cyan-400"
-                >
-                  ↓
-                </div>
-              )}
-            </React.Fragment>
-          ))}
+                {index <
+                  normalized.steps
+                    .length -
+                    1 && (
+                  <div
+                    aria-hidden="true"
+                    className="flex h-10 items-center justify-center text-xl font-bold text-cyan-400"
+                  >
+                    ↓
+                  </div>
+                )}
+              </React.Fragment>
+            )
+          )}
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {normalized.steps.map((step, index) => (
-            <div key={index} className="relative">
-              <FlowStepBox step={step} />
+          {normalized.steps.map(
+            (step, index) => (
+              <div
+                key={index}
+                className="relative"
+              >
+                <FlowStepBox
+                  step={step}
+                />
 
-              {index < normalized.steps.length - 1 && (
-                <span
-                  aria-hidden="true"
-                  className="absolute -right-3 top-1/2 z-10 hidden -translate-y-1/2 text-xl font-bold text-cyan-400 xl:block"
-                >
-                  →
-                </span>
-              )}
-            </div>
-          ))}
+                {index <
+                  normalized.steps
+                    .length -
+                    1 && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute -right-3 top-1/2 z-10 hidden -translate-y-1/2 text-xl font-bold text-cyan-400 xl:block"
+                  >
+                    →
+                  </span>
+                )}
+              </div>
+            )
+          )}
         </div>
       )}
     </section>
@@ -3443,135 +1723,79 @@ function ProcessFlow({
 /* CLASSIFICATION TREE                                                         */
 /* -------------------------------------------------------------------------- */
 
+function normalizeTreeLines(value: any): any {
+  const lines = asArray(value)
+    .map((item) => clean(item))
+    .filter(Boolean);
+
+  if (lines.length < 2 || !lines.some((line) => /[├└│]/.test(line))) {
+    return value;
+  }
+
+  type TreeNode = { title: string; children: TreeNode[] };
+  const root: TreeNode = { title: "", children: [] };
+  const stack: Array<{ depth: number; node: TreeNode }> = [
+    { depth: -1, node: root },
+  ];
+
+  for (const raw of lines) {
+    const stripped = raw
+      .replace(/^[\s│├└─┬┌┐┘└]+/, "")
+      .replace(/^[-*]\s*/, "")
+      .trim();
+
+    if (!stripped) continue;
+
+    const prefixMatch = raw.match(/^[\s│├└─]*/);
+    const prefix = prefixMatch?.[0] ?? "";
+    const depth = Math.max(
+      0,
+      Math.floor((prefix.replace(/[├└┬┌┐┘─]/g, " ").length) / 4)
+    );
+
+    const node: TreeNode = { title: stripped, children: [] };
+
+    while (
+      stack.length > 1 &&
+      stack[stack.length - 1].depth >= depth
+    ) {
+      stack.pop();
+    }
+
+    stack[stack.length - 1].node.children.push(node);
+    stack.push({ depth, node });
+  }
+
+  return root.children;
+}
+
 function ClassificationTree({
   tree,
 }: {
   tree: any;
 }) {
-  if (tree === null || tree === undefined || tree === "") {
+  if (!tree) {
     return null;
   }
 
-  const hasNodeContent = (node: any): boolean => {
-    if (typeof node === "string") {
-      return clean(node).length > 0;
-    }
-
-    if (!node || typeof node !== "object") {
-      return false;
-    }
-
-    const title = firstText(
-      node.title,
-      node.name,
-      node.label,
-      node.heading,
-      node.text
-    );
-
-    const description = firstText(
-      node.description,
-      node.content,
-      node.explanation,
-      node.details
-    );
-
-    const children = asArray(
-      node.children ??
-        node.items ??
-        node.branches ??
-        node.nodes ??
-        node.steps
-    );
-
-    return (
-      Boolean(title || description) ||
-      children.some(hasNodeContent)
-    );
-  };
-
-  const unwrapTree = (value: any): any => {
-    if (value === null || value === undefined) {
-      return null;
-    }
-
-    if (Array.isArray(value)) {
-      const filtered = value.filter(hasNodeContent);
-      return filtered.length ? filtered : null;
-    }
-
-    if (typeof value === "string") {
-      return clean(value) ? value : null;
-    }
-
-    if (typeof value !== "object") {
-      return null;
-    }
-
-    if (hasNodeContent(value)) {
-      return value;
-    }
-
-    const candidates = [
-      value.tree,
-      value.root,
-      value.rootNode,
-      value.classification,
-      value.classificationTree,
-      value.data,
-      value.content,
-      value.structure,
-      value.nodes,
-      value.items,
-      value.children,
-    ];
-
-    for (const candidate of candidates) {
-      const normalized = unwrapTree(candidate);
-
-      if (
-        normalized !== null &&
-        normalized !== undefined &&
-        (
-          Array.isArray(normalized)
-            ? normalized.length > 0
-            : hasNodeContent(normalized)
-        )
-      ) {
-        return normalized;
-      }
-    }
-
-    return null;
-  };
-
-  const normalizedTree = unwrapTree(tree);
-
-  if (
-    normalizedTree === null ||
-    normalizedTree === undefined ||
-    (Array.isArray(normalizedTree) && normalizedTree.length === 0) ||
-    !hasNodeContent(normalizedTree)
-  ) {
-    return null;
-  }
+  const normalizedTree = normalizeTreeLines(tree);
 
   const renderNode = (
     node: any,
     depth = 0
   ): React.ReactNode => {
     if (typeof node === "string") {
-      const text = clean(node);
-      if (!text) return null;
-
       return (
-        <div className="rounded-xl border border-slate-800 bg-slate-900 px-4 py-3 text-[16px] leading-7 text-slate-300 sm:text-[17px]">
-          {text}
+        <div className="rounded-xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm text-slate-300">
+          {node}
         </div>
       );
     }
 
-    if (!node || typeof node !== "object") {
+    if (
+      !node ||
+      typeof node !== "object"
+    ) {
       return null;
     }
 
@@ -3579,72 +1803,59 @@ function ClassificationTree({
       node.title,
       node.name,
       node.label,
-      node.heading,
-      node.text
+      node.heading
     );
 
     const description = firstText(
       node.description,
       node.content,
-      node.explanation,
-      node.details
+      node.explanation
     );
 
     const children = asArray(
       node.children ??
         node.items ??
         node.branches ??
-        node.nodes ??
-        node.steps
-    ).filter(hasNodeContent);
-
-    if (!title && !description && children.length === 0) {
-      const nested = unwrapTree(node);
-      if (nested && nested !== node) {
-        return renderNode(nested, depth);
-      }
-      return null;
-    }
+        node.nodes
+    );
 
     return (
       <div>
-        {(title || description) && (
-          <div
-            className={cx(
-              "rounded-xl border px-4 py-3",
-              depth === 0
-                ? "border-cyan-500/25 bg-cyan-500/[0.05]"
-                : "border-slate-800 bg-slate-900/80"
-            )}
-          >
-            {title && (
-              <div className="text-[16px] font-semibold leading-7 text-white sm:text-[17px]">
-                {title}
-              </div>
-            )}
+        <div
+          className={cx(
+            "rounded-xl border px-4 py-3",
+            depth === 0
+              ? "border-cyan-500/25 bg-cyan-500/[0.05]"
+              : "border-slate-800 bg-slate-900/80"
+          )}
+        >
+          {title && (
+            <div className="font-semibold text-white">
+              {title}
+            </div>
+          )}
 
-            {description && (
-              <div className="mt-1 text-[15px] leading-7 text-slate-400 sm:text-[16px]">
-                {description}
-              </div>
-            )}
-          </div>
-        )}
+          {description && (
+            <div className="mt-1 text-xs leading-6 text-slate-400">
+              {description}
+            </div>
+          )}
+        </div>
 
         {children.length > 0 && (
-          <div
-            className={cx(
-              "space-y-3",
-              title || description
-                ? "mt-3 ml-5 border-l border-slate-800 pl-5"
-                : ""
+          <div className="mt-3 ml-5 space-y-3 border-l border-slate-800 pl-5">
+            {children.map(
+              (child, index) => (
+                <React.Fragment
+                  key={index}
+                >
+                  {renderNode(
+                    child,
+                    depth + 1
+                  )}
+                </React.Fragment>
+              )
             )}
-          >
-            {children.map((child, index) => (
-              <React.Fragment key={index}>
-                {renderNode(child, depth + 1)}
-              </React.Fragment>
-            ))}
           </div>
         )}
       </div>
@@ -3657,17 +1868,13 @@ function ClassificationTree({
         Classification
       </div>
 
-      {Array.isArray(normalizedTree) ? (
-        <div className="space-y-3">
-          {normalizedTree.map((node, index) => (
+      {Array.isArray(normalizedTree)
+        ? normalizedTree.map((node, index) => (
             <React.Fragment key={index}>
-              {renderNode(node, 0)}
+              {renderNode(node)}
             </React.Fragment>
-          ))}
-        </div>
-      ) : (
-        renderNode(normalizedTree)
-      )}
+          ))
+        : renderNode(normalizedTree)}
     </section>
   );
 }
@@ -4077,7 +2284,7 @@ function MathIntuition({
           Mathematical Intuition
         </h2>
 
-        <p className="mt-3 max-w-3xl text-[16px] leading-8 text-slate-400 sm:text-[17px]">
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-400">
           The key mathematical ideas behind
           the concepts in this lesson,
           expressed in a compact form for
@@ -4135,7 +2342,7 @@ function MathIntuition({
                     {explanation &&
                       explanation !==
                         formula && (
-                        <p className="mt-2 text-[15px] leading-8 text-slate-400 sm:text-[16px]">
+                        <p className="mt-2 text-sm leading-7 text-slate-400">
                           {explanation}
                         </p>
                       )}
@@ -4207,7 +2414,7 @@ function Exercises({
                     {index + 1}
                   </div>
 
-                  <p className="text-[16px] leading-8 text-slate-300 sm:text-[17px]">
+                  <p className="text-sm leading-7 text-slate-300">
                     {item}
                   </p>
                 </div>
@@ -4219,7 +2426,7 @@ function Exercises({
                 key={index}
                 className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5"
               >
-                <div className="flex gap-4 text-left">
+                <div className="flex gap-4">
                   <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-400 text-xs font-black text-slate-950">
                     {index + 1}
                   </div>
@@ -4302,12 +2509,12 @@ function InterviewQuestions({
                 key={index}
                 className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5"
               >
-                <div className="flex gap-4 text-left">
+                <div className="flex gap-4">
                   <span className="font-mono text-xs font-bold text-violet-300">
                     Q{index + 1}
                   </span>
 
-                  <p className="text-[16px] leading-8 text-slate-300 sm:text-[17px]">
+                  <p className="text-sm leading-7 text-slate-300">
                     {value}
                   </p>
                 </div>
@@ -4390,12 +2597,12 @@ function KeyTakeaways({
                 key={index}
                 className="rounded-2xl border border-cyan-500/15 bg-cyan-500/[0.025] p-5"
               >
-                <div className="flex gap-4 text-left">
+                <div className="flex gap-4">
                   <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-400 text-xs font-black text-slate-950">
                     {index + 1}
                   </div>
 
-                  <p className="text-[16px] leading-8 text-slate-200 sm:text-[17px]">
+                  <p className="text-sm leading-7 text-slate-200">
                     {value}
                   </p>
                 </div>
@@ -4818,7 +3025,7 @@ function GeneratedVisualGallery({
           Explore Visually
         </h2>
 
-        <p className="mt-3 max-w-3xl text-[16px] leading-8 text-slate-400 sm:text-[17px]">
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-400">
           These diagrams are generated locally inside CloudLearn. No web images,
           external image URLs, or third-party image hosting are used.
         </p>
@@ -4864,7 +3071,7 @@ function GeneratedVisualGallery({
                 </div>
 
                 {description && (
-                  <p className="mt-3 text-[15px] leading-8 text-slate-400 sm:text-[16px]">
+                  <p className="mt-3 text-sm leading-7 text-slate-400">
                     {description}
                   </p>
                 )}
@@ -4885,24 +3092,20 @@ const KNOWN_CONTENT_KEYS = new Set([
   "id",
   "moduleId",
   "lessonId",
-  "lessonNumber",
-  "moduleNumber",
-  "lessonCount",
   "type",
   "slug",
   "number",
+  "lessonNumber",
   "title",
   "name",
+  "subtitle",
+  "estimatedTime",
+  "difficulty",
   "label",
   "heading",
-  "subtitle",
   "description",
   "overview",
   "content",
-  "estimatedTime",
-  "duration",
-  "difficulty",
-  "status",
   "learningObjectives",
   "sections",
   "codeExamples",
@@ -4946,7 +3149,7 @@ function AdditionalValue({
     typeof value === "boolean"
   ) {
     return (
-      <p className="w-full max-w-5xl text-left text-[17px] leading-8 text-slate-300 sm:text-[18px]">
+      <p className="max-w-4xl text-sm leading-8 text-slate-300">
         {String(value)}
       </p>
     );
@@ -4955,71 +3158,6 @@ function AdditionalValue({
   if (Array.isArray(value)) {
     if (!value.length) {
       return null;
-    }
-
-    /*
-     * Smart object-array detection:
-     * [{term, meaning}, ...] and similar educational records are much
-     * easier to read as a compact table than as unrelated cards.
-     */
-    const objectItems = value.filter(isObject);
-
-    if (
-      objectItems.length >= 2 &&
-      objectItems.length === value.length
-    ) {
-      const keySet = new Set(
-        objectItems.flatMap((item) => Object.keys(item))
-      );
-
-      const preferredColumns = [
-        "term",
-        "concept",
-        "name",
-        "definition",
-        "meaning",
-        "description",
-        "purpose",
-        "example",
-        "use",
-      ].filter((key) => keySet.has(key));
-
-      if (preferredColumns.length >= 2) {
-        const columns = preferredColumns.slice(0, 4);
-
-        return (
-          <div className="my-6 overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950/70">
-            <table className="w-full min-w-[620px] border-collapse text-left text-sm">
-              <thead>
-                <tr className="bg-slate-900">
-                  {columns.map((column) => (
-                    <th
-                      key={column}
-                      className="border-b border-slate-800 px-4 py-3 text-xs font-bold uppercase tracking-wide text-cyan-300"
-                    >
-                      {prettyFieldName(column)}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {objectItems.map((item, rowIndex) => (
-                  <tr key={rowIndex} className="align-top">
-                    {columns.map((column) => (
-                      <td
-                        key={column}
-                        className="border-b border-slate-900 px-4 py-3 text-[15px] leading-7 text-slate-300 sm:text-[16px]"
-                      >
-                        {clean(item[column]) || "—"}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        );
-      }
     }
 
     return (
@@ -5044,14 +3182,9 @@ function AdditionalValue({
           }
 
           return (
-            <div
-              key={index}
-              className="flex gap-3 rounded-xl border border-slate-800/80 bg-slate-900/45 p-4"
-            >
-              <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-400" />
-              <span className="text-[16px] leading-8 text-slate-300 sm:text-[17px]">
-                {text}
-              </span>
+            <div key={index} className="flex gap-3 text-sm leading-7 text-slate-300">
+              <span className="mt-[11px] h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-400" />
+              <span>{text}</span>
             </div>
           );
         })}
@@ -5181,7 +3314,7 @@ function Architecture({
                 </div>
 
                 {layer?.description && (
-                  <div className="mt-2 text-[15px] leading-8 text-slate-400 sm:text-[16px]">
+                  <div className="mt-2 text-sm leading-7 text-slate-400">
                     {clean(
                       layer.description
                     )}
@@ -5254,7 +3387,7 @@ function ImplementationStages({
                 </div>
 
                 {data.description && (
-                  <div className="mt-2 text-[15px] leading-8 text-slate-400 sm:text-[16px]">
+                  <div className="mt-2 text-sm leading-7 text-slate-400">
                     {clean(
                       data.description
                     )}
@@ -5276,6 +3409,63 @@ function ImplementationStages({
         )}
       </div>
     </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* INPUT / OUTPUT                                                              */
+/* -------------------------------------------------------------------------- */
+
+function InputOutputBlock({
+  value,
+}: {
+  value: any;
+}) {
+  if (!value) return null;
+
+  const data =
+    typeof value === "object" && !Array.isArray(value)
+      ? value
+      : { input: value };
+
+  const input = firstText(
+    data.input,
+    data.prompt,
+    data.request,
+    data.source
+  );
+
+  const output = firstText(
+    data.output,
+    data.response,
+    data.result,
+    data.target
+  );
+
+  if (!input && !output) {
+    return null;
+  }
+
+  return (
+    <div className="my-8 grid gap-4 md:grid-cols-2">
+      {input && (
+        <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5">
+          <div className="mb-3 text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-400">
+            Input
+          </div>
+          <p className="text-sm leading-7 text-slate-300">{input}</p>
+        </div>
+      )}
+
+      {output && (
+        <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5">
+          <div className="mb-3 text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-400">
+            Output
+          </div>
+          <p className="text-sm leading-7 text-slate-300">{output}</p>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -5374,12 +3564,6 @@ function SectionRenderer({
         />
       )}
 
-      {section?.contentAfterProcess && (
-        <Paragraphs
-          value={section.contentAfterProcess}
-        />
-      )}
-
       {(section?.classificationTree ||
         section?.tree) && (
         <ClassificationTree
@@ -5398,12 +3582,6 @@ function SectionRenderer({
           title={
             section.formulaTitle
           }
-        />
-      )}
-
-      {section?.contentAfterFormula && (
-        <Paragraphs
-          value={section.contentAfterFormula}
         />
       )}
 
@@ -5578,6 +3756,24 @@ function SectionRenderer({
           }
         )}
 
+      {section?.inputOutput && (
+        <InputOutputBlock
+          value={section.inputOutput}
+        />
+      )}
+
+      {section?.contentAfterProcess && (
+        <Paragraphs
+          value={section.contentAfterProcess}
+        />
+      )}
+
+      {section?.contentAfterFormula && (
+        <Paragraphs
+          value={section.contentAfterFormula}
+        />
+      )}
+
       {section?.mathIntuition && (
         <MathIntuition
           items={
@@ -5641,12 +3837,10 @@ const SECTION_KNOWN_KEYS = new Set([
   "process",
   "processFlow",
   "flow",
-  "contentAfterProcess",
   "classificationTree",
   "tree",
   "formula",
   "formulaTitle",
-  "contentAfterFormula",
   "formulas",
   "table",
   "tables",
@@ -5657,6 +3851,9 @@ const SECTION_KNOWN_KEYS = new Set([
   "language",
   "codeExamples",
   "mathIntuition",
+  "inputOutput",
+  "contentAfterProcess",
+  "contentAfterFormula",
   "body",
   "details",
   "notes",
@@ -5706,14 +3903,6 @@ function SectionAdditionalContent({
 }
 
 /* -------------------------------------------------------------------------- */
-/* CONTENT ALIGNMENT                                                          */
-/*                                                                            */
-/* Main educational prose uses one consistent reading column: max-w-5xl,      */
-/* left aligned, with 17px/18px responsive text and 2rem line-height.          */
-/* Cards, formulas, code, diagrams and navigation keep their own sizing.      */
-/* -------------------------------------------------------------------------- */
-
-/* -------------------------------------------------------------------------- */
 /* MAIN LESSON                                                                 */
 /* -------------------------------------------------------------------------- */
 
@@ -5726,7 +3915,7 @@ function MainLesson({
     <div className="w-full min-w-0 break-words [overflow-wrap:anywhere]">
       <Hero lesson={lesson} />
 
-      <div className="space-y-12 px-5 py-9 text-left sm:px-8 sm:py-11 lg:px-12 lg:py-12">
+      <div className="space-y-12 px-5 py-9 sm:px-8 sm:py-11 lg:px-12 lg:py-12">
         {lesson.learningObjectives && (
           <LearningObjectives
             objectives={
@@ -5881,7 +4070,7 @@ function SpecialContent({
     <div className="w-full min-w-0 break-words [overflow-wrap:anywhere]">
       <Hero lesson={content} />
 
-      <div className="space-y-12 px-5 py-9 text-left sm:px-8 sm:py-11 lg:px-12 lg:py-12">
+      <div className="space-y-12 px-5 py-9 sm:px-8 sm:py-11 lg:px-12 lg:py-12">
         {content.description && (
           <section>
             <Paragraphs
