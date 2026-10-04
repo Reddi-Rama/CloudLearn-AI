@@ -1,7 +1,5 @@
 ﻿import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import path from "path";
-import fs from "fs";
 import { AuthRequest } from "../../middleware/auth.middleware";
 import { certificateService } from "./certificate.service";
 
@@ -93,6 +91,8 @@ export async function getMyCertificates(
 
     return res.status(200).json({
       success: true,
+      message:
+        "Certificates fetched successfully",
       data: certificates,
     });
   } catch (error) {
@@ -108,6 +108,11 @@ export async function getMyCertificates(
   }
 }
 
+/**
+ * Public certificate verification.
+ *
+ * GET /api/v1/certificate/verify/:certificateId
+ */
 export async function verifyCertificate(
   req: Request,
   res: Response
@@ -157,44 +162,6 @@ export async function verifyCertificate(
   }
 }
 
-/**
- * Resolve the physical certificate PDF safely.
- *
- * Older certificate records may contain an absolute Windows
- * path from another machine. The actual certificate storage
- * location belongs to the current backend process, so when
- * the stored path no longer exists we fall back to the
- * certificate storage directory using the certificate ID.
- */
-function resolveCertificateFilePath(
-  storedFilePath: string | null | undefined,
-  certificateId: string
-) {
-  if (
-    storedFilePath &&
-    fs.existsSync(storedFilePath)
-  ) {
-    return storedFilePath;
-  }
-
-  const storageDirectory = path.join(
-    process.cwd(),
-    "storage",
-    "certificates"
-  );
-
-  const currentStoragePath = path.join(
-    storageDirectory,
-    `${certificateId}.pdf`
-  );
-
-  if (fs.existsSync(currentStoragePath)) {
-    return currentStoragePath;
-  }
-
-  return null;
-}
-
 export async function downloadCertificate(
   req: Request,
   res: Response
@@ -225,21 +192,8 @@ export async function downloadCertificate(
       });
     }
 
-    const filePath =
-      resolveCertificateFilePath(
-        certificate.filePath,
-        certificate.certificateId
-      );
-
-    if (!filePath) {
-      return res.status(404).json({
-        success: false,
-        message: "Certificate file not found",
-      });
-    }
-
     return res.download(
-      filePath,
+      certificate.filePath,
       `${certificate.certificateId}.pdf`,
       (error) => {
         if (
@@ -270,4 +224,3 @@ export async function downloadCertificate(
     }
   }
 }
-
