@@ -28,8 +28,8 @@ export default function MyCertificatesPage() {
   const [loading, setLoading] =
     useState(true);
 
-  const [error, setError] =
-    useState("");
+  const [error, setError] = useState("");
+  const [loginRedirectLoading, setLoginRedirectLoading] = useState(false);
 
   /* ============================================================
      LOAD CERTIFICATES
@@ -210,7 +210,40 @@ export default function MyCertificatesPage() {
               text-red-600 dark:text-red-400
             "
           >
-            {error}
+            <div>{error}</div>
+
+            <button
+              type="button"
+              onClick={() => {
+                setLoginRedirectLoading(true);
+                localStorage.removeItem("cloudlearn-access-token");
+                localStorage.removeItem("cloudlearn-refresh-token");
+                router.replace("/login");
+              }}
+              disabled={loginRedirectLoading}
+              className="
+                mt-3
+                inline-flex
+                items-center
+                rounded-xl
+                bg-red-600
+                px-4
+                py-2
+                font-bold
+                text-white
+                transition
+                hover:bg-red-500
+              "
+            >
+              {loginRedirectLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Logging in...
+                </>
+              ) : (
+                "Login Again"
+              )}
+            </button>
           </div>
         )}
 

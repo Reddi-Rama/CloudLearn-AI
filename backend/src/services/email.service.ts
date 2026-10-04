@@ -31,7 +31,7 @@ export async function sendVerificationOtp(
   fullName: string,
   otp: string
 ) {
-  await transporter.sendMail({
+  const info = await transporter.sendMail({
     from: smtpFrom,
     to: email,
     subject: "Verify your CloudLearn Academy email",
@@ -86,4 +86,11 @@ CloudLearn Academy`,
       </div>
     `,
   });
+
+  console.log("OTP email delivery result:", {
+    messageId: info.messageId,
+    accepted: info.accepted,
+    rejected: info.rejected,
+  });
 }
+

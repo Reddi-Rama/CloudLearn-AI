@@ -5,8 +5,6 @@ import Link from "next/link";
 import { ArrowRight, BookOpen, Sparkles } from "lucide-react";
 
 import { AIML_MODULES } from "@/content/aiml/aimlRegistry";
-
-
 const STORAGE_KEY = "cloudlearn-aiml-completed-lessons";
 
 export default function AIFoundationsCoursePage() {
@@ -185,7 +183,7 @@ export default function AIFoundationsCoursePage() {
 
             </div>
 
-            {/* Course Completion Notice */}
+{/* Course Completion Notice */}
             <div
               className="
                 mt-8 rounded-2xl
@@ -470,5 +468,7 @@ export default function AIFoundationsCoursePage() {
     </main>
   );
 }
+
+
 
 

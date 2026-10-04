@@ -74,6 +74,12 @@ export default function CheckoutPage() {
 
   const course = searchParams.get("course") || "";
 
+  const isAIMLBundle =
+    course === "ai-foundations" ||
+    course === "machine-learning" ||
+    course === "deep-learning" ||
+    course === "generative-ai";
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -81,6 +87,10 @@ export default function CheckoutPage() {
   const courseName = useMemo(() => {
     if (course === "c-development") {
       return "C Programming";
+    }
+
+    if (isAIMLBundle) {
+      return "AIML Full Course Bundle";
     }
 
     return course
@@ -260,11 +270,13 @@ export default function CheckoutPage() {
     }
 
     setSuccess(
-      "Payment successful! Course unlocked."
+      isAIMLBundle
+        ? "Payment successful! AIML Full Course unlocked."
+        : "Payment successful! Course unlocked."
     );
 
     setTimeout(() => {
-      router.replace(`/courses/${course}`);
+      router.replace(isAIMLBundle ? "/domains/aiml" : `/courses/${course}`);
     }, 1000);
   };
 
@@ -360,8 +372,9 @@ export default function CheckoutPage() {
         amount: amount * 100,
         currency,
         name: "CloudLearn AI",
-        description:
-          `Unlock ${backendCourseName}`,
+        description: isAIMLBundle
+          ? "Unlock AIML Full Course Bundle"
+          : `Unlock ${backendCourseName}`,
         order_id: orderId,
 
         handler: async (
@@ -517,16 +530,16 @@ export default function CheckoutPage() {
 
               <div className="mt-4 flex items-end gap-3">
                 <span className="text-lg font-medium text-slate-400 line-through">
-                  ₹99
+                  {isAIMLBundle ? "₹149" : "₹99"}
                 </span>
 
                 <span className="text-4xl font-bold text-slate-900">
-                  ₹49
+                  {isAIMLBundle ? "₹99" : "₹49"}
                 </span>
               </div>
 
               <div className="mt-3 inline-flex rounded-full bg-green-100 px-3 py-1.5 text-sm font-bold text-green-700">
-                50% OFF
+                {isAIMLBundle ? "OFFER 4" : "50% OFF"}
               </div>
 
               <div className="mt-6 border-t border-slate-200 pt-6">
@@ -537,7 +550,7 @@ export default function CheckoutPage() {
                   </span>
 
                   <span className="text-slate-500 line-through">
-                    ₹99
+                    {isAIMLBundle ? "₹149" : "₹99"}
                   </span>
                 </div>
 
@@ -547,7 +560,7 @@ export default function CheckoutPage() {
                   </span>
 
                   <span className="text-2xl font-bold text-slate-900">
-                    ₹49
+                    {isAIMLBundle ? "₹99" : "₹49"}
                   </span>
                 </div>
 
@@ -587,7 +600,9 @@ export default function CheckoutPage() {
               >
                 {loading
                   ? "Processing..."
-                  : "Pay ₹49 & Unlock Course"}
+                  : isAIMLBundle
+                    ? "Pay ₹99 & Unlock AIML Bundle"
+                    : "Pay ₹49 & Unlock Course"}
               </button>
 
               <p className="mt-4 text-center text-xs leading-5 text-slate-500">
@@ -604,3 +619,9 @@ export default function CheckoutPage() {
     </main>
   );
 }
+
+
+
+
+
+

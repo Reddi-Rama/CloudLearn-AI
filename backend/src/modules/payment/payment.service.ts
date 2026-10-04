@@ -3,14 +3,33 @@ import Razorpay from "razorpay";
 
 import { paymentRepository } from "./payment.repository";
 
-const COURSE_PRICE = 49;
+const PROGRAMMING_COURSE_PRICE = 49;
+
+const AIML_BUNDLE_PRICE = 99;
+
+const AIML_COURSES = [
+  "ai-foundations",
+  "machine-learning",
+  "deep-learning",
+  "generative-ai",
+];
+
+function isAIMLCourse(courseSlug: string) {
+  return AIML_COURSES.includes(courseSlug);
+}
+
+function getCoursePrice(courseSlug: string) {
+  return isAIMLCourse(courseSlug)
+    ? AIML_BUNDLE_PRICE
+    : PROGRAMMING_COURSE_PRICE;
+}
 
 const razorpayKeyId = process.env.RAZORPAY_KEY_ID;
 const razorpayKeySecret = process.env.RAZORPAY_KEY_SECRET;
 
 if (!razorpayKeyId || !razorpayKeySecret) {
   console.warn(
-    "⚠️ Razorpay environment variables are missing."
+    "?? Razorpay environment variables are missing."
   );
 }
 
@@ -24,6 +43,7 @@ export const paymentService = {
     userId: string,
     courseSlug: string
   ) {
+    const coursePrice = getCoursePrice(courseSlug);
     const course =
       await paymentRepository.findCourseBySlug(
         courseSlug
@@ -46,7 +66,7 @@ export const paymentService = {
     }
 
     const order = await razorpay.orders.create({
-      amount: COURSE_PRICE * 100,
+      amount: coursePrice * 100,
       currency: "INR",
       receipt: `course_${courseSlug}_${Date.now()}`,
       notes: {
@@ -60,14 +80,14 @@ export const paymentService = {
         id: crypto.randomUUID(),
         userId,
         courseSlug,
-        amount: COURSE_PRICE,
+        amount: coursePrice,
         razorpayOrderId: order.id,
       });
 
     return {
       paymentId: payment.id,
       orderId: order.id,
-      amount: COURSE_PRICE,
+      amount: coursePrice,
       currency: "INR",
       keyId: razorpayKeyId,
       courseSlug,
@@ -94,7 +114,10 @@ export const paymentService = {
       throw new Error("Unauthorized payment");
     }
 
-    if (payment.amount !== COURSE_PRICE) {
+    const expectedPrice =
+      getCoursePrice(payment.courseSlug);
+
+    if (payment.amount !== expectedPrice) {
       throw new Error("Invalid payment amount");
     }
 
@@ -134,6 +157,43 @@ export const paymentService = {
 
     if (!course) {
       throw new Error("Course not found");
+    }
+
+        /* AIML_BUNDLE_ENROLLMENT */
+
+    if (isAIMLCourse(payment.courseSlug)) {
+      const enrollments = [];
+
+      for (const slug of AIML_COURSES) {
+        const aimlCourse =
+          await paymentRepository.findCourseBySlug(slug);
+
+        if (!aimlCourse) {
+          throw new Error(
+            `AIML course not found: ${slug}`
+          );
+        }
+
+        const enrollment =
+          await paymentRepository.createEnrollment(
+            userId,
+            aimlCourse.id
+          );
+
+        enrollments.push(enrollment);
+      }
+
+      return {
+        payment: updatedPayment,
+        enrollment: enrollments[0],
+        enrollments,
+        course: {
+          id: course.id,
+          title: "AIML Full Course",
+          slug: payment.courseSlug,
+        },
+        bundleCourses: AIML_COURSES,
+      };
     }
 
     const enrollment =
@@ -178,3 +238,4 @@ export const paymentService = {
     };
   },
 };
+

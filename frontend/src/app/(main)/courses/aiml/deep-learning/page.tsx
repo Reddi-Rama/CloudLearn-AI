@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import {
   ArrowRight,
   BrainCircuit,
@@ -9,7 +9,6 @@ import {
   Sparkles,
   Zap,
 } from "lucide-react";
-
 const modules = [
   {
     id: "module1",
@@ -137,7 +136,8 @@ export default function DeepLearningCoursePage() {
         </section>
 
         {/* Modules */}
-        <section className="mt-8">
+
+<section className="mt-8">
           <div className="mb-5">
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
               Course Modules
@@ -196,3 +196,4 @@ export default function DeepLearningCoursePage() {
     </main>
   );
 }
+

@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import {
@@ -10,6 +10,7 @@ import {
 import AIMLSidebar from "@/components/aiml/AIMLSidebar";
 import AIMLContentRenderer from "@/components/aiml/AIMLContentRenderer";
 import AIMLCourseCompletion from "@/components/aiml/AIMLCourseCompletion";
+import LessonAccessGuard from "@/components/courses/LessonAccessGuard";
 
 interface Props {
   params: Promise<{
@@ -138,7 +139,8 @@ export default async function AIMLLessonPage({
           : lessonContent.title;
 
   return (
-    <main className="min-h-screen w-full bg-[#020617] pt-20 text-white">
+    <LessonAccessGuard courseSlug="ai-foundations">
+      <main className="min-h-screen w-full bg-[#020617] pt-20 text-white">
 
       {/* COURSE NAVIGATION */}
 
@@ -170,7 +172,7 @@ export default async function AIMLLessonPage({
                 group-hover:-translate-x-0.5
               "
             >
-              ←
+              â†
             </span>
 
             <span className="flex flex-col">
@@ -239,7 +241,7 @@ export default async function AIMLLessonPage({
               <div className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400">
                 {isSpecialPage
                   ? "AI Foundations"
-                  : `Module ${module.number} • Lesson ${
+                  : `Module ${module.number} â€¢ Lesson ${
                       currentIndex + 1
                     }`}
               </div>
@@ -332,7 +334,7 @@ export default async function AIMLLessonPage({
 
                         <div className="mt-2 flex items-center gap-2">
                           <span className="text-sky-400">
-                            ←
+                            â†
                           </span>
 
                           <span
@@ -392,7 +394,7 @@ export default async function AIMLLessonPage({
                           </span>
 
                           <span className="text-sky-400">
-                            →
+                            â†’
                           </span>
                         </div>
                       </Link>
@@ -408,5 +410,6 @@ export default async function AIMLLessonPage({
         </div>
       </section>
     </main>
+    </LessonAccessGuard>
   );
 }

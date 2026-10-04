@@ -1,7 +1,6 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { MACHINE_LEARNING_STRUCTURE } from "@/content/aiml/machine-learning/machineLearningStructure";
-
 export default function MachineLearningCoursePage() {
   return (
     <main className="min-h-screen bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-white">
@@ -32,7 +31,7 @@ export default function MachineLearningCoursePage() {
           </p>
         </section>
 
-        <section className="mt-12">
+<section className="mt-12">
           <div className="mb-7">
             <p className="text-sm font-bold uppercase tracking-[0.16em] text-sky-600 dark:text-sky-400">
               Course Structure
@@ -60,7 +59,7 @@ export default function MachineLearningCoursePage() {
                 </div>
 
                 <h3 className="mt-5 text-xl font-bold leading-7">
-                  {module.title.replace(/^Module \d+\s*[—-]\s*/, "")}
+                  {module.title.replace(/^Module \d+\s*[â€”-]\s*/, "")}
                 </h3>
 
                 <p className="mt-3 text-sm leading-6 text-zinc-500 dark:text-zinc-400">
@@ -84,3 +83,6 @@ export default function MachineLearningCoursePage() {
     </main>
   );
 }
+
+
+

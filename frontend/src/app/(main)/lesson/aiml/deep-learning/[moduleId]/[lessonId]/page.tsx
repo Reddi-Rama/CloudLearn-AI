@@ -3,6 +3,7 @@
 import DeepLearningSidebar from "@/components/aiml/DeepLearningSidebar";
 import DeepLearningContentRenderer from "@/components/aiml/DeepLearningContentRenderer";
 import AIMLCourseLessonCompletion from "@/components/aiml/AIMLCourseLessonCompletion";
+import LessonAccessGuard from "@/components/courses/LessonAccessGuard";
 
 // Module 1
 import dlModule1Lesson1 from "@/content/aiml/deep-learning/lessons/module1/lesson1";
@@ -298,7 +299,8 @@ export default async function DeepLearningLessonPage({ params }: Props) {
         : null;
 
   return (
-    <main className="min-h-screen bg-[#020617] text-slate-100">
+    <LessonAccessGuard courseSlug="deep-learning">
+      <main className="min-h-screen bg-[#020617] text-slate-100">
       <div className="mx-auto max-w-[1800px] px-4 py-6 lg:px-6">
         <div className="grid gap-6 lg:grid-cols-[300px_minmax(0,1fr)]">
           <aside className="lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)]">
@@ -350,7 +352,9 @@ export default async function DeepLearningLessonPage({ params }: Props) {
         </div>
       </div>
     </main>
+    </LessonAccessGuard>
   );
 }
+
 
 

@@ -1,4 +1,4 @@
-import { Prisma, User } from "@prisma/client";
+﻿import { Prisma, User } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 
 export async function createUser(data: {
@@ -14,6 +14,29 @@ export async function createUser(data: {
 export async function findUserByEmail(email: string) {
   return prisma.user.findUnique({
     where: { email },
+  });
+}
+export async function findUserByGoogleId(googleId: string) {
+  return prisma.user.findUnique({
+    where: { googleId },
+  });
+}
+
+export async function createGoogleUser(data: {
+  fullName: string;
+  email: string;
+  googleId: string;
+  avatar?: string | null;
+}) {
+  return prisma.user.create({
+    data: {
+      fullName: data.fullName,
+      email: data.email,
+      password: null,
+      googleId: data.googleId,
+      avatar: data.avatar ?? null,
+      isVerified: true,
+    },
   });
 }
 

@@ -1,9 +1,10 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import GenerativeAISidebar from "@/components/aiml/GenerativeAISidebar";
 import GenerativeAIContentRenderer from "@/components/aiml/GenerativeAIContentRenderer";
 import AIMLCourseLessonCompletion from "@/components/aiml/AIMLCourseLessonCompletion";
+import LessonAccessGuard from "@/components/courses/LessonAccessGuard";
 
 // ============================================================
 // MODULE 1
@@ -511,8 +512,8 @@ export default async function GenerativeAILessonPage({
   let previousHref: string | null = null;
   let nextHref: string | null = null;
 
-  let previousLabel = "← Previous";
-  let nextLabel = "Next →";
+  let previousLabel = "â† Previous";
+  let nextLabel = "Next â†’";
 
   // ----------------------------------------------------------
   // ABOUT
@@ -524,7 +525,7 @@ export default async function GenerativeAILessonPage({
         ? `/lesson/aiml/generative-ai/${module.id}/${module.lessons[0].id}`
         : `/lesson/aiml/generative-ai/${module.id}/practice`;
 
-    nextLabel = "Start Module →";
+    nextLabel = "Start Module â†’";
   }
 
   // ----------------------------------------------------------
@@ -540,24 +541,24 @@ export default async function GenerativeAILessonPage({
       previousHref =
         `/lesson/aiml/generative-ai/${module.id}/${module.lessons[lessonIndex - 1].id}`;
 
-      previousLabel = "← Previous Lesson";
+      previousLabel = "â† Previous Lesson";
     } else {
       previousHref =
         `/lesson/aiml/generative-ai/${module.id}/about`;
 
-      previousLabel = "← Module About";
+      previousLabel = "â† Module About";
     }
 
     if (lessonIndex < module.lessons.length - 1) {
       nextHref =
         `/lesson/aiml/generative-ai/${module.id}/${module.lessons[lessonIndex + 1].id}`;
 
-      nextLabel = "Next Lesson →";
+      nextLabel = "Next Lesson â†’";
     } else {
       nextHref =
         `/lesson/aiml/generative-ai/${module.id}/practice`;
 
-      nextLabel = "Go to Practice →";
+      nextLabel = "Go to Practice â†’";
     }
   }
 
@@ -573,12 +574,12 @@ export default async function GenerativeAILessonPage({
       ? `/lesson/aiml/generative-ai/${module.id}/${lastLesson.id}`
       : `/lesson/aiml/generative-ai/${module.id}/about`;
 
-    previousLabel = "← Last Lesson";
+    previousLabel = "â† Last Lesson";
 
     nextHref =
       `/lesson/aiml/generative-ai/${module.id}/project`;
 
-    nextLabel = "Module Project →";
+    nextLabel = "Module Project â†’";
   }
 
   // ----------------------------------------------------------
@@ -589,7 +590,7 @@ export default async function GenerativeAILessonPage({
     previousHref =
       `/lesson/aiml/generative-ai/${module.id}/practice`;
 
-    previousLabel = "← Practice";
+    previousLabel = "â† Practice";
 
     const nextModule =
       MODULES[moduleIndex + 1];
@@ -598,12 +599,12 @@ export default async function GenerativeAILessonPage({
       nextHref =
         `/lesson/aiml/generative-ai/${nextModule.id}/about`;
 
-      nextLabel = "Next Module →";
+      nextLabel = "Next Module â†’";
     } else {
       nextHref =
         "/courses/aiml/generative-ai";
 
-      nextLabel = "Finish Course →";
+      nextLabel = "Finish Course â†’";
     }
   }
 
@@ -612,7 +613,8 @@ export default async function GenerativeAILessonPage({
   // ==========================================================
 
   return (
-    <main className="min-h-screen bg-[#020617] text-slate-100">
+    <LessonAccessGuard courseSlug="generative-ai">
+      <main className="min-h-screen bg-[#020617] text-slate-100">
       <div className="mx-auto max-w-[1800px] px-4 pb-12 pt-8 lg:px-6">
         <div className="grid gap-6 lg:grid-cols-[300px_minmax(0,1fr)]">
 
@@ -755,7 +757,7 @@ export default async function GenerativeAILessonPage({
                   </div>
 
                   <div className="mt-1 text-sm font-semibold text-slate-300">
-                    Module {moduleIndex + 1} · {module.title}
+                    Module {moduleIndex + 1} Â· {module.title}
                   </div>
                 </div>
 
@@ -769,5 +771,6 @@ export default async function GenerativeAILessonPage({
         </div>
       </div>
     </main>
+    </LessonAccessGuard>
   );
 }

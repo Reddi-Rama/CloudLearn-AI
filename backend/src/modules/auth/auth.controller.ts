@@ -1,8 +1,9 @@
-﻿import { Request, Response } from "express";
+import { Request, Response } from "express";
 import { AuthRequest } from "../../middleware/auth.middleware";
 
 import {
   loginUser,
+  loginWithGoogle,
   registerUser,
   getCurrentUser,
   refreshAccessToken,
@@ -178,6 +179,42 @@ export async function resendOtp(
   }
 }
 
+export async function googleLogin(
+  req: Request,
+  res: Response
+) {
+  try {
+    const { idToken } = req.body;
+
+    if (
+      typeof idToken !== "string" ||
+      !idToken.trim()
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Google ID token is required",
+      });
+    }
+
+    const data = await loginWithGoogle(
+      idToken
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Google login successful",
+      data,
+    });
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "Google login failed",
+    });
+  }
+}
 export async function login(
   req: Request,
   res: Response

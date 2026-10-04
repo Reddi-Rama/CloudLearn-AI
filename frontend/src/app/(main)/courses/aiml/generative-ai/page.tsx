@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import {
   ArrowLeft,
   ArrowRight,
@@ -26,7 +26,6 @@ import module8 from "@/content/aiml/generative-ai/lessons/module8";
 import module9 from "@/content/aiml/generative-ai/lessons/module9";
 
 import GenerativeAICourseProgress from "@/components/aiml/GenerativeAICourseProgress";
-
 const modules = [
   {
     id: module1.id,
@@ -371,7 +370,7 @@ export default function GenerativeAICoursePage() {
                 "
               >
                 <Zap className="h-4 w-4 text-emerald-300" />
-                Foundations → Production
+                Foundations â†’ Production
               </div>
 
             </div>
@@ -409,7 +408,7 @@ export default function GenerativeAICoursePage() {
             COURSE PROGRESS
         ============================================================ */}
 
-        <GenerativeAICourseProgress />
+<GenerativeAICourseProgress />
 
         {/* ============================================================
             COURSE MODULES
@@ -628,3 +627,4 @@ export default function GenerativeAICoursePage() {
     </main>
   );
 }
+

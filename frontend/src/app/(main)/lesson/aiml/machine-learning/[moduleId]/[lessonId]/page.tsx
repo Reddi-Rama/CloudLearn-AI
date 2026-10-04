@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import MachineLearningSidebar from "@/components/aiml/MachineLearningSidebar";
 import AIMLContentRenderer from "@/components/aiml/AIMLContentRenderer";
 import AIMLCourseLessonCompletion from "@/components/aiml/AIMLCourseLessonCompletion";
+import LessonAccessGuard from "@/components/courses/LessonAccessGuard";
 
 // ============================================================
 // MODULE 1
@@ -505,7 +506,8 @@ export default async function MachineLearningLessonPage({
   // ==========================================================
 
   return (
-    <main className="min-h-screen w-full bg-[#020617] text-white">
+    <LessonAccessGuard courseSlug="machine-learning">
+      <main className="min-h-screen w-full bg-[#020617] text-white">
 
       {/* ======================================================
           BACK TO MACHINE LEARNING
@@ -879,7 +881,9 @@ export default async function MachineLearningLessonPage({
 
       </section>
 
-    </main>
+      </main>
+    </LessonAccessGuard>
   );
 }
+
 

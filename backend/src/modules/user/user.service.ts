@@ -53,6 +53,11 @@ export const userService = {
 
     if (!user) {
       throw new Error("User not found.");
+    }    
+    if (!user.password) {
+      throw new Error(
+        "This account uses Google Sign-In and does not have a password."
+      );
     }
 
     const isMatch = await bcrypt.compare(

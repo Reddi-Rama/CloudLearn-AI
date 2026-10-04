@@ -1,6 +1,7 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { ArrowRight, Brain, Cpu, Network, Sparkles } from "lucide-react";
 import BackButton from "@/components/layout/BackButton";
+import AIMLCourseAccessGate from "@/components/aiml/AIMLCourseAccessGate";
 
 const courses = [
   {
@@ -72,6 +73,11 @@ export default function AIMLDomainPage() {
           </div>
         </section>
 
+        <AIMLCourseAccessGate
+          course="ai-foundations"
+          courseName="AIML Full Course"
+          startHref="/courses/aiml/ai-foundations"
+        />
         <section className="mt-10 grid gap-6 md:grid-cols-2">
 
           {courses.map((course) => {

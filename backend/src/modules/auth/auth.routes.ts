@@ -1,7 +1,8 @@
-﻿import { Router } from "express";
+import { Router } from "express";
 
 import {
   login,
+  googleLogin,
   logout,
   me,
   refresh,
@@ -32,6 +33,10 @@ router.post(
 router.post(
   "/login",
   login
+);
+router.post(
+  "/google",
+  googleLogin
 );
 
 router.post(
