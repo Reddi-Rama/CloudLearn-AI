@@ -1,9 +1,10 @@
-﻿import { Request, Response } from "express";
+import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import path from "path";
 import fs from "fs";
 import { AuthRequest } from "../../middleware/auth.middleware";
 import { certificateService } from "./certificate.service";
+import { generateCertificate as generateCertificatePdf } from "../../generators/certificate.generator";
 
 const prisma = new PrismaClient();
 
@@ -216,6 +217,13 @@ export async function downloadCertificate(
         where: {
           certificateId,
         },
+        include: {
+          user: {
+            select: {
+              fullName: true,
+            },
+          },
+        },
       });
 
     if (!certificate) {
@@ -225,18 +233,17 @@ export async function downloadCertificate(
       });
     }
 
+    /* Always regenerate using the latest certificate design. */
     const filePath =
-      resolveCertificateFilePath(
-        certificate.filePath,
-        certificate.certificateId
-      );
-
-    if (!filePath) {
-      return res.status(404).json({
-        success: false,
-        message: "Certificate file not found",
+      await generateCertificatePdf({
+        studentName: certificate.user.fullName,
+        courseTitle: certificate.courseTitle,
+        certificateId: certificate.certificateId,
+        issueDate:
+          new Date(
+            certificate.issuedAt
+          ).toLocaleDateString("en-IN"),
       });
-    }
 
     return res.download(
       filePath,
@@ -249,7 +256,7 @@ export async function downloadCertificate(
           return res.status(404).json({
             success: false,
             message:
-              "Certificate file not found",
+              "Unable to download certificate",
           });
         }
 
@@ -269,5 +276,5 @@ export async function downloadCertificate(
       });
     }
   }
-}
 
+}
