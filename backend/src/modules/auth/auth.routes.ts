@@ -9,6 +9,8 @@ import {
   register,
   verifyEmail,
   resendOtp,
+  forgotPassword,
+  resetPasswordController,
 } from "./auth.controller";
 
 import { authenticate } from "../../middleware/auth.middleware";
@@ -34,6 +36,16 @@ router.post(
   "/login",
   login
 );
+router.post(
+  "/forgot-password",
+  forgotPassword
+);
+
+router.post(
+  "/reset-password",
+  resetPasswordController
+);
+
 router.post(
   "/google",
   googleLogin

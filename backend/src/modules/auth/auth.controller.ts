@@ -8,6 +8,8 @@ import {
   getCurrentUser,
   refreshAccessToken,
   logoutUser,
+  requestPasswordReset,
+  resetPassword,
 } from "./auth.service";
 
 import {
@@ -179,6 +181,97 @@ export async function resendOtp(
   }
 }
 
+
+export async function forgotPassword(
+  req: Request,
+  res: Response
+) {
+  try {
+    const { email } = req.body;
+
+    if (
+      typeof email !== "string" ||
+      !email.trim()
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is required",
+      });
+    }
+
+    const result = await requestPasswordReset(
+      email.trim().toLowerCase()
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: result.message,
+    });
+  } catch (error) {
+    console.error("Forgot password error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message:
+        "Unable to process the password reset request right now.",
+    });
+  }
+}
+
+export async function resetPasswordController(
+  req: Request,
+  res: Response
+) {
+  try {
+    const { token, password } = req.body;
+
+    if (
+      typeof token !== "string" ||
+      !token.trim()
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Password reset token is required",
+      });
+    }
+
+    if (
+      typeof password !== "string" ||
+      !password
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "New password is required",
+      });
+    }
+
+    if (password.length < 8) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Password must be at least 8 characters long",
+      });
+    }
+
+    const result = await resetPassword(
+      token,
+      password
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: result.message,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "Password reset failed",
+    });
+  }
+}
 export async function googleLogin(
   req: Request,
   res: Response

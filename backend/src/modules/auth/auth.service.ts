@@ -1,8 +1,11 @@
+import { createHash, randomBytes } from "crypto";
 import { OAuth2Client } from "google-auth-library";
 import {
   createUser,
   findUserByEmail,
   findUserById,
+  findUserByPasswordResetToken,
+  savePasswordResetToken,
   findUserByGoogleId,
   createGoogleUser,
   findUserProfile,
@@ -21,6 +24,7 @@ import {
   generateRefreshToken,
   verifyRefreshToken,
 } from "../../lib/jwt";
+import { sendPasswordResetEmail } from "../../services/email.service";
 
 
 const googleClient = new OAuth2Client(
@@ -298,5 +302,113 @@ export async function logoutUser(
   return {
     message:
       "Logged out successfully",
+  };
+}
+
+function hashPasswordResetToken(token: string) {
+  return createHash("sha256")
+    .update(token)
+    .digest("hex");
+}
+
+export async function requestPasswordReset(
+  email: string
+) {
+  const normalizedEmail = email.trim().toLowerCase();
+
+  const user = await findUserByEmail(normalizedEmail);
+
+  // Do not reveal whether an account exists.
+  if (!user || !user.password || !user.isVerified) {
+    return {
+      message:
+        "If an account with that email exists, a password reset link has been sent.",
+    };
+  }
+
+  const resetToken = randomBytes(32).toString("hex");
+  const hashedToken = hashPasswordResetToken(resetToken);
+
+  const resetExpiry = new Date(
+    Date.now() + 15 * 60 * 1000
+  );
+
+  await savePasswordResetToken(
+    user.id,
+    hashedToken,
+    resetExpiry
+  );
+
+  const frontendUrl =
+    process.env.FRONTEND_URL ||
+    "http://localhost:3000";
+
+  const resetUrl =
+    `${frontendUrl.replace(/\/$/, "")}` +
+    `/reset-password?token=${encodeURIComponent(resetToken)}`;
+
+  await sendPasswordResetEmail(
+    user.email,
+    user.fullName,
+    resetUrl
+  );
+
+  return {
+    message:
+      "If an account with that email exists, a password reset link has been sent.",
+  };
+}
+
+export async function resetPassword(
+  resetToken: string,
+  newPassword: string
+) {
+  const normalizedToken = resetToken.trim();
+
+  if (!normalizedToken) {
+    throw new Error("Password reset token is required");
+  }
+
+  const hashedToken =
+    hashPasswordResetToken(normalizedToken);
+
+  const user =
+    await findUserByPasswordResetToken(
+      hashedToken
+    );
+
+  if (
+    !user ||
+    !user.passwordResetExpiry ||
+    user.passwordResetExpiry < new Date()
+  ) {
+    throw new Error(
+      "Invalid or expired password reset link"
+    );
+  }
+
+  if (!user.password) {
+    throw new Error(
+      "This account does not use password authentication"
+    );
+  }
+
+  const hashedPassword =
+    await hashPassword(newPassword);
+
+  await userRepository.updateById(
+    user.id,
+    {
+      password: hashedPassword,
+      passwordResetToken: null,
+      passwordResetExpiry: null,
+      refreshToken: null,
+      refreshTokenExpiry: null,
+    }
+  );
+
+  return {
+    message:
+      "Password updated successfully. Please log in again.",
   };
 }

@@ -153,3 +153,78 @@ ${message}
     rejected: info.rejected,
   });
 }
+export async function sendPasswordResetEmail(
+  email: string,
+  fullName: string,
+  resetUrl: string
+) {
+  const info = await transporter.sendMail({
+    from: smtpFrom,
+    to: email,
+    subject: "Reset your CloudLearn Academy password",
+    text: `Hi ${fullName},
+
+We received a request to reset your CloudLearn Academy password.
+
+Use the link below to create a new password:
+
+${resetUrl}
+
+This password reset link will expire in 15 minutes.
+
+If you did not request a password reset, you can safely ignore this email.
+
+CloudLearn Academy`,
+    html: `
+      <div style="font-family:Arial,sans-serif;background:#f8fafc;padding:32px;">
+        <div style="max-width:560px;margin:0 auto;background:#ffffff;border:1px solid #e2e8f0;border-radius:16px;padding:32px;">
+          <h1 style="margin:0 0 16px;color:#0f172a;">
+            Reset your CloudLearn Academy password
+          </h1>
+
+          <p style="margin:0 0 16px;color:#475569;font-size:16px;">
+            Hi ${fullName},
+          </p>
+
+          <p style="margin:0 0 24px;color:#475569;font-size:16px;line-height:1.6;">
+            We received a request to reset your CloudLearn Academy password.
+            Click the button below to create a new password.
+          </p>
+
+          <div style="text-align:center;margin:28px 0;">
+            <a
+              href="${resetUrl}"
+              style="display:inline-block;padding:14px 24px;background:#0284c7;color:#ffffff;text-decoration:none;border-radius:12px;font-weight:700;"
+            >
+              Reset Password
+            </a>
+          </div>
+
+          <p style="margin:0 0 10px;color:#64748b;font-size:14px;line-height:1.5;">
+            This password reset link will expire in 15 minutes.
+          </p>
+
+          <p style="margin:0;color:#64748b;font-size:14px;line-height:1.5;">
+            If the button does not work, copy and paste this link into your browser:
+          </p>
+
+          <p style="margin:12px 0 0;word-break:break-all;color:#0369a1;font-size:13px;">
+            ${resetUrl}
+          </p>
+
+          <hr style="margin:28px 0;border:none;border-top:1px solid #e2e8f0;" />
+
+          <p style="margin:0;color:#94a3b8;font-size:12px;">
+            If you did not request a password reset, you can safely ignore this email.
+          </p>
+        </div>
+      </div>
+    `,
+  });
+
+  console.log("Password reset email delivery result:", {
+    messageId: info.messageId,
+    accepted: info.accepted,
+    rejected: info.rejected,
+  });
+}

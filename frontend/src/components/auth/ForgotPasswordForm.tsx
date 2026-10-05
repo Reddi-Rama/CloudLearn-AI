@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -8,22 +8,55 @@ import LoadingButton from "./LoadingButton";
 import FormError from "./FormError";
 import FormSuccess from "./FormSuccess";
 
+import { API, apiPost } from "@/lib/api";
+
 export default function ForgotPasswordForm() {
+  const [email, setEmail] = useState("");
+
   const [loading, setLoading] = useState(false);
-
-  const [error] = useState("");
-
+  const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    setLoading(true);
+    setError("");
+    setSuccess("");
 
-    setTimeout(() => {
+    if (!email.trim()) {
+      setError("Please enter your email address.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const result = await apiPost<{
+        success: boolean;
+        message: string;
+      }>(
+        `${API.BASE_URL}${API.ENDPOINTS.FORGOT_PASSWORD || "/auth/forgot-password"}`,
+        {
+          email: email.trim().toLowerCase(),
+        }
+      );
+
+      if (!result?.success) {
+        throw new Error(
+          result?.message || "Unable to send reset link."
+        );
+      }
+
+      setSuccess(result.message);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to send reset link. Please try again."
+      );
+    } finally {
       setLoading(false);
-      setSuccess("Password reset link sent successfully.");
-    }, 1500);
+    }
   }
 
   return (
@@ -35,6 +68,9 @@ export default function ForgotPasswordForm() {
         label="Email Address"
         type="email"
         placeholder="Enter your email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
       />
 
       <FormError message={error} />

@@ -1,4 +1,4 @@
-﻿import { Prisma, User } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 
 export async function createUser(data: {
@@ -46,6 +46,37 @@ export async function findUserById(id: string) {
   });
 }
 
+export async function findUserByPasswordResetToken(
+  passwordResetToken: string
+) {
+  return prisma.user.findUnique({
+    where: { passwordResetToken },
+  });
+}
+
+export async function savePasswordResetToken(
+  id: string,
+  passwordResetToken: string,
+  passwordResetExpiry: Date
+) {
+  return prisma.user.update({
+    where: { id },
+    data: {
+      passwordResetToken,
+      passwordResetExpiry,
+    },
+  });
+}
+
+export async function clearPasswordResetToken(id: string) {
+  return prisma.user.update({
+    where: { id },
+    data: {
+      passwordResetToken: null,
+      passwordResetExpiry: null,
+    },
+  });
+}
 export async function findUserProfile(id: string) {
   return prisma.user.findUnique({
     where: { id },
