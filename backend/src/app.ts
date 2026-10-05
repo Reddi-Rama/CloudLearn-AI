@@ -26,6 +26,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "http://10.240.152.175:3000",
+      process.env.FRONTEND_URL || "https://cloud-learn-ai-vf78.vercel.app",
     ],
     credentials: true,
   })
