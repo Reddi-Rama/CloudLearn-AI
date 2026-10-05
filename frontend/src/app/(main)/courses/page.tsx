@@ -1,4 +1,7 @@
-﻿import Link from "next/link";
+﻿"use client";
+
+import Link from "next/link";
+import { useTheme } from "@/components/theme/ThemeProvider";
 
 const courses = [
   {
@@ -32,20 +35,46 @@ const courses = [
 ];
 
 export default function CoursesPage() {
-  return (
-    <main className="min-h-screen bg-slate-50 py-20 dark:bg-slate-950">
-      <div className="mx-auto max-w-7xl px-6">
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
+  return (
+    <main
+      className={
+        isDark
+          ? "min-h-screen bg-slate-950 py-20"
+          : "min-h-screen bg-[#F7FAFC] py-20"
+      }
+    >
+      <div className="mx-auto max-w-7xl px-6">
         <div className="mb-12">
-          <p className="font-medium text-sky-600 dark:text-sky-400">
+          <p
+            className={
+              isDark
+                ? "font-semibold text-sky-400"
+                : "font-semibold text-sky-700"
+            }
+          >
             Programming Domain
           </p>
 
-          <h1 className="mt-3 text-5xl font-bold text-slate-900 dark:text-white">
+          <h1
+            className={
+              isDark
+                ? "mt-3 text-5xl font-bold text-white"
+                : "mt-3 text-5xl font-bold text-slate-950"
+            }
+          >
             Programming Courses
           </h1>
 
-          <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-600 dark:text-slate-400">
+          <p
+            className={
+              isDark
+                ? "mt-4 max-w-2xl text-lg leading-8 text-slate-400"
+                : "mt-4 max-w-2xl text-lg leading-8 text-slate-600"
+            }
+          >
             Choose a programming course and start learning through structured
             modules, practical lessons, examples, and projects.
           </p>
@@ -56,74 +85,58 @@ export default function CoursesPage() {
             <Link
               key={course.href}
               href={course.href}
-              className="
-                group
-                rounded-[32px]
-                border
-                border-slate-200
-                bg-white
-                p-8
-                shadow-sm
-                transition
-                hover:-translate-y-1
-                hover:border-sky-300
-                hover:shadow-xl
-                dark:border-slate-700
-                dark:bg-slate-900
-                dark:hover:border-slate-600
-                dark:hover:bg-slate-800
-              "
+              className={
+                isDark
+                  ? "group rounded-3xl border border-slate-700 bg-slate-900 p-8 shadow-sm transition-all duration-200 hover:border-sky-500/50 hover:bg-slate-900/90"
+                  : "group rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-200 hover:border-sky-300 hover:bg-sky-50/30 hover:shadow-md"
+              }
             >
-              <div className="flex items-start gap-5">
-
+              <div className="flex items-start gap-6">
                 <div
-                  className="
-                    flex
-                    h-12
-                    w-12
-                    shrink-0
-                    items-center
-                    justify-center
-                    rounded-full
-                    bg-sky-100
-                    font-semibold
-                    text-sky-600
-                    dark:bg-sky-950
-                    dark:text-sky-400
-                  "
+                  className={
+                    isDark
+                      ? "flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-sky-500/30 bg-sky-950 text-lg font-semibold text-sky-400"
+                      : "flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-sky-200 bg-sky-50 text-lg font-semibold text-sky-700"
+                  }
                 >
                   {course.number}
                 </div>
 
-                <div>
+                <div className="flex-1">
                   <h2
-                    className="
-                      text-2xl
-                      font-semibold
-                      text-slate-900
-                      transition
-                      group-hover:text-sky-600
-                      dark:text-white
-                      dark:group-hover:text-sky-400
-                    "
+                    className={
+                      isDark
+                        ? "text-2xl font-bold text-white"
+                        : "text-2xl font-bold text-slate-900"
+                    }
                   >
                     {course.name}
                   </h2>
 
-                  <p className="mt-3 text-sm leading-6 text-slate-500 dark:text-slate-400">
+                  <p
+                    className={
+                      isDark
+                        ? "mt-4 text-base leading-7 text-slate-400"
+                        : "mt-4 text-base leading-7 text-slate-600"
+                    }
+                  >
                     {course.description}
                   </p>
 
-                  <p className="mt-5 text-sm font-medium text-sky-600 dark:text-sky-400">
-                    Start Learning <span aria-hidden="true">&rarr;</span>
-                  </p>
+                  <div
+                    className={
+                      isDark
+                        ? "mt-7 font-semibold text-sky-400"
+                        : "mt-7 font-semibold text-sky-700"
+                    }
+                  >
+                    Start Learning →
+                  </div>
                 </div>
-
               </div>
             </Link>
           ))}
         </div>
-
       </div>
     </main>
   );
