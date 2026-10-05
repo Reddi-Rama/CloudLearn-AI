@@ -26,6 +26,7 @@ exports.examController = {
             });
         }
         catch (error) {
+            console.error("SUBMIT EXAM ERROR:", error);
             const message = error instanceof Error ? error.message : "Failed to load exam";
             const status = message.includes("not enrolled")
                 ? 403

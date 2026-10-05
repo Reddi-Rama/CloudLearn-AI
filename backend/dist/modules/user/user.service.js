@@ -35,6 +35,9 @@ exports.userService = {
         if (!user) {
             throw new Error("User not found.");
         }
+        if (!user.password) {
+            throw new Error("This account uses Google Sign-In and does not have a password.");
+        }
         const isMatch = await bcryptjs_1.default.compare(data.currentPassword, user.password);
         if (!isMatch) {
             throw new Error("Current password is incorrect.");

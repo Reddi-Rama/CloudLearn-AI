@@ -4,6 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendVerificationOtp = sendVerificationOtp;
+exports.sendContactMessage = sendContactMessage;
+exports.sendPasswordResetEmail = sendPasswordResetEmail;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const smtpHost = process.env.SMTP_HOST;
 const smtpPort = Number(process.env.SMTP_PORT || 465);
@@ -25,7 +27,7 @@ const transporter = nodemailer_1.default.createTransport({
     },
 });
 async function sendVerificationOtp(email, fullName, otp) {
-    await transporter.sendMail({
+    const info = await transporter.sendMail({
         from: smtpFrom,
         to: email,
         subject: "Verify your CloudLearn Academy email",
@@ -79,6 +81,134 @@ CloudLearn Academy`,
         </div>
       </div>
     `,
+    });
+    console.log("OTP email delivery result:", {
+        messageId: info.messageId,
+        accepted: info.accepted,
+        rejected: info.rejected,
+    });
+}
+async function sendContactMessage(fullName, email, subject, message) {
+    const info = await transporter.sendMail({
+        from: smtpFrom,
+        to: smtpUser,
+        replyTo: email,
+        subject: `CloudLearn Contact: ${subject}`,
+        text: `New message received from the CloudLearn contact form.
+
+Name: ${fullName}
+Email: ${email}
+Subject: ${subject}
+
+Message:
+${message}
+`,
+        html: `
+      <div style="font-family:Arial,sans-serif;background:#f8fafc;padding:32px;">
+        <div style="max-width:620px;margin:0 auto;background:#ffffff;border:1px solid #e2e8f0;border-radius:16px;padding:32px;">
+          <h2 style="margin:0 0 24px;color:#0f172a;">
+            New CloudLearn Contact Message
+          </h2>
+
+          <p style="margin:8px 0;color:#475569;">
+            <strong>Name:</strong> ${fullName}
+          </p>
+
+          <p style="margin:8px 0;color:#475569;">
+            <strong>Email:</strong> ${email}
+          </p>
+
+          <p style="margin:8px 0;color:#475569;">
+            <strong>Subject:</strong> ${subject}
+          </p>
+
+          <hr style="margin:24px 0;border:none;border-top:1px solid #e2e8f0;" />
+
+          <p style="margin:0 0 10px;color:#0f172a;font-weight:700;">
+            Message
+          </p>
+
+          <div style="background:#f8fafc;border-radius:12px;padding:18px;color:#475569;line-height:1.6;white-space:pre-wrap;">
+            ${message}
+          </div>
+        </div>
+      </div>
+    `,
+    });
+    console.log("Contact email delivery result:", {
+        messageId: info.messageId,
+        accepted: info.accepted,
+        rejected: info.rejected,
+    });
+}
+async function sendPasswordResetEmail(email, fullName, resetUrl) {
+    const info = await transporter.sendMail({
+        from: smtpFrom,
+        to: email,
+        subject: "Reset your CloudLearn Academy password",
+        text: `Hi ${fullName},
+
+We received a request to reset your CloudLearn Academy password.
+
+Use the link below to create a new password:
+
+${resetUrl}
+
+This password reset link will expire in 15 minutes.
+
+If you did not request a password reset, you can safely ignore this email.
+
+CloudLearn Academy`,
+        html: `
+      <div style="font-family:Arial,sans-serif;background:#f8fafc;padding:32px;">
+        <div style="max-width:560px;margin:0 auto;background:#ffffff;border:1px solid #e2e8f0;border-radius:16px;padding:32px;">
+          <h1 style="margin:0 0 16px;color:#0f172a;">
+            Reset your CloudLearn Academy password
+          </h1>
+
+          <p style="margin:0 0 16px;color:#475569;font-size:16px;">
+            Hi ${fullName},
+          </p>
+
+          <p style="margin:0 0 24px;color:#475569;font-size:16px;line-height:1.6;">
+            We received a request to reset your CloudLearn Academy password.
+            Click the button below to create a new password.
+          </p>
+
+          <div style="text-align:center;margin:28px 0;">
+            <a
+              href="${resetUrl}"
+              style="display:inline-block;padding:14px 24px;background:#0284c7;color:#ffffff;text-decoration:none;border-radius:12px;font-weight:700;"
+            >
+              Reset Password
+            </a>
+          </div>
+
+          <p style="margin:0 0 10px;color:#64748b;font-size:14px;line-height:1.5;">
+            This password reset link will expire in 15 minutes.
+          </p>
+
+          <p style="margin:0;color:#64748b;font-size:14px;line-height:1.5;">
+            If the button does not work, copy and paste this link into your browser:
+          </p>
+
+          <p style="margin:12px 0 0;word-break:break-all;color:#0369a1;font-size:13px;">
+            ${resetUrl}
+          </p>
+
+          <hr style="margin:28px 0;border:none;border-top:1px solid #e2e8f0;" />
+
+          <p style="margin:0;color:#94a3b8;font-size:12px;">
+            If you did not request a password reset, you can safely ignore this email.
+          </p>
+        </div>
+      </div>
+    `,
+    });
+    console.log("Password reset email delivery result:", {
+        messageId: info.messageId,
+        accepted: info.accepted,
+        rejected: info.rejected,
     });
 }
 //# sourceMappingURL=email.service.js.map

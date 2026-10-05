@@ -1,9 +1,16 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.certificateService = void 0;
 const client_1 = require("@prisma/client");
+const fs_1 = __importDefault(require("fs"));
 const certificate_generator_1 = require("../../generators/certificate.generator");
 const prisma = new client_1.PrismaClient();
+function certificateFileExists(filePath) {
+    return Boolean(filePath) && fs_1.default.existsSync(filePath);
+}
 exports.certificateService = {
     async generate(userId, courseSlug, courseTitle) {
         if (!userId) {
@@ -39,15 +46,6 @@ exports.certificateService = {
         const resolvedCourseTitle = passedAttempt.exam.course.title ||
             courseTitle ||
             courseSlug;
-        const existingCertificate = await prisma.certificate.findFirst({
-            where: {
-                userId,
-                courseSlug,
-            },
-        });
-        if (existingCertificate) {
-            return existingCertificate;
-        }
         const user = await prisma.user.findUnique({
             where: {
                 id: userId,
@@ -60,6 +58,47 @@ exports.certificateService = {
         if (!user) {
             throw new Error("User not found");
         }
+        const existingCertificate = await prisma.certificate.findFirst({
+            where: {
+                userId,
+                courseSlug,
+            },
+        });
+        /*
+         * Existing certificate + existing PDF:
+         * nothing to regenerate.
+         */
+        if (existingCertificate &&
+            certificateFileExists(existingCertificate.filePath)) {
+            return existingCertificate;
+        }
+        /*
+         * Existing certificate record but missing PDF:
+         * regenerate the PDF using the SAME certificate ID
+         * and update the stored file path.
+         */
+        if (existingCertificate) {
+            const issueDateText = new Date(existingCertificate.issuedAt).toLocaleDateString("en-IN");
+            const filePath = await (0, certificate_generator_1.generateCertificate)({
+                studentName: user.fullName,
+                courseTitle: existingCertificate.courseTitle ||
+                    resolvedCourseTitle,
+                certificateId: existingCertificate.certificateId,
+                issueDate: issueDateText,
+            });
+            return prisma.certificate.update({
+                where: {
+                    id: existingCertificate.id,
+                },
+                data: {
+                    filePath,
+                },
+            });
+        }
+        /*
+         * No certificate record:
+         * create a completely new certificate.
+         */
         const certificateId = await this.createUniqueCertificateId();
         const issueDate = new Date();
         const issueDateText = issueDate.toLocaleDateString("en-IN");

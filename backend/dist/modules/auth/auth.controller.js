@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.register = register;
 exports.verifyEmail = verifyEmail;
 exports.resendOtp = resendOtp;
+exports.forgotPassword = forgotPassword;
+exports.resetPasswordController = resetPasswordController;
+exports.googleLogin = googleLogin;
 exports.login = login;
 exports.me = me;
 exports.refresh = refresh;
@@ -116,6 +119,94 @@ async function resendOtp(req, res) {
             message: error instanceof Error
                 ? error.message
                 : "Failed to resend OTP",
+        });
+    }
+}
+async function forgotPassword(req, res) {
+    try {
+        const { email } = req.body;
+        if (typeof email !== "string" ||
+            !email.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: "Email is required",
+            });
+        }
+        const result = await (0, auth_service_1.requestPasswordReset)(email.trim().toLowerCase());
+        return res.status(200).json({
+            success: true,
+            message: result.message,
+        });
+    }
+    catch (error) {
+        console.error("Forgot password error:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Unable to process the password reset request right now.",
+        });
+    }
+}
+async function resetPasswordController(req, res) {
+    try {
+        const { token, password } = req.body;
+        if (typeof token !== "string" ||
+            !token.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: "Password reset token is required",
+            });
+        }
+        if (typeof password !== "string" ||
+            !password) {
+            return res.status(400).json({
+                success: false,
+                message: "New password is required",
+            });
+        }
+        if (password.length < 8) {
+            return res.status(400).json({
+                success: false,
+                message: "Password must be at least 8 characters long",
+            });
+        }
+        const result = await (0, auth_service_1.resetPassword)(token, password);
+        return res.status(200).json({
+            success: true,
+            message: result.message,
+        });
+    }
+    catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: error instanceof Error
+                ? error.message
+                : "Password reset failed",
+        });
+    }
+}
+async function googleLogin(req, res) {
+    try {
+        const { idToken } = req.body;
+        if (typeof idToken !== "string" ||
+            !idToken.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: "Google ID token is required",
+            });
+        }
+        const data = await (0, auth_service_1.loginWithGoogle)(idToken);
+        return res.status(200).json({
+            success: true,
+            message: "Google login successful",
+            data,
+        });
+    }
+    catch (error) {
+        return res.status(401).json({
+            success: false,
+            message: error instanceof Error
+                ? error.message
+                : "Google login failed",
         });
     }
 }

@@ -1,11 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.examRepository = void 0;
-const client_1 = require("@prisma/client");
-const prisma = new client_1.PrismaClient();
+const prisma_1 = require("../../lib/prisma");
 exports.examRepository = {
     async findPublishedExamByCourseSlug(courseSlug) {
-        return prisma.exam.findFirst({
+        return prisma_1.prisma.exam.findFirst({
             where: {
                 isPublished: true,
                 course: {
@@ -23,7 +22,7 @@ exports.examRepository = {
         });
     },
     async findCourseBySlug(courseSlug) {
-        return prisma.course.findUnique({
+        return prisma_1.prisma.course.findUnique({
             where: {
                 slug: courseSlug,
             },
@@ -35,7 +34,7 @@ exports.examRepository = {
         });
     },
     async findEnrollment(userId, courseId) {
-        return prisma.enrollment.findFirst({
+        return prisma_1.prisma.enrollment.findFirst({
             where: {
                 userId,
                 courseId,
@@ -47,12 +46,12 @@ exports.examRepository = {
         });
     },
     async createAttempt(data) {
-        return prisma.examAttempt.create({
+        return prisma_1.prisma.examAttempt.create({
             data,
         });
     },
     async findLatestAttempt(userId, examId) {
-        return prisma.examAttempt.findFirst({
+        return prisma_1.prisma.examAttempt.findFirst({
             where: {
                 userId,
                 examId,

@@ -7,11 +7,26 @@ exports.paymentService = void 0;
 const crypto_1 = __importDefault(require("crypto"));
 const razorpay_1 = __importDefault(require("razorpay"));
 const payment_repository_1 = require("./payment.repository");
-const COURSE_PRICE = 49;
+const PROGRAMMING_COURSE_PRICE = 49;
+const AIML_BUNDLE_PRICE = 99;
+const AIML_COURSES = [
+    "ai-foundations",
+    "machine-learning",
+    "deep-learning",
+    "generative-ai",
+];
+function isAIMLCourse(courseSlug) {
+    return AIML_COURSES.includes(courseSlug);
+}
+function getCoursePrice(courseSlug) {
+    return isAIMLCourse(courseSlug)
+        ? AIML_BUNDLE_PRICE
+        : PROGRAMMING_COURSE_PRICE;
+}
 const razorpayKeyId = process.env.RAZORPAY_KEY_ID;
 const razorpayKeySecret = process.env.RAZORPAY_KEY_SECRET;
 if (!razorpayKeyId || !razorpayKeySecret) {
-    console.warn("⚠️ Razorpay environment variables are missing.");
+    console.warn("?? Razorpay environment variables are missing.");
 }
 const razorpay = new razorpay_1.default({
     key_id: razorpayKeyId || "",
@@ -19,6 +34,7 @@ const razorpay = new razorpay_1.default({
 });
 exports.paymentService = {
     async createOrder(userId, courseSlug) {
+        const coursePrice = getCoursePrice(courseSlug);
         const course = await payment_repository_1.paymentRepository.findCourseBySlug(courseSlug);
         if (!course) {
             throw new Error("Course not found");
@@ -28,7 +44,7 @@ exports.paymentService = {
             throw new Error("You are already enrolled in this course");
         }
         const order = await razorpay.orders.create({
-            amount: COURSE_PRICE * 100,
+            amount: coursePrice * 100,
             currency: "INR",
             receipt: `course_${courseSlug}_${Date.now()}`,
             notes: {
@@ -40,13 +56,13 @@ exports.paymentService = {
             id: crypto_1.default.randomUUID(),
             userId,
             courseSlug,
-            amount: COURSE_PRICE,
+            amount: coursePrice,
             razorpayOrderId: order.id,
         });
         return {
             paymentId: payment.id,
             orderId: order.id,
-            amount: COURSE_PRICE,
+            amount: coursePrice,
             currency: "INR",
             keyId: razorpayKeyId,
             courseSlug,
@@ -61,7 +77,8 @@ exports.paymentService = {
         if (payment.userId !== userId) {
             throw new Error("Unauthorized payment");
         }
-        if (payment.amount !== COURSE_PRICE) {
+        const expectedPrice = getCoursePrice(payment.courseSlug);
+        if (payment.amount !== expectedPrice) {
             throw new Error("Invalid payment amount");
         }
         const generatedSignature = crypto_1.default
@@ -76,6 +93,29 @@ exports.paymentService = {
         const course = await payment_repository_1.paymentRepository.findCourseBySlug(payment.courseSlug);
         if (!course) {
             throw new Error("Course not found");
+        }
+        /* AIML_BUNDLE_ENROLLMENT */
+        if (isAIMLCourse(payment.courseSlug)) {
+            const enrollments = [];
+            for (const slug of AIML_COURSES) {
+                const aimlCourse = await payment_repository_1.paymentRepository.findCourseBySlug(slug);
+                if (!aimlCourse) {
+                    throw new Error(`AIML course not found: ${slug}`);
+                }
+                const enrollment = await payment_repository_1.paymentRepository.createEnrollment(userId, aimlCourse.id);
+                enrollments.push(enrollment);
+            }
+            return {
+                payment: updatedPayment,
+                enrollment: enrollments[0],
+                enrollments,
+                course: {
+                    id: course.id,
+                    title: "AIML Full Course",
+                    slug: payment.courseSlug,
+                },
+                bundleCourses: AIML_COURSES,
+            };
         }
         const enrollment = await payment_repository_1.paymentRepository.createEnrollment(userId, course.id);
         return {

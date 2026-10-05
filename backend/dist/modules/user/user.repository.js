@@ -3,7 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.userRepository = void 0;
 exports.createUser = createUser;
 exports.findUserByEmail = findUserByEmail;
+exports.findUserByGoogleId = findUserByGoogleId;
+exports.createGoogleUser = createGoogleUser;
 exports.findUserById = findUserById;
+exports.findUserByPasswordResetToken = findUserByPasswordResetToken;
+exports.savePasswordResetToken = savePasswordResetToken;
+exports.clearPasswordResetToken = clearPasswordResetToken;
 exports.findUserProfile = findUserProfile;
 exports.saveRefreshToken = saveRefreshToken;
 exports.clearRefreshToken = clearRefreshToken;
@@ -18,9 +23,49 @@ async function findUserByEmail(email) {
         where: { email },
     });
 }
+async function findUserByGoogleId(googleId) {
+    return prisma_1.prisma.user.findUnique({
+        where: { googleId },
+    });
+}
+async function createGoogleUser(data) {
+    return prisma_1.prisma.user.create({
+        data: {
+            fullName: data.fullName,
+            email: data.email,
+            password: null,
+            googleId: data.googleId,
+            avatar: data.avatar ?? null,
+            isVerified: true,
+        },
+    });
+}
 async function findUserById(id) {
     return prisma_1.prisma.user.findUnique({
         where: { id },
+    });
+}
+async function findUserByPasswordResetToken(passwordResetToken) {
+    return prisma_1.prisma.user.findUnique({
+        where: { passwordResetToken },
+    });
+}
+async function savePasswordResetToken(id, passwordResetToken, passwordResetExpiry) {
+    return prisma_1.prisma.user.update({
+        where: { id },
+        data: {
+            passwordResetToken,
+            passwordResetExpiry,
+        },
+    });
+}
+async function clearPasswordResetToken(id) {
+    return prisma_1.prisma.user.update({
+        where: { id },
+        data: {
+            passwordResetToken: null,
+            passwordResetExpiry: null,
+        },
     });
 }
 async function findUserProfile(id) {

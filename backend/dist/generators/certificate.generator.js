@@ -439,44 +439,287 @@ async function generateCertificate(data) {
         color: border,
     });
     /* ==========================================================
-       11. CERTIFIED SEAL
-       ========================================================== */
+11. CERTIFIED SEAL
+CloudLearn reference-style certification badge
+========================================================== */
+    const sealX = 137;
+    const sealY = 94;
+    /* ----------------------------------------------------------
+       OUTER SCALLOPED GOLD EDGE
+       ---------------------------------------------------------- */
     page.drawCircle({
-        x: 137,
-        y: 94,
-        size: 34,
+        x: sealX,
+        y: sealY,
+        size: 37.5,
         color: gold,
     });
+    for (let i = 0; i < 48; i += 1) {
+        const angle = (Math.PI * 2 * i) / 48;
+        page.drawCircle({
+            x: sealX + Math.cos(angle) * 36.2,
+            y: sealY + Math.sin(angle) * 36.2,
+            size: 1.65,
+            color: gold,
+        });
+    }
+    /* ----------------------------------------------------------
+       NAVY MEDALLION
+       ---------------------------------------------------------- */
     page.drawCircle({
-        x: 137,
-        y: 94,
+        x: sealX,
+        y: sealY,
+        size: 32.5,
+        color: navy,
+    });
+    /* Main gold ring */
+    page.drawCircle({
+        x: sealX,
+        y: sealY,
+        size: 29.5,
+        borderWidth: 1.4,
+        borderColor: gold,
+    });
+    /* Inner navy field */
+    page.drawCircle({
+        x: sealX,
+        y: sealY,
         size: 27,
         color: navy,
     });
+    /* Fine inner gold ring */
     page.drawCircle({
-        x: 137,
-        y: 94,
-        size: 22,
-        borderWidth: 1,
+        x: sealX,
+        y: sealY,
+        size: 25.2,
+        borderWidth: 0.65,
         borderColor: gold,
     });
-    centerTextInBox(page, "CLOUDLEARN", sansBold, 5.3, 103, white, 105, 169);
-    centerTextInBox(page, "CERTIFIED", sansBold, 7.2, 89, white, 105, 169);
-    page.drawCircle({
-        x: 121,
-        y: 77,
-        size: 1.7,
+    /* ----------------------------------------------------------
+       CROWN
+       ---------------------------------------------------------- */
+    /* Crown base */
+    page.drawLine({
+        start: { x: 129, y: 112.5 },
+        end: { x: 145, y: 112.5 },
+        thickness: 1,
+        color: gold,
+    });
+    /* Crown peaks */
+    page.drawLine({
+        start: { x: 130, y: 112.5 },
+        end: { x: 131.5, y: 118 },
+        thickness: 1,
+        color: gold,
+    });
+    page.drawLine({
+        start: { x: 131.5, y: 118 },
+        end: { x: 134.3, y: 114.2 },
+        thickness: 1,
+        color: gold,
+    });
+    page.drawLine({
+        start: { x: 134.3, y: 114.2 },
+        end: { x: 137, y: 119 },
+        thickness: 1,
+        color: gold,
+    });
+    page.drawLine({
+        start: { x: 137, y: 119 },
+        end: { x: 139.7, y: 114.2 },
+        thickness: 1,
+        color: gold,
+    });
+    page.drawLine({
+        start: { x: 139.7, y: 114.2 },
+        end: { x: 142.5, y: 118 },
+        thickness: 1,
+        color: gold,
+    });
+    page.drawLine({
+        start: { x: 142.5, y: 118 },
+        end: { x: 144, y: 112.5 },
+        thickness: 1,
         color: gold,
     });
     page.drawCircle({
-        x: 153,
-        y: 77,
-        size: 1.7,
+        x: 131.5,
+        y: 118,
+        size: 0.8,
+        color: gold,
+    });
+    page.drawCircle({
+        x: 137,
+        y: 119,
+        size: 0.9,
+        color: gold,
+    });
+    page.drawCircle({
+        x: 142.5,
+        y: 118,
+        size: 0.8,
+        color: gold,
+    });
+    /* ----------------------------------------------------------
+       CURVED LEFT LAUREL
+       ---------------------------------------------------------- */
+    page.drawLine({
+        start: { x: 117.5, y: 81 },
+        end: { x: 120, y: 86 },
+        thickness: 0.9,
+        color: gold,
+    });
+    page.drawLine({
+        start: { x: 120, y: 86 },
+        end: { x: 121.5, y: 92 },
+        thickness: 0.9,
+        color: gold,
+    });
+    page.drawLine({
+        start: { x: 121.5, y: 92 },
+        end: { x: 122.5, y: 98 },
+        thickness: 0.9,
+        color: gold,
+    });
+    page.drawLine({
+        start: { x: 122.5, y: 98 },
+        end: { x: 123.5, y: 104 },
+        thickness: 0.9,
+        color: gold,
+    });
+    const leftLaurel = [
+        [118.4, 83.5],
+        [119.8, 87.5],
+        [120.8, 91.5],
+        [121.7, 95.5],
+        [122.5, 99.5],
+        [123.1, 103.5],
+    ];
+    for (const [x, y] of leftLaurel) {
+        page.drawLine({
+            start: { x: x - 4.1, y: y + 1.8 },
+            end: { x, y },
+            thickness: 0.7,
+            color: gold,
+        });
+        page.drawLine({
+            start: { x: x - 3.5, y: y - 1.8 },
+            end: { x, y },
+            thickness: 0.7,
+            color: gold,
+        });
+    }
+    /* ----------------------------------------------------------
+       CURVED RIGHT LAUREL
+       ---------------------------------------------------------- */
+    page.drawLine({
+        start: { x: 156.5, y: 81 },
+        end: { x: 154, y: 86 },
+        thickness: 0.9,
+        color: gold,
+    });
+    page.drawLine({
+        start: { x: 154, y: 86 },
+        end: { x: 152.5, y: 92 },
+        thickness: 0.9,
+        color: gold,
+    });
+    page.drawLine({
+        start: { x: 152.5, y: 92 },
+        end: { x: 151.5, y: 98 },
+        thickness: 0.9,
+        color: gold,
+    });
+    page.drawLine({
+        start: { x: 151.5, y: 98 },
+        end: { x: 150.5, y: 104 },
+        thickness: 0.9,
+        color: gold,
+    });
+    const rightLaurel = [
+        [155.6, 83.5],
+        [154.2, 87.5],
+        [153.2, 91.5],
+        [152.3, 95.5],
+        [151.5, 99.5],
+        [150.9, 103.5],
+    ];
+    for (const [x, y] of rightLaurel) {
+        page.drawLine({
+            start: { x: x + 4.1, y: y + 1.8 },
+            end: { x, y },
+            thickness: 0.7,
+            color: gold,
+        });
+        page.drawLine({
+            start: { x: x + 3.5, y: y - 1.8 },
+            end: { x, y },
+            thickness: 0.7,
+            color: gold,
+        });
+    }
+    /* ----------------------------------------------------------
+       CLOUDLEARN
+       ---------------------------------------------------------- */
+    centerTextInBox(page, "CLOUDLEARN", sansBold, 5.1, 105, white, 122, 152);
+    /* Small gold separator */
+    page.drawCircle({
+        x: 119.5,
+        y: 101,
+        size: 0.9,
+        color: gold,
+    });
+    page.drawLine({
+        start: { x: 122, y: 101 },
+        end: { x: 152, y: 101 },
+        thickness: 0.55,
+        color: gold,
+    });
+    /* ----------------------------------------------------------
+       CERTIFIED
+       ---------------------------------------------------------- */
+    centerTextInBox(page, "CERTIFIED", sansBold, 7.3, 88.5, white, 119, 155);
+    /* ----------------------------------------------------------
+       THREE GOLD STARS
+       ---------------------------------------------------------- */
+    const drawSealStar = (cx, cy, r) => {
+        const points = [];
+        for (let i = 0; i < 10; i += 1) {
+            const radius = i % 2 === 0 ? r : r * 0.42;
+            const angle = -Math.PI / 2 +
+                (Math.PI * 2 * i) / 10;
+            points.push({
+                x: cx + Math.cos(angle) * radius,
+                y: cy + Math.sin(angle) * radius,
+            });
+        }
+        for (let i = 0; i < points.length; i += 1) {
+            page.drawLine({
+                start: points[i],
+                end: points[(i + 1) % points.length],
+                thickness: 0.7,
+                color: gold,
+            });
+        }
+    };
+    drawSealStar(128, 77.5, 2.4);
+    drawSealStar(137, 76.5, 2.8);
+    drawSealStar(146, 77.5, 2.4);
+    /* Small gold side dots */
+    page.drawCircle({
+        x: 122,
+        y: 77.5,
+        size: 0.9,
+        color: gold,
+    });
+    page.drawCircle({
+        x: 152,
+        y: 77.5,
+        size: 0.9,
         color: gold,
     });
     /* ==========================================================
-       12. ISSUE DATE
-       ========================================================== */
+         12. ISSUE DATE
+         ========================================================== */
     page.drawText("ISSUED ON", {
         x: 242,
         y: 106,
