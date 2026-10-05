@@ -1,4 +1,4 @@
-﻿import nodemailer from "nodemailer";
+import nodemailer from "nodemailer";
 
 const smtpHost = process.env.SMTP_HOST;
 const smtpPort = Number(process.env.SMTP_PORT || 465);
@@ -94,3 +94,62 @@ CloudLearn Academy`,
   });
 }
 
+export async function sendContactMessage(
+  fullName: string,
+  email: string,
+  subject: string,
+  message: string
+) {
+  const info = await transporter.sendMail({
+    from: smtpFrom,
+    to: smtpUser,
+    replyTo: email,
+    subject: `CloudLearn Contact: ${subject}`,
+    text: `New message received from the CloudLearn contact form.
+
+Name: ${fullName}
+Email: ${email}
+Subject: ${subject}
+
+Message:
+${message}
+`,
+    html: `
+      <div style="font-family:Arial,sans-serif;background:#f8fafc;padding:32px;">
+        <div style="max-width:620px;margin:0 auto;background:#ffffff;border:1px solid #e2e8f0;border-radius:16px;padding:32px;">
+          <h2 style="margin:0 0 24px;color:#0f172a;">
+            New CloudLearn Contact Message
+          </h2>
+
+          <p style="margin:8px 0;color:#475569;">
+            <strong>Name:</strong> ${fullName}
+          </p>
+
+          <p style="margin:8px 0;color:#475569;">
+            <strong>Email:</strong> ${email}
+          </p>
+
+          <p style="margin:8px 0;color:#475569;">
+            <strong>Subject:</strong> ${subject}
+          </p>
+
+          <hr style="margin:24px 0;border:none;border-top:1px solid #e2e8f0;" />
+
+          <p style="margin:0 0 10px;color:#0f172a;font-weight:700;">
+            Message
+          </p>
+
+          <div style="background:#f8fafc;border-radius:12px;padding:18px;color:#475569;line-height:1.6;white-space:pre-wrap;">
+            ${message}
+          </div>
+        </div>
+      </div>
+    `,
+  });
+
+  console.log("Contact email delivery result:", {
+    messageId: info.messageId,
+    accepted: info.accepted,
+    rejected: info.rejected,
+  });
+}

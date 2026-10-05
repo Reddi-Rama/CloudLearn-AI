@@ -27,6 +27,7 @@ export const API = {
 
     PAYMENT: "/payment",
     SEARCH: "/search",
+    CONTACT: "/contact",
   },
 };
 

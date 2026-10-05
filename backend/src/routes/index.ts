@@ -5,6 +5,7 @@ import userRoutes from "../modules/user/user.routes";
 import certificateRoutes from "../modules/certificate/certificate.routes";
 import paymentRoutes from "../modules/payment/payment.routes";
 import examRoutes from "../modules/exam/exam.routes";
+import contactRoutes from "../modules/contact/contact.routes";
 
 const router = Router();
 
@@ -20,5 +21,6 @@ router.use("/users", userRoutes);
 router.use("/certificate", certificateRoutes);
 router.use("/payment", paymentRoutes);
 router.use("/exam", examRoutes);
+router.use("/contact", contactRoutes);
 
 export default router;
