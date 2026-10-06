@@ -9,16 +9,29 @@ export default function useLocalStorage<T>(
   const [value, setValue] = useState<T>(initialValue);
 
   useEffect(() => {
-    const stored = localStorage.getItem(key);
+    try {
+      const stored = localStorage.getItem(key);
 
-    if (stored) {
-      setValue(JSON.parse(stored));
+      if (!stored) {
+        return;
+      }
+
+      const parsed = JSON.parse(stored) as T;
+      setValue(parsed);
+    } catch {
+      localStorage.removeItem(key);
+      setValue(initialValue);
     }
-  }, [key]);
+  }, [key, initialValue]);
 
   const updateValue = (newValue: T) => {
     setValue(newValue);
-    localStorage.setItem(key, JSON.stringify(newValue));
+
+    try {
+      localStorage.setItem(key, JSON.stringify(newValue));
+    } catch {
+      // Keep the in-memory state even if browser storage is unavailable.
+    }
   };
 
   return [value, updateValue] as const;

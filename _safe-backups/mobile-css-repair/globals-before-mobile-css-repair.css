@@ -538,7 +538,7 @@ body::after {
 
 
 /* ============================================================
-   HOME Ã¢â‚¬â€ REMOVE SECTION BACKGROUNDS
+   HOME â€” REMOVE SECTION BACKGROUNDS
 ============================================================ */
 
 /*
@@ -571,7 +571,7 @@ body::after {
 
 
 /* ============================================================
-   HOME Ã¢â‚¬â€ REMOVE FULL-WIDTH SEPARATORS
+   HOME â€” REMOVE FULL-WIDTH SEPARATORS
 ============================================================ */
 
 .home-page section {
@@ -582,7 +582,7 @@ body::after {
 
 
 /* ============================================================
-   HOME Ã¢â‚¬â€ WHITE CARDS ONLY
+   HOME â€” WHITE CARDS ONLY
 ============================================================ */
 
 /*
@@ -601,7 +601,7 @@ body::after {
 
 
 /* ============================================================
-   HOME Ã¢â‚¬â€ GLASS CARDS
+   HOME â€” GLASS CARDS
 ============================================================ */
 
 .home-page .glass-card {
@@ -610,7 +610,7 @@ body::after {
 
 
 /* ============================================================
-   HOME Ã¢â‚¬â€ PREMIUM SURFACES
+   HOME â€” PREMIUM SURFACES
 ============================================================ */
 
 .home-page .surface {
@@ -619,7 +619,7 @@ body::after {
 
 
 /* ============================================================
-   HOME Ã¢â‚¬â€ INPUTS
+   HOME â€” INPUTS
 ============================================================ */
 
 .home-page input,
@@ -1019,7 +1019,7 @@ html.dark body {
 
 
 /* ============================================================
-   MAIN LIGHT PAGES Ã¢â€ â€™ DARK
+   MAIN LIGHT PAGES â†’ DARK
 ============================================================ */
 
 html.dark .home-page,
@@ -2127,7 +2127,7 @@ html.dark .programming-domain-page .bg-sky-100 {
 
 /* ============================================================
    CLOUDLEARN EXAMS DARK MODE
-   UI ONLY Ã¢â‚¬â€ backend/certificate logic untouched
+   UI ONLY â€” backend/certificate logic untouched
 ============================================================ */
 
 html.dark .exam-result-page {
@@ -2181,7 +2181,7 @@ html.dark .exam-result-page .text-slate-400 {
   color: #94a3b8 !important;
 }
 
-/* Failed result Ã¢â‚¬â€ amber instead of red */
+/* Failed result â€” amber instead of red */
 html.dark .exam-result-page .bg-red-50 {
   background-color: #211a0b !important;
 }
@@ -2294,7 +2294,7 @@ html.dark .exam-result-page button.bg-white {
   border-color: #475569 !important;
 }
 
-/* Certificate button Ã¢â‚¬â€ presentation only.
+/* Certificate button â€” presentation only.
    Existing href/backend connection remains unchanged. */
 html.dark .exam-result-page a.bg-green-600 {
   background-color: #16a34a !important;
@@ -2313,7 +2313,7 @@ html.dark .exam-result-page article .bg-slate-50 {
 
 /* ============================================================
    CLOUDLEARN AIML EXAM
-   LIGHT MODE Ã¢â‚¬â€ AURORA INDIGO / VIOLET THEME
+   LIGHT MODE â€” AURORA INDIGO / VIOLET THEME
    ============================================================ */
 
 html:not(.dark) .aiml-exam-page {
@@ -2405,7 +2405,7 @@ html:not(.dark) .aiml-exam-page [class*="bg-cyan-400/10"] {
   background-color: #eeecff !important;
 }
 
-/* Progress bar: indigo Ã¢â€ â€™ violet Ã¢â€ â€™ pink */
+/* Progress bar: indigo â†’ violet â†’ pink */
 html:not(.dark) .aiml-exam-page [class*="from-cyan-400"][class*="to-violet-400"] {
   background-image: linear-gradient(90deg, #5b5bf7 0%, #7c3aed 52%, #db2777 100%) !important;
   background-color: transparent !important;
@@ -2554,14 +2554,15 @@ html.dark .aiml-exam-page {
   opacity: 1 !important;
 }
 
+
+
 /* ============================================================
    CLOUDLEARN MOBILE HARDENING
-   Mobile-only responsive protection.
+   Mobile-only responsiveness.
    Desktop styles remain unchanged.
 ============================================================ */
 
 @media (max-width: 767px) {
-
   html,
   body {
     width: 100%;
@@ -2572,6 +2573,13 @@ html.dark .aiml-exam-page {
   body {
     min-width: 0;
     background-attachment: scroll;
+  }
+
+  #__next,
+  body > div {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   img,
@@ -2593,14 +2601,191 @@ html.dark .aiml-exam-page {
     scrollbar-width: thin;
   }
 
+  .container-custom {
+    padding-inline: 16px;
+  }
+
+  .section {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+
+  .cloudlearn-back-nav {
+    max-width: calc(100vw - 24px) !important;
+  }
+
+  .cloudlearn-back-nav a {
+    max-width: calc(100vw - 24px) !important;
+    white-space: normal !important;
+  }
+
+  table {
+    max-width: 100%;
+  }
+
   button,
   a {
     -webkit-tap-highlight-color: transparent;
   }
+}
+
+/* ------------------------------------------------------------
+     HEADINGS
+     Keep hierarchy strong instead of shrinking everything.
+  ------------------------------------------------------------ */
+
+  h1 {
+    font-size: 2rem;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+  }
+
+  h2 {
+    font-size: 1.65rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  h3 {
+    font-size: 1.3rem;
+    line-height: 1.3;
+  }
+
+  h4 {
+    font-size: 1.1rem;
+    line-height: 1.4;
+  }
+
+  h5,
+  h6 {
+    font-size: 1rem;
+    line-height: 1.45;
+  }
+
+  /* ------------------------------------------------------------
+     PARAGRAPHS
+  ------------------------------------------------------------ */
+
+  p {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  /* ------------------------------------------------------------
+     LISTS
+  ------------------------------------------------------------ */
+
+  li {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  /* ------------------------------------------------------------
+     BUTTONS AND LINKS
+     Comfortable touch targets without changing desktop.
+  ------------------------------------------------------------ */
+
+  button {
+    min-height: 44px;
+  }
+
+  /* Don't force tiny navigation/action text. */
+
+  button,
+  a {
+    font-size: inherit;
+  }
+
+  /* ------------------------------------------------------------
+     FORM CONTROLS
+  ------------------------------------------------------------ */
 
   input,
   textarea,
   select {
+    font-size: 16px !important;
+    line-height: 1.5;
+  }
+
+  /* ------------------------------------------------------------
+     CODE
+  ------------------------------------------------------------ */
+
+  code {
+    font-size: 0.9rem;
+  }
+
+  pre {
+    font-size: 0.875rem;
+    line-height: 1.65;
+  }
+
+  /* ------------------------------------------------------------
+     COMMON SMALL TEXT
+     Prevent extremely small utility text on phones.
+  ------------------------------------------------------------ */
+
+  small {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  /* ------------------------------------------------------------
+     CONTENT WIDTH
+     Give text comfortable breathing room.
+  ------------------------------------------------------------ */
+
+  .container-custom {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  /* ------------------------------------------------------------
+     CARDS
+  ------------------------------------------------------------ */
+
+  [class*="rounded-3xl"],
+  [class*="rounded-2xl"] {
+    max-width: 100%;
+  }
+
+  /* ------------------------------------------------------------
+     LONG TEXT
+     Prevent ugly word breaking while keeping the viewport safe.
+  ------------------------------------------------------------ */
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  li {
+    overflow-wrap: break-word;
+    word-break: normal;
+  }
+
+  /* ------------------------------------------------------------
+     TABLES
+     Keep text readable; allow the table itself to scroll.
+  ------------------------------------------------------------ */
+
+  .overflow-x-auto table,
+  .overflow-x-scroll table {
+    min-width: max-content;
+  }
+
+  /* ------------------------------------------------------------
+     IMAGES / MEDIA
+  ------------------------------------------------------------ */
+
+  img,
+  video,
+  canvas,
+  svg {
     max-width: 100%;
   }
 }

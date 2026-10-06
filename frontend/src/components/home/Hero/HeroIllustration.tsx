@@ -15,20 +15,25 @@ export default function HeroIllustration() {
 
       {/* Glow */}
 
-      <div className="absolute h-[480px] w-[480px] rounded-full bg-sky-300/20 blur-3xl" />
+      <div className="absolute h-[320px] w-[320px] rounded-full bg-sky-300/20 blur-3xl sm:h-[380px] sm:w-[380px] lg:h-[480px] lg:w-[480px]" />
 
       {/* Main Circle */}
 
-      <div className="relative flex h-[420px] w-[420px] items-center justify-center rounded-full border border-sky-200 bg-white shadow-2xl">
+      <div className="relative flex h-[300px] w-[300px] items-center justify-center rounded-full border border-sky-200 bg-white shadow-2xl sm:h-[360px] sm:w-[360px] lg:h-[420px] lg:w-[420px]">
+
+        <Laptop
+          size={82}
+          className="text-sky-600 sm:hidden"
+        />
 
         <Laptop
           size={110}
-          className="text-sky-600"
+          className="hidden text-sky-600 sm:block"
         />
 
         {/* Floating Icons */}
 
-        <div className="absolute top-8 left-10 rounded-2xl bg-white p-4 shadow-xl animate-bounce">
+        <div className="absolute left-10 top-8 rounded-2xl bg-white p-4 shadow-xl animate-bounce">
 
           <Cloud
             className="text-sky-500"
@@ -37,7 +42,7 @@ export default function HeroIllustration() {
 
         </div>
 
-        <div className="absolute top-12 right-8 rounded-2xl bg-white p-4 shadow-xl animate-pulse">
+        <div className="absolute right-8 top-12 rounded-2xl bg-white p-4 shadow-xl animate-pulse">
 
           <Brain
             className="text-indigo-600"
