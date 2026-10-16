@@ -1,11 +1,5 @@
-﻿import ProgrammingHero from "@/components/programming/ProgrammingHero";
+import { redirect } from "next/navigation";
 
 export default function ProgrammingPage() {
-  return (
-    <main className="programming-domain-page min-h-screen bg-[#F8FBFF] pt-28">
-
-      <ProgrammingHero />
-
-    </main>
-  );
+  redirect("/courses");
 }

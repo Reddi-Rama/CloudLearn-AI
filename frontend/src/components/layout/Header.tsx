@@ -63,7 +63,7 @@ export default function Header() {
 
   return (
     <header className="fixed left-0 top-0 z-50 w-full border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
-      <div className="mx-auto flex h-20 max-w-[1600px] items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between px-3 sm:h-20 sm:px-6 lg:px-8">
         <Logo />
 
         {!studentPage && <Navbar />}
@@ -88,9 +88,9 @@ export default function Header() {
       </div>
 
       {mobileOpen && (
-        <div className="absolute left-0 right-0 top-20 max-h-[calc(100vh-80px)] overflow-y-auto border-t border-slate-200 bg-white shadow-2xl lg:hidden dark:border-slate-800 dark:bg-slate-950">
-          <nav className="mx-auto max-w-2xl px-4 py-4 sm:px-6">
-            <div className="space-y-2">
+        <div className="absolute left-0 right-0 top-16 max-h-[calc(100vh-64px)] sm:top-20 sm:max-h-[calc(100vh-80px)] overflow-y-auto border-t border-slate-200 bg-white shadow-2xl lg:hidden dark:border-slate-800 dark:bg-slate-950">
+          <nav className="mx-auto max-w-2xl px-3 py-3 sm:px-6 sm:py-4">
+            <div className="space-y-1.5 sm:space-y-2">
               {mobileLinks.map((link) => {
                 const active =
                   pathname === link.href ||
@@ -103,8 +103,8 @@ export default function Header() {
                     onClick={() => setMobileOpen(false)}
                     className={
                       active
-                        ? "block rounded-2xl bg-sky-50 px-5 py-4 text-base font-semibold text-sky-700 dark:bg-sky-500/10 dark:text-sky-400"
-                        : "block rounded-2xl px-5 py-4 text-base font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-sky-600 dark:text-slate-200 dark:hover:bg-slate-900 dark:hover:text-sky-400"
+                        ? "block rounded-xl bg-sky-50 px-4 py-3 text-[15px] sm:rounded-2xl sm:px-5 sm:py-4 sm:text-base font-semibold text-sky-700 dark:bg-sky-500/10 dark:text-sky-400"
+                        : "block rounded-xl px-4 py-3 text-[15px] sm:rounded-2xl sm:px-5 sm:py-4 sm:text-base font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-sky-600 dark:text-slate-200 dark:hover:bg-slate-900 dark:hover:text-sky-400"
                     }
                   >
                     {link.title}

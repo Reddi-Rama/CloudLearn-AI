@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useTheme } from "@/components/theme/ThemeProvider";
@@ -42,12 +42,12 @@ export default function CoursesPage() {
     <main
       className={
         isDark
-          ? "min-h-screen bg-slate-950 py-20"
-          : "min-h-screen bg-[#F7FAFC] py-20"
+          ? "min-h-screen bg-slate-950 py-12 sm:py-20"
+          : "min-h-screen bg-[#F7FAFC] py-12 sm:py-20"
       }
     >
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-12">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="mb-8 sm:mb-12">
           <p
             className={
               isDark
@@ -61,8 +61,8 @@ export default function CoursesPage() {
           <h1
             className={
               isDark
-                ? "mt-3 text-5xl font-bold text-white"
-                : "mt-3 text-5xl font-bold text-slate-950"
+                ? "mt-3 text-[2.1rem] leading-tight font-bold sm:text-5xl text-white"
+                : "mt-3 text-[2.1rem] leading-tight font-bold sm:text-5xl text-slate-950"
             }
           >
             Programming Courses
@@ -71,8 +71,8 @@ export default function CoursesPage() {
           <p
             className={
               isDark
-                ? "mt-4 max-w-2xl text-lg leading-8 text-slate-400"
-                : "mt-4 max-w-2xl text-lg leading-8 text-slate-600"
+                ? "mt-3 max-w-2xl text-[15px] leading-7 sm:mt-4 sm:text-lg sm:leading-8 text-slate-400"
+                : "mt-3 max-w-2xl text-[15px] leading-7 sm:mt-4 sm:text-lg sm:leading-8 text-slate-600"
             }
           >
             Choose a programming course and start learning through structured
@@ -80,18 +80,18 @@ export default function CoursesPage() {
           </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2">
+        <div className="grid gap-5 sm:gap-8 md:grid-cols-2">
           {courses.map((course) => (
             <Link
               key={course.href}
               href={course.href}
               className={
                 isDark
-                  ? "group rounded-3xl border border-slate-700 bg-slate-900 p-8 shadow-sm transition-all duration-200 hover:border-sky-500/50 hover:bg-slate-900/90"
-                  : "group rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-200 hover:border-sky-300 hover:bg-sky-50/30 hover:shadow-md"
+                  ? "group rounded-2xl border border-slate-700 bg-slate-900 p-5 sm:rounded-3xl sm:p-8 shadow-sm transition-all duration-200 hover:border-sky-500/50 hover:bg-slate-900/90"
+                  : "group rounded-2xl border border-slate-200 bg-white p-5 sm:rounded-3xl sm:p-8 shadow-sm transition-all duration-200 hover:border-sky-300 hover:bg-sky-50/30 hover:shadow-md"
               }
             >
-              <div className="flex items-start gap-6">
+              <div className="flex items-start gap-4 sm:gap-6">
                 <div
                   className={
                     isDark
@@ -106,8 +106,8 @@ export default function CoursesPage() {
                   <h2
                     className={
                       isDark
-                        ? "text-2xl font-bold text-white"
-                        : "text-2xl font-bold text-slate-900"
+                        ? "text-xl font-bold sm:text-2xl text-white"
+                        : "text-xl font-bold sm:text-2xl text-slate-900"
                     }
                   >
                     {course.name}
@@ -116,8 +116,8 @@ export default function CoursesPage() {
                   <p
                     className={
                       isDark
-                        ? "mt-4 text-base leading-7 text-slate-400"
-                        : "mt-4 text-base leading-7 text-slate-600"
+                        ? "mt-3 text-[15px] leading-6 sm:mt-4 sm:text-base sm:leading-7 text-slate-400"
+                        : "mt-3 text-[15px] leading-6 sm:mt-4 sm:text-base sm:leading-7 text-slate-600"
                     }
                   >
                     {course.description}
@@ -126,8 +126,8 @@ export default function CoursesPage() {
                   <div
                     className={
                       isDark
-                        ? "mt-7 font-semibold text-sky-400"
-                        : "mt-7 font-semibold text-sky-700"
+                        ? "mt-5 font-semibold sm:mt-7 text-sky-400"
+                        : "mt-5 font-semibold sm:mt-7 text-sky-700"
                     }
                   >
                     Start Learning →

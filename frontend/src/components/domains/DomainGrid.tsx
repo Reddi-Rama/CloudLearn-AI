@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import {
@@ -361,7 +361,7 @@ export default function DomainGrid({
               return isAvailable ? (
                 <Link
                   key={domain.slug}
-                  href={`/domains/${domain.slug}`}
+                  href={domain.slug === "programming" ? "/courses" : `/domains/${domain.slug}`}
                   className="block h-full"
                 >
                   {card}

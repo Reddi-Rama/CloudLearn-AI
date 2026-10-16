@@ -1,0 +1,49 @@
+import { notFound } from "next/navigation";
+import { modules } from "@/content/programming/python/lessons/module";
+import CourseAccessGate from "@/components/courses/CourseAccessGate";
+
+type ModuleData = {
+  id: string;
+  title: string;
+  lessons?: {
+    id: string;
+    title: string;
+  }[];
+};
+
+export default function PythonCoursePage() {
+  const course = "python-development";
+  const courseName = "Python Development";
+  const courseModules = modules.filter(Boolean) as ModuleData[];
+
+  if (!courseModules.length) {
+    return notFound();
+  }
+
+  return (
+    <main className="min-h-screen bg-slate-50 py-20 dark:bg-slate-950">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <section className="rounded-3xl bg-white p-5 shadow-sm sm:p-12 dark:bg-slate-900">
+          <p className="font-medium text-sky-600 dark:text-sky-400">
+            Programming Domain
+          </p>
+
+          <h1 className="mt-4 text-3xl font-bold text-slate-900 sm:text-5xl dark:text-white">
+            {courseName}
+          </h1>
+
+          <p className="mt-6 max-w-3xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8 dark:text-slate-400">
+            Learn Python from fundamentals to advanced concepts through
+            structured modules, practical lessons, code examples, and projects.
+          </p>
+
+          <CourseAccessGate
+            course={course}
+            courseName={courseName}
+            courseModules={courseModules}
+          />
+        </section>
+      </div>
+    </main>
+  );
+}

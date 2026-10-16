@@ -73,11 +73,11 @@ export default function DeepLearningCoursePage() {
   );
 
   return (
-    <main className="min-h-screen bg-[#020617] text-slate-100">
+    <main className="min-h-screen bg-slate-50 text-slate-900 dark:bg-[#020617] dark:text-slate-100">
       <div className="mx-auto max-w-[1500px] px-5 py-10 sm:px-8 lg:px-10">
 
         {/* Hero */}
-        <section className="relative overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/70 p-7 shadow-2xl sm:p-10 lg:p-12">
+        <section className="relative overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/70 p-7 shadow-2xl sm:p-10 lg:p-12">
           <div className="absolute -right-32 -top-32 h-80 w-80 rounded-full bg-violet-500/10 blur-3xl" />
           <div className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl" />
 
@@ -92,14 +92,14 @@ export default function DeepLearningCoursePage() {
               </span>
             </div>
 
-            <h1 className="text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white sm:text-5xl lg:text-6xl">
               Deep Learning
               <span className="block text-violet-300">
                 & Computer Vision
               </span>
             </h1>
 
-            <p className="mt-6 max-w-3xl text-base leading-8 text-slate-300 sm:text-lg">
+            <p className="mt-6 max-w-3xl text-base leading-8 text-slate-600 dark:text-slate-300 sm:text-lg">
               A complete learning path covering the foundations of deep
               learning, neural networks, convolutional networks, sequence
               models, Transformers, advanced training, and modern computer
@@ -107,17 +107,17 @@ export default function DeepLearningCoursePage() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <div className="flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-950/60 px-4 py-3 text-sm text-slate-300">
+              <div className="flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950/60 px-4 py-3 text-sm text-slate-600 dark:text-slate-300">
                 <BookOpen className="h-4 w-4 text-cyan-300" />
                 6 Modules
               </div>
 
-              <div className="flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-950/60 px-4 py-3 text-sm text-slate-300">
+              <div className="flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950/60 px-4 py-3 text-sm text-slate-600 dark:text-slate-300">
                 <Sparkles className="h-4 w-4 text-violet-300" />
                 {totalLessons} Lessons
               </div>
 
-              <div className="flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-950/60 px-4 py-3 text-sm text-slate-300">
+              <div className="flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950/60 px-4 py-3 text-sm text-slate-600 dark:text-slate-300">
                 <Camera className="h-4 w-4 text-emerald-300" />
                 Computer Vision
               </div>
@@ -126,7 +126,7 @@ export default function DeepLearningCoursePage() {
             <div className="mt-8">
               <Link
                 href="/lesson/aiml/deep-learning/module1/lesson1"
-                className="inline-flex items-center gap-2 rounded-xl bg-violet-500 px-5 py-3 font-semibold text-white transition hover:bg-violet-400"
+                className="inline-flex items-center gap-2 rounded-xl bg-violet-500 px-5 py-3 font-semibold text-slate-900 dark:text-white transition hover:bg-violet-400"
               >
                 Start Learning
                 <ArrowRight className="h-4 w-4" />
@@ -139,7 +139,7 @@ export default function DeepLearningCoursePage() {
 
 <section className="mt-8">
           <div className="mb-5">
-            <h2 className="text-2xl font-bold text-white sm:text-3xl">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white sm:text-3xl">
               Course Modules
             </h2>
 
@@ -156,7 +156,7 @@ export default function DeepLearningCoursePage() {
                 <Link
                   key={module.id}
                   href={`/lesson/aiml/deep-learning/${module.id}/lesson1`}
-                  className="group rounded-3xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl transition duration-200 hover:-translate-y-1 hover:border-slate-600 hover:bg-slate-900"
+                  className="group rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/70 p-6 shadow-xl transition duration-200 hover:-translate-y-1 hover:border-slate-600 hover:bg-slate-900"
                 >
                   <div className="flex items-start justify-between gap-5">
                     <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-slate-700 bg-slate-800">
@@ -173,7 +173,7 @@ export default function DeepLearningCoursePage() {
                       MODULE {module.number}
                     </p>
 
-                    <h3 className="mt-2 text-xl font-bold text-white">
+                    <h3 className="mt-2 text-xl font-bold text-slate-900 dark:text-white">
                       {module.title}
                     </h3>
 
@@ -196,4 +196,5 @@ export default function DeepLearningCoursePage() {
     </main>
   );
 }
+
 

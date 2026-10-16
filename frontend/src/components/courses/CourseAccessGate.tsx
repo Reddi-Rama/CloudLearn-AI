@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useTheme } from "@/components/theme/ThemeProvider";
 
 type ModuleData = {
   id: string;
@@ -23,22 +24,21 @@ export default function CourseAccessGate({
   courseName,
   courseModules,
 }: CourseAccessGateProps) {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [enrolled, setEnrolled] = useState(false);
   const [checking, setChecking] = useState(true);
   const [error, setError] = useState("");
 
   const apiUrl =
-    process.env.NEXT_PUBLIC_API_URL ||
-    "http://localhost:5000/api/v1";
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
   useEffect(() => {
     let cancelled = false;
 
     const checkEnrollment = async () => {
       try {
-        const token = localStorage.getItem(
-          "cloudlearn-access-token"
-        );
+        const token = localStorage.getItem("cloudlearn-access-token");
 
         if (!token) {
           if (!cancelled) {
@@ -61,9 +61,7 @@ export default function CourseAccessGate({
         const data = await response.json();
 
         if (!response.ok || !data.success) {
-          throw new Error(
-            data.message || "Unable to check enrollment"
-          );
+          throw new Error(data.message || "Unable to check enrollment");
         }
 
         if (!cancelled) {
@@ -90,23 +88,18 @@ export default function CourseAccessGate({
     };
   }, [apiUrl, course]);
 
+  const totalLessons = courseModules.reduce(
+    (total, module) => total + (module.lessons?.length ?? 0),
+    0
+  );
+
   if (checking) {
     return (
-      <section className="
-        mt-10
-        rounded-3xl
-        border border-slate-200
-        bg-white
-        p-8
-        shadow-sm
-        dark:border-slate-800
-        dark:bg-slate-900
-        dark:shadow-none
-      ">
+      <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
         <div className="flex items-center gap-3">
-          <div className="h-3 w-3 animate-pulse rounded-full bg-sky-600 dark:bg-sky-400" />
-          <p className="font-medium text-slate-600 dark:text-slate-400">
-            Checking course access...
+          <div className="h-3 w-3 animate-pulse rounded-full bg-blue-600" />
+          <p className="font-medium text-slate-600">
+            Checking your course access...
           </p>
         </div>
       </section>
@@ -115,453 +108,223 @@ export default function CourseAccessGate({
 
   if (enrolled) {
     return (
-      <>
-        <section className="
-          mt-10
-          rounded-3xl
-          border border-green-200
-          bg-green-50
-          p-8
-          dark:border-green-900/60
-          dark:bg-green-950/20
-        ">
-          <div className="flex items-center gap-3">
-            <div className="
-              flex h-12 w-12 items-center justify-center
-              rounded-2xl
-              bg-white
-              text-2xl
-              shadow-sm
-              dark:bg-slate-900
-            ">
-              ✅
+      <div className="mt-8">
+        <section className="overflow-hidden rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6 sm:p-8">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-xl">
+                âœ“
+              </div>
+              <div>
+                <span className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-700">
+                  Enrollment confirmed
+                </span>
+                <h2 className="mt-2 text-xl font-bold text-slate-900 sm:text-2xl">
+                  Your course is unlocked
+                </h2>
+                <p className="mt-2 max-w-xl text-sm leading-6 text-slate-600">
+                  You have access to {courseName}. Continue with your first
+                  module or choose any module below.
+                </p>
+              </div>
             </div>
 
-            <div>
-              <p className="
-                text-sm font-semibold uppercase tracking-wide
-                text-green-600
-                dark:text-green-400
-              ">
-                Course Unlocked
-              </p>
-
-              <h2 className="
-                mt-1 text-2xl font-bold
-                text-slate-900
-                dark:text-white
-              ">
-                You have full access to {courseName}
-              </h2>
-            </div>
+            <Link
+              href={
+                courseModules[0]
+                  ? `/lesson/${course}/${courseModules[0].id}/about`
+                  : `/courses/${course}`
+              }
+              className="inline-flex shrink-0 items-center justify-center rounded-xl bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-md"
+            >
+              Start learning <span className="ml-2">&#8594;</span>
+            </Link>
           </div>
-
-          <p className="
-            mt-4 max-w-2xl text-sm leading-6
-            text-slate-600
-            dark:text-slate-400
-          ">
-            Your payment has been verified and your enrollment
-            is active. You can now access all course modules
-            and lessons.
-          </p>
-
-          <Link
-            href={
-              courseModules[0]
-                ? `/lesson/${course}/${courseModules[0].id}/about`
-                : `/courses/${course}`
-            }
-            className="
-              mt-6
-              inline-flex items-center justify-center
-              rounded-2xl
-              bg-sky-600
-              px-8 py-4
-              font-semibold text-white
-              shadow-sm
-              transition
-              hover:bg-sky-700
-              dark:bg-sky-500
-              dark:hover:bg-sky-400
-            "
-          >
-            Start Learning →
-          </Link>
         </section>
 
-        <section className="mt-16">
+        <section className="mt-10">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <h2 className="
-                text-3xl font-bold
-                text-slate-900
-                dark:text-white
-              ">
-                Course Modules
+              <p className="text-sm font-semibold text-blue-600">
+                COURSE CONTENT
+              </p>
+              <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                Course modules
               </h2>
-
-              <p className="
-                mt-2
-                text-slate-600
-                dark:text-slate-400
-              ">
-                All modules are unlocked.
+              <p className="mt-2 text-sm text-slate-500">
+                Choose a module to continue learning.
               </p>
             </div>
-
-            <span className="
-              rounded-full
-              bg-green-100
-              px-4 py-2
-              text-sm font-medium
-              text-green-700
-              dark:bg-green-950/50
-              dark:text-green-400
-            ">
-              ✅ Unlocked
+            <span className="rounded-full bg-emerald-50 px-3.5 py-2 text-sm font-semibold text-emerald-700">
+              {courseModules.length} modules Â· Unlocked
             </span>
           </div>
 
-          <div className="
-            mt-8 grid gap-6
-            md:grid-cols-2
-            lg:grid-cols-3
-          ">
-            {courseModules
-              .filter(Boolean)
-              .map((module, index) => (
-                <Link
-                  key={`${module.id}-${index}`}
-                  href={`/lesson/${course}/${module.id}/about`}
-                  className="
-                    group
-                    flex min-h-[310px] flex-col
-                    rounded-3xl
-                    border border-slate-200
-                    bg-white
-                    p-8
-                    shadow-sm
-                    transition
-                    hover:-translate-y-1
-                    hover:border-sky-200
-                    hover:shadow-xl
-                    dark:border-slate-800
-                    dark:bg-slate-900
-                    dark:shadow-none
-                    dark:hover:border-sky-800
-                    dark:hover:bg-slate-900
-                  "
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="
-                      flex h-12 w-12 shrink-0 items-center justify-center
-                      rounded-2xl
-                      bg-sky-100
-                      font-bold text-sky-700
-                      dark:bg-sky-950
-                      dark:text-sky-400
-                    ">
-                      {index + 1}
-                    </div>
+          <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            {courseModules.filter(Boolean).map((module, index) => (
+              <Link
+                key={`${module.id}-${index}`}
+                href={`/lesson/${course}/${module.id}/about`}
+                className="group flex min-h-[250px] flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition duration-200 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_16px_40px_rgba(37,99,235,0.10)]"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-sm font-bold text-blue-700 transition group-hover:bg-blue-600 group-hover:text-white">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700">
+                    Unlocked
+                  </span>
+                </div>
 
-                    <span className="
-                      text-xl
-                      opacity-80
-                      transition
-                      group-hover:scale-110
-                    ">
-                      🔓
-                    </span>
-                  </div>
+                <h3 className="mt-6 text-lg font-bold leading-7 text-slate-900">
+                  {module.title}
+                </h3>
 
-                  <h3 className="
-                    mt-6 h-16 overflow-hidden
-                    text-xl font-bold leading-7
-                    text-slate-900
-                    dark:text-white
-                  ">
-                    {module.title}
-                  </h3>
+                <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-500">
+                  Learn {module.title} through structured lessons, practical
+                  examples, and guided exercises.
+                </p>
 
-                  <p className="
-                    mt-4 h-14 overflow-hidden
-                    text-sm leading-6
-                    text-slate-600
-                    dark:text-slate-400
-                  ">
-                    Learn {module.title} through structured lessons,
-                    practical examples, and real-world applications.
-                  </p>
-
-                  <div className="
-                    mt-auto flex items-center justify-between pt-8
-                  ">
-                    <span className="
-                      rounded-full
-                      bg-slate-100
-                      px-4 py-2
-                      text-sm font-medium
-                      text-slate-700
-                      dark:bg-slate-800
-                      dark:text-slate-300
-                    ">
-                      {module.lessons?.length ?? 0} Lessons
-                    </span>
-
-                    <span className="
-                      font-semibold
-                      text-sky-600
-                      dark:text-sky-400
-                    ">
-                      Start Module →
-                    </span>
-                  </div>
-                </Link>
-              ))}
+                <div className="mt-auto flex items-center justify-between gap-3 pt-6">
+                  <span className="rounded-lg bg-slate-100 px-3 py-2 text-xs font-medium text-slate-600">
+                    {module.lessons?.length ?? 0} lessons
+                  </span>
+                  <span className="text-sm font-semibold text-blue-600 transition group-hover:translate-x-1">
+                    Open module &#8594;
+                  </span>
+                </div>
+              </Link>
+            ))}
           </div>
         </section>
-      </>
+      </div>
     );
   }
 
   return (
-    <>
-      <section className="
-        mt-10
-        rounded-3xl
-        border border-sky-100
-        bg-sky-50
-        p-8
-        dark:border-sky-900/60
-        dark:bg-sky-950/20
-      ">
-        <div className="flex items-center gap-3">
-          <div className="
-            flex h-12 w-12 items-center justify-center
-            rounded-2xl
-            bg-white
-            text-2xl
-            shadow-sm
-            dark:bg-slate-900
-          ">
-            🔒
+    <div className="mt-8">
+      <section className="grid gap-7 overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-center lg:p-9">
+        <div>
+          <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-blue-700">
+            <span aria-hidden="true">ðŸ”’</span>
+            Full course access
+          </span>
+
+          <h2 className="mt-4 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            Unlock {courseName}
+          </h2>
+
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
+            Get access to all {courseModules.length} modules and {totalLessons}
+            lessons, with practical examples and structured learning content.
+          </p>
+
+          <div className="mt-5 flex flex-wrap gap-x-5 gap-y-3 text-sm text-slate-600">
+            <span>âœ“ All course modules</span>
+            <span>âœ“ Structured lessons</span>
+            <span>âœ“ Practical examples</span>
           </div>
 
-          <div>
-            <p className="
-              text-sm font-semibold uppercase tracking-wide
-              text-sky-600
-              dark:text-sky-400
-            ">
-              Course Locked
-            </p>
-
-            <h2 className="
-              mt-1 text-2xl font-bold
-              text-slate-900
-              dark:text-white
-            ">
-              Unlock {courseName}
-            </h2>
-          </div>
+          {error && (
+            <div
+              role="status"
+              className="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-800"
+            >
+              {error}
+            </div>
+          )}
         </div>
 
-        <div className="mt-6 flex flex-wrap items-center gap-4">
-          <span className="
-            text-lg font-medium line-through
-            text-slate-400
-            dark:text-slate-500
-          ">
-            ₹99
-          </span>
-
-          <span className="
-            text-4xl font-bold
-            text-slate-900
-            dark:text-white
-          ">
-            ₹49
-          </span>
-
-          <span className="
-            rounded-full
-            bg-green-100
-            px-4 py-2
-            text-sm font-bold
-            text-green-700
-            dark:bg-green-950/50
-            dark:text-green-400
-          ">
+        <div
+          className={`rounded-2xl border p-6 text-center ${
+            isDark
+              ? "border-slate-700 bg-gradient-to-br from-slate-900 to-slate-800"
+              : "border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50"
+          }`}
+        >
+          <p className={`text-sm font-semibold ${isDark ? "text-slate-300" : "text-slate-600"}`}>
+            Course enrollment
+          </p>
+          <div className="mt-3 flex items-center justify-center gap-3">
+            <span className={`text-lg line-through ${isDark ? "text-slate-500" : "text-slate-400"}`}>&#8377;99</span>
+            <span className={`text-4xl font-extrabold tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}>
+              &#8377;49
+            </span>
+          </div>
+          <span className={`mt-3 inline-flex rounded-full px-3 py-1.5 text-xs font-bold ${isDark ? "bg-emerald-900/50 text-emerald-300" : "bg-emerald-100 text-emerald-800"}`}>
             50% OFF
           </span>
+
+          <Link
+            href={`/payment/checkout?course=${encodeURIComponent(course)}`}
+            className="mt-5 flex w-full items-center justify-center rounded-xl bg-blue-600 px-5 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-md"
+          >
+            Unlock course <span className="ml-2">&#8594;</span>
+          </Link>
+
+          <p className={`mt-3 text-xs leading-5 ${isDark ? "text-slate-400" : "text-slate-500"}`}>
+            Continue to checkout to unlock the course.
+          </p>
         </div>
-
-        <p className="
-          mt-4 max-w-2xl
-          text-sm leading-6
-          text-slate-600
-          dark:text-slate-400
-        ">
-          Unlock this complete course to access all
-          modules, lessons, practical examples, and
-          learning content.
-        </p>
-
-        {error && (
-          <div className="
-            mt-5
-            rounded-2xl
-            border border-yellow-200
-            bg-yellow-50
-            p-4
-            text-sm text-yellow-800
-            dark:border-yellow-900/60
-            dark:bg-yellow-950/30
-            dark:text-yellow-300
-          ">
-            {error}
-          </div>
-        )}
-
-        <Link
-          href={`/payment/checkout?course=${encodeURIComponent(course)}`}
-          className="
-            mt-6
-            inline-flex items-center justify-center
-            rounded-2xl
-            bg-sky-600
-            px-8 py-4
-            font-semibold text-white
-            shadow-sm
-            transition
-            hover:bg-sky-700
-            dark:bg-sky-500
-            dark:hover:bg-sky-400
-          "
-        >
-          Unlock Course →
-        </Link>
       </section>
 
-      <section className="mt-16">
+      <section className="mt-10">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="
-              text-3xl font-bold
-              text-slate-900
-              dark:text-white
-            ">
-              Course Modules
+            <p className="text-sm font-semibold text-blue-600">
+              COURSE CONTENT
+            </p>
+            <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+              Explore the modules
             </h2>
-
-            <p className="
-              mt-2
-              text-slate-600
-              dark:text-slate-400
-            ">
-              Unlock the course to access these modules.
+            <p className="mt-2 text-sm text-slate-500">
+              Preview the topics included in this learning path.
             </p>
           </div>
-
-          <span className="
-            rounded-full
-            bg-slate-100
-            px-4 py-2
-            text-sm font-medium
-            text-slate-600
-            dark:bg-slate-800
-            dark:text-slate-400
-          ">
-            🔒 Locked
+          <span className="rounded-full bg-slate-100 px-3.5 py-2 text-sm font-semibold text-slate-600 dark:text-slate-300">
+            {courseModules.length} modules Â· Locked
           </span>
         </div>
 
-        <div className="
-          mt-8 grid gap-6
-          md:grid-cols-2
-          lg:grid-cols-3
-        ">
-          {courseModules
-            .filter(Boolean)
-            .map((module, index) => (
-              <div
-                key={`${module.id}-${index}`}
-                className="
-                  flex min-h-[310px] flex-col
-                  rounded-3xl
-                  border border-slate-200
-                  bg-white
-                  p-8
-                  shadow-sm
-                  dark:border-slate-800
-                  dark:bg-slate-900
-                  dark:shadow-none
-                "
-              >
-                <div className="flex items-center justify-between">
-                  <div className="
-                    flex h-12 w-12 shrink-0 items-center justify-center
-                    rounded-2xl
-                    bg-slate-100
-                    font-bold text-slate-500
-                    dark:bg-slate-800
-                    dark:text-slate-400
-                  ">
-                    {index + 1}
-                  </div>
-
-                  <span className="text-xl opacity-80">
-                    🔒
-                  </span>
-                </div>
-
-                <h3 className="
-                  mt-6 h-16 overflow-hidden
-                  text-xl font-bold leading-7
-                  text-slate-900
-                  dark:text-white
-                ">
-                  {module.title}
-                </h3>
-
-                <p className="
-                  mt-4 h-14 overflow-hidden
-                  text-sm leading-6
-                  text-slate-600
-                  dark:text-slate-400
-                ">
-                  Learn {module.title} through structured lessons,
-                  practical examples, and real-world applications.
-                </p>
-
-                <div className="
-                  mt-auto flex items-center justify-between pt-8
-                ">
-                  <span className="
-                    rounded-full
-                    bg-slate-100
-                    px-4 py-2
-                    text-sm font-medium
-                    text-slate-700
-                    dark:bg-slate-800
-                    dark:text-slate-300
-                  ">
-                    {module.lessons?.length ?? 0} Lessons
-                  </span>
-
-                  <span className="
-                    font-semibold
-                    text-slate-400
-                    dark:text-slate-500
-                  ">
-                    Locked 🔒
-                  </span>
-                </div>
+        <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          {courseModules.filter(Boolean).map((module, index) => (
+            <article
+              key={`${module.id}-${index}`}
+              className="flex min-h-[235px] flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition duration-200 hover:border-blue-100 hover:shadow-md"
+            >
+              <div className="flex items-center justify-between">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100 text-sm font-bold text-slate-600">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span aria-label="Locked module" className="text-lg">
+                  ðŸ”’
+                </span>
               </div>
-            ))}
+
+              <h3 className="mt-6 text-lg font-bold leading-7 text-slate-900">
+                {module.title}
+              </h3>
+
+              <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-500">
+                Learn {module.title} through guided lessons and practical
+                examples.
+              </p>
+
+              <div className="mt-auto flex items-center justify-between gap-3 pt-6">
+                <span className="rounded-lg bg-slate-100 px-3 py-2 text-xs font-medium text-slate-600">
+                  {module.lessons?.length ?? 0} lessons
+                </span>
+                <span className="text-xs font-semibold text-slate-400">
+                  Locked
+                </span>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
-    </>
+    </div>
   );
 }
+
+
+

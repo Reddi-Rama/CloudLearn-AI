@@ -21,7 +21,7 @@ export default function DomainCard({
   icon: Icon,
 }: Props) {
   const routes: Record<string, string> = {
-    Programming: "/domains/programming",
+    Programming: "/courses",
 
     "Artificial Intelligence":
       "/domains/aiml",

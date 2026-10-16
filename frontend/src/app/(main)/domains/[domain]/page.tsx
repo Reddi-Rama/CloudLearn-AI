@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 import {
   Clock3,
   Sparkles,
@@ -70,6 +72,10 @@ export default async function DomainPage({
   const { domain: rawDomain } = await params;
 
   const domain = rawDomain.toLowerCase();
+
+  if (domain === "programming") {
+    redirect("/courses");
+  }
 
   const domainName =
     domainNames[domain] ||

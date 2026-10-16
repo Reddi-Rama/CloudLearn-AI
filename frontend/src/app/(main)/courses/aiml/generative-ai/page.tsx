@@ -127,7 +127,7 @@ export default function GenerativeAICoursePage() {
   );
 
   return (
-    <main className="min-h-screen bg-[#020617] text-slate-100">
+    <main className="min-h-screen bg-slate-50 text-slate-900 dark:bg-[#020617] dark:text-slate-100">
       <div className="mx-auto max-w-[1500px] px-5 py-10 sm:px-8 lg:px-10">
 
         {/* ============================================================
@@ -143,17 +143,17 @@ export default function GenerativeAICoursePage() {
             gap-2
             rounded-xl
             border
-            border-slate-800
-            bg-slate-900/80
+            border-slate-200 dark:border-slate-800
+            bg-white dark:bg-slate-900/80
             px-4
             py-2.5
             text-sm
             font-semibold
-            text-slate-300
+            text-slate-600 dark:text-slate-300
             transition
             hover:border-slate-700
             hover:bg-slate-800
-            hover:text-white
+            hover:text-slate-900 dark:text-white
           "
         >
           <ArrowLeft className="h-4 w-4" />
@@ -170,8 +170,8 @@ export default function GenerativeAICoursePage() {
             overflow-hidden
             rounded-3xl
             border
-            border-slate-800
-            bg-slate-900/70
+            border-slate-200 dark:border-slate-800
+            bg-white dark:bg-slate-900/70
             p-7
             shadow-2xl
             sm:p-10
@@ -273,7 +273,7 @@ export default function GenerativeAICoursePage() {
                 text-4xl
                 font-black
                 tracking-tight
-                text-white
+                text-slate-900 dark:text-white
                 sm:text-5xl
                 lg:text-6xl
               "
@@ -301,7 +301,7 @@ export default function GenerativeAICoursePage() {
                 max-w-4xl
                 text-base
                 leading-8
-                text-slate-300
+                text-slate-600 dark:text-slate-300
                 sm:text-lg
               "
             >
@@ -323,12 +323,12 @@ export default function GenerativeAICoursePage() {
                   gap-2
                   rounded-xl
                   border
-                  border-slate-800
-                  bg-slate-950/60
+                  border-slate-200 dark:border-slate-800
+                  bg-slate-100 dark:bg-slate-950/60
                   px-4
                   py-3
                   text-sm
-                  text-slate-300
+                  text-slate-600 dark:text-slate-300
                 "
               >
                 <BookOpen className="h-4 w-4 text-cyan-300" />
@@ -342,12 +342,12 @@ export default function GenerativeAICoursePage() {
                   gap-2
                   rounded-xl
                   border
-                  border-slate-800
-                  bg-slate-950/60
+                  border-slate-200 dark:border-slate-800
+                  bg-slate-100 dark:bg-slate-950/60
                   px-4
                   py-3
                   text-sm
-                  text-slate-300
+                  text-slate-600 dark:text-slate-300
                 "
               >
                 <Sparkles className="h-4 w-4 text-violet-300" />
@@ -361,12 +361,12 @@ export default function GenerativeAICoursePage() {
                   gap-2
                   rounded-xl
                   border
-                  border-slate-800
-                  bg-slate-950/60
+                  border-slate-200 dark:border-slate-800
+                  bg-slate-100 dark:bg-slate-950/60
                   px-4
                   py-3
                   text-sm
-                  text-slate-300
+                  text-slate-600 dark:text-slate-300
                 "
               >
                 <Zap className="h-4 w-4 text-emerald-300" />
@@ -435,7 +435,7 @@ export default function GenerativeAICoursePage() {
                 mt-2
                 text-2xl
                 font-bold
-                text-white
+                text-slate-900 dark:text-white
                 sm:text-3xl
               "
             >
@@ -470,8 +470,8 @@ export default function GenerativeAICoursePage() {
                     overflow-hidden
                     rounded-3xl
                     border
-                    border-slate-800
-                    bg-slate-900/70
+                    border-slate-200 dark:border-slate-800
+                    bg-white dark:bg-slate-900/70
                     p-6
                     shadow-xl
                     transition
@@ -567,7 +567,7 @@ export default function GenerativeAICoursePage() {
                           text-xl
                           font-bold
                           leading-7
-                          text-white
+                          text-slate-900 dark:text-white
                         "
                       >
                         {module.title}
@@ -627,4 +627,5 @@ export default function GenerativeAICoursePage() {
     </main>
   );
 }
+
 

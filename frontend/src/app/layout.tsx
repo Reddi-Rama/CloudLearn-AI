@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 
 import BackNavigation from "@/components/layout/BackNavigation";
@@ -9,7 +10,6 @@ import { AppProvider } from "../providers";
 
 import "./globals.css";
 
-
 /* ============================================================
    METADATA
 ============================================================ */
@@ -20,8 +20,7 @@ export const metadata: Metadata = {
     template: "%s | CloudLearn",
   },
 
-  description:
-    "A modern learning platform for students.",
+  description: "A modern learning platform for students.",
 
   keywords: [
     "CloudLearn",
@@ -50,11 +49,8 @@ export const metadata: Metadata = {
     apple: "/favicon.ico",
   },
 
-  metadataBase: new URL(
-    "https://cloudlearn.ai"
-  ),
+  metadataBase: new URL("https://cloudlearn.ai"),
 };
-
 
 /* ============================================================
    ROOT LAYOUT
@@ -70,58 +66,26 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
-      <body
-        className="
-          min-h-screen
-          antialiased
-        "
-      >
-
-        {/* ==================================================
-            NAVIGATION LOADING
-        ================================================== */}
-
+      <body className="min-h-screen antialiased">
+        {/* Navigation loading indicator */}
         <NavigationLoading />
 
-
-        {/* ==================================================
-            THEME
-        ================================================== */}
-
+        {/* Theme and application providers */}
         <ThemeProvider>
-
-          {/* =================================================
-              APP PROVIDER
-          ================================================= */}
-
           <AppProvider>
-
-            {/* ===============================================
-                GLOBAL BACK NAVIGATION
-            =============================================== */}
-
+            {/* Global back navigation */}
             <BackNavigation />
 
-
-            {/* ===============================================
-                PAGE
-            =============================================== */}
-
+            {/* Current page */}
             {children}
-
           </AppProvider>
-
         </ThemeProvider>
 
-
-        {/* ==================================================
-            MOUSE EFFECT
-        ================================================== */}
-
+        {/* Global mouse effect */}
         <MouseGlow />
-
       </body>
     </html>
   );

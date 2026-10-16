@@ -11,7 +11,7 @@ export default function MainLayout({
 
       <Header />
 
-      <main className="w-full">
+      <main className="w-full cloudlearn-page-content">
         {children}
       </main>
 

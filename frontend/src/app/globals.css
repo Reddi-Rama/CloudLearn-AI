@@ -63,7 +63,9 @@
 ============================================================ */
 
 html {
-  scroll-behavior: smooth;
+  /* Lenis handles animated scrolling; avoid competing native animation. */
+  scroll-behavior: auto;
+  scroll-padding-top: 88px;
 }
 
 
@@ -538,7 +540,7 @@ body::after {
 
 
 /* ============================================================
-   HOME Ã¢â‚¬â€ REMOVE SECTION BACKGROUNDS
+   HOME ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â REMOVE SECTION BACKGROUNDS
 ============================================================ */
 
 /*
@@ -571,7 +573,7 @@ body::after {
 
 
 /* ============================================================
-   HOME Ã¢â‚¬â€ REMOVE FULL-WIDTH SEPARATORS
+   HOME ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â REMOVE FULL-WIDTH SEPARATORS
 ============================================================ */
 
 .home-page section {
@@ -582,7 +584,7 @@ body::after {
 
 
 /* ============================================================
-   HOME Ã¢â‚¬â€ WHITE CARDS ONLY
+   HOME ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â WHITE CARDS ONLY
 ============================================================ */
 
 /*
@@ -601,7 +603,7 @@ body::after {
 
 
 /* ============================================================
-   HOME Ã¢â‚¬â€ GLASS CARDS
+   HOME ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â GLASS CARDS
 ============================================================ */
 
 .home-page .glass-card {
@@ -610,7 +612,7 @@ body::after {
 
 
 /* ============================================================
-   HOME Ã¢â‚¬â€ PREMIUM SURFACES
+   HOME ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â PREMIUM SURFACES
 ============================================================ */
 
 .home-page .surface {
@@ -619,7 +621,7 @@ body::after {
 
 
 /* ============================================================
-   HOME Ã¢â‚¬â€ INPUTS
+   HOME ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â INPUTS
 ============================================================ */
 
 .home-page input,
@@ -1019,7 +1021,7 @@ html.dark body {
 
 
 /* ============================================================
-   MAIN LIGHT PAGES Ã¢â€ â€™ DARK
+   MAIN LIGHT PAGES ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢ DARK
 ============================================================ */
 
 html.dark .home-page,
@@ -2127,7 +2129,7 @@ html.dark .programming-domain-page .bg-sky-100 {
 
 /* ============================================================
    CLOUDLEARN EXAMS DARK MODE
-   UI ONLY Ã¢â‚¬â€ backend/certificate logic untouched
+   UI ONLY ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â backend/certificate logic untouched
 ============================================================ */
 
 html.dark .exam-result-page {
@@ -2181,7 +2183,7 @@ html.dark .exam-result-page .text-slate-400 {
   color: #94a3b8 !important;
 }
 
-/* Failed result Ã¢â‚¬â€ amber instead of red */
+/* Failed result ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â amber instead of red */
 html.dark .exam-result-page .bg-red-50 {
   background-color: #211a0b !important;
 }
@@ -2294,7 +2296,7 @@ html.dark .exam-result-page button.bg-white {
   border-color: #475569 !important;
 }
 
-/* Certificate button Ã¢â‚¬â€ presentation only.
+/* Certificate button ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â presentation only.
    Existing href/backend connection remains unchanged. */
 html.dark .exam-result-page a.bg-green-600 {
   background-color: #16a34a !important;
@@ -2313,7 +2315,7 @@ html.dark .exam-result-page article .bg-slate-50 {
 
 /* ============================================================
    CLOUDLEARN AIML EXAM
-   LIGHT MODE Ã¢â‚¬â€ AURORA INDIGO / VIOLET THEME
+   LIGHT MODE ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â AURORA INDIGO / VIOLET THEME
    ============================================================ */
 
 html:not(.dark) .aiml-exam-page {
@@ -2405,7 +2407,7 @@ html:not(.dark) .aiml-exam-page [class*="bg-cyan-400/10"] {
   background-color: #eeecff !important;
 }
 
-/* Progress bar: indigo Ã¢â€ â€™ violet Ã¢â€ â€™ pink */
+/* Progress bar: indigo ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢ violet ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢ pink */
 html:not(.dark) .aiml-exam-page [class*="from-cyan-400"][class*="to-violet-400"] {
   background-image: linear-gradient(90deg, #5b5bf7 0%, #7c3aed 52%, #db2777 100%) !important;
   background-color: transparent !important;
@@ -2602,5 +2604,394 @@ html.dark .aiml-exam-page {
   textarea,
   select {
     max-width: 100%;
+  }
+}
+
+/* ============================================================
+   CLOUDLEARN MOBILE FINAL RESPONSIVE SYSTEM
+   Mobile-only optimization.
+   Desktop styles remain unchanged.
+============================================================ */
+
+@media (max-width: 767px) {
+
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  body {
+    background-attachment: scroll;
+  }
+
+  main {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  img,
+  video,
+  canvas,
+  svg {
+    max-width: 100%;
+  }
+
+  /* Prevent common oversized page containers */
+  main > div,
+  main > section {
+    max-width: 100%;
+  }
+
+  /* Mobile-friendly horizontal page padding */
+  .container-custom {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Large desktop spacing becomes comfortable mobile spacing */
+  .section {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  /* Keep headings strong but proportional */
+  h1 {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  h2,
+  h3 {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  /* Long text should never force horizontal overflow */
+  p,
+  li,
+  span {
+    overflow-wrap: break-word;
+  }
+
+  /* Buttons remain easy to tap */
+  button {
+    min-height: 42px;
+  }
+
+  /* Inputs should respect viewport width */
+  input,
+  textarea,
+  select {
+    max-width: 100%;
+  }
+
+  /* Code remains readable instead of becoming tiny */
+  pre {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 0.82rem;
+  }
+
+  /* Tables should scroll rather than destroy their layout */
+  table {
+    max-width: 100%;
+  }
+
+  .overflow-x-auto,
+  .overflow-x-scroll {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Large fixed media should fit the phone */
+  [class*="w-["] {
+    max-width: 100%;
+  }
+
+  /* Prevent fixed-width content from escaping */
+  [style*="width"] {
+    max-width: 100%;
+  }
+
+  /* Comfortable touch targets */
+  a,
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ============================================================
+   SMALL PHONE OPTIMIZATION
+   360pxÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“639px
+============================================================ */
+
+@media (max-width: 639px) {
+
+  .section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  /* Avoid giant desktop-like headings */
+  h1 {
+    line-height: 1.12;
+  }
+
+  h2 {
+    line-height: 1.2;
+  }
+
+  /* Keep cards visually balanced */
+  .rounded-3xl {
+    border-radius: 1.25rem;
+  }
+
+  /* Reduce excessive generic spacing without affecting desktop */
+  .gap-20 {
+    gap: 2rem;
+  }
+
+  .gap-16 {
+    gap: 1.75rem;
+  }
+
+  .gap-12 {
+    gap: 1.5rem;
+  }
+
+  /* Reduce extreme vertical padding only on small screens */
+  .py-24 {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .py-20 {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .py-16 {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  /* Keep common horizontal spacing comfortable */
+  .px-8 {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .px-10,
+  .px-12 {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  /* Prevent huge fixed heights on phones */
+  [class*="h-[4"],
+  [class*="h-[5"],
+  [class*="h-[6"] {
+    max-height: 80vh;
+  }
+}
+
+/* ============================================================
+   CLOUDLEARN MOBILE TOP LAYOUT FIX
+   Prevents fixed header/back navigation from covering content.
+   Mobile only. Desktop remains unchanged.
+============================================================ */
+
+@media (max-width: 767px) {
+
+  /*
+     Header remains fixed at the top.
+     Global back navigation sits directly underneath it.
+  */
+  .cloudlearn-back-nav {
+    top: 84px !important;
+    left: 12px !important;
+    right: auto !important;
+    max-width: calc(100vw - 24px) !important;
+    z-index: 40 !important;
+  }
+
+  /*
+     Only pages that actually have the global back navigation
+     receive the additional content offset.
+
+     This prevents the first heading from hiding underneath
+     the back button.
+
+     Pages without the global back navigation are untouched.
+  */
+  body:has(.cloudlearn-back-nav) .cloudlearn-page-content {
+    padding-top: 104px !important;
+  }
+
+  /*
+     Prevent accidental horizontal scrolling on phones.
+  */
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden !important;
+  }
+
+  .cloudlearn-page-content {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .cloudlearn-page-content > main,
+  .cloudlearn-page-content section,
+  .cloudlearn-page-content article {
+    max-width: 100%;
+  }
+
+  /*
+     Keep the back button comfortable without making it huge.
+  */
+  .cloudlearn-back-nav a {
+    max-width: calc(100vw - 24px) !important;
+    height: 40px !important;
+    padding-left: 13px !important;
+    padding-right: 13px !important;
+    font-size: 14px !important;
+  }
+}
+
+/* ============================================================
+   SMALL PHONES
+============================================================ */
+
+@media (max-width: 639px) {
+
+  /*
+     Give the page a little more breathing room when the
+     global back navigation is present.
+  */
+  body:has(.cloudlearn-back-nav) .cloudlearn-page-content {
+    padding-top: 108px !important;
+  }
+
+  .cloudlearn-back-nav {
+    top: 84px !important;
+    left: 10px !important;
+    max-width: calc(100vw - 20px) !important;
+  }
+
+  .cloudlearn-back-nav a {
+    height: 38px !important;
+    padding-left: 11px !important;
+    padding-right: 11px !important;
+    font-size: 13px !important;
+  }
+}
+
+/* ============================================================
+   CLOUDLEARN HEADER THEME CONSISTENCY
+   Keeps header appearance synchronized with CloudLearn theme.
+   Does not change layout or desktop structure.
+============================================================ */
+
+html[data-cloudlearn-theme="light"] header {
+  background-color: #ffffff !important;
+  border-bottom-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+html[data-cloudlearn-theme="light"] header .text-slate-700 {
+  color: #334155 !important;
+}
+
+html[data-cloudlearn-theme="light"] header .text-slate-500 {
+  color: #64748b !important;
+}
+
+html[data-cloudlearn-theme="light"] header .bg-slate-50 {
+  background-color: #f8fafc !important;
+}
+
+html[data-cloudlearn-theme="light"] header .border-slate-200 {
+  border-color: #e2e8f0 !important;
+}
+
+html[data-cloudlearn-theme="light"] header button {
+  color: #334155;
+}
+
+html[data-cloudlearn-theme="light"] header button:hover {
+  color: #0284c7;
+}
+
+html[data-cloudlearn-theme="dark"] header {
+  background-color: #020617 !important;
+  border-bottom-color: #26354d !important;
+  color: #f8fafc !important;
+}
+
+html[data-cloudlearn-theme="dark"] header .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+
+html[data-cloudlearn-theme="dark"] header .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+html[data-cloudlearn-theme="dark"] header .bg-slate-50 {
+  background-color: #0f172a !important;
+}
+
+html[data-cloudlearn-theme="dark"] header .border-slate-200 {
+  border-color: #26354d !important;
+}
+
+html[data-cloudlearn-theme="dark"] header button {
+  color: #cbd5e1;
+}
+
+html[data-cloudlearn-theme="dark"] header button:hover {
+  color: #38bdf8;
+}
+
+/* ============================================================
+   GLOBAL SMOOTH SCROLLING (LENIS)
+   Works with the SmoothScroll.tsx client component.
+============================================================ */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+html.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+html.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+html.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Respect users who prefer reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  html,
+  html.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
   }
 }

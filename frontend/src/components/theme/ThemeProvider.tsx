@@ -19,6 +19,13 @@ const ThemeContext = createContext<ThemeContextType | undefined>(
   undefined
 );
 
+function applyTheme(theme: Theme) {
+  const root = document.documentElement;
+
+  root.classList.toggle("dark", theme === "dark");
+  root.setAttribute("data-cloudlearn-theme", theme);
+}
+
 export function ThemeProvider({
   children,
 }: {
@@ -29,29 +36,20 @@ export function ThemeProvider({
   useEffect(() => {
     const savedTheme = localStorage.getItem("cloudlearn-theme");
 
+    let initialTheme: Theme;
+
     if (savedTheme === "dark" || savedTheme === "light") {
-      setTheme(savedTheme);
-      document.documentElement.classList.toggle(
-        "dark",
-        savedTheme === "dark"
-      );
-      return;
+      initialTheme = savedTheme;
+    } else {
+      initialTheme = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches
+        ? "dark"
+        : "light";
     }
 
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-
-    const initialTheme: Theme = prefersDark
-      ? "dark"
-      : "light";
-
     setTheme(initialTheme);
-
-    document.documentElement.classList.toggle(
-      "dark",
-      initialTheme === "dark"
-    );
+    applyTheme(initialTheme);
   }, []);
 
   function toggleTheme() {
@@ -66,10 +64,7 @@ export function ThemeProvider({
         nextTheme
       );
 
-      document.documentElement.classList.toggle(
-        "dark",
-        nextTheme === "dark"
-      );
+      applyTheme(nextTheme);
 
       return nextTheme;
     });
